@@ -1,0 +1,72 @@
+﻿@using ShareModels
+@using WebClient.Services
+
+@inject IUserStateService userService
+
+@inject NavigationManager NavigationManager
+
+@layout AuthLayout
+@page "/login"
+
+
+<h3>Login</h3>
+
+<form>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" @bind="user.UserName" id="exampleInputEmail1"
+            aria-describedby="emailHelp">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" @bind="user.Password" class="form-control" id="exampleInputPassword1">
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+    <button type="button" @onclick="LoginAction" class="btn btn-primary">Login</button>
+
+
+</form>
+
+@if (message != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @message
+    </div>
+}
+
+
+@code {
+    private UserLogin user = new UserLogin();
+
+    private string message;
+
+    private async Task LoginAction()
+    {
+        try
+        {
+            var result = await userService.Login(user);
+
+            if (result)
+            {
+                NavigationManager.NavigateTo("");
+            }
+        }
+        catch (Exception ex)
+        {
+            message = ex.Message;
+            await  HideMessage();
+        }
+    }
+
+
+    private async Task HideMessage()
+    {
+        await Task.Delay(500);
+        message = null;
+    }
+
+}

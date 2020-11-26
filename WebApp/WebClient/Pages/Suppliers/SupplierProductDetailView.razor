@@ -1,0 +1,197 @@
+@page "/supplier/product/{supplierId?}/{id?}";
+
+
+@inject IProductService productService;
+@inject NavigationManager nav;
+@inject NotificationService NotificationService
+
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <h3>Detail Product</h3>
+    </ol>
+</nav>
+
+
+
+<EditForm Model="@model" OnValidSubmit="SaveProduct">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Category</label>
+            <input type="text" @bind="model.Category.Name" class="form-control">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Pruduct Name</label>
+            <input type="text" @bind="model.Name" class="form-control">
+        </div>
+
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Code Name</label>
+            <input type="text" @bind="model.CodeName" class="form-control">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Code Article</label>
+            <input type="text" @bind="model.CodeArticle" class="form-control">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Merk</label>
+            <input type="text" @bind="model.Merk" class="form-control">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Size</label>
+            <input type="text" @bind="model.Size" class="form-control">
+        </div>
+    </div>
+
+    <button type="button" @onclick="GoBack" class="btn btn-primary">Back</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+<hr />
+<h3>Harga Product</h3>
+<button class="btn btn-success" @onclick="AddItem"><i class="material-icons">add</i> </button>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Level Unit</th>
+            <th scope="col">Jumlah Per Unit</th>
+            <th scope="col">Harga Beli</th>
+            <th scope="col">Harga Jual</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (model != null && model.Units != null)
+        {
+            foreach (var unit in model.Units)
+            {
+                <tr>
+                    <th scope="row">1</th>
+                    <td><input @bind="unit.Name" type="text" @oninput="@(() => OnChange(unit.Id))"></td>
+                    <td><input @bind="unit.Level" type="number" @oninput="@(() => OnChange(unit.Id))"></td>
+                    <td><input @bind="unit.Amount" type="number" @oninput="@(() => OnChange(unit.Id))"></td>
+                    <td><input @bind="unit.Buy" type="number" @oninput="@(() => OnChange(unit.Id))"></td>
+                    <td><input @bind="unit.Sell" type="number" @oninput="@(() => OnChange(unit.Id))"></td>
+                    <td style="width: 30px !important;">
+                        <ButtonLitleSave @ref="ComponentRef" unit="unit" OnButtonClick="OnButtonClickHandler" />
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+
+@code{
+    [Parameter]
+    public string id { get; set; }
+
+    [Parameter]
+    public string supplierId { get; set; }
+
+    public Product model { get; set; }
+
+    List<ButtonLitleSave> components = new List<ButtonLitleSave>();
+    ButtonLitleSave ComponentRef
+    {
+        set { components.Add(value); }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var Id = Convert.ToInt32(id);
+        model = await productService.Get(Id);
+    }
+
+
+    public void AddItem()
+    {
+        model.Units.Add(new Unit { Amount = 1, Level = model.Units.Count, ProductId = model.Id });
+    }
+
+    public void OnChange(int id)
+    {
+        var com = components.Where(x => x.unit.Id == id).FirstOrDefault();
+        if (com != null)
+        {
+            com.OnChange();
+        }
+    }
+    public async Task SaveProduct()
+    {
+        try
+        {
+            var Id = Convert.ToInt32(id);
+            var updated = await productService.Update(Id, model);
+            NotificationService.Notify(new NotificationMessage
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = "Success",
+                Detail = "Data Berhasil Diubah !",
+                Duration = 3000
+            });
+        }
+        catch (System.Exception ex)
+        {
+            NotificationService.Notify(new NotificationMessage
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = ex.Message,
+                Duration = 3000
+            });
+        }
+    }
+
+    public void GoBack()
+    {
+        nav.NavigateTo("/supplier");
+    }
+
+
+    protected async Task OnButtonClickHandler(ChangeEventArgs e)
+    {
+        var paramss = (object[])e.Value;
+        var btn = (ButtonLitleSave)paramss[0];
+        var unit = (Unit)paramss[1];
+        btn.IconName = "support";
+        btn.IconStyle = "loader";
+        Unit temUnit;
+        if (unit.Id > 0)
+        {
+            temUnit = await productService.UpdateUnit(unit.Id, unit);
+        }
+        else
+        {
+            temUnit = await productService.AddUnit(model.Id, unit);
+            if (temUnit != null)
+            {
+                unit = temUnit;
+            }
+        }
+
+        if (temUnit != null)
+        {
+            btn.IconName = "check_circle";
+            btn.IconStyle = "iconSuccess";
+        }
+        else
+        {
+            btn.IconName = "error_outline";
+            btn.IconStyle = "iconError";
+        }
+
+        await Task.Delay(4000);
+        btn.IconName = "";
+        btn.IconStyle = "";
+        StateHasChanged();
+    }
+}

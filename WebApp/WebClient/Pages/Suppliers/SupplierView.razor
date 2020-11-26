@@ -1,0 +1,78 @@
+﻿@page "/supplier"
+
+@using System;
+@using ShareModels;
+@using WebClient.Services;
+
+@inject NavigationManager nav;
+@inject ISupplierService supplierService;
+
+<h3>Data Supplier</h3>
+<NavLink class="btn btn-successs" para href="/supplier/change">Add</NavLink>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nama Supplier</th>
+            <th scope="col">Contact Name</th>
+            <th scope="col">Contact Telepon</th>
+            <th scope="col">Address</th>
+            <th scope="col">Email</th>
+            <th scope="col">Office</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (suppliers != null)
+        {
+            var number = 1;
+            foreach (var item in suppliers)
+            {
+                var linkEdit = $"/supplier/change/{item.Id}";
+                var linkProducts = $"/supplier/products/{item.Id}";
+                <tr>
+                    <th scope="row">@number</th>
+                    <td>@item.Nama</td>
+                    <td>@item.ContactPersonName</td>
+                    <td>@item.ContactPerson</td>
+                    <td>@item.Address</td>
+                    <td>@item.Email</td>
+                    <td>@item.Telepon</td>
+                    <td>
+                        <NavLink para href="@linkEdit">Edit</NavLink>
+                        <NavLink para href="@linkProducts">Products</NavLink>
+                    </td>
+                </tr>
+                number++;
+            }
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private IEnumerable<Supplier> suppliers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            suppliers = await supplierService.GetSuppliers();
+        }
+        catch (Exception)
+        {
+
+
+        }
+
+
+    }
+
+
+    private void AddAction()
+    {
+        nav.NavigateTo("/supplier/change/1");
+    }
+
+}

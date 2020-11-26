@@ -1,0 +1,19 @@
+@page "/pembelian";
+@using WebClient.Pages.ShareComponent
+
+<TabControl>
+    <TabPage Text="Orders">
+        <PembelianOrderView />
+    </TabPage>
+
+    <TabPage Text="Pembelian">
+        <PembelianView />
+    </TabPage>
+</TabControl>
+
+
+<style>
+    .viewbody {
+        margin-top: 15px;
+    }
+</style>

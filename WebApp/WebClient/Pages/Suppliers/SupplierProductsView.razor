@@ -1,0 +1,69 @@
+@page "/supplier/products/{id?}";
+
+@using ShareModels;
+@using WebClient.Services;
+@inject NavigationManager nav;
+@inject ISupplierService supplierService;
+@using Microsoft.AspNetCore.Authorization
+@inject IProductService productService;
+@attribute [Authorize]
+
+
+
+<h3>Data Product</h3>
+<NavLink class="btn btn-successs" para href="/supplier/change">Add</NavLink>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nama Supplier</th>
+            <th scope="col">Contact Name</th>
+            <th scope="col">Contact Telepon</th>
+            <th scope="col">Address</th>
+            <th scope="col">Email</th>
+            <th scope="col">Office</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (products != null)
+        {
+            var number = 1;
+            foreach (var item in products)
+            {
+                var linkEdit = $"/supplier/product/{id}/{item.Id}";
+                <tr>
+                    <th scope="row">@number</th>
+                    <td>@item.Category.Name</td>
+                    <td>@item.CodeName</td>
+                    <td>@item.CodeArticle</td>
+                    <td>@item.Name</td>
+                    <td>@item.Size</td>
+                    <td>@item.Merk</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <NavLink para href="@linkEdit">Detail</NavLink>
+                    </td>
+                </tr>
+                number++;
+            }
+        }
+    </tbody>
+</table>
+
+@code{
+    [Parameter]
+    public string id { get; set; }
+    private IEnumerable<Product> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        int Id = Convert.ToInt32(id);
+        if (Id > 0)
+        {
+            products = await productService.GetProductsBySupplier(Id);
+        }
+    }
+
+}

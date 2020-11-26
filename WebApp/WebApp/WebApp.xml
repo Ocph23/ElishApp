@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApp</name>
+    </assembly>
+    <members>
+        <member name="M:WebApp.Controllers.SupplierController.GetProducts(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns>All Product Of Supplier</returns>
+        </member>
+    </members>
+</doc>

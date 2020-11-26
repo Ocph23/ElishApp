@@ -1,0 +1,28 @@
+@using ShareModels
+@using WebClient.Pages.ShareComponent;
+
+<i class="material-icons @IconStyle" data-inline="true" @onclick="ClickAction">@IconName</i>
+
+@code{
+    [Parameter] public EventCallback<ChangeEventArgs> OnButtonClick { get; set; }
+
+    [Parameter] public Unit unit { get; set; }
+
+
+    public string IconStyle { get; set; }
+    public string IconName { get; set; }
+
+    public void OnChange()
+    {
+        IconName = "save";
+        IconStyle = "iconChange";
+    }
+
+    public void ClickAction()
+    {
+        var eventChange = new ChangeEventArgs() { Value = new object[] { this, unit } };
+        OnButtonClick.InvokeAsync(eventChange);
+    }
+
+
+}

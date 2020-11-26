@@ -1,0 +1,59 @@
+<CascadingValue Value="this">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        @foreach (TabPage tabPage in Pages)
+            {
+                <li class="nav-item">
+                    <a class="nav-link @GetButtonClass(tabPage)" id="home-tab" data-toggle="tab" @onclick=@( () =>
+                                                                                                         ActivatePage(tabPage)) role="tab" aria-controls="home" aria-selected="true"> @tabPage.Text
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            @ChildContent
+        </div>
+
+
+
+
+    </CascadingValue>
+
+    @code {
+    // Next line is needed so we are able to add <TabPage> components inside
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public TabPage ActivePage { get; set; }
+    List<TabPage> Pages = new List<TabPage>();
+
+    internal void AddPage(TabPage tabPage)
+    {
+        Pages.Add(tabPage);
+        if (Pages.Count == 1)
+        {
+            tabPage.Active = "active";
+            ActivePage = tabPage;
+        }
+        StateHasChanged();
+    }
+
+    string GetButtonClass(TabPage page)
+    {
+        return page == ActivePage ? "btn-primary" : "btn-default";
+    }
+
+    void ActivatePage(TabPage page)
+    {
+        foreach (var item in Pages)
+        {
+            item.Active = "";
+            if (page.Text == page.Text)
+            {
+                item.Active = "active";
+            }
+        }
+        ActivePage = page;
+        StateHasChanged();
+    }
+}

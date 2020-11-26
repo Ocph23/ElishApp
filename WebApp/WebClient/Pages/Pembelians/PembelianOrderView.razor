@@ -1,0 +1,60 @@
+@using ShareModels
+@using WebClient.Services;
+
+@inject IPembelianService pembelianService;
+
+<div class="viewbody">
+    <h3>Data Orders</h3>
+
+    <NavLink class="btn btn-successs" para href="/pembelian/order/create">Add</NavLink>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nomor</th>
+                <th scope="col">Supplier</th>
+                <th scope="col">Discount</th>
+                <th scope="col">Tanggal Order</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (orders != null)
+            {
+                var number = 1;
+                foreach (var item in orders)
+                {
+                    <tr>
+                        <th scope="row">@number</th>
+                        <td>@item.Nomor</td>
+                        <td>@item.Supplier.Nama</td>
+                        <td>@item.Discount %</td>
+                        <td>
+                            @{
+                                var detailLink = $"orderdetail/{item.Id}";
+                            }
+                            <NavLink para href="@detailLink">Detail</NavLink>
+                        </td>
+                        <td>@item.OrderDate.ToString("dd-MM-yyyy")</td>
+                    </tr>
+                    number++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+@code{
+    private IEnumerable<Orderpembelian> orders;
+    protected override async Task OnInitializedAsync()
+    {
+        orders = await pembelianService.GetOrders();
+    }
+
+}
