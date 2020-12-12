@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ShareModels.ModelViews;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using ShareModels;
 using System.Threading.Tasks;
 using WebClient.Services;
 
@@ -14,9 +11,9 @@ namespace WebClient.Controllers
     [ApiController]
     public class IncomingCheckController : ControllerBase
     {
-        private IncommingService _service;
+        private IIncommingService _service;
 
-        public IncomingCheckController(IncommingService service)
+        public IncomingCheckController(IIncommingService service)
         {
             _service = service;
         }

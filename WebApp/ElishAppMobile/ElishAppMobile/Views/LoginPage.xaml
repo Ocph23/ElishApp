@@ -7,8 +7,21 @@
              x:Class="ElishAppMobile.Views.LoginPage"
              Shell.NavBarIsVisible="False">
     <ContentPage.Content>
-        <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
-            <Button VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
-        </StackLayout>
+        <Grid Padding="10,0,10,0" VerticalOptions="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout>
+                
+            </StackLayout>
+            <Button Grid.Row="1" VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
+            
+            <StackLayout Grid.Row="2">
+                <Entry HorizontalOptions="Center" WidthRequest="200" Text="{Binding Url}"/>
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

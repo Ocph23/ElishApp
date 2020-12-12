@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ShareModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
@@ -11,7 +9,6 @@ namespace ElishAppMobile
 {
     public class Account
     {
-
         public static bool UserIsLogin {
             get {
                 var user = GetUser().Result;
@@ -19,7 +16,6 @@ namespace ElishAppMobile
                                 
             }
         }
-
 
         public static async Task<AuthenticateResponse> GetUser()
         {
@@ -75,8 +71,6 @@ namespace ElishAppMobile
             }
             return false;
         }
-
-
 
     }
 }

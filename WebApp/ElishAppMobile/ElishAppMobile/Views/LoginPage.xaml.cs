@@ -1,4 +1,5 @@
 ﻿using ElishAppMobile.ViewModels;
+using ShareModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,21 @@ namespace ElishAppMobile.Views
         public LoginPage()
         {
             InitializeComponent();
+            BindingContext = new LoginViewModel();
+        }
+    }
+
+    public class LoginViewModel:BaseViewModel
+    {
+        private string url;
+
+        public string Url
+        {
+            get { return Helper.Url; }
+            set { SetProperty(ref url , value);
+                Helper.Url = value;
+            }
         }
 
-      
     }
 }

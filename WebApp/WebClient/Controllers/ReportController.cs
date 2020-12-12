@@ -1,8 +1,6 @@
 ﻿using AspNetCore.Reporting;
-using AspNetCore.Reporting.ReportExecutionService;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShareModels;
 using System;
@@ -79,10 +77,6 @@ namespace WebClient.Controllers
             return File(result.MainStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
-
-
-
-
         public async Task<ActionResult> PrintPenjualan(int id)
         {
             var data = await _penjualanService.GetPenjualan(id);
@@ -126,7 +120,6 @@ namespace WebClient.Controllers
             var result = localReport.Execute(RenderType.Pdf, 1, null, "");
             return File(result.MainStream, "application/pdf");
         }
-
 
         public async Task<ActionResult> OrderPembelianExcel(int id)
         {
