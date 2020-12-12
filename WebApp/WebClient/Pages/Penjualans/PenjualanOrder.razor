@@ -1,0 +1,100 @@
+@page "/penjualan/order";
+
+@attribute [Authorize]
+
+@inject IPenjualanService penjualanService;
+@inject ICustomerService customerService;
+@inject IProductService productService;
+@inject DialogService dialog;
+
+@inject NavigationManager nav;
+
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="Data Order Penjualan">
+            <RadzenButton Icon="add" Style="margin-bottom:10px" ButtonStyle="ButtonStyle.Success"
+                          Click="@(()=> nav.NavigateTo($"/penjualan/orderdetail"))" />
+            @if (orders == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <RadzenGrid Data="@(orders.Where(e => currentTOC >= 0 ? e.Status == currentTOC: true))"
+                            AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Orderpenjualan">
+                    <Columns>
+                        <RadzenGridColumn Width="120px" TItem="Orderpenjualan" Property="OrderDate" Title="Order" />
+                        <RadzenGridColumn Width="180px" TItem="Orderpenjualan" Property="Nomor" Title="Nomor" />
+                        <RadzenGridColumn Width="280px" TItem="Orderpenjualan" Property="Customer.Name" Title="Customer" />
+                        <RadzenGridColumn TItem="Orderpenjualan" Property="Sales.Name" Title="Sales" />
+                        <RadzenGridColumn TextAlign="TextAlign.Center" Width="80px" TItem="Orderpenjualan" Property="Discount" Title="Discount">
+                            <Template Context="item">
+                                @(item.Discount + "%")
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="150px" TextAlign=TextAlign.Right TItem="Orderpenjualan" Property="Total" Title="Total">
+                            <Template Context="item">
+                                @(item.Total.ToString("N"))
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="120px" TItem="Orderpenjualan" Property="Status" Title="Status">
+                            <FilterTemplate>
+                                <RadzenDropDown @bind-Value="@currentTOC" TextProperty="Text"
+                                                ValueProperty="Value" Style="width:100%"
+                                                Data="@(Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().Select(t => new { Text = $"{t}", Value = t }))" />
+                            </FilterTemplate>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="Orderpenjualan" Context="item" Bubble="false"
+                                          Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                            <Template Context="item">
+                                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list"
+                                              Size="ButtonSize.Medium"
+                                              Click="@(()=> nav.NavigateTo($"/penjualan/orderdetail/{item.Id}"))" />
+                                <RadzenButton Visible=@(item.Status==OrderStatus.New?true:false) ButtonStyle="ButtonStyle.Warning" Icon="edit"
+                                              Size="ButtonSize.Medium" Click="@(()=> CreatePenjualan(item))" />
+                            </Template>
+                        </RadzenGridColumn>
+                    </Columns>
+                </RadzenGrid>
+            }
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+
+@code {
+    public class Employee
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+
+    }
+
+    IEnumerable<Orderpenjualan> orders;
+
+    IEnumerable<Customer> customers;
+
+    OrderStatus currentTOC;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await customerService.Get();
+        orders = await penjualanService.GetOrders();
+    }
+
+
+    async Task CreatePenjualan(Orderpenjualan item)
+    {
+
+        var resultDialog = await dialog.Confirm("Yakin Buat Penjualan ? ", "Buat Penjualan", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
+        if (resultDialog != null && resultDialog == true)
+        {
+            var result = await penjualanService.CreatePenjualan(item.Id);
+
+            if (result != null)
+            {
+                nav.NavigateTo($"/penjualan/realisasidetail/{result.Id}");
+            }
+        }
+    }
+}

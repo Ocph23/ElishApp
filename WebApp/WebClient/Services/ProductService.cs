@@ -1,4 +1,8 @@
-﻿using ShareModels;
+﻿using Microsoft.Extensions.Logging;
+using Ocph.DAL;
+using Ocph.DAL.Mapping.MySql;
+using ShareModels;
+using ShareModels.ModelViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,21 +11,17 @@ using System.Threading.Tasks;
 namespace WebClient.Services
 {
 
-    public interface IProductService : IService<Product>
-    {
-        Task<IEnumerable<Product>> GetProductsBySupplier(int id);
-        Task<Product> AddProduct(int supplierId, Product product);
-        Task<Unit> AddUnit(int productId, Unit unit);
-        Task<Unit> UpdateUnit(int unitId, Unit unit);
-    }
+   
 
     public class ProductService : IProductService
     {
-        private OcphDbContext dbContext;
+        readonly OcphDbContext dbContext;
+        private readonly ILogger<ProductService> logger;
 
-        public ProductService(OcphDbContext db)
+        public ProductService(OcphDbContext db, ILogger<ProductService> log)
         {
             dbContext = db;
+            logger = log;
         }
 
         public Task<Product> AddProduct(int supplierId, Product product)
@@ -35,6 +35,16 @@ namespace WebClient.Services
                     product.Id = dbContext.Products.InsertAndGetLastID(product);
                     if (product.Id <= 0)
                         throw new SystemException("Product Not Created !");
+
+                    foreach (var unit in product.Units)
+                    {
+                        unit.ProductId = product.Id;
+                        unit.Id = dbContext.Units.InsertAndGetLastID(unit);
+                        if(unit.Id <=0)
+                            throw new SystemException("Product Not Created !");
+
+                    }
+
                     exsitsProduct = product;
                 }
 
@@ -200,6 +210,49 @@ namespace WebClient.Services
             return Task.FromResult(updated);
         }
 
+        public Task<IEnumerable<ProductStock>> GetProductStock()
+        {
+            try
+            {
+                var command = dbContext.CreateCommand();
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandText = "GetStock";
 
+                var reader = command.ExecuteReader();
+                 var   list = new MappingColumn(new EntityInfo(typeof(ProductStock))).MappingWithoutInclud<ProductStock>(reader);
+                reader.Close();
+
+                var result = from a in list
+                             join k in dbContext.Categories.Select() on a.CategoryId equals k.Id
+                             join sp in dbContext.SupplierProducts.Select() on a.Id  equals sp.ProductId
+                                         join s in dbContext.Suppliers.Select() on sp.SupplierId equals s.Id
+                             join u in dbContext.Units.Select() on a.Id equals u.ProductId into gg
+                             select new ProductStock
+                             {
+                                 Category = k,
+                                 Supplier = s,
+                                 CategoryId = a.CategoryId,
+                                 CodeArticle = a.CodeArticle,
+                                 CodeName = a.CodeName,
+                                 Description = a.Description,
+                                 Id = a.Id,
+                                 Merk = a.Merk,
+                                 Name = a.Name,    
+                                 Pembelian = a.Pembelian,
+                                 Penjualan = a.Penjualan,
+                                 Size = a.Size,
+                                 Units = (from g in gg select g).ToList()
+                             };
+
+
+
+                return Task.FromResult(result);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+                throw new SystemException(ex.Message);
+            }
+        }
     }
 }

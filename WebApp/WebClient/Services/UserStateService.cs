@@ -14,13 +14,7 @@ using WebClient.Services;
 
 namespace WebClient.Services
 {
-    public interface IUserStateService
-    {
-        AuthenticateResponse User { get; set; }
-        Task<bool> Login(UserLogin model);
-        Task Logout();
-        Task Initialize();
-    }
+   
 
     public class UserStateService : IUserStateService
     {

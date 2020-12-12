@@ -1,78 +1,52 @@
 ﻿@page "/supplier"
 
-@using System;
-@using ShareModels;
-@using WebClient.Services;
+
+
+@attribute [Authorize]
 
 @inject NavigationManager nav;
 @inject ISupplierService supplierService;
 
 <h3>Data Supplier</h3>
-<NavLink class="btn btn-successs" para href="/supplier/change">Add</NavLink>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nama Supplier</th>
-            <th scope="col">Contact Name</th>
-            <th scope="col">Contact Telepon</th>
-            <th scope="col">Address</th>
-            <th scope="col">Email</th>
-            <th scope="col">Office</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
+<RadzenButton Icon="add" Style="margin-bottom: 5px; white-space: pre-wrap" ButtonStyle="ButtonStyle.Success" Click="@(()=> nav.NavigateTo($"/supplier/change"))"/>
+    <RadzenGrid Data="suppliers" AllowFiltering="true" AllowPaging="true" AllowSorting="true"  >
+        <Columns>
+            <RadzenGridColumn TItem="Supplier" Title="Name" Property="Nama" />
+            <RadzenGridColumn TItem="Supplier" Title="Contact Person" Property="ContactPersonName" Width="250px" />
+            <RadzenGridColumn TItem="Supplier" Title="Telepon" Property="Telepon" Width="200px" />
+            <RadzenGridColumn TItem="Supplier" Context="item" Width="100px">
+                <Template>
+                    <RadzenButton Icon="info" ButtonStyle="ButtonStyle.Warning" Click="@(()=> nav.NavigateTo($"/supplier/change/{item.Id}"))"></RadzenButton>
+                    <RadzenButton Icon="list" ButtonStyle="ButtonStyle.Info" Click="@(()=> nav.NavigateTo($"/supplier/products/{item.Id}"))"></RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
 
-        @if (suppliers != null)
+
+
+    @code {
+        private IEnumerable<Supplier> suppliers;
+
+        protected override async Task OnInitializedAsync()
         {
-            var number = 1;
-            foreach (var item in suppliers)
+            try
             {
-                var linkEdit = $"/supplier/change/{item.Id}";
-                var linkProducts = $"/supplier/products/{item.Id}";
-                <tr>
-                    <th scope="row">@number</th>
-                    <td>@item.Nama</td>
-                    <td>@item.ContactPersonName</td>
-                    <td>@item.ContactPerson</td>
-                    <td>@item.Address</td>
-                    <td>@item.Email</td>
-                    <td>@item.Telepon</td>
-                    <td>
-                        <NavLink para href="@linkEdit">Edit</NavLink>
-                        <NavLink para href="@linkProducts">Products</NavLink>
-                    </td>
-                </tr>
-                number++;
+                suppliers = await supplierService.GetSuppliers();
             }
+            catch (Exception)
+            {
+
+
+            }
+
+
         }
-    </tbody>
-</table>
 
 
-@code {
-    private IEnumerable<Supplier> suppliers;
-
-    protected override async Task OnInitializedAsync()
-    {
-        try
+        private void AddAction()
         {
-            suppliers = await supplierService.GetSuppliers();
+            nav.NavigateTo("/supplier/change/1");
         }
-        catch (Exception)
-        {
-
-
-        }
-
 
     }
-
-
-    private void AddAction()
-    {
-        nav.NavigateTo("/supplier/change/1");
-    }
-
-}

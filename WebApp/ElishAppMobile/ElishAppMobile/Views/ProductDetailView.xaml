@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:ShareModels;assembly=ShareModels"
+             Title="Detail Product"
+             x:Class="ElishAppMobile.Views.ProductDetailView">
+    <ContentPage.Content>
+        <ScrollView Padding="20" BackgroundColor="#E3EBFF">
+            <StackLayout>
+                <StackLayout Grid.Row="1" Margin="10">
+                    <Label Text="Detail" FontSize="Large" FontAttributes="Bold" />
+                    <StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Product Name" FontAttributes="Bold"/>
+                            <Label Text="{Binding Model.Name}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Merk" FontAttributes="Bold"/>
+                            <Label Text="{Binding Model.Merk}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Product Code" FontAttributes="Bold"/>
+                            <Label Text="{Binding Model.CodeName}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Article" FontAttributes="Bold"/>
+                            <Label Text="{Binding Model.CodeArticle}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Size" FontAttributes="Bold"/>
+                            <Label Text="{Binding Model.Size}" Margin="10,0"/>
+                        </StackLayout>
+
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Description" FontAttributes="Bold"/>
+                            <Label Text="{Binding Model.Description}"  Margin="10,0"/>
+                        </StackLayout>
+
+                    </StackLayout>
+
+                </StackLayout>
+                <StackLayout Grid.Row="1" Margin="10">
+                    <Label Text="Galery" FontSize="Large" FontAttributes="Bold" />
+                    <Image Source="iamge2.png" HeightRequest="200" Margin="20"/>
+                </StackLayout>
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

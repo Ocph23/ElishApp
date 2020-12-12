@@ -1,0 +1,129 @@
+﻿@page "/data/penjualan"
+
+@using ShareModels.ModelViews;
+@using Newtonsoft.Json;
+
+@inject IPenjualanService penjualanService
+
+@attribute [Authorize]
+
+<RadzenFieldset Text="Laporan Penjualan">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Start Date</label>
+                <div class="col-sm-10">
+                    <RadzenDatePicker Change="@(()=>GetData(true))" @bind-Value="start" Style="width:200px" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">End Date</label>
+                <div class="col-sm-10">
+                    <RadzenDatePicker Change="@(()=>GetData(true))" @bind-Value="endDate" Style="width:200px" />
+                </div>
+            </div>
+            <div class="form-group row" style="padding-left:15px">
+                <RadzenRadioButtonList @bind-Value=@grouping TValue="int" Change=@((args) => GetData(false))>
+                    <Items>
+                        <RadzenRadioButtonListItem Text="Product" Value="1" />
+                        <RadzenRadioButtonListItem Text="Penjualan" Value="2" />
+                        <RadzenRadioButtonListItem Text="Customer" Value="3" />
+                        <RadzenRadioButtonListItem Text="Sales" Value="4" />
+                    </Items>
+                </RadzenRadioButtonList>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <RadzenGrid @ref="grid" Data="datas" ColumnWidth="200px">
+                <Columns>
+                </Columns>
+            </RadzenGrid>
+        </div>
+    </div>
+</RadzenFieldset>
+
+
+@code {
+    int grouping = 1;
+    private DateTime start;
+    private DateTime endDate;
+    private List<PenjualanViewModel> datas = new List<PenjualanViewModel>();
+    private IEnumerable<PenjualanViewModel> source = new List<PenjualanViewModel>();
+    RadzenGrid<PenjualanViewModel> grid;
+
+
+    public async Task GetData(bool forced)
+    {
+        if (forced)
+            source = new List<PenjualanViewModel>();
+
+        if (source.Count() <= 0 || forced)
+        {
+            source = await penjualanService.GetPenjualans(start, endDate);
+        }
+
+        grid.ColumnsCollection.Clear();
+
+        datas.Clear();
+        switch (grouping)
+        {
+            #pragma warning disable BL0005
+            case 1:
+                var group1 = source.GroupBy(x => x.ProductView).ToList();
+                SetData(group1);
+
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "Name", Title = "Name" });
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CodeName", Title = "Code Name" });
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CodeName", Title = "Article" });
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "SupplierName", Title = "Supplier" });
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "AmountView", Title = "Amount" });
+                break;
+
+            case 2:
+                var group2 = source.GroupBy(x => x.Id.ToString());
+                SetData(group2);
+
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CreateDate", Title = "Crate" });
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "Nomor", Title = "Nomor" });
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CustomerName", Title = "Customer" });
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "Payment", Title = "Payment Type" });
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "Status", Title = "Paid" });
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "SalesName", Title = "Sales" });
+                break;
+
+
+            case 3:
+                var group3 = source.GroupBy(x => x.CustomerName);
+                SetData(group3);
+
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CustomerName", Title = "Customer" });
+                break;
+
+
+            case 4:
+                var group4 = source.GroupBy(x => x.SalesName);
+                SetData(group4);
+                grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "SalesName", Title = "Sales" });
+                break;
+        }
+
+        grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "TotalDiscountView", Title = "Discount", TextAlign = TextAlign.Right });
+        grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "GrandTotal", Title = "Total", TextAlign = TextAlign.Right });
+
+
+        await grid.Reload();
+    }
+
+    void SetData(IEnumerable<IGrouping<string, PenjualanViewModel>> group)
+    {
+        foreach (var items in group)
+        {
+            var item = items.FirstOrDefault();
+            item.TotalDiscountView = items.ToList().Sum(x => x.TotalDiscount).ToString("N2");
+            item.GrandTotal = (items.ToList().Sum(x => x.TotalView) - items.ToList().Sum(x => x.TotalDiscount)).ToString("N2");
+            item.AmountView = items.ToList().Sum(x => x.Amount).ToString("N");
+            datas.Add(item);
+        }
+    }
+
+}

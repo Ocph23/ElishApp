@@ -1,0 +1,160 @@
+﻿@layout AuthLayout
+
+@using QRCoder;
+@using System.Drawing;
+@using System.Drawing.Imaging;
+@using System.IO;
+
+
+@if (Model != null && Model.Id > 0)
+{
+<div class="col-md-12 justPrint" style="padding-left:0px">
+    <div class="row">
+        <div class="col">
+            <h2>SALES ORDER</h2>
+            <h6>SUN SWALLOW</h6>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label col-form-label-sm">Nomor</label>
+                <div class="col-sm-8">
+                    <input type="text" value="@Model.Nomor" class="form-control form-control-sm">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label col-form-label-sm">Customer</label>
+                <div class="col-sm-8">
+                    @if(Model.Customer!=null)
+                    {
+                    <textarea value="@(Model.Customer.Name + "\r\n" + Model.Customer.Address)" style="width:100%; min-height:75px" class="form-control form-control-sm"></textarea>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="col" style="text-align:right">
+                <RadzenImage Path="@barcode_text" Style="width:100px" />
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label col-form-label-sm">Tanggal</label>
+                <div class="col-sm-8">
+                    <input type="text" value="@(Model.OrderDate.ToString("dd-MM-yyyy"))" class="form-control form-control-sm">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label col-form-label-sm">Jatuh Tempo</label>
+                <div class="col-sm-8">
+                    <input type="text" value="" class="form-control form-control-sm">
+                </div>
+            </div>
+            @if (Model.Discount > 0)
+            {
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label col-form-label-sm">Discount</label>
+                    <div class="col-sm-8">
+                        <input type="text" value="@Model.Discount %" class="form-control form-control-sm">
+                    </div>
+                </div>
+            }
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label col-form-label-sm">Sales</label>
+                <div class="col-sm-8">
+                    @if (Model.Sales != null)
+                    {
+                        <input type="text" value="@Model.Sales.Name" class="form-control form-control-sm">
+                    }
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table ">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Kode Article</th>
+                <th>Nama Barang</th>
+                <th colspan="2">Jumlah</th>
+                <th>Harga</th>
+                @if (Model.Discount > 0)
+                {
+                    <th>Discount</th>
+                }
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Items.Count > 0)
+            {
+                var i = 1;
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Product.CodeArticle</td>
+                        <td>@item.Product.Name @item.Product.Size</td>
+                        <td style="text-align:right">@(item.Amount)</td>
+                        <td>@(item.Unit.Name)</td>
+                        <td>@item.Price</td>
+                        @if (Model.Discount > 0)
+                        {
+                            <td>@(item.Total * Model.Discount / 100)</td>
+                        }
+                        <td>@(item.Total - (item.Total * Model.Discount / 100))</td>
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+    <div class="datainfo">
+        <div> Barang2 telah diterima dengan baik dan cukup </div>
+        Barang2 telah dibeli tidak dapat ditukar/dikembalian
+        <div>
+            Pembayaran dapat ditransfer Ke :
+            <div>Nama : Elisabeth Hamid</div>
+            Ac : (Bank Mandiri) 154-00-1667520-3
+        </div>
+    </div>
+
+</div>
+
+}
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public Orderpenjualan Model { get; set; }
+
+    string barcode_text = "";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1000);
+        if (Model!=null && Model.Id > 0)
+        {
+            using (var ms = new MemoryStream())
+            {
+                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(Model.Nomor, QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(qrCodeData);
+
+                using (Bitmap bitmap = qrCode.GetGraphic(20))
+                {
+                    bitmap.Save(ms, ImageFormat.Png);
+                    barcode_text = "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
+                }
+
+                Bitmap qrCodeImage = qrCode.GetGraphic(20);
+            }
+        }
+    }
+}

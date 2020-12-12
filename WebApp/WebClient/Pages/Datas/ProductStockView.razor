@@ -1,0 +1,48 @@
+﻿@page "/data/stock"
+
+@using ShareModels.ModelViews;
+@attribute [Authorize]
+
+@inject IProductService productService;
+
+<div class="col-md-12">
+    <RadzenFieldset Text="Data Real Stok">
+
+        <RadzenGrid @ref="gridStock"  Data="@Stocks" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="ProductStock">
+            <Columns>
+                <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeArticle" Title="Article" />
+                <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeName" Title="Code" />
+                <RadzenGridColumn TItem="ProductStock" Property="Name" Title="Product" />
+                <RadzenGridColumn Width="75px" TItem="ProductStock" Property="Size" Title="Size" />
+                <RadzenGridColumn Width="75px" TItem="ProductStock" Property="StockView" Title="Stock" />
+                <RadzenGridColumn Width="150px" TItem="ProductStock" Title="Unit">
+                    <Template Context="data">
+                        <Radzen.Blazor.RadzenDropDown Data="data.Units"
+                                                      TextProperty="Name" @bind-Value="data.SelectedUnit">
+
+                        </Radzen.Blazor.RadzenDropDown>
+                    </Template>
+                </RadzenGridColumn>
+            </Columns>
+        </RadzenGrid>
+    </RadzenFieldset>
+</div>
+
+@code {
+
+    RadzenGrid<ProductStock> gridStock;
+    public List<ProductStock> Stocks { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var stocks = await productService.GetProductStock();
+        Stocks = stocks.ToList();
+        foreach (var item in Stocks)
+        {
+            item.SelectedUnit = item.Units.Where(x => x.Level == 0).FirstOrDefault();
+        }
+
+    }
+
+}

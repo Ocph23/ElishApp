@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ElishAppMobile.Views.ProductView"
+             xmlns:local="clr-namespace:ElishAppMobile.Views"  
+             xmlns:model="clr-namespace:ShareModels.ModelViews;assembly=ShareModels"
+             xmlns:control="clr-namespace:ElishAppMobile.Helpers"
+             NavigationPage.HasNavigationBar="true"
+             BackgroundColor="White"
+             x:Name="BrowseItemsPage">
+    <Shell.SearchHandler>
+        <control:TextSearchHandler x:Name="search" Placeholder="Cari"></control:TextSearchHandler>
+    </Shell.SearchHandler>
+    <RefreshView x:DataType="local:ProductViewViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=Default}">
+        <CollectionView x:Name="ItemsListView" 
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="0,1" x:DataType="model:ProductStock" BackgroundColor="LightGray" >
+                        <SwipeView VerticalOptions="CenterAndExpand" >
+                            <SwipeView.RightItems>
+                                <SwipeItems >
+                                    <SwipeItemView  
+                                               BackgroundColor="LightGreen" 
+                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type local:ProductViewViewModel}}, Path=ScanBarcode}"	
+                                               CommandParameter="{Binding .}" >
+                                        <StackLayout WidthRequest="100">
+                                            <Label Text="Scan" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"></Label>
+                                        </StackLayout>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <!-- Content -->
+                            <Grid BackgroundColor="White" Padding="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="75"/>
+                                </Grid.ColumnDefinitions>
+                                <StackLayout Spacing="0">
+                                    <Label Text="{Binding CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="18" />
+                                    <Label Text="{Binding Name}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+                                    <Label Text="{Binding CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" />
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ProductViewViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                                <StackLayout Grid.Column="1" Spacing="0">
+                                    <Label Text="{Binding StockView}" FontSize="18" HorizontalOptions="CenterAndExpand"/>
+                                    <Label HorizontalOptions="CenterAndExpand" Text="{Binding SelectedUnit.Name}" FontSize="18"/>
+                                </StackLayout>
+                            </Grid>
+                        </SwipeView>
+                      
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

@@ -1,0 +1,351 @@
+﻿@page "/penjualan/orderdetail/{id?}"
+
+
+
+@using ShareModels.ModelViews;
+@using WebClient.Pages.ShareComponent;
+
+@attribute [Authorize]
+
+@inject ICustomerService customerService;
+@inject IPenjualanService penjualanService;
+@inject IProductService productService;
+@inject IKaryawanService karyawanService;
+@inject NotificationService NotificationService;
+@inject NavigationManager nav;
+
+<div class="noprint">
+    <RadzenTabs>
+        <Tabs>
+
+            <RadzenTabsItem Text="Data Order Pembelian">
+                <nav aria-label="breadcrumb">
+                    <h3>Create Order Penjualan</h3>
+                </nav>
+
+                <div class="col-md-6 noprint">
+                    <RadzenFieldset Text="Data Pembelian">
+                        <div class="row">
+                            <div class="col-md-4 align-items-center d-flex">
+                                <RadzenLabel Text="Customer" />
+                            </div>
+                            <div class="col-md-8">
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                Data=@customers @bind-Value=@model.CustomerId SelectedItemChanged="@((arg)=> SelectCustomer(arg))"
+                                                TextProperty="Name" ValueProperty="Id" />
+                            </div>
+
+                            <div class="col-md-4 align-items-center d-flex">
+                                <RadzenLabel Text="Discount" />
+                            </div>
+                            <div class="col-md-8">
+                                <RadzenNumeric @bind-Value="model.Discount" TValue="double" Style="margin-bottom:10px" Placeholder="0.0" Step="0.1" /> %
+                            </div>
+
+                            <div class="col-md-4 align-items-center d-flex">
+                                <RadzenLabel Text="Sales" />
+                            </div>
+                            <div class="col-md-8">
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                Data=@sales @bind-Value=@model.SalesId SelectedItemChanged="@((arg)=> SelectSales(arg))"
+                                                TextProperty="Name" ValueProperty="Id" />
+                            </div>
+
+                            <div class="col-md-4 align-items-center d-flex">
+                                <RadzenLabel Text="Status" Style="margin-top:10px" />
+                            </div>
+                            <div class="col-md-8">
+                                <RadzenTextBox Disabled=true Value="@model.Status.ToString()" Style="margin-top:10px" />
+                            </div>
+                        </div>
+
+                    </RadzenFieldset>
+                </div>
+
+                <div class="col-md-12">
+                    <RadzenFieldset Text="Data Orders">
+                        <div class="row col-md-6">
+                            <div class="col-md-4 align-items-center d-flex">
+                                <RadzenLabel Text="Cari Product" />
+                            </div>
+                            <div class="col-md-8">
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                Data=@products.Where(item=> !model.Items.Any(data=> data.ProductId.Equals(item.Id)))
+                                                @bind-Value=@product.Id
+                                                TextProperty="CodeName" ValueProperty="Id" Style="width:400px"
+                                                Change=@(args => SelectProduct(args, "Supplier")) />
+                            </div>
+                        </div>
+
+
+
+                        <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" AllowPaging="true" ColumnWidth="auto"
+                                    AllowSorting="true" TItem="OrderPenjualanItem">
+                            <Columns>
+                                <RadzenGridColumn TItem="OrderPenjualanItem" Property="Product.CodeName" Title="Code" />
+                                <RadzenGridColumn TItem="OrderPenjualanItem" Property="Product.Name" Title="Product" />
+                                <RadzenGridColumn TItem="OrderPenjualanItem" Width="150px" Property="Product.CodeArticle" Title="Article" />
+                                <RadzenGridColumn TItem="OrderPenjualanItem" Width="100px" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
+                                    <EditTemplate Context="item">
+                                        <RadzenNumeric TValue="double" @bind-Value="item.Amount" Step="0.25" Change=@(args => OnChangeOrderItem(args, item)) />
+                                    </EditTemplate>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="OrderPenjualanItem" Width="120px" Property="Unit.Name" Title="Unit">
+                                    <EditTemplate Context="item">
+                                        <RadzenDropDown @bind-Value="item.UnitId" Data="@item.Product.Units"
+                                                        Change=@(args => OnChangeOrderItem(args, item))
+                                                        TextProperty="Name" ValueProperty="Id" Style="width:100%" />
+                                    </EditTemplate>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="OrderPenjualanItem" Width="150px" TextAlign="TextAlign.Right" Property="Price" Title="Price">
+                                    <EditTemplate Context="item">
+                                        <RadzenNumeric @bind-Value="item.Price" Step="0.25" />
+                                    </EditTemplate>
+                                    <FooterTemplate>
+                                        <div>Total</div>
+                                        <div>Discount</div>
+                                        <div>Total Payment </div>
+                                    </FooterTemplate>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="OrderPenjualanItem" Width="180px" Property="Total" TextAlign="TextAlign.Right" Title="Total">
+                                    <FooterTemplate>
+                                        @{
+                                            <div>@model.Total.ToString("N")</div>
+                                            var total = model.Total * (model.Discount / 100);
+                                            <div>@total.ToString("N")</div>
+                                            <div>@((model.Total-total).ToString("N"))</div>
+
+                                        }
+                                    </FooterTemplate>
+                                </RadzenGridColumn>
+
+                                <RadzenGridColumn TItem="OrderPenjualanItem" Context="sampleBlazorModelsSampleOrder"
+                                                  Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                                    <HeaderTemplate>
+                                        <RadzenCheckBox Value="@editAll" TValue="bool" ValueChanged="@((v)=>EditAllChange(v))" />
+                                    </HeaderTemplate>
+
+                                    <Template Context="order">
+                                        <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(order))">
+                                        </RadzenButton>
+                                    </Template>
+                                    <EditTemplate Context="order">
+                                        <RadzenButton Icon="save" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Warning" Click="@((args) => SaveRow(order))">
+                                        </RadzenButton>
+                                        <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Danger"
+                                                      Click="@((args) => CancelEdit(order))">
+                                        </RadzenButton>
+                                    </EditTemplate>
+
+                                    <FooterTemplate>
+                                        <RadzenButton Click=@(args => Cancel()) Icon="cancel" ButtonStyle="ButtonStyle.Warning" />
+                                        <RadzenButton Visible="@(model.Items.Count>0)" Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
+                                    </FooterTemplate>
+                                </RadzenGridColumn>
+                            </Columns>
+                        </RadzenGrid>
+                    </RadzenFieldset>
+                </div>
+            </RadzenTabsItem>
+
+        </Tabs>
+    </RadzenTabs>
+</div>
+
+@if(model!=null){
+<PrintLayout>
+    <SalesOrderLayout Model="model" />
+</PrintLayout>
+}
+
+
+
+@code{
+    [Parameter]
+    public string id { get; set; }
+
+    private Product product = new Product();
+    private IEnumerable<Customer> customers;
+    private IEnumerable<Karyawan> sales;
+    private IEnumerable<ProductStock> products = new List<ProductStock>();
+    private Orderpenjualan model = new Orderpenjualan() { Items = new List<OrderPenjualanItem>() };
+    private RadzenGrid<OrderPenjualanItem> ordersGrid;
+    private bool editAll;
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await customerService.Get();
+        products = await productService.GetProductStock();
+        sales = await karyawanService.Get();
+        if (!string.IsNullOrEmpty(id))
+        {
+            int paramId = Convert.ToInt32(id);
+            if (paramId > 0)
+            {
+
+                this.model = await penjualanService.GetOrder(paramId);
+            }
+
+        }
+
+    }
+
+
+    void EditAllChange(object obj)
+    {
+        editAll = !editAll;
+        foreach (var item in model.Items)
+        {
+            if (editAll)
+                ordersGrid.EditRow(item);
+
+            else
+            {
+                ordersGrid.UpdateRow(item);
+            }
+        }
+    }
+
+    void SelectCustomer(object customer)
+    {
+        var cust = (Customer)customer;
+        if (cust != null)
+            model.Customer = cust;
+    }
+
+    void SelectSales(object sales)
+    {
+        var kar = (Karyawan)sales;
+        if (kar != null)
+            model.Sales = kar;
+    }
+
+    private void RemoveItem(OrderPenjualanItem item)
+    {
+        model.Items.Remove(item);
+
+    }
+    private void Cancel()
+    {
+        model = new Orderpenjualan() { Items = new List<OrderPenjualanItem>() };
+    }
+
+    void EditRow(OrderPenjualanItem item)
+    {
+        ordersGrid.EditRow(item);
+    }
+    void SaveRow(OrderPenjualanItem item)
+    {
+        ordersGrid.UpdateRow(item);
+    }
+    async Task CancelEdit(OrderPenjualanItem item)
+    {
+
+
+        model.Items.Remove(item);
+        await ordersGrid.Reload();
+    }
+
+
+    private async Task Save(Orderpenjualan model)
+    {
+
+        try
+        {
+            Orderpenjualan result;
+            if (model.Id <= 0)
+            {
+                model.OrderDate = DateTime.Now;
+
+                result = await penjualanService.CreateOrder(model);
+            }
+            else
+            {
+                result = await penjualanService.UpdateOrder(model.Id, model);
+            }
+
+            if (result != null)
+            {
+                NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Success",
+                    Detail = "Order Berhasil Dibuat !",
+                    Duration = 3000
+                });
+
+                await Task.Delay(1000);
+
+                nav.NavigateTo("/penjualan/order");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            NotificationService.Notify(new NotificationMessage
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = ex.Message,
+                Duration = 3000
+            });
+        }
+
+    }
+    async Task SelectProduct(object value, string name)
+    {
+        var prodId = (int)value;
+        var _product = products.Where(x => x.Id == prodId).FirstOrDefault();
+        if (_product != null && model.Items.Where(x => x.ProductId == _product.Id).FirstOrDefault() == null)
+        {
+            var item = new OrderPenjualanItem { Product = _product, ProductId = prodId, Amount = 1 };
+            item.Unit = _product.Units.FirstOrDefault();
+            item.UnitId = item.Unit.Id;
+            if (model.Items == null)
+                model.Items = new List<OrderPenjualanItem>();
+            model.Items.Add(item);
+        }
+
+        product = new Product();
+        await ordersGrid.Reload();
+    }
+
+
+
+    private async Task OnChangeOrderItem(object arg, OrderPenjualanItem item)
+    {
+        if (arg.GetType() == typeof(Int32))
+        {
+            var unitId = (Int32)arg;
+            var unit = item.Product.Units.Where(x => x.Id == unitId).FirstOrDefault();
+            if (unit != null)
+            {
+                item.Unit = unit;
+                item.Price = unit.Buy;
+            }
+            await Task.Delay(100);
+        }
+
+
+        var productStok = products.Where(x => x.Id == item.ProductId).FirstOrDefault();
+        if (productStok != null)
+        {
+            var readyStok = productStok.Stock / item.Unit.Amount;
+            if (item.Amount > readyStok)
+            {
+                NotificationService.Notify(new NotificationMessage
+                {
+                    Detail = $"Stock {productStok.CodeName} Tidak Cukup \r Sisa Stock = {readyStok} {item.Unit.Name}",
+                    Severity = NotificationSeverity.Error
+                });
+                item.Amount = readyStok;
+            }
+        }
+
+
+        StateHasChanged();
+    }
+
+
+}

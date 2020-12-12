@@ -1,9 +1,12 @@
 @page "/supplier/product/{supplierId?}/{id?}";
 
+@attribute [Authorize]
 
 @inject IProductService productService;
 @inject NavigationManager nav;
-@inject NotificationService NotificationService
+@inject NotificationService NotificationService;
+@inject ISupplierService supplierService;
+@inject ICategoryService categoryService;
 
 
 
@@ -14,81 +17,155 @@
 </nav>
 
 
+<RadzenTemplateForm Data="model" Submit="@(async (Product prod)=> { await SaveProduct(model); })">
+    <Radzen.Blazor.RadzenFieldset Text="Data Product">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Category" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenDropDown @bind-Value="model.CategoryId" AllowClear="true" Placeholder="Select Category"
+                                        Data="@categories" style="width: 60%;" TextProperty="Name" ValueProperty="Id" Name="CardId">
+                        </RadzenDropDown>
+                    </div>
+                </div>
 
-<EditForm Model="@model" OnValidSubmit="SaveProduct">
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputPassword4">Category</label>
-            <input type="text" @bind="model.Category.Name" class="form-control">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputEmail4">Pruduct Name</label>
-            <input type="text" @bind="model.Name" class="form-control">
-        </div>
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Product Name" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextBox @bind-Value="model.Name" />
+                    </div>
+                </div>
 
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputEmail4">Code Name</label>
-            <input type="text" @bind="model.CodeName" class="form-control">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputPassword4">Code Article</label>
-            <input type="text" @bind="model.CodeArticle" class="form-control">
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputEmail4">Merk</label>
-            <input type="text" @bind="model.Merk" class="form-control">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputPassword4">Size</label>
-            <input type="text" @bind="model.Size" class="form-control">
-        </div>
-    </div>
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Code Product" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextBox @bind-Value="model.CodeName" />
+                    </div>
+                </div>
 
-    <button type="button" @onclick="GoBack" class="btn btn-primary">Back</button>
-    <button type="submit" class="btn btn-primary">Save</button>
-</EditForm>
-
-<hr />
-<h3>Harga Product</h3>
-<button class="btn btn-success" @onclick="AddItem"><i class="material-icons">add</i> </button>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Level Unit</th>
-            <th scope="col">Jumlah Per Unit</th>
-            <th scope="col">Harga Beli</th>
-            <th scope="col">Harga Jual</th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (model != null && model.Units != null)
-        {
-            foreach (var unit in model.Units)
-            {
-                <tr>
-                    <th scope="row">1</th>
-                    <td><input @bind="unit.Name" type="text" @oninput="@(() => OnChange(unit.Id))"></td>
-                    <td><input @bind="unit.Level" type="number" @oninput="@(() => OnChange(unit.Id))"></td>
-                    <td><input @bind="unit.Amount" type="number" @oninput="@(() => OnChange(unit.Id))"></td>
-                    <td><input @bind="unit.Buy" type="number" @oninput="@(() => OnChange(unit.Id))"></td>
-                    <td><input @bind="unit.Sell" type="number" @oninput="@(() => OnChange(unit.Id))"></td>
-                    <td style="width: 30px !important;">
-                        <ButtonLitleSave @ref="ComponentRef" unit="unit" OnButtonClick="OnButtonClickHandler" />
-                    </td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Code Article" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextBox @bind-Value="model.CodeArticle" />
+                    </div>
+                </div>
 
 
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Merk" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextBox @bind-Value="model.Merk" />
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Size" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextBox @bind-Value="model.Size" />
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Description" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextArea @bind-Value="model.Description" />
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <hr />
+        <div class="row text-center" style="margin:10px">
+
+            <Radzen.Blazor.RadzenButton Icon="undo" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" Style="margin:5px" />
+            <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
+        </div>
+
+    </Radzen.Blazor.RadzenFieldset>
+    <hr />
+    <RadzenFieldset Text="Harga Product">
+        <Radzen.Blazor.RadzenButton ButtonType="ButtonType.Button" class="btn btn-success" Click="@(()=>AddItem())" Icon="add" Style="margin-bottom:10px" />
+        <RadzenGrid @ref="unitGrid" Data="@(model.Units)" AllowFiltering="true"
+                    AllowPaging="true" AllowSorting="true" TItem="Unit">
+            <Columns>
+                <RadzenGridColumn TItem="Unit" Property="Name" Title="Unit Name">
+                    <EditTemplate Context="item">
+                        <RadzenTextBox @bind-Value="item.Name" />
+                    </EditTemplate>
+                </RadzenGridColumn>
+
+                <RadzenGridColumn TItem="Unit" Property="Level" Title="Level" Width="75px">
+                    <EditTemplate Context="item">
+                        <RadzenNumeric @bind-Value="item.Level" />
+                    </EditTemplate>
+                </RadzenGridColumn>
+
+                <RadzenGridColumn TItem="Unit" Property="Amount" TextAlign="TextAlign.Right" Width="75px" Title="Amount">
+                    <EditTemplate Context="item">
+                        <RadzenNumeric @bind-Value="item.Amount" />
+                    </EditTemplate>
+                </RadzenGridColumn>
+                <RadzenGridColumn TItem="Unit" TextAlign="TextAlign.Right" Context="unit" Property="Buy" Title="Buy">
+                    <Template>
+                        @unit.Buy.ToString("N")
+                    </Template>
+                    <EditTemplate Context="item">
+                        <RadzenNumeric @bind-Value="item.Buy" />
+                    </EditTemplate>
+                </RadzenGridColumn>
+                <RadzenGridColumn TItem="Unit" Context="unit" TextAlign="TextAlign.Right" Property="Sell" Title="Sell">
+                    <Template>
+                        @unit.Sell.ToString("N")
+                    </Template>
+                    <EditTemplate Context="item">
+                        <RadzenNumeric @bind-Value="item.Sell" />
+                    </EditTemplate>
+                </RadzenGridColumn>
+
+                <RadzenGridColumn TItem="Unit" Context="sampleBlazorModelsSampleOrder"
+                                  Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                    <Template Context="item">
+                        <RadzenButton Icon="edit" Size="ButtonSize.Medium" Click="@(args => EditUnit(item))">
+                        </RadzenButton>
+                    </Template>
+                    <EditTemplate Context="item">
+                        <RadzenButton Icon="save" Size="ButtonSize.Medium" Click="@((args) => SaveUnit(item))">
+                        </RadzenButton>
+                        <RadzenButton Icon="cancel" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Secondary"
+                                      Click="@((args) => CancelUnit(item))">
+                        </RadzenButton>
+                    </EditTemplate>
+                </RadzenGridColumn>
+
+            </Columns>
+        </RadzenGrid>
+    </RadzenFieldset>
+
+
+
+</RadzenTemplateForm>
 
 
 @code{
@@ -100,21 +177,32 @@
 
     public Product model { get; set; }
 
+    public IEnumerable<Category> categories { get; set; }
+
     List<ButtonLitleSave> components = new List<ButtonLitleSave>();
+
+    RadzenGrid<Unit> unitGrid;
+
     ButtonLitleSave ComponentRef
     {
         set { components.Add(value); }
     }
     protected override async Task OnInitializedAsync()
     {
-        var Id = Convert.ToInt32(id);
-        model = await productService.Get(Id);
+        categories = await categoryService.Get();
+
+        if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(supplierId))
+        {
+            var Id = Convert.ToInt32(id);
+            model = await productService.Get(Id);
+        }
     }
 
 
     public void AddItem()
     {
         model.Units.Add(new Unit { Amount = 1, Level = model.Units.Count, ProductId = model.Id });
+        unitGrid.Reload();
     }
 
     public void OnChange(int id)
@@ -125,19 +213,38 @@
             com.OnChange();
         }
     }
-    public async Task SaveProduct()
+
+    public async Task SaveProduct(Product prod)
     {
         try
         {
-            var Id = Convert.ToInt32(id);
-            var updated = await productService.Update(Id, model);
-            NotificationService.Notify(new NotificationMessage
+            var saved = false;
+            if (model.Id > 0)
             {
-                Severity = NotificationSeverity.Success,
-                Summary = "Success",
-                Detail = "Data Berhasil Diubah !",
-                Duration = 3000
-            });
+                var Id = Convert.ToInt32(id);
+                saved = await productService.Update(Id, model);
+
+            }
+            else
+            {
+                var Id = Convert.ToInt32(supplierId);
+                var result = await productService.AddProduct(Id, model);
+                if (result != null)
+                    saved = true;
+
+            }
+
+            if (saved)
+                NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Success",
+                    Detail = "Data Berhasil Disimpan !",
+                    Duration = 3000
+                });
+
+            else
+                throw new SystemException("Data Not Saved !");
         }
         catch (System.Exception ex)
         {
@@ -153,7 +260,7 @@
 
     public void GoBack()
     {
-        nav.NavigateTo("/supplier");
+        nav.NavigateTo($"/supplier/products/{supplierId}");
     }
 
 
@@ -193,5 +300,38 @@
         btn.IconName = "";
         btn.IconStyle = "";
         StateHasChanged();
+    }
+
+
+    async  Task SaveUnit(Unit unit)
+    {
+
+        Unit temUnit;
+        if (unit.Id > 0)
+        {
+            temUnit = await productService.UpdateUnit(unit.Id, unit);
+        }
+        else
+        {
+            temUnit = await productService.AddUnit(model.Id, unit);
+            if (temUnit != null)
+            {
+                unit = temUnit;
+            }
+        }
+
+      await  unitGrid.UpdateRow(unit);
+
+        StateHasChanged();
+    }
+
+    void EditUnit(Unit item)
+    {
+        unitGrid.EditRow(item);
+    }
+
+    void CancelUnit(Unit item)
+    {
+        unitGrid.CancelEditRow(item);
     }
 }

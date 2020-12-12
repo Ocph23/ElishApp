@@ -6,20 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebClient.Services
 {
-
-    public interface ISupplierService
-    {
-        Task<IEnumerable<Supplier>> GetSuppliers();
-        Task<Supplier> GetSupplier(int supplierId);
-        Task<Supplier> Post(Supplier value);
-        Task<bool> Update(int id, Supplier value);
-        Task<bool> Delete(int id);
-        Task<IEnumerable<Product>> GetProducts(int supplierId);
-    }
-
     public class SupplierService : ISupplierService
     {
-        private OcphDbContext dbContext;
+        private readonly OcphDbContext dbContext;
 
         public SupplierService(OcphDbContext db)
         {

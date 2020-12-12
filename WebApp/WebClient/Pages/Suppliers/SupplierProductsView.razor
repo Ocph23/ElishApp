@@ -1,7 +1,5 @@
 @page "/supplier/products/{id?}";
 
-@using ShareModels;
-@using WebClient.Services;
 @inject NavigationManager nav;
 @inject ISupplierService supplierService;
 @using Microsoft.AspNetCore.Authorization
@@ -11,51 +9,55 @@
 
 
 <h3>Data Product</h3>
-<NavLink class="btn btn-successs" para href="/supplier/change">Add</NavLink>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nama Supplier</th>
-            <th scope="col">Contact Name</th>
-            <th scope="col">Contact Telepon</th>
-            <th scope="col">Address</th>
-            <th scope="col">Email</th>
-            <th scope="col">Office</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
 
-        @if (products != null)
-        {
-            var number = 1;
-            foreach (var item in products)
-            {
-                var linkEdit = $"/supplier/product/{id}/{item.Id}";
-                <tr>
-                    <th scope="row">@number</th>
-                    <td>@item.Category.Name</td>
-                    <td>@item.CodeName</td>
-                    <td>@item.CodeArticle</td>
-                    <td>@item.Name</td>
-                    <td>@item.Size</td>
-                    <td>@item.Merk</td>
-                    <td>@item.Description</td>
-                    <td>
-                        <NavLink para href="@linkEdit">Detail</NavLink>
-                    </td>
-                </tr>
-                number++;
-            }
-        }
-    </tbody>
-</table>
+<Radzen.Blazor.RadzenButton Icon="add"  ButtonType="ButtonType.Button"  
+     Style="margin-bottom:10px" Click="@(()=>nav.NavigateTo($"/supplier/addproduct/{id}"))" ButtonStyle="ButtonStyle.Success" />
+
+
+<RadzenGrid @ref="grid" Data="@(products)" AllowFiltering="true"
+            AllowPaging="true" AllowSorting="true" TItem="Product" >
+    <Columns>
+
+        <RadzenGridColumn TItem="Product" Width="125px" Property="Category.Name" Title="Categori">
+           
+        </RadzenGridColumn>
+
+        <RadzenGridColumn TItem="Product" Property="Name" Title="Product Name">
+        
+        </RadzenGridColumn>
+
+        <RadzenGridColumn TItem="Product" Width="150px" Property="CodeName" Title="Code Name">
+       
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="Product" Width="150px" Property="CodeArticle" Title="CodeA rticle">
+           
+        </RadzenGridColumn>
+
+        <RadzenGridColumn TItem="Product" Width="150px" Property="Merk" Title="Merk">
+           
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="Product" Width="80px" Property="Size" Title="Size">
+           
+        </RadzenGridColumn>
+
+        <RadzenGridColumn TItem="Product"  Context="sampleBlazorModelsSampleOrder"
+                          Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="65px">
+            <Template Context="item">
+                <RadzenButton Icon="edit" Size="ButtonSize.Medium" Click="@(()=>nav.NavigateTo($"/supplier/product/{id}/{item.Id}"))">
+                </RadzenButton>
+            </Template>
+        </RadzenGridColumn>
+
+    </Columns>
+</RadzenGrid>
+
 
 @code{
     [Parameter]
     public string id { get; set; }
     private IEnumerable<Product> products;
+
+    RadzenGrid<Product> grid;
 
     protected override async Task OnInitializedAsync()
     {

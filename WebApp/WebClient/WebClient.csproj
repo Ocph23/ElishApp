@@ -1,17 +1,85 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>0a7be25d-899f-4c3f-9029-8e83abc567f8</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Blazored.LocalStorage" Version="3.0.0"/>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
-    <PackageReference Include="System.Net.Http.Json" Version="5.0.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605"/>
-    <PackageReference Include="Radzen.Blazor" Version="2.17.10"/>
+    <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
+    <PackageReference Include="Blazored.LocalStorage" Version="3.0.0" />
+    <PackageReference Include="ClosedXML" Version="0.95.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="QRCoderNetCore" Version="1.0.0" />
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605" />
+    <PackageReference Include="Radzen.Blazor" Version="2.17.10" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\trireksaapps\TrireksaApps\OcphDAL\OcphDAL.csproj"/>
-    <ProjectReference Include="..\..\ShareModels\ShareModels.csproj"/>
+    <ProjectReference Include="..\..\..\trireksaapps\TrireksaApps\OcphDAL\OcphDAL.csproj" />
+    <ProjectReference Include="..\ShareModels\ShareModels.csproj" />
   </ItemGroup>
+ <ItemGroup>
+    <!-- extends watching group to include *.razor files -->
+    <Watch Include="**\*.razor" />
+  </ItemGroup>
+ <ItemGroup>
+   <Content Remove="Pages\Datas\PiutangView.razor" />
+   <Content Remove="Shared\LoadingScreen.razor" />
+ </ItemGroup>
+ <ItemGroup>
+   <Watch Remove="Pages\Category\CategoryView.razor" />
+   <Watch Remove="Pages\Category\EditCategory.razor" />
+   <Watch Remove="Pages\Customers\ChangeCustomerView.razor" />
+   <Watch Remove="Pages\Customers\CustomerView.razor" />
+   <Watch Remove="Pages\Datas\IncommingCheckListView.razor" />
+   <Watch Remove="Pages\Datas\PenjualanView.razor" />
+   <Watch Remove="Pages\Datas\PiutangView.razor" />
+   <Watch Remove="Pages\Datas\ProductStockView.razor" />
+   <Watch Remove="Pages\Karyawan.cs\ChangeKaryawanView.razor" />
+   <Watch Remove="Pages\Karyawan.cs\KaryawanView.razor" />
+   <Watch Remove="Pages\Pembelians\EditPembelianPembayaran.razor" />
+   <Watch Remove="Pages\Penjualans\EditPenjualanPembayaran.razor" />
+   <Watch Remove="Pages\Penjualans\PenjualanOrder.razor" />
+   <Watch Remove="Pages\Penjualans\PenjualanOrderDetail.razor" />
+   <Watch Remove="Pages\Penjualans\PenjualanRealisasi.razor" />
+   <Watch Remove="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
+   <Watch Remove="Pages\ShareComponent\FakturPenjualanLayout.razor" />
+   <Watch Remove="Pages\ShareComponent\PrintLayout.razor" />
+   <Watch Remove="Pages\ShareComponent\SalesOrderLayout.razor" />
+   <Watch Remove="Pages\Suppliers\SupplierProductAddView.razor" />
+   <Watch Remove="Shared\LoadingScreen.razor" />
+ </ItemGroup>
+ <ItemGroup>
+   <None Include="Pages\Category\EditCategory.razor" />
+   <None Include="Pages\Datas\IncommingCheckListView.razor" />
+   <None Include="Pages\Datas\PiutangView.razor" />
+   <None Include="Pages\Datas\PenjualanView.razor" />
+   <None Include="Pages\Datas\ProductStockView.razor" />
+   <None Include="Pages\Karyawan.cs\KaryawanView.razor" />
+   <None Include="Pages\Pembelians\EditPembelianPembayaran.razor" />
+   <None Include="Pages\Penjualans\EditPenjualanPembayaran.razor" />
+   <None Include="Pages\Penjualans\PenjualanOrderDetail.razor" />
+   <None Include="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
+   <None Include="Pages\ShareComponent\FakturPenjualanLayout.razor" />
+   <None Include="Shared\PrintLayout.razor" />
+   <None Include="Pages\ShareComponent\SalesOrderLayout.razor" />
+   <None Include="Shared\LoadingScreen.razor" />
+ </ItemGroup>
+ <ItemGroup>
+   <UpToDateCheckInput Remove="Shared\LoadingScreen.razor" />
+ </ItemGroup>
+ <ItemGroup>
+   <_ContentIncludedByDefault Remove="Shared\LoadingScreen.razor" />
+ </ItemGroup>
+ <ItemGroup>
+   <Folder Include="wwwroot\fonts\" />
+ </ItemGroup>
+ <ItemGroup>
+   <Content Update="wwwroot\Reports\NotaOrder.rdlc">
+     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+   </Content>
+   <Content Update="wwwroot\Reports\NotaPenjualan.rdlc">
+     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+   </Content>
+ </ItemGroup>
 </Project>

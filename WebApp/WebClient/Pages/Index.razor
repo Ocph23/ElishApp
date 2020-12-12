@@ -3,21 +3,40 @@
 @using ShareModels;
 @using WebClient;
 @using Microsoft.AspNetCore.Authorization
+@inject NavigationManager nav;
 
-@attribute [Authorize]
-
-
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
-
+<AuthorizeView>
+    <Authorized>
+        <h1>Hello, @context.User.Identity.Name!</h1>
+        <p>You can only see this content if you're authorized.</p>
+    </Authorized>
+    <NotAuthorized>
+        <p><em>@loading</em></p>
+        <h1>Authentication Failure!</h1>
+        <p>You're not signed in.</p>
+        <button class="btn btn-success" @onclick="@dologin">Login</button>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code{
 
-    public LoginResponse data;
+    string loading ="Loading....";
+    bool login = false;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await Loading();
+    }
 
+    async void dologin()
+    {
+        nav.NavigateTo("/login");
+    }
+
+    async Task Loading()
+    {
+        await Task.Delay(2000);
+        loading = string.Empty;
+        login = true;
+    }
 }

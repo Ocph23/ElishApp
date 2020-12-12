@@ -1,0 +1,62 @@
+﻿@page "/category"
+
+
+
+@using WebClient.Pages.Category;
+
+@inject NavigationManager nav;
+@inject ICategoryService categoryService;
+@inject DialogService DialogService;
+
+@attribute [Authorize]
+
+
+<Radzen.Blazor.RadzenFieldset Text="Data Category">
+    <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditCategory>($"Add Category",
+                        new Dictionary<string, object>() { { "model", new Category()}, },
+                        new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
+
+    <RadzenGrid Data="@categories" AllowFiltering="true" AllowPaging="true" AllowSorting="true" >
+        <Columns>
+            <Radzen.Blazor.RadzenGridColumn Property="Name" Title="Name" TItem="Category" />
+            <Radzen.Blazor.RadzenGridColumn Property="Description" Title="Description" TItem="Category" />
+            <Radzen.Blazor.RadzenGridColumn Width="150px"   TItem="Category">
+                <Template Context="item">
+                    <RadzenButton Click=@(args => DialogService.OpenAsync<EditCategory>($"Edit Category",
+                        new Dictionary<string, object>() { { "model", item}, },
+                        new DialogOptions())) Icon="edit" ButtonStyle="ButtonStyle.Warning" sty />
+                </Template>
+            </Radzen.Blazor.RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+
+</Radzen.Blazor.RadzenFieldset>
+
+@code {
+    private ICollection<Category> categories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DialogService.OnClose += OnCloseDialog;
+        categories =( await categoryService.Get()).ToList();
+
+    }
+
+
+
+    public void OnCloseDialog(dynamic result)
+    {
+
+        if (result != null)
+        {
+            Category model = (Category)result;
+
+            categories.Add(model);
+        }
+
+    }
+
+
+
+
+}

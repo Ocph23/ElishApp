@@ -9,6 +9,11 @@ using Blazored.LocalStorage;
 using WebClient.Services;
 using WebClient.Models;
 using Radzen;
+using System.Net;
+using Microsoft.AspNetCore.HttpOverrides;
+using Ocph.DAL;
+using ShareModels;
+using WebClient.Middlewares;
 
 namespace WebClient
 {
@@ -25,14 +30,25 @@ namespace WebClient
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //services.Configure<ForwardedHeadersOptions>(options =>
+            //{
+            //    options.KnownProxies.Add(IPAddress.Parse("194.59.165.198"));
+            //});
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddBlazoredLocalStorage();
             services.AddHttpContextAccessor();
-
+            services.AddLogging();
+            services.Add(new ServiceDescriptor(
+                                typeof(IExceptionNotificationService),
+                                typeof(ExceptionNotificationService),
+                                ServiceLifetime.Singleton));
+            services.AddSingleton<IIncommingService,IncommingService>();
             services.AddScoped<HttpClient>();
             services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+            services.AddOcphService();
             services.AddScoped<OcphDbContext>();
             services.AddScoped<IUserStateService, UserStateService>();
             services.AddScoped<IUserService, UserService>();
@@ -42,18 +58,24 @@ namespace WebClient
             services.AddScoped<IPenjualanService, PenjualanService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IKaryawanService, KaryawanService>();
-
-
-
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<TooltipService>();
             services.AddScoped<ContextMenuService>();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            ServiceLocator.Instance = app.ApplicationServices;
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -65,7 +87,8 @@ namespace WebClient
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+           // app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -74,6 +97,11 @@ namespace WebClient
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<ElishAppHub>("/elishapp");
+                endpoints.MapControllerRoute(
+                    name:"default", 
+                    pattern: "{controller=Report}/{action}/{id?}");
+
             });
         }
     }

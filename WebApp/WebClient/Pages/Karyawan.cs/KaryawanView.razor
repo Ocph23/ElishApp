@@ -1,0 +1,67 @@
+﻿@page "/karyawan"
+
+@inject IKaryawanService karyawanService;
+@inject NavigationManager nav;
+
+@attribute [Authorize]
+
+<h3>Data Karyawan</h3>
+
+
+@if (employees == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <Radzen.Blazor.RadzenButton Icon="add" ButtonType="ButtonType.Button" Click="@(()=>nav.NavigateTo($"/karyawan/change"))"
+                ButtonStyle="ButtonStyle.Info" Style="margin:5px" />
+
+
+    <RadzenGrid Data="@(employees)" FilterCaseSensitivity="FilterCaseSensitivity.Default"
+                AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Karyawan">
+        <Columns>
+            <RadzenGridColumn TItem="Karyawan"  Property="Name" Title="Name" />
+            <RadzenGridColumn TItem="Karyawan" Width="250px" Property="Email" Title="Email" />
+            <RadzenGridColumn TItem="Karyawan" Width="250px" Property="Telepon" Title="Telepon" />
+            <RadzenGridColumn TItem="Karyawan" Context="data" Width="65px" >
+                <Template>
+                    <RadzenButton ButtonStyle="ButtonStyle.Warning" ButtonType="ButtonType.Button" Icon="edit" Click="@(()=> nav.NavigateTo($"/karyawan/change/{data.Id}"))" />
+                </Template>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
+
+@code {
+    public enum TitleOfCourtesy
+    {
+        Ms,
+        Mr,
+        All = -1
+    }
+
+    public class Employee
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public TitleOfCourtesy TitleOfCourtesy { get; set; }
+
+    }
+
+    IEnumerable<Karyawan> employees;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employees = await karyawanService.Get();
+    }
+}
+
+
+
+
+
+
+@code {
+
+}

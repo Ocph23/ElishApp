@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebClient.Services
 {
-    public interface IKaryawanService : IService<Karyawan>
-    {
-    }
+   
     public class KaryawanService : IKaryawanService
     {
 

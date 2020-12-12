@@ -1,0 +1,147 @@
+﻿@page "/karyawan/change/{id?}"
+
+@inject NavigationManager nav;
+@inject IKaryawanService karyawanService;
+
+@attribute [Authorize]
+
+
+<Radzen.Blazor.RadzenFieldset Text="@title">
+    <div class="row">
+        <div class="col-xl-12">
+            <RadzenTabs  style="height: 750px">
+                <Tabs>
+                    <RadzenTabsItem Text="Data Karaywan">
+                        <RadzenTemplateForm Data="model" Submit="@(async(Karyawan arg)=>await Save(arg))">
+                            <Radzen.Blazor.RadzenFieldset Text="Customer">
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="row" style="margin-top:10px">
+                                            <div class="col-md-4 align-items-center d-flex">
+                                                <RadzenLabel Text="Customer Name" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <RadzenTextBox @bind-Value="model.Name" Name="Name" />
+                                                <RadzenRequiredValidator Component="Name" Text="Name is required" Popup=true Style="position: absolute" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top:10px">
+                                            <div class="col-md-4 align-items-center d-flex">
+                                                <RadzenLabel Text="Email" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <RadzenTextBox @bind-Value="model.Email" />
+                                                <RadzenRequiredValidator Component="Email" Text="Email Name is required" Popup=true Style="position: absolute" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top:10px">
+                                            <div class="col-md-4 align-items-center d-flex">
+                                                <RadzenLabel Text="Telepon" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <RadzenTextBox @bind-Value="model.Telepon" Name="Telepon" />
+                                                <RadzenRequiredValidator Component="Telepon" Text="Telepon is required" Popup=true Style="position: absolute" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top:10px">
+                                            <div class="col-md-4 align-items-center d-flex">
+                                                <RadzenLabel Text="Address" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <RadzenTextArea @bind-Value="model.Address"  Name="Address"/>
+                                                <RadzenRequiredValidator Component="Address" Text="Address is required" Popup=true Style="position: absolute" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <hr />
+                                <div class="row text-center" style="margin:10px">
+
+                                    <Radzen.Blazor.RadzenButton Icon="undo" ButtonType="ButtonType.Button" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" Style="margin:5px" />
+                                    <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
+                                </div>
+
+                            </Radzen.Blazor.RadzenFieldset>
+                        </RadzenTemplateForm>
+                    </RadzenTabsItem>
+                </Tabs>
+            </RadzenTabs>
+        </div>
+    </div>
+</Radzen.Blazor.RadzenFieldset>
+
+    @code {
+        [Parameter]
+        public string id { get; set; }
+
+        public string title = "Add Karyawan";
+
+        public Karyawan model { get; set; } = new  Karyawan();
+
+        protected override async Task OnInitializedAsync()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                {
+                    model = new  Karyawan();
+                }
+                else
+                {
+                    title = "Edit Karyawan";
+                    model = await karyawanService.Get(Convert.ToInt32(id));
+                }
+            }
+            catch
+            {
+                //ex.Message;
+            }
+        }
+
+
+        private async Task Save(Karyawan cust)
+        {
+            try
+            {
+                var Id = Convert.ToInt32(id);
+                if (Id <= 0)
+                {
+                    var data = await karyawanService.Post(model);
+                    if (data != null)
+                    {
+                        nav.NavigateTo("/karyawan");
+                    }
+                }
+                else
+                {
+                    var updated = await karyawanService.Update(Convert.ToInt32(id), model);
+                    if (updated)
+                    {
+                        nav.NavigateTo("/karyawan");
+                    }
+                }
+
+
+            }
+            catch
+            {
+                //ex.Message;
+            }
+
+
+        }
+
+
+        private void GoBack()
+        {
+            nav.NavigateTo("/karyawan");
+        }
+
+
+
+    }

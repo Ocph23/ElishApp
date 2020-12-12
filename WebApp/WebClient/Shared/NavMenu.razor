@@ -6,33 +6,31 @@
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="supplier">
-                <span class="oi oi-plus" aria-hidden="true"></span> Supplier
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="pembelian">
-                <span class="oi oi-plus" aria-hidden="true"></span> Pembelian
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="product">
-                <span class="oi oi-plus" aria-hidden="true"></span> Product
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="customer">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Customer
-            </NavLink>
-        </li>
-    </ul>
+
+    <RadzenPanelMenu>
+        <RadzenPanelMenuItem Text="General" Icon="home" Path="/">
+            <RadzenPanelMenuItem Text="Category" Path="category" Icon="category"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="Supplier" Path="supplier" Icon="supervised_user_circle"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="Customer" Path="customer" Icon="emoji_people"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="Employees" Path="karyawan" Icon="group"></RadzenPanelMenuItem>
+        </RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="Pembelian" Icon="shopping_cart">
+            <RadzenPanelMenuItem Style="margin-left:10px" Text="Order" Path="pembelian/order" Icon="shopping_cart"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Style="margin-left:10px" Text="Realisasi" Path="pembelian/realisasi" Icon="shopping_cart"></RadzenPanelMenuItem>
+        </RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="Penjualan" Icon="storefront">
+            <RadzenPanelMenuItem Style="margin-left:10px" Text="Order" Path="penjualan/order" Icon="storefront"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Style="margin-left:10px" Text="Realisasi" Path="penjualan/realisasi" Icon="storefront"></RadzenPanelMenuItem>
+
+        </RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="Reports" Icon="save">
+            <RadzenPanelMenuItem Text="Stock" Path="data/stock" Icon="receipt_log"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="Sales" Path="data/penjualan" Icon="receipt_log"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="Incomming Check" Path="incomming" Icon="receipt_log"></RadzenPanelMenuItem>
+        </RadzenPanelMenuItem>
+
+    </RadzenPanelMenu>
+   
 </div>
 
 @code {
