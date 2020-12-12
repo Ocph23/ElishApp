@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\trireksaapps\TrireksaApps\OcphDAL\OcphDAL.csproj" />
+    <ProjectReference Include="..\OcphDAL\OcphDAL.csproj" />
     <ProjectReference Include="..\ShareModels\ShareModels.csproj" />
   </ItemGroup>
 

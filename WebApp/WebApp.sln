@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcphDAL", "..\..\trireksaapps\TrireksaApps\OcphDAL\OcphDAL.csproj", "{0FB93193-9500-4624-B991-CEC7C3B8CB90}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareModels", "ShareModels\ShareModels.csproj", "{EF0CD1CF-F473-4E3F-82F8-7D6908E23DBD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebClient", "WebClient\WebClient.csproj", "{2F5B1D4B-5A91-4BD9-8A2B-EEE4567E9AE0}"
@@ -13,7 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElishAppMobile.Android", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElishAppMobile", "ElishAppMobile\ElishAppMobile\ElishAppMobile.csproj", "{7C4DB746-1BD6-4DCC-96A0-F33107D3470C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RLDC", "RLDC\RLDC.csproj", "{7D0679E9-AA81-4EEE-AB80-DC598F8D563D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLDC", "RLDC\RLDC.csproj", "{7D0679E9-AA81-4EEE-AB80-DC598F8D563D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcphDAL", "OcphDAL\OcphDAL.csproj", "{6CA56E9A-3CE7-418A-8C67-DD8F91578D0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0FB93193-9500-4624-B991-CEC7C3B8CB90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0FB93193-9500-4624-B991-CEC7C3B8CB90}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0FB93193-9500-4624-B991-CEC7C3B8CB90}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0FB93193-9500-4624-B991-CEC7C3B8CB90}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF0CD1CF-F473-4E3F-82F8-7D6908E23DBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EF0CD1CF-F473-4E3F-82F8-7D6908E23DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF0CD1CF-F473-4E3F-82F8-7D6908E23DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +43,10 @@ Global
 		{7D0679E9-AA81-4EEE-AB80-DC598F8D563D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D0679E9-AA81-4EEE-AB80-DC598F8D563D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D0679E9-AA81-4EEE-AB80-DC598F8D563D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CA56E9A-3CE7-418A-8C67-DD8F91578D0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CA56E9A-3CE7-418A-8C67-DD8F91578D0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CA56E9A-3CE7-418A-8C67-DD8F91578D0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CA56E9A-3CE7-418A-8C67-DD8F91578D0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
