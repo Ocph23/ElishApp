@@ -87,9 +87,6 @@ namespace ElishAppMobile
         public string Message { get; set; }
     }
 
-
-
-
     public static class RestServiceExtention {
         
         public static async Task<T> GetResult<T>(this HttpResponseMessage response) 
