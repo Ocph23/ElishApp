@@ -161,27 +161,27 @@ namespace WebClient.Controllers
 
                     var items = pembelian.Items.ToList();
                     int nomor = 1;
-                    for (int index = start; index <= items.Count; index++)
+                    for (int index = 1; index <= items.Count; index++)
                     {
                         var total = items[index - 1].Total;
-                        worksheet.Cell(index + 1, 1).Value = nomor;
-                        worksheet.Cell(index + 1, 2).Value = items[index - 1].Product.CodeArticle;
-                        worksheet.Cell(index + 1, 3).Value = items[index - 1].Product.Name+" | "+ items[index - 1].Product.Size;
-                        worksheet.Cell(index + 1, 4).Value = items[index - 1].Amount;
-                        worksheet.Cell(index + 1, 5).Value = items[index - 1].Price;
+                        worksheet.Cell(index + start, 1).Value = nomor;
+                        worksheet.Cell(index + start, 2).Value = items[index - 1].Product.CodeArticle;
+                        worksheet.Cell(index + start, 3).Value = items[index - 1].Product.Name+" | "+ items[index - 1].Product.Size;
+                        worksheet.Cell(index + start, 4).Value = items[index - 1].Amount;
+                        worksheet.Cell(index + start, 5).Value = items[index - 1].Price;
                        
 
-                        worksheet.Cell(index + 1, 6).Value =total * pembelian.Discount/100;
-                        worksheet.Cell(index + 1, 7).Value = total - (total * pembelian.Discount / 100);
+                        worksheet.Cell(index + start, 6).Value =total * pembelian.Discount/100;
+                        worksheet.Cell(index + start, 7).Value = total - (total * pembelian.Discount / 100);
 
-                        worksheet.Cell(index + 1, 5).Style.NumberFormat.Format = "0,000.00";
-                        worksheet.Cell(index + 1, 6).Style.NumberFormat.Format = "0,000.00";
-                        worksheet.Cell(index + 1, 7).Style.NumberFormat.Format = "0,000.00";
+                        worksheet.Cell(index + start, 5).Style.NumberFormat.Format = "0,000.00";
+                        worksheet.Cell(index + start, 6).Style.NumberFormat.Format = "0,000.00";
+                        worksheet.Cell(index + start, 7).Style.NumberFormat.Format = "0,000.00";
                         nomor++;
                     }
 
-                    worksheet.Range($"A{start}:G{items.Count}").Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                    worksheet.Range($"A{start}:G{items.Count+1}").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Range($"A{start}:G{items.Count+start}").Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    worksheet.Range($"A{start}:G{items.Count+start}").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
                     foreach (var item in worksheet.ColumnsUsed())
                     {
@@ -189,8 +189,8 @@ namespace WebClient.Controllers
                     }
 
 
-                    worksheet.Cell(items.Count + 4, 1).Value = "Hormat Kami";
-                    worksheet.Cell(items.Count + 8, 1).Value = "Elish";
+                    worksheet.Cell(items.Count + 8, 1).Value = "Hormat Kami";
+                    worksheet.Cell(items.Count + 12, 1).Value = "Elish";
                     var rangeAsign = worksheet.Range($"A{items.Count+4}:B{items.Count+4}");
                     rangeAsign.Merge().Style.Font.SetBold().Font.FontSize = 12;
 
