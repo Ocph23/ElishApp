@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:view="clr-namespace:ElishAppMobile.Views"
-             xmlns:model="clr-namespace:ShareModels.ModelViews;assembly=ShareModels"
+             xmlns:model="clr-namespace:ShareModels.ModelViews;assembly=ShareModels" xmlns:helpers="clr-namespace:ElishAppMobile.Helpers"
              x:Class="ElishAppMobile.Views.SalesOrderView"
              Title="Create Order">
     <ContentPage.Content>
@@ -22,8 +21,10 @@
                 <StackLayout Orientation="Horizontal">
                     <Label WidthRequest="100" Text="Customer" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                     <Picker  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding DataCustomers}" 
-                            VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="250"
+                            VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="220"
                              SelectedItem="{Binding CustomerSelected}"/>
+                    <ImageButton Clicked="ImageButton_Clicked_1" Source="customer.png"  BackgroundColor="Transparent"
+                                 WidthRequest="30" HeightRequest="30" Aspect="Fill"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label WidthRequest="100" Text="Total" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
@@ -38,10 +39,10 @@
                 </StackLayout>
             </StackLayout>
             <StackLayout Orientation="Horizontal" Grid.Row="1">
-
-                <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" Margin="10,5">
+                    <ImageButton Command="{Binding ClearCommand}" Source="clearicon.png" WidthRequest="30" Aspect="AspectFit"/>
                     <ImageButton Command="{Binding QRCommand}" Source="qr.png" WidthRequest="30" Aspect="AspectFit"/>
-                    <ImageButton Clicked="ImageButton_Clicked" Source="plus.png" HeightRequest="30" Aspect="AspectFill"/>
+                    <ImageButton Clicked="ImageButton_Clicked" BackgroundColor="Transparent" Source="plus.png" HeightRequest="30" Aspect="AspectFit"/>
                     <Picker x:Name="productPicker" ItemDisplayBinding="{Binding CodeName}" IsVisible="False" ItemsSource="{Binding ProductStocks}" SelectedItem="{Binding ProductSelect}"/>
                 </StackLayout>
             </StackLayout>
@@ -53,19 +54,25 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout  BackgroundColor="LightGray" Margin="0,0.5">
-                                <SwipeView  x:DataType="model:ItemPenjualanModel">
-                                    <SwipeView.LeftItems>
-                                        <SwipeItemView >
-                                            <Button Text="Delete" BackgroundColor="OrangeRed"/>
+                                <SwipeView  x:DataType="model:ItemPenjualanModel"   >
+                                    <SwipeView.LeftItems  >
+                                        <SwipeItemView  
+                                               BackgroundColor="Red" 
+                                            Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference ItemsListView}}" CommandParameter="{Binding .}">
+                                            <StackLayout WidthRequest="80">
+                                                <Label Text="Delete" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"></Label>
+                                            </StackLayout>
                                         </SwipeItemView>
                                     </SwipeView.LeftItems>
                                     <SwipeView.RightItems>
-                                        <SwipeItemView HeightRequest="30" >
-                                            <Grid>
-                                                <Stepper Value="{Binding Real}"  Minimum="0" Maximum="{Binding Amount}" Increment="1" HeightRequest="60" HorizontalOptions="Center"
+                                        <SwipeItems>
+                                            <SwipeItemView HeightRequest="30" >
+                                                <Grid>
+                                                    <Stepper Value="{Binding Real}"  Minimum="0" Maximum="{Binding Amount}" Increment="0.25" HeightRequest="60" HorizontalOptions="Center"
                                                  VerticalOptions="CenterAndExpand"/>
-                                            </Grid>
-                                        </SwipeItemView>
+                                                </Grid>
+                                            </SwipeItemView>
+                                        </SwipeItems>
                                     </SwipeView.RightItems>
                                     <Grid  BackgroundColor="#E3EBFF" >
                                         <Grid.ColumnDefinitions>
@@ -94,15 +101,16 @@
                                             </Label>
                                         </StackLayout>
                                         <StackLayout Grid.Column="1" HorizontalOptions="CenterAndExpand" Spacing="0"  VerticalOptions="Center">
-                                            <Entry Margin="0" HorizontalOptions="Center" Keyboard="Numeric" Text="{Binding Real}" HorizontalTextAlignment="Center"
-                                                   WidthRequest="80" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+                                            <helpers:CustomStepper  ShowEntry="False" Text="{Binding Real}" WidthRequest="140"  Increment="0.25"  
+                                                                    Maximum="{Binding Amount}"
+                                                                    Margin="5" VerticalOptions="CenterAndExpand"/>
                                             <Picker Margin="0" ItemsSource="{Binding Product.Units}" ItemDisplayBinding="{Binding Name}"
                                                     FontSize="15" HorizontalTextAlignment="Center" SelectedItem="{Binding Unit}"/>
-                                            <Label Text="{Binding Amount}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
+                                           <Label Text="{Binding Amount}" HorizontalOptions="CenterAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="Rp : "></Span>
-                                                        <Span Text="{Binding Total}"></Span>
+                                                        <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"></Span>
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>

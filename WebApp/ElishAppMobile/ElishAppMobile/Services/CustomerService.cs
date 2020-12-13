@@ -83,7 +83,12 @@ namespace ElishAppMobile
                 var response = await res.PostAsync($"{controller}", res.GenerateHttpContent(value));
                 if (!response.IsSuccessStatusCode)
                     await res.Error(response);
-                return await response.GetResult<Customer>();
+                var data= await response.GetResult<Customer>();
+                if (data != null)
+                {
+                    CustomerCollection.Add(data);
+                }
+                return data;
             }
             catch (Exception ex)
             {

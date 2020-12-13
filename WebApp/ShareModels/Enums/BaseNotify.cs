@@ -6,10 +6,7 @@ using System.Runtime.CompilerServices;
 namespace ShareModels
 {
     public  class  BaseNotify: INotifyPropertyChanged
-
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public  bool SetProperty<T>(ref T backingStore, T value,
         [CallerMemberName]string propertyName = "", Action onChanged = null)
         {
@@ -22,17 +19,15 @@ namespace ShareModels
             return true;
         }
 
-
         #region INotifyPropertyChanged
-
-       
-
+        public event PropertyChangedEventHandler PropertyChanged;
         public  void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             var changed = PropertyChanged;
             if (changed == null)
                 return;
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         }
         #endregion
 

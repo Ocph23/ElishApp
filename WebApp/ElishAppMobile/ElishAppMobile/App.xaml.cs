@@ -27,15 +27,18 @@ namespace ElishAppMobile
             DependencyService.Register<IIncommingService, IncomingCheckService>();
             DependencyService.Register<IPenjualanService, PenjualanService>();
             DependencyService.Register<IUserStateService, UserService>();
-            MessagingCenter.Subscribe<MessageDataCenter>(this, "message", async (sender) => {
-                await MainPage.DisplayAlert(sender.Title, sender.Message, sender.Cancel="Close");
-            });
+           
 
             Load();
         }
 
         private async void Load()
         {
+            MessagingCenter.Subscribe<MessageDataCenter>(this, "message", async (sender) => {
+                await MainPage.DisplayAlert(sender.Title, sender.Message, sender.Cancel = "Close");
+            });
+
+
             MainPage = new Views.LoginPage();
 
             if (Account.UserIsLogin)

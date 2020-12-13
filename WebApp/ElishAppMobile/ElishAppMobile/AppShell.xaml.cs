@@ -14,6 +14,8 @@ namespace ElishAppMobile
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
         {
+           await Account.SetProfile(null);
+            await  Account.SetUser(null);
             await Current.GoToAsync("//LoginPage");
         }
     }

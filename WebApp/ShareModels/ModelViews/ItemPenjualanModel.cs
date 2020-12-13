@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,7 +50,15 @@ namespace ShareModels.ModelViews
             }
         }
         public int UnitId { get; set; }
-        public virtual Unit Unit { get => _unit; set => SetProperty(ref _unit, value); }
+        public virtual Unit Unit
+        {
+            get {
+                if (_unit == null && Product != null && Product.Units.Any())
+                    _unit = Product.Units.Where(x => x.Level == 0).FirstOrDefault();
+                    return _unit;
+            }
+            set => SetProperty(ref _unit, value);
+        }
         public virtual Product Product { get; set; }
         public virtual ObservableCollection<Unit> Units { get; set; }
         public event Func<ItemPenjualanModel, Task> UpdateEvent;

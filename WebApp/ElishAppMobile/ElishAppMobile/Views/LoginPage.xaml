@@ -14,15 +14,15 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <StackLayout Margin="0,50" >
-                <Image Source="icon_sun_swallow.png" WidthRequest="150" VerticalOptions="CenterAndExpand"/>
+                <Image Source="icon.png" WidthRequest="150" VerticalOptions="CenterAndExpand"/>
             </StackLayout>
             <StackLayout VerticalOptions="StartAndExpand" Grid.Row="1" Margin="20,0">
                 <Label Text="Login" FontSize="Title" Margin="0,30"/>
                 <Label Text="User Name"/>
                 <Entry Text="{Binding UserName}"/>
-                <Label Text="User Name"/>
+                <Label Text="Password"/>
                 <Entry IsPassword="True" Text="{Binding Password}"/>
-                 <Button  VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
+                 <Button Margin="0,20" VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
             </StackLayout>
             
             <StackLayout Grid.Row="2" Margin="20">

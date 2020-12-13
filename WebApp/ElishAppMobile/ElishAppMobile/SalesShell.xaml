@@ -83,11 +83,9 @@
     <Shell.FlyoutHeader>
         <StackLayout>
             <Grid BackgroundColor="Black">
-                <Image Aspect="AspectFit"  
-           Source="image1.jpg" 
-           Opacity="0.8" />
-                <Label Text="Sales"/>
+                <Image Aspect="AspectFit"  Source="image1.jpg" Opacity="0.8" />
             </Grid>
+                <Label x:Name="user"  TextColor="DarkViolet" FontSize="20" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
         </StackLayout>
     </Shell.FlyoutHeader>
     

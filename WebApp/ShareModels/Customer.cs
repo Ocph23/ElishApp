@@ -7,24 +7,33 @@ using System.Threading.Tasks;
 
 namespace ShareModels
 {
-    public class Customer
+    public class Customer :BaseNotify
     {
+        private string _name;
+        private int _userid;
+        private string _address;
+        private string _npwp;
+        private string _telp;
+        private string _contactName;
+        private string _email;
+        private int _id;
+
         [Key]
-        public int Id { get; set; }
+        public int Id { get => _id; set => SetProperty(ref _id, value); }
 
-        public string Name { get; set; }
+        public string Name { get => _name; set => SetProperty(ref _name, value); }
 
-        public string Email { get; set; }
+        public string Email { get => _email; set => SetProperty(ref _email, value); }
 
-        public string ContactName { get; set; }
+        public string ContactName { get => _contactName; set => SetProperty(ref _contactName, value); }
 
-        public string Telepon { get; set; }
+        public string Telepon { get => _telp; set => SetProperty(ref _telp, value); }
 
-        public string NPWP { get; set; }
+        public string NPWP { get => _npwp; set => SetProperty(ref _npwp, value); }
 
-        public string Address { get; set; }
+        public string Address { get => _address; set => SetProperty(ref _address, value); }
 
-        public int UserId { get; set; }
+        public int UserId { get => _userid; set => SetProperty(ref _userid, value); }
 
         public virtual bool HasUser { get { return UserId != 0; } } 
     }
