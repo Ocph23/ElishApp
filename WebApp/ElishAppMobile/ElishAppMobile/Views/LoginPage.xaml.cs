@@ -80,7 +80,7 @@ namespace ElishAppMobile.Views
             try
             {
                 var user = new UserLogin() { UserName=UserName, Password=Password };
-                await UserService.Login(user);
+              var result=  await UserService.Login(user);
                 if (Account.UserIsLogin)
                 {
                     if (await Account.UserInRole("Administrator"))
@@ -96,15 +96,16 @@ namespace ElishAppMobile.Views
                         Application.Current.MainPage = new AppShell();
                     }
                 }
-
-                throw new SystemException("You Not Have Access !");
+                else
+                {
+                    throw new SystemException("You Not Have Access !");
+                }
             }
             catch (Exception ex)
             {
                 MessagingCenter.Send<MessageDataCenter>(new MessageDataCenter {
                     Message= ex.Message, Title="Error"
                 }, "mesage");
-                throw;
             }
         }
         #endregion

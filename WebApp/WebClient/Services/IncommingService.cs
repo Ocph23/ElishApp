@@ -50,6 +50,17 @@ namespace WebClient.Services
         private void ClearDataSource()
         {
             this.Datas.Clear();
+            Task.Run(async () =>
+            {
+                using var scope = ServiceLocator.Instance.CreateScope();
+                var pembelianService = scope.ServiceProvider.GetRequiredService<IPembelianService>();
+                var pembelians = await pembelianService.GetPembelians();
+                Pembelians.Clear();
+                foreach (var item in pembelians)
+                {
+                    Pembelians.Add(item);
+                }
+            });
         }
 
         private void SetDataSource(Pembelian value)

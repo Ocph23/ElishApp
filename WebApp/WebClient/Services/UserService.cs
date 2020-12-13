@@ -46,13 +46,9 @@ namespace WebClient.Services
                 if (!user.Activated)
                     throw new SystemException($"Your Account {model.UserName} Not Active !");
 
-                var roles = from ur in _context.UserRoles.Where(x => x.UserId == user.Id)
-                            join c in _context.Roles.Select() on ur.RoleId equals c.Id into rGroup
-                            from c in rGroup.DefaultIfEmpty()
-                            select c;
 
-                user.Roles = roles.ToList();
 
+                user = await FindUserById(user.Id);
                 var token = await GenerateJwtToken(user);
                 return new AuthenticateResponse(user, token);
             }
@@ -314,12 +310,12 @@ namespace WebClient.Services
 
                     if (role.Name == "Administrator" || role.Name == "Sales")
                     {
-                        return _context.Karyawans.Where(x => x.UserId == user.Id);
+                        return _context.Karyawans.Where(x => x.UserId == user.Id).FirstOrDefault();
                     }
 
                     if (role.Name == "Customer")
                     {
-                        return _context.Customers.Where(x => x.UserId == user.Id);
+                        return _context.Customers.Where(x => x.UserId == user.Id).FirstOrDefault();
                     }
                 }
             }

@@ -62,8 +62,6 @@ namespace WebClient.Api
             {
                 var userName = User.Identity.Name;
                 var response = await _userService.Profile();
-                if (response == null)
-                    return Unauthorized(new { message = "You Are Profile Not Found !" });
                 return Ok(response);
             }
             catch (System.Exception ex)

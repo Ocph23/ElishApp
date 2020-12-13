@@ -3,6 +3,7 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using ShareModels;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -26,41 +27,36 @@ namespace ElishAppMobile
             DependencyService.Register<IIncommingService, IncomingCheckService>();
             DependencyService.Register<IPenjualanService, PenjualanService>();
             DependencyService.Register<IUserStateService, UserService>();
-
-            MessagingCenter.Subscribe<MessageDataCenter, string>(this, "message", async (sender, data) => {
-
-                await MainPage.DisplayAlert(sender.Title, sender.Message, sender.Cancel ?? "Close");
+            MessagingCenter.Subscribe<MessageDataCenter>(this, "message", async (sender) => {
+                await MainPage.DisplayAlert(sender.Title, sender.Message, sender.Cancel="Close");
             });
 
-            MessagingCenter.Subscribe<MessageDataCenter, string>(this, "dialog", async (sender, data) => {
-                await MainPage.DisplayAlert(sender.Title, sender.Message, sender.Ok ?? "Ok", sender.Cancel ?? "Cancel");
-            });
+            Load();
+        }
 
+        private async void Load()
+        {
+            MainPage = new Views.LoginPage();
 
             if (Account.UserIsLogin)
             {
-                Task.Run( async () => {
-
-                    if(await Account.UserInRole("Administrator"))
-                    {
-                        MainPage = new AppShell();
-                    }else if(await Account.UserInRole("Sales"))
-                    {
-                        MainPage = new SalesShell();
-                    }
-                    else
-                    {
-                        MainPage = new AppShell();
-                    }
-                });
+                if (await Account.UserInRole("Administrator"))
+                {
+                    MainPage = new AppShell();
+                }
+                else if (await Account.UserInRole("Sales"))
+                {
+                    MainPage = new SalesShell();
+                }
+                else
+                {
+                    MainPage = new AppShell();
+                }
             }
             else
             {
                 MainPage = new Views.LoginPage();
             }
-
-
-          
         }
 
         protected override void OnStart()

@@ -38,13 +38,13 @@ namespace ElishAppMobile.Services
                             if (profile != null)
                             {
                                 await Account.SetProfile(profile);
-                                return true;
                             }
                         }
+                            return true;
                     }
-                }
-
-                throw  new SystemException(await client.Error(response));
+                    return false;
+                }else
+                    throw  new SystemException(await client.Error(response));
             }
             catch (Exception ex)
             {

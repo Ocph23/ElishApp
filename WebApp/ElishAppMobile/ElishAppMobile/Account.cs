@@ -81,7 +81,7 @@ namespace ElishAppMobile
             var user = await GetUser();
             if (user != null)
             {
-                var role = user.Roles.Where(x => x.ToLower() == roleName).FirstOrDefault();
+                var role = user.Roles.Where(x => x.ToLower() == roleName.ToLower()).FirstOrDefault();
                 return !string.IsNullOrEmpty(role);
             }
             return false;

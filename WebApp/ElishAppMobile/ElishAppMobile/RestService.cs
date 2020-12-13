@@ -23,8 +23,6 @@ namespace ElishAppMobile
             }
         }
 
-        
-
         public RestService(string apiUrl)
         {
             this.BaseAddress = new Uri(apiUrl);
@@ -36,9 +34,8 @@ namespace ElishAppMobile
         {
             if (token != null)
             {
-                this.DefaultRequestHeaders.TryAddWithoutValidation("Authorization",
-                    token);
-                this.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", token);
+                this.DefaultRequestHeaders.TryAddWithoutValidation("Authorization",  token);
+                this.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
         }
 
