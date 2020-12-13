@@ -86,6 +86,5 @@ namespace ElishAppMobile
             }
             return false;
         }
-
     }
 }
