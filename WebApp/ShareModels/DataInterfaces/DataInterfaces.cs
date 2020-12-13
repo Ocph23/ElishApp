@@ -15,6 +15,7 @@ namespace ShareModels
         Task<bool> Update(int id, T value);
         Task<bool> Delete(int id);
     }
+
     public interface IUserStateService
     {
         AuthenticateResponse User { get; set; }
@@ -23,9 +24,14 @@ namespace ShareModels
         Task Initialize();
     }
 
-    public interface IUserService
+    public interface IUserAuthentification
     {
         Task<AuthenticateResponse> Authenticate(UserLogin model);
+        Task<object> Profile();
+    }
+
+    public interface IUserService   : IUserAuthentification
+    {
         Task<User> FindUserById(int id);
         Task<string> AuthenticateUSerProvider(User user);
         Task<string> GenerateToken(User user);
@@ -33,9 +39,9 @@ namespace ShareModels
         Task AddUserRole(string v, User admin);
         Task<Customer> RegisterCustomer(Customer value);
         Task<Karyawan> RegisterKaryawan(Karyawan value);
-
         Task<User> FindUserByUserName(string userName);
         Task<User> FindUserByEmail(string email);
+        Task<IEnumerable<User>> GetUsers();
     }
 
     public interface IPembelianService

@@ -21,6 +21,9 @@
     <ProjectReference Include="..\..\ShareModels\ShareModels.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="SalesShell.xaml.cs">
+      <DependentUpon>SalesShell.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\BarcodeScanner.xaml.cs">
       <DependentUpon>BarcodeScanner.xaml</DependentUpon>
     </Compile>

@@ -3,7 +3,13 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:ElishAppMobile.Views"
        Title="ElishAppMobile"
-       x:Class="ElishAppMobile.AppShell">
+       x:Class="ElishAppMobile.SalesShell">
+
+    <!--
+        The overall app visual hierarchy is defined here, along with navigation.
+    
+        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/
+    -->
 
     <Shell.Resources>
         <ResourceDictionary>
@@ -20,6 +26,11 @@
             </Style>
             <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
             <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
+
+            <!--
+            Default Styles for all Flyout Items
+            https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
+            -->
             <Style Class="FlyoutItemLabelStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="White"></Setter>
             </Style>
@@ -44,7 +55,9 @@
                 </Setter>
             </Style>
 
-          
+            <!--
+            Custom Style you can apply to any Flyout Item
+            -->
             <Style Class="MenuItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
@@ -61,13 +74,19 @@
         </ResourceDictionary>
     </Shell.Resources>
 
+    <!-- 
+        When the Flyout is visible this defines the content to display in the flyout.
+        FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
+        https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
+    -->
+
     <Shell.FlyoutHeader>
         <StackLayout>
-            <Grid BackgroundColor="DarkGray">
+            <Grid BackgroundColor="Black">
                 <Image Aspect="AspectFit"  
            Source="image1.jpg" 
            Opacity="0.8" />
-                <Label Text="Admin"/>
+                <Label Text="Sales"/>
             </Grid>
         </StackLayout>
     </Shell.FlyoutHeader>
@@ -87,12 +106,14 @@
         <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:IncomingCheckView}" />
     </FlyoutItem>
 
+    <FlyoutItem Title="Create Order" Icon="icon_feed.png">
+        <ShellContent Route="CreateOrder" ContentTemplate="{DataTemplate local:SalesOrderView}" />
+    </FlyoutItem>
+
     <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>
 
     <TabBar>
         <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
     </TabBar>
-
-
 </Shell>

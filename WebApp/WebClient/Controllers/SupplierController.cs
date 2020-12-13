@@ -14,8 +14,8 @@ namespace WebClient.Controllers
     [ApiController]
     public class SupplierController : ControllerBase, IBaseController<Supplier>
     {
-        private ISupplierService supplierService;
-        private IProductService prodService;
+        private readonly ISupplierService supplierService;
+        private readonly IProductService prodService;
 
         public SupplierController(ISupplierService service, IProductService _prodService)
         {

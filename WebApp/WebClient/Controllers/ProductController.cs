@@ -14,7 +14,7 @@ namespace WebClient.Controllers
     [ApiController]
     public class ProductController : ControllerBase, IBaseController<Product>
     {
-        private IProductService service;
+        private readonly IProductService service;
 
         public ProductController(IProductService _service)
         {

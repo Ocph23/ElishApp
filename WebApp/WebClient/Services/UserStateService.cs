@@ -1,28 +1,22 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Newtonsoft.Json;
 using ShareModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using WebClient;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Threading.Tasks;
-using WebClient.Services;
 
 namespace WebClient.Services
 {
-   
-
     public class UserStateService : IUserStateService
     {
-        private IUserService _userService;
-        private HttpClient http;
-        private ILocalStorageService _localStorageService;
-        private NavigationManager _navigationManager;
-        private AuthenticationStateProvider _authenticationStateProvider;
+        private readonly IUserService _userService;
+        private readonly HttpClient http;
+        private readonly ILocalStorageService _localStorageService;
+        private readonly NavigationManager _navigationManager;
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
 
         public AuthenticateResponse User { get; set; }
 
@@ -55,13 +49,12 @@ namespace WebClient.Services
                     http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", User.Token);
                     return true;
                 }
-
                 return false;
              
             }
             catch (Exception ex)
             {
-                throw new SystemException(ex.Message);
+               throw ex.ThrowException();
             }
         }
 

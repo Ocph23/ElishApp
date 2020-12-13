@@ -1,5 +1,4 @@
-﻿using ElishAppMobile.Models;
-using ElishAppMobile.Services;
+﻿using ElishAppMobile.Services;
 using ShareModels;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,6 @@ namespace ElishAppMobile.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public SignalrClient Signalr=> DependencyService.Get<SignalrClient>();
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
         public ICategoryService Categories => DependencyService.Get<ICategoryService>();
         public ICustomerService Customers => DependencyService.Get<ICustomerService>();
         public ISupplierService Suppliers => DependencyService.Get<ISupplierService>();
@@ -20,6 +18,7 @@ namespace ElishAppMobile.ViewModels
         public IIncommingService IncomingService => DependencyService.Get<IIncommingService>();
         public IPembelianService PembelianService=> DependencyService.Get<IPembelianService>();
         public IPenjualanService PenjualanService=> DependencyService.Get<IPenjualanService>();
+        public IUserStateService UserService  => DependencyService.Get<IUserStateService>();
 
         bool isBusy = false;
         public bool IsBusy

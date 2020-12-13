@@ -4,9 +4,9 @@ using Xamarin.Forms;
 
 namespace ElishAppMobile
 {
-    public partial class AppShell : Shell
+    public partial class SalesShell : Shell
     {
-        public AppShell()
+        public SalesShell()
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(IncomingCheckView), typeof(IncomingCheckView));

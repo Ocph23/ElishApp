@@ -13,6 +13,8 @@ namespace ElishAppMobile.ViewModels
         public LoginViewModel()
         {
             LoginCommand = new Command(OnLoginClicked);
+            this.PropertyChanged +=
+              (_, __) => LoginCommand.ChangeCanExecute();
         }
 
         private async void OnLoginClicked(object obj)

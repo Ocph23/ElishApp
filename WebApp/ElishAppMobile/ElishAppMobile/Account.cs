@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ElishAppMobile.Models;
+using Newtonsoft.Json;
 using ShareModels;
 using System;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace ElishAppMobile
         public static bool UserIsLogin {
             get {
                 var user = GetUser().Result;
-                return user == null ? false : true;
+                return user != null;
                                 
             }
         }
@@ -51,6 +52,20 @@ namespace ElishAppMobile
             }
         }
 
+        internal static async Task SetProfile(Profile response)
+        {
+            var userString = JsonConvert.SerializeObject(response);
+            await SecureStorage.SetAsync("Profile", userString);
+        }
+
+        public static async Task<Profile> GetProfile()
+        {
+            var userString = await SecureStorage.GetAsync("Profile");
+            if (string.IsNullOrEmpty(userString))
+                return null;
+            else
+                return JsonConvert.DeserializeObject<Profile>(userString);
+        }
 
         public static string Token
         {
@@ -67,7 +82,7 @@ namespace ElishAppMobile
             if (user != null)
             {
                 var role = user.Roles.Where(x => x.ToLower() == roleName).FirstOrDefault();
-                return string.IsNullOrEmpty(role) ? false : true;
+                return !string.IsNullOrEmpty(role);
             }
             return false;
         }

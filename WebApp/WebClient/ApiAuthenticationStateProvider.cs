@@ -35,6 +35,8 @@ namespace WebClient
 
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", savedToken.Token);
 
+                MarkUserAsAuthenticated(savedToken.UserName);
+
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(savedToken.Token), "jwt")));
             }
             catch (Exception)

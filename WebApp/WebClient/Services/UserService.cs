@@ -10,6 +10,8 @@ using WebClient.Models;
 using System.Security.Cryptography;
 using ShareModels;
 using WebClient;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace WebClient.Services
 {
@@ -19,13 +21,15 @@ namespace WebClient.Services
         private readonly OcphDbContext _context;
 
         private readonly AppSettings _appSettings;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public OcphDbContext OcphDbContext { get; }
 
-        public UserService(IOptions<AppSettings> appSettings, OcphDbContext dbcontext)
+        public UserService(IOptions<AppSettings> appSettings, OcphDbContext dbcontext, IHttpContextAccessor httpContextAccessor)
         {
             _context = dbcontext;
             _appSettings = appSettings.Value;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<AuthenticateResponse> Authenticate(UserLogin model)
@@ -49,7 +53,7 @@ namespace WebClient.Services
 
                 user.Roles = roles.ToList();
 
-                var token = await generateJwtToken(user);
+                var token = await GenerateJwtToken(user);
                 return new AuthenticateResponse(user, token);
             }
             catch (System.Exception ex)
@@ -109,7 +113,7 @@ namespace WebClient.Services
         {
             try
             {
-                var token = await generateJwtToken(user);
+                var token = await GenerateJwtToken(user);
                 if (string.IsNullOrEmpty(token))
                     throw new SystemException("You Not Have Access");
                 return token;
@@ -121,7 +125,7 @@ namespace WebClient.Services
             }
         }
 
-        private Task<string> generateJwtToken(User user)
+        private Task<string> GenerateJwtToken(User user)
         {
             // generate token that is valid for 7 days
 
@@ -144,7 +148,7 @@ namespace WebClient.Services
 
         public async Task<string> GenerateToken(User user)
         {
-            return await generateJwtToken(user);
+            return await GenerateJwtToken(user);
         }
 
         public async Task<User> Register(RegisterModel model)
@@ -169,6 +173,13 @@ namespace WebClient.Services
             var trans = _context.BeginTransaction();
             try
             {
+
+                if (string.IsNullOrEmpty(model.Email))
+                {
+                    string userName = GeneratePasswordHash($"Password{DateTime.Now.ToLongDateString()}");
+                    model.Email = userName[0..5];
+                }
+
                 User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email) };
                 user.Id = _context.Users.InsertAndGetLastID(user);
                 if (user.Id <= 0)
@@ -198,12 +209,18 @@ namespace WebClient.Services
             var trans = _context.BeginTransaction();
             try
             {
+                if (string.IsNullOrEmpty(model.Email))
+                {
+                    string userName = GeneratePasswordHash($"Password{DateTime.Now.ToLongDateString()}");
+                    model.Email = userName[0..5];
+                }
+
                 User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email) };
                 user.Id = _context.Users.InsertAndGetLastID(user);
                 if (user.Id <= 0)
                     throw new SystemException("Register Not Success !");
 
-                var role = _context.Roles.Where(x => x.Name == "customer").FirstOrDefault();
+                var role = _context.Roles.Where(x => x.Name == "Sales").FirstOrDefault();
                 _context.UserRoles.Insert(new Userrole { RoleId = role.Id, UserId = user.Id });
 
                 model.UserId = user.Id;
@@ -222,9 +239,8 @@ namespace WebClient.Services
             }
         }
 
-        private string GeneratePasswordHash(string password)
+        private static string GeneratePasswordHash(string password)
         {
-
             if (string.IsNullOrEmpty(password))
                 throw new SystemException("Password Requeired !");
 
@@ -243,7 +259,6 @@ namespace WebClient.Services
                 //for each byte  
                 strBuilder.Append(result[i].ToString("x2"));
             }
-
             return strBuilder.ToString();
         }
 
@@ -265,5 +280,50 @@ namespace WebClient.Services
         }
 
 
+        [ApiAuthorize(Roles="Administrator")]
+        public async Task<IEnumerable<User>> GetUsers()
+        {
+            try
+            {
+                var users = from user in _context.Users.Select()
+                            join ur in _context.UserRoles.Select() on user.Id equals ur.UserId
+                            join c in _context.Roles.Select() on ur.RoleId equals c.Id into rGroup
+                            from c in rGroup.DefaultIfEmpty()
+                                select new User { 
+                                 Activated=user.Activated, Email=user.Email, UserName=user.UserName,  Id=user.Id,
+                                   Roles = rGroup.ToList()
+                                };
+               
+                return await Task.FromResult(users.AsEnumerable());
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
+        public async Task<object> Profile()
+        {
+            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+            if (!string.IsNullOrEmpty(userName))
+            {
+                var user = await FindUserByUserName(userName);
+                if(user != null)
+                {
+                    var role = user.Roles.FirstOrDefault();
+
+                    if (role.Name == "Administrator" || role.Name == "Sales")
+                    {
+                        return _context.Karyawans.Where(x => x.UserId == user.Id);
+                    }
+
+                    if (role.Name == "Customer")
+                    {
+                        return _context.Customers.Where(x => x.UserId == user.Id);
+                    }
+                }
+            }
+                throw new UnauthorizedAccessException("You Are Profile Not Found !");
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace WebClient.Controllers
     [ApiController]
     public class IncomingCheckController : ControllerBase
     {
-        private IIncommingService _service;
+        private readonly IIncommingService _service;
 
         public IncomingCheckController(IIncommingService service)
         {

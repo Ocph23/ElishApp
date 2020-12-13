@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace WebClient.Middlewares
+namespace WebClient
 {
 
     public interface IExceptionNotificationService
@@ -31,5 +29,30 @@ namespace WebClient.Middlewares
             _decorated.WriteLine(value);
         }
     }
+
+
+
+    public static class ApiControllerErrorExtention
+    {
+        public static ObjectResult OnError(this ControllerBase controller, System.Exception ex)
+        {
+            var type = ex.GetType();
+            if (type.Name == typeof(System.UnauthorizedAccessException).Name)
+                return controller.Unauthorized(ex.Message);
+
+            return controller.BadRequest(new ErrorMessage(ex.Message));
+        }
+
+        public static SystemException ThrowException(this Exception ex)
+        {
+            var type = ex.GetType();
+            if (type.Name == typeof(System.UnauthorizedAccessException).Name)
+                return new UnauthorizedAccessException(ex.Message, ex);
+            return new SystemException(ex.Message,ex);
+        }
+    }
+
+
+  
 }
 

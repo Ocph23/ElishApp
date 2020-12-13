@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using WebClient.Models;
 using ShareModels;
-using WebClient.Services;
+using WebClient;
 
 namespace WebClient.Api
 {
@@ -13,12 +10,32 @@ namespace WebClient.Api
 
     public class UserController : ControllerBase
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         public UserController(IUserService userService)
         {
             _userService = userService;
         }
+
+
+
+        [ApiAuthorize(Roles ="Administrator")]
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var response = await _userService.GetUsers();
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return this.OnError(ex);
+            }
+        }
+
+
+
 
 
         [HttpPost("Login")]
@@ -34,6 +51,24 @@ namespace WebClient.Api
             catch (System.Exception ex)
             {
                 return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
+
+        [ApiAuthorize]
+        [HttpGet("profile")]
+        public async Task<IActionResult> Profile()
+        {
+            try
+            {
+                var userName = User.Identity.Name;
+                var response = await _userService.Profile();
+                if (response == null)
+                    return Unauthorized(new { message = "You Are Profile Not Found !" });
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+               return this.OnError(ex);
             }
         }
 
@@ -63,17 +98,18 @@ namespace WebClient.Api
             try
             {
                 User user= await _userService.FindUserById(userid);
-
                 if (user == null)
-                    throw new System.SystemException("User Not Found !");
+                    throw new System.UnauthorizedAccessException("User Not Found !");
                 await _userService.AddUserRole(role, user);
                 return Ok();
             }
             catch (System.Exception ex)
             {
-                return BadRequest(new ErrorMessage(ex.Message));
+                return this.OnError(ex);
             }
         }
 
     }
+
+    
 }

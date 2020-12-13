@@ -14,7 +14,7 @@ namespace WebClient.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private ICustomerService customerService;
+        private readonly ICustomerService customerService;
 
         public CustomerController(ICustomerService _customerService)
         {

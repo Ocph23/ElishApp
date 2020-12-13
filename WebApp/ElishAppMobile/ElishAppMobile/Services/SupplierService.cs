@@ -8,19 +8,17 @@ namespace ElishAppMobile
 {
     public class SupplierService : ISupplierService
     {
-        private string controller = "/api/supplier";
+        private readonly string controller = "/api/supplier";
 
         public async Task<bool> Delete(int id)
         {
             try
             {
-                using (var res = new RestService())
-                {
-                    var response = await res.DeleteAsync($"{controller}/{id}");
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    return await response.GetResult<bool>();
-                }
+                using var res = new RestService();
+                var response = await res.DeleteAsync($"{controller}/{id}");
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<bool>();
             }
             catch (Exception ex)
             {
@@ -32,13 +30,11 @@ namespace ElishAppMobile
         {
             try
             {
-                using (var res = new RestService())
-                {
-                    var response = await res.GetAsync($"{controller}/{id}");
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    return await response.GetResult<Supplier>();
-                }
+                using var res = new RestService();
+                var response = await res.GetAsync($"{controller}/{id}");
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<Supplier>();
             }
             catch (Exception ex)
             {
@@ -50,13 +46,11 @@ namespace ElishAppMobile
         {
             try
             {
-                using (var res = new RestService())
-                {
-                    var response = await res.GetAsync($"{controller}");
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    return await response.GetResult<IEnumerable<Supplier>>();
-                }
+                using var res = new RestService();
+                var response = await res.GetAsync($"{controller}");
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<IEnumerable<Supplier>>();
             }
             catch (Exception ex)
             {
@@ -68,13 +62,11 @@ namespace ElishAppMobile
         {
             try
             {
-                using (var res = new RestService())
-                {
-                    var response = await res.GetAsync($"{controller}/GetProducts");
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    return await response.GetResult<IEnumerable<Product>>();
-                }
+                using var res = new RestService();
+                var response = await res.GetAsync($"{controller}/GetProducts");
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<IEnumerable<Product>>();
             }
             catch (Exception ex)
             {
@@ -89,13 +81,11 @@ namespace ElishAppMobile
 
             try
             {
-                using (var res = new RestService())
-                {
-                    var response = await res.PostAsync($"{controller}", res.GenerateHttpContent(value));
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    return await response.GetResult<Supplier>();
-                }
+                using var res = new RestService();
+                var response = await res.PostAsync($"{controller}", res.GenerateHttpContent(value));
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<Supplier>();
             }
             catch (Exception ex)
             {
@@ -107,13 +97,11 @@ namespace ElishAppMobile
         {
             try
             {
-                using (var res = new RestService())
-                {
-                    var response = await res.PutAsync($"{controller}/{id}", res.GenerateHttpContent(value));
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    return await response.GetResult<bool>();
-                }
+                using var res = new RestService();
+                var response = await res.PutAsync($"{controller}/{id}", res.GenerateHttpContent(value));
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<bool>();
             }
             catch (Exception ex)
             {

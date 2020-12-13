@@ -187,14 +187,13 @@ namespace ElishAppMobile.Views
 
         private async void OnAddItem(object obj)
         {
-            await Shell.Current.GoToAsync(nameof(NewItemPage));
+            //await Shell.Current.GoToAsync(nameof(NewItemPage));
         }
 
-        async void OnItemSelected(IncomingItem item)
+        void OnItemSelected(IncomingItem item)
         {
             if (item == null)
                 return;
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel)}");
         }
 
         internal Task Search(string textSearch)

@@ -62,9 +62,7 @@ namespace WebClient
                                new Claim(ClaimTypes.Name, name),
                 };
                 var identity = new ClaimsIdentity(claims, "Bearer");
-
                 var user = await userService.FindUserById(id);
-
                 context.User = new ClaimsPrincipal(identity);
                 if (user != null)
                     context.Items["User"] = user;

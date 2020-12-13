@@ -70,7 +70,7 @@ namespace ElishAppMobile.Views
                     {
                         if (_SourceItems.Where(prod => !string.IsNullOrEmpty(prod.CodeArticle) && prod.CodeArticle == x.ToString()).Count() > 0)
                         {
-                            MessagingCenter.Send<MessageDialogData>(new MessageDialogData
+                            MessagingCenter.Send<MessageDataCenter>(new MessageDataCenter
                             {
                                 Title = "Error",
                                 Message = $"Data {x} Sudah Ada",
@@ -131,7 +131,7 @@ namespace ElishAppMobile.Views
 
         private async void OnAddItem(object obj)
         {
-            await Shell.Current.GoToAsync(nameof(NewItemPage));
+          //  await Shell.Current.GoToAsync(nameof(NewItemPage));
         }
 
         async void OnItemSelected(ProductStock item)

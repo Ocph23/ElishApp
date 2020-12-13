@@ -1,15 +1,11 @@
-using System; 
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace ShareModels
+namespace ElishAppMobile.Models
 {
-    public class Customer
+    public class Profile
     {
-        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -26,6 +22,5 @@ namespace ShareModels
 
         public int UserId { get; set; }
 
-        public virtual bool HasUser { get { return UserId != 0; } } 
     }
 }

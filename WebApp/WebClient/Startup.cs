@@ -13,7 +13,6 @@ using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
 using Ocph.DAL;
 using ShareModels;
-using WebClient.Middlewares;
 
 namespace WebClient
 {
@@ -87,12 +86,11 @@ namespace WebClient
                 app.UseHsts();
             }
 
-           // app.UseHttpsRedirection();
-
-            app.UseStaticFiles();
-
+            // app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseAuthorization();
+            app.UseMiddleware<JwtMiddleware>();
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapBlazorHub();
