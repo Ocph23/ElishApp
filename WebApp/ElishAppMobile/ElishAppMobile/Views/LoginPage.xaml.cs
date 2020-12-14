@@ -38,7 +38,13 @@ namespace ElishAppMobile.Views
         #region Properties
         public string Url
         {
-            get { return Helper.Url; }
+            get {
+
+                if (string.IsNullOrEmpty(url))
+                    url = Helper.Url;
+                return url; 
+
+            }
             set { SetProperty(ref url , value);
                 Helper.Url = value;
             }

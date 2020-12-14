@@ -7,7 +7,7 @@ namespace ElishAppMobile
 {
     public class Helper
     {
-        public static string Url { get; set; } = "http://192.168.1.8";
+        public static string Url { get; set; } = "https://waena-desa.id";
     }
 
     public class IMageSourceConverter : IValueConverter
