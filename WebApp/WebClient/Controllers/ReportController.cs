@@ -2,12 +2,19 @@
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using QRCoder;
 using ShareModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using WebClient.Models;
 
 namespace WebClient.Controllers
 {
@@ -16,12 +23,14 @@ namespace WebClient.Controllers
         private readonly IWebHostEnvironment _iwebhost;
         private readonly IPenjualanService _penjualanService;
         private readonly IPembelianService _pembelianService;
+        private readonly IOptions<AppSettings> _appSettings;
 
-        public ReportController(IWebHostEnvironment iwebhost, IPembelianService pembelianService, IPenjualanService penjualanService)
+        public ReportController(IWebHostEnvironment iwebhost, IOptions<AppSettings> appSettings, IPembelianService pembelianService, IPenjualanService penjualanService)
         {
             _iwebhost = iwebhost;
             _penjualanService = penjualanService;
             _pembelianService = pembelianService;
+            _appSettings = appSettings;
         }
 
         public ActionResult Index()
@@ -63,15 +72,32 @@ namespace WebClient.Controllers
                 nomor++;
             }
 
+
+            //paramas
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+
+            string barcode = GetBarCode(data.Nomor);
+            var accounting = _appSettings.Value.Accounting;
+            Dictionary<string, string> reportparameter = new Dictionary<string, string>();
+            reportparameter.Add("acc", accounting);
+            reportparameter.Add("sales", textInfo.ToTitleCase(data.Sales.Name));
+            reportparameter.Add("barcode", barcode);
+
             LocalReport localReport = new LocalReport(path);
             localReport.AddDataSource("HeaderNota", new List<ShareModels.Reports.NotaPenjualan>() {nota});
             localReport.AddDataSource("DataNota", datas);
-            var result = localReport.Execute(RenderType.ExcelOpenXml, 1, null, "");
-            return File(result.MainStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+          
+
+            var result = localReport.Execute(RenderType.Pdf, 1, reportparameter, "");
+            return File(result.MainStream, "application/pdf");
+            //var result = localReport.Execute(RenderType.ExcelOpenXml, 1, null, "");
+            //return File(result.MainStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
         public async Task<ActionResult> PrintPenjualan(int id)
         {
+          
             var data = await _penjualanService.GetPenjualan(id);
             var path = $"{_iwebhost.WebRootPath}\\Reports\\NotaPenjualan.rdlc";
 
@@ -107,11 +133,46 @@ namespace WebClient.Controllers
                 nomor++;
             }
 
+            //paramas
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+
+            string barcode = GetBarCode(data.Nomor);
+            var accounting = _appSettings.Value.Accounting;
+            Dictionary<string, string> reportparameter = new Dictionary<string, string>();
+            reportparameter.Add("acc", accounting);
+            reportparameter.Add("customer", textInfo.ToTitleCase(data.Customer.Name));
+            reportparameter.Add("barcode", barcode);
+
             LocalReport localReport = new LocalReport(path);
             localReport.AddDataSource("HeaderNota", new List<ShareModels.Reports.NotaPenjualan>() { nota });
             localReport.AddDataSource("DataNota", datas);
-            var result = localReport.Execute(RenderType.Pdf, 1, null, "");
+
+            var result = localReport.Execute(RenderType.Pdf, 1, reportparameter, "");
             return File(result.MainStream, "application/pdf");
+        }
+
+        private string GetBarCode(string nomor)
+        {
+            try
+            {
+                using (var ms = new MemoryStream())
+                {
+                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(nomor, QRCodeGenerator.ECCLevel.Q);
+                    QRCode qrCode = new QRCode(qrCodeData);
+
+                    using (Bitmap bitmap = qrCode.GetGraphic(20))
+                    {
+                        bitmap.Save(ms, ImageFormat.Png);
+                        return Convert.ToBase64String(ms.ToArray());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new System.SystemException(ex.Message);
+            }
         }
 
         public async Task<ActionResult> OrderPembelianExcel(int id)

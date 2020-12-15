@@ -140,15 +140,21 @@
                                         </RadzenButton>
                                     </EditTemplate>
 
-                                    <FooterTemplate>
-                                        <RadzenButton Click=@(args => Cancel()) Icon="cancel" ButtonStyle="ButtonStyle.Warning" />
-                                        <RadzenButton Visible="@(model.Items.Count>0)" Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
-                                    </FooterTemplate>
+                                   
                                 </RadzenGridColumn>
                             </Columns>
                         </RadzenGrid>
                     </RadzenFieldset>
                 </div>
+                <Radzen.Blazor.RadzenFieldset>
+                    <div class="text-right">
+                        <RadzenButton Click=@(args => Cancel()) Icon="undo" ButtonStyle="ButtonStyle.Warning" />
+                            <RadzenButton Visible="@(model.Items.Count>0)" Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
+                        <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" 
+                           href="@($"/report/printorder/{model.Id}")"><i class="ui-button-icon-left pi">print</i></a>
+                    </div>
+                </Radzen.Blazor.RadzenFieldset>
+
             </RadzenTabsItem>
 
         </Tabs>

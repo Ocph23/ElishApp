@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ElishAppMobile
 {
@@ -12,7 +14,7 @@ namespace ElishAppMobile
     {
         public static string DeviceToken { get; set; }
 
-        public RestService()
+        public RestService():base(DependencyService.Get<Helpers.IHTTPClientHandlerCreationService>().GetInsecureHandler())
         {
             string _server = Helper.Url;
             this.BaseAddress = new Uri(_server);

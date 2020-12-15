@@ -104,7 +104,6 @@
 
                     </RadzenFieldset>
                 </div>
-
                 <div class="col-md-12">
                     <RadzenFieldset Text="Data Orders">
                         <div class="row col-md-6">
@@ -120,7 +119,6 @@
                                                 Change=@(args => SelectProduct(args, "Supplier")) />
                             </div>
                         </div>
-
                         <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Penjualanitem">
                             <Columns>
                                 <RadzenGridColumn TItem="Penjualanitem" Property="Product.CodeName" Title="Code" />
@@ -162,7 +160,6 @@
                                         }
                                     </FooterTemplate>
                                 </RadzenGridColumn>
-
                                 <RadzenGridColumn TItem="Penjualanitem" Context="sampleBlazorModelsSampleOrder"
                                                   Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                                     <HeaderTemplate>
@@ -179,15 +176,17 @@
                                                       Click="@((args) => CancelEdit(order))">
                                         </RadzenButton>
                                     </EditTemplate>
-                                    <FooterTemplate>
-                                        <RadzenButton Click=@(args => Cancel()) Icon="cancel" ButtonStyle="ButtonStyle.Warning" />
-                                        <RadzenButton Visible=@(model.Status== PaymentStatus.None?true:false) Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
-                                    </FooterTemplate>
                                 </RadzenGridColumn>
                             </Columns>
                         </RadzenGrid>
                     </RadzenFieldset>
-
+                    <Radzen.Blazor.RadzenFieldset>
+                        <div class="text-right">
+                            <RadzenButton Click=@(args => Cancel()) Icon="undo" ButtonStyle="ButtonStyle.Warning" />
+                            <RadzenButton Visible=@(model.Status== PaymentStatus.None?true:false) Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
+                            <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" href="@($"/report/printpenjualan/{model.Id}")"><i class="ui-button-icon-left pi">print</i></a>
+                        </div>
+                    </Radzen.Blazor.RadzenFieldset>
                     <RadzenFieldset Text="Pembayaran">
                         <RadzenButton Visible=@(model.Status!=PaymentStatus.PaidOff?true:false)
                                       Click=@(args => DialogService.OpenAsync<EditPenjualanPembayaran>($"Pembayaran",
@@ -264,7 +263,6 @@
 
                     </RadzenFieldset>
                 </div>
-
             </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>
@@ -347,7 +345,6 @@
         }
 
     }
-
 
     string OnErrorStock(Penjualanitem data)
     {
