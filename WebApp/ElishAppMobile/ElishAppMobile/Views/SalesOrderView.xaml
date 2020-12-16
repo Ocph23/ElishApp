@@ -57,23 +57,13 @@
                                 <SwipeView  x:DataType="model:ItemPenjualanModel"   >
                                     <SwipeView.LeftItems  >
                                         <SwipeItemView  
-                                               BackgroundColor="Red" 
+                                               BackgroundColor="OrangeRed" 
                                             Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference ItemsListView}}" CommandParameter="{Binding .}">
                                             <StackLayout WidthRequest="80">
-                                                <Label Text="Delete" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"></Label>
+                                                <Label Text="Delete" TextColor="White" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"></Label>
                                             </StackLayout>
                                         </SwipeItemView>
                                     </SwipeView.LeftItems>
-                                    <SwipeView.RightItems>
-                                        <SwipeItems>
-                                            <SwipeItemView HeightRequest="30" >
-                                                <Grid>
-                                                    <Stepper Value="{Binding Real}"  Minimum="0" Maximum="{Binding Amount}" Increment="0.25" HeightRequest="60" HorizontalOptions="Center"
-                                                 VerticalOptions="CenterAndExpand"/>
-                                                </Grid>
-                                            </SwipeItemView>
-                                        </SwipeItems>
-                                    </SwipeView.RightItems>
                                     <Grid  BackgroundColor="#E3EBFF" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>

@@ -16,7 +16,6 @@ namespace ElishAppMobile.Views
             BindingContext = new LoginViewModel();
         }
     }
-
     public class LoginViewModel:BaseViewModel
     {
         #region Constructor
@@ -39,14 +38,12 @@ namespace ElishAppMobile.Views
         public string Url
         {
             get {
-
                 if (string.IsNullOrEmpty(url))
                     url = Helper.Url;
                 return url; 
-
             }
             set { SetProperty(ref url , value);
-                Helper.Url = value;
+              
             }
         }
 
@@ -65,7 +62,7 @@ namespace ElishAppMobile.Views
                 SetProperty(ref _password, value); 
             }
 
-    }
+        }
 
         public Command LoginCommand {
             get => _loginCommand;
@@ -86,7 +83,7 @@ namespace ElishAppMobile.Views
             try
             {
                 var user = new UserLogin() { UserName=UserName, Password=Password };
-              var result=  await UserService.Login(user);
+                var result=  await UserService.Login(user);
                 if (Account.UserIsLogin)
                 {
                     if (await Account.UserInRole("Administrator"))
@@ -112,6 +109,10 @@ namespace ElishAppMobile.Views
                 MessagingCenter.Send<MessageDataCenter>(new MessageDataCenter {
                     Message= ex.Message, Title="Error"
                 }, "mesage");
+            }
+            finally
+            {
+                Helper.Url = Url;
             }
         }
         #endregion

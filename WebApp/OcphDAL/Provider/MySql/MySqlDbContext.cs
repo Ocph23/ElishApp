@@ -187,7 +187,7 @@ namespace Ocph.DAL.Provider.MySql
             string temp = sb.ToString();
             sb.Clear();
 
-            temp = temp[0..^2];
+            temp = temp[0..(temp.Length-2)];
             sb.Append(temp + " ");
             sb.Append(" From ").Append(Entity.TableName);
 

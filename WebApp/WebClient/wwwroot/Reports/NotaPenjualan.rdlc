@@ -2131,22 +2131,6 @@
                 </BottomBorder>
               </Style>
             </Textbox>
-            <Image Name="barcode">
-              <Source>Database</Source>
-              <Value>=Parameters!barcode.Value</Value>
-              <MIMEType>image/png</MIMEType>
-              <Sizing>Fit</Sizing>
-              <Top>1.41778cm</Top>
-              <Left>9.30235cm</Left>
-              <Height>1.75816cm</Height>
-              <Width>2.08208cm</Width>
-              <ZIndex>12</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
           </ReportItems>
           <Style>
             <Border>

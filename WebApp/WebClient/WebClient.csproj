@@ -2,11 +2,15 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>0a7be25d-899f-4c3f-9029-8e83abc567f8</UserSecretsId>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+   
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="3.0.0" />
     <PackageReference Include="ClosedXML" Version="0.95.3" />
+    <PackageReference Include="FastReport.OpenSource" Version="2021.1.0" />
+    <PackageReference Include="FastReport.OpenSource.Web" Version="2021.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="QRCoderNetCore" Version="1.0.0" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
@@ -53,6 +57,7 @@
    <Watch Remove="Pages\Penjualans\PenjualanOrderDetail.razor" />
    <Watch Remove="Pages\Penjualans\PenjualanRealisasi.razor" />
    <Watch Remove="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
+   <Watch Remove="Pages\Prints\NotaPenjualan.razor" />
    <Watch Remove="Pages\ShareComponent\FakturPenjualanLayout.razor" />
    <Watch Remove="Pages\ShareComponent\PrintLayout.razor" />
    <Watch Remove="Pages\ShareComponent\SalesOrderLayout.razor" />
@@ -70,6 +75,7 @@
    <None Include="Pages\Penjualans\EditPenjualanPembayaran.razor" />
    <None Include="Pages\Penjualans\PenjualanOrderDetail.razor" />
    <None Include="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
+   <None Include="Pages\Prints\NotaPenjualan.razor" />
    <None Include="Pages\ShareComponent\FakturPenjualanLayout.razor" />
    <None Include="Shared\PrintLayout.razor" />
    <None Include="Pages\ShareComponent\SalesOrderLayout.razor" />
@@ -95,10 +101,13 @@
    <Folder Include="wwwroot\fonts\" />
  </ItemGroup>
  <ItemGroup>
-   <Content Update="wwwroot\Reports\NotaOrder.rdlc">
+   <Content Update="wwwroot\reports\nota1.xsd">
+     <SubType>Designer</SubType>
+   </Content>
+   <Content Update="wwwroot\reports\notaorder.rdlc">
      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
    </Content>
-   <Content Update="wwwroot\Reports\NotaPenjualan.rdlc">
+   <Content Update="wwwroot\reports\notapenjualan.rdlc">
      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
    </Content>
  </ItemGroup>

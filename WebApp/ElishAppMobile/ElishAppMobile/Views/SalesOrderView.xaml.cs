@@ -164,7 +164,6 @@ namespace ElishAppMobile.Views
             {
                 DataCustomers.Add(item);
             }
-
             products = await Products.GetProductStock();
             foreach (var item in products.Where(x=>x.Stock>0))
             {
@@ -176,10 +175,14 @@ namespace ElishAppMobile.Views
         {
             try
             {
+                if (!await MessageHelper.DialogAsync("Dialog", "Yakin Buat Order ? "))
+                    return;
+
                 Order.Items.Clear();
                 foreach (var item in Datas)
                 {
-                    Order.Items.Add(new OrderPenjualanItem {  Amount=item.Real, Price= item.Unit.Sell, UnitId=item.UnitId, Unit=item.Unit, ProductId=item.ProductId, Product=item.Product });
+                    Order.Items.Add(new OrderPenjualanItem {  Amount=item.Real, Price= item.Unit.Sell, UnitId=item.UnitId, Unit=item.Unit, 
+                        ProductId=item.ProductId, Product=item.Product });
                 }
 
                 int salesId = 0;
@@ -199,7 +202,7 @@ namespace ElishAppMobile.Views
             }
             catch (Exception ex)
             {
-                await Toas.ShowLong($"Error : {ex.Message} !");
+                await MessageHelper.ErrorAsync($"Error : {ex.Message} !");
             }
         }
 
@@ -207,7 +210,7 @@ namespace ElishAppMobile.Views
         {
             if (result != null)
             {
-                 string article = result.Article.ToString();
+                string article = result.Article.ToString();
                 var data = Datas.Where(x => x.Product.CodeArticle == article).FirstOrDefault();
                 if (data != null)
                 {
@@ -219,7 +222,10 @@ namespace ElishAppMobile.Views
                     }
 
                     if(result.Type == "Auto")
-                        data.Real += max < 1 ? max : 1 ;
+                    {
+                        data.Real += max < 0.5 ? max : 0.5;
+                        await Toas.ShowLong($"{data.Product.Name} , Amount : {data.Real}");
+                    }
                     else
                     {
                        if((double)result.Count > max)
@@ -268,7 +274,7 @@ namespace ElishAppMobile.Views
                 ProductId = value.Id,
                 Unit = unit,
                 UnitId = unit.Id,
-                Real = value.Stock < 1 ? value.Stock:1 
+                Real = value.Stock < 0.5 ? value.Stock : 0.5 
             };
 
             newData.UpdateEvent += NewData_UpdateEvent;

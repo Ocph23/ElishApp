@@ -30,10 +30,10 @@ namespace WebClient
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //services.Configure<ForwardedHeadersOptions>(options =>
-            //{
-            //    options.KnownProxies.Add(IPAddress.Parse("194.59.165.198"));
-            //});
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.KnownProxies.Add(IPAddress.Parse("194.59.165.198"));
+            });
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -90,6 +90,8 @@ namespace WebClient
             app.UseRouting();
             app.UseAuthorization();
             app.UseMiddleware<JwtMiddleware>();
+            app.UseFastReport();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
@@ -99,7 +101,6 @@ namespace WebClient
                 endpoints.MapControllerRoute(
                     name:"default", 
                     pattern: "{controller=Report}/{action}/{id?}");
-
             });
         }
     }

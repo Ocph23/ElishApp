@@ -1,5 +1,4 @@
-﻿using AspNetCore.Reporting;
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -8,13 +7,20 @@ using ShareModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebClient.Models;
+
+using FastReport.Utils;
+using FastReport;
+using FastReport.Export.Html;
+using System.Data;
+using System.ComponentModel;
+using AspNetCore.Reporting;
+using FastReport.Web;
 
 namespace WebClient.Controllers
 {
@@ -33,15 +39,11 @@ namespace WebClient.Controllers
             _appSettings = appSettings;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
-        }
+          
 
-        public async Task<ActionResult> PrintOrder(int id)
-        {
-            var data = await _penjualanService.GetOrder(id);
-            var path = $"{_iwebhost.WebRootPath}\\Reports\\NotaOrder.rdlc";
+            var data = await _penjualanService.GetOrder(10);
             var nota = new ShareModels.Reports.NotaPenjualan
             {
                 CreateDate = data.OrderDate,
@@ -58,14 +60,62 @@ namespace WebClient.Controllers
             {
                 datas.Add(new ShareModels.Reports.NotaData
                 {
-                    No=nomor,
+                    No = nomor,
                     Amount = item.Amount,
                     CodeArticle = item.Product.CodeArticle,
                     CodeProduct = item.Product.CodeName,
                     ProductName = $"{item.Product.Name} {item.Product.Size}",
                     Unit = item.Unit.Name,
                     Price = item.Price,
-                    Total = item.Total, 
+                    Total = item.Total,
+
+                });
+
+                nomor++;
+            }
+
+            var report = new WebReport();
+            report.Report.Load($"{_iwebhost.WebRootPath}/reports/nota1.frx");
+            var datasets = datas.ToDataTable();
+            report.Report.RegisterData(datasets, "Table1");
+            report.ToolbarColor = System.Drawing.Color.White;
+            report.ShowZoomButton = false;
+            report.ShowExports = false;
+            report.ShowPrint= false;
+
+            ViewBag.WebReport = report;
+            return View();
+        }
+
+        public async Task<ActionResult> PrintOrder(int id)
+        {
+            var data = await _penjualanService.GetOrder(id);
+            var path = $"{_iwebhost.WebRootPath}/reports/notaorder.rdlc";
+
+            var nota = new ShareModels.Reports.NotaPenjualan
+            {
+                CreateDate = data.OrderDate,
+                Customer = data.Customer.Name,
+                Discount = data.Discount,
+                OrderStatus = data.Status.ToString(),
+                PoNumber = data.Nomor,
+                Sales = data.Sales.Name,
+            };
+
+            var datas = new List<ShareModels.Reports.NotaData>();
+            int nomor = 1;
+            foreach (var item in data.Items)
+            {
+                datas.Add(new ShareModels.Reports.NotaData
+                {
+                    No = nomor,
+                    Amount = item.Amount,
+                    CodeArticle = item.Product.CodeArticle,
+                    CodeProduct = item.Product.CodeName,
+                    ProductName = $"{item.Product.Name} {item.Product.Size}",
+                    Unit = item.Unit.Name,
+                    Price = item.Price,
+                    Total = item.Total,
 
                 });
 
@@ -80,14 +130,10 @@ namespace WebClient.Controllers
             string barcode = GetBarCode(data.Nomor);
             var accounting = _appSettings.Value.Accounting;
             Dictionary<string, string> reportparameter = new Dictionary<string, string>();
-            reportparameter.Add("acc", accounting);
-            reportparameter.Add("sales", textInfo.ToTitleCase(data.Sales.Name));
-            reportparameter.Add("barcode", barcode);
-
             LocalReport localReport = new LocalReport(path);
-            localReport.AddDataSource("HeaderNota", new List<ShareModels.Reports.NotaPenjualan>() {nota});
+            localReport.AddDataSource("HeaderNota", new List<ShareModels.Reports.NotaPenjualan>() { nota });
             localReport.AddDataSource("DataNota", datas);
-          
+
 
             var result = localReport.Execute(RenderType.Pdf, 1, reportparameter, "");
             return File(result.MainStream, "application/pdf");
@@ -95,12 +141,98 @@ namespace WebClient.Controllers
             //return File(result.MainStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
+
+        public async Task<ActionResult> TestFastReport(int id)
+        {
+
+            var reportItem = "nota1.frx";
+
+            string mime = "application/" + "html"; //MIME-header with default value
+                                                   // Find a report
+            if (reportItem != null)
+            {
+
+                var path = $"{_iwebhost.WebRootPath}/reports/{reportItem}";
+                using (MemoryStream stream = new MemoryStream()) //Create the stream for the report
+                {
+                    try
+                    {
+                        var data = await _penjualanService.GetOrder(id);
+                        var nota = new ShareModels.Reports.NotaPenjualan
+                        {
+                            CreateDate = data.OrderDate,
+                            Customer = data.Customer.Name,
+                            Discount = data.Discount,
+                            OrderStatus = data.Status.ToString(),
+                            PoNumber = data.Nomor,
+                            Sales = data.Sales.Name,
+                        };
+
+                        var datas = new List<ShareModels.Reports.NotaData>();
+                        int nomor = 1;
+                        foreach (var item in data.Items)
+                        {
+                            datas.Add(new ShareModels.Reports.NotaData
+                            {
+                                No = nomor,
+                                Amount = item.Amount,
+                                CodeArticle = item.Product.CodeArticle,
+                                CodeProduct = item.Product.CodeName,
+                                ProductName = $"{item.Product.Name} {item.Product.Size}",
+                                Unit = item.Unit.Name,
+                                Price = item.Price,
+                                Total = item.Total,
+
+                            });
+
+                            nomor++;
+                        }
+
+                        var datasets = datas.ToDataTable();
+                        DataSet ds = new DataSet();
+                        ds.Tables.Add(datasets);
+                        ds.WriteXml($"{_iwebhost.WebRootPath}/reports/nota1.xml");
+
+                        Config.WebMode = true;
+                        using (Report report = new Report())
+                        {
+                            ds.DataSetName = "Nota";
+                            report.Load(path); //Load the report
+                         //   report.RegisterData(ds, "Nota"); //Register data in the report
+                            report.Prepare();
+                            HTMLExport html = new HTMLExport();
+                            html.SinglePage = true; //report on the one page
+                            html.Navigator = false; //navigation panel on top
+                            html.EmbedPictures = true; //build in images to the document
+                            report.Export(html, stream);
+                            mime = "text/" + "html"; //redefine mime for html
+                        }
+                        //Get the name of resulting report file with needed extension
+                        var file = String.Concat(Path.GetFileNameWithoutExtension(path), ".", "html");
+                        return File(stream.ToArray(), mime);
+                        
+                    }
+                    catch(Exception ex)
+                    {
+                        return new NoContentResult();
+                    }
+                    finally
+                    {
+                        stream.Dispose();
+                    }
+                }
+            }
+            else
+                return NotFound();
+        }
+
+
+
         public async Task<ActionResult> PrintPenjualan(int id)
         {
-          
-            var data = await _penjualanService.GetPenjualan(id);
-            var path = $"{_iwebhost.WebRootPath}\\Reports\\NotaPenjualan.rdlc";
 
+            var data = await _penjualanService.GetPenjualan(id);
+            var path = $"{_iwebhost.WebRootPath}/reports/notapenjualan.rdlc";
             var nota = new ShareModels.Reports.NotaPenjualan
             {
                 CreateDate = data.CreateDate,
@@ -137,7 +269,7 @@ namespace WebClient.Controllers
             CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
             TextInfo textInfo = cultureInfo.TextInfo;
 
-            string barcode = GetBarCode(data.Nomor);
+            string barcode = data.Nomor;
             var accounting = _appSettings.Value.Accounting;
             Dictionary<string, string> reportparameter = new Dictionary<string, string>();
             reportparameter.Add("acc", accounting);
@@ -147,7 +279,6 @@ namespace WebClient.Controllers
             LocalReport localReport = new LocalReport(path);
             localReport.AddDataSource("HeaderNota", new List<ShareModels.Reports.NotaPenjualan>() { nota });
             localReport.AddDataSource("DataNota", datas);
-
             var result = localReport.Execute(RenderType.Pdf, 1, reportparameter, "");
             return File(result.MainStream, "application/pdf");
         }
@@ -164,7 +295,7 @@ namespace WebClient.Controllers
 
                     using (Bitmap bitmap = qrCode.GetGraphic(20))
                     {
-                        bitmap.Save(ms, ImageFormat.Png);
+                        //bitmap.Save(ms, ImageFormat.Png);
                         return Convert.ToBase64String(ms.ToArray());
                     }
                 }
@@ -179,7 +310,7 @@ namespace WebClient.Controllers
         {
 
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-           
+
             try
             {
                 var pembelian = await _pembelianService.GetOrder(id);
@@ -237,7 +368,7 @@ namespace WebClient.Controllers
 
                 worksheet.Cell(items.Count + 8, 1).Value = "Hormat Kami";
                 worksheet.Cell(items.Count + 12, 1).Value = "Elish";
-                var rangeAsign = worksheet.Range($"A{items.Count + 4}:B{items.Count + 4}");
+                var rangeAsign = worksheet.Range($"A{items.Count + 8}:B{items.Count + 8}");
                 rangeAsign.Merge().Style.Font.SetBold().Font.FontSize = 12;
 
                 using var stream = new MemoryStream();
@@ -251,5 +382,47 @@ namespace WebClient.Controllers
             }
 
         }
+
+
+
+        public  DataSet ToDataSet<OrderPenjualanItem>( List<OrderPenjualanItem> list)
+        {
+            Type elementType = typeof(OrderPenjualanItem);
+            DataSet ds = new DataSet();
+            DataTable t = new DataTable();
+            ds.Tables.Add(t);
+
+            //add a column to table for each public property on T
+            foreach (var propInfo in elementType.GetProperties())
+            {
+                Type ColType = Nullable.GetUnderlyingType(propInfo.PropertyType) ?? propInfo.PropertyType;
+
+                t.Columns.Add(propInfo.Name, ColType);
+            }
+
+            //go through each property on T and add each value to the table
+            foreach (OrderPenjualanItem item in list)
+            {
+                DataRow row = t.NewRow();
+
+                foreach (var propInfo in elementType.GetProperties())
+                {
+                    row[propInfo.Name] = propInfo.GetValue(item, null) ?? DBNull.Value;
+                }
+
+                t.Rows.Add(row);
+            }
+
+            return ds;
+        }
+
+
+       
+
+
     }
+
+
+
+      
 }

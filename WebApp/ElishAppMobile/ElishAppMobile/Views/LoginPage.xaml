@@ -13,20 +13,20 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <StackLayout Margin="0,50" >
-                <Image Source="icon.png" WidthRequest="150" VerticalOptions="CenterAndExpand"/>
+            <StackLayout Margin="0,20" >
+                <Image Source="icon.png" WidthRequest="100" VerticalOptions="CenterAndExpand"/>
             </StackLayout>
-            <StackLayout VerticalOptions="StartAndExpand" Grid.Row="1" Margin="20,0">
-                <Label Text="Login" FontSize="Title" Margin="0,30"/>
+            <StackLayout VerticalOptions="StartAndExpand" Grid.Row="1" Margin="30,0">
+                <Label Text="Login" FontSize="Title" Margin="0,20"/>
                 <Label Text="User Name"/>
                 <Entry Text="{Binding UserName}"/>
                 <Label Text="Password"/>
                 <Entry IsPassword="True" Text="{Binding Password}"/>
-                 <Button Margin="0,20" VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
+                <Button Margin="0,20" VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
             </StackLayout>
-            
-            <StackLayout Grid.Row="2" Margin="20">
-                <Entry HorizontalOptions="Center" WidthRequest="200" Text="{Binding Url}"/>
+            <StackLayout Grid.Row="2" Margin="5">
+                <Entry HorizontalOptions="Center" FontSize="Small" WidthRequest="200" 
+                  HorizontalTextAlignment="Center"     Text="{Binding Url}"/>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

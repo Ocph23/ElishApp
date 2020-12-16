@@ -43,10 +43,9 @@
                 <StackLayout Margin="50" BackgroundColor="OrangeRed" HeightRequest="1" VerticalOptions="CenterAndExpand"/>
             </Grid>
             <StackLayout Orientation="Horizontal"  HorizontalOptions="CenterAndExpand"  IsVisible="{Binding AutoCount, Converter={StaticResource isNot}}" Grid.Row="2" >
-                <StackLayout Spacing="0" >
-                    <Entry IsVisible="{Binding IsScanning, Converter={StaticResource isNot} }" Keyboard="Numeric" HorizontalTextAlignment="Center"
-                       x:Name="amount" Text="{Binding AmountValue}"  />
-                    <Stepper Value="{Binding AmountValue}" Margin="0"/>
+                <StackLayout IsVisible="{Binding IsScanning, Converter={StaticResource isNot} }" Spacing="0" >
+                    <local:CustomStepper  ShowEntry="True" Text="{Binding AmountValue}" WidthRequest="140"  Increment="0.25"  
+                                            Minimum="0" Maximum="{Binding Amount}" Margin="5" VerticalOptions="CenterAndExpand"/>
                 </StackLayout>
                 <Button HeightRequest="50" IsVisible="{Binding IsScanning, Converter={StaticResource isNot} }" Text="Take" HorizontalOptions="End" Command="{Binding TakeCommand}" />
             </StackLayout>

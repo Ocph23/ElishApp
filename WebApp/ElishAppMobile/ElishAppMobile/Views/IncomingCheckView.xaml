@@ -39,7 +39,6 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-
                             <StackLayout  Padding="10" Spacing="0" >
                                 <Label Text="{Binding Product.CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="18" />
                                 <Label Text="{Binding Product.Name}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
@@ -63,10 +62,9 @@
                             <StackLayout Grid.Column="1" HorizontalOptions="CenterAndExpand" Spacing="0"  >
                                 <Entry HorizontalOptions="Center" Keyboard="Numeric" Text="{Binding ActualValue}" HorizontalTextAlignment="Center" WidthRequest="100" Style="{DynamicResource ListItemTextStyle}" FontSize="20" />
                                     <Label Text="{Binding Unit.Name}" HorizontalOptions="CenterAndExpand"/>
-                                    <Stepper Value="{Binding ActualValue}" Minimum="0" Increment="1" HeightRequest="45"
+                                    <Stepper Value="{Binding ActualValue}" Minimum="0" Increment="0.25" HeightRequest="45"
                                          VerticalOptions="CenterAndExpand"/>
                             </StackLayout>
-
                         </Grid>
                         </StackLayout>
                     </DataTemplate>
