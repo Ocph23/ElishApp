@@ -5,10 +5,9 @@
              Title="Detail Product"
              x:Class="ElishAppMobile.Views.ProductDetailView">
     <ContentPage.Content>
-        <ScrollView Padding="20" BackgroundColor="#E3EBFF">
+        <ScrollView Padding="20" >
             <StackLayout>
                 <StackLayout Grid.Row="1" Margin="10">
-                    <Label Text="Detail" FontSize="Large" FontAttributes="Bold" />
                     <StackLayout>
                         <StackLayout Margin="5" Spacing="0">
                             <Label Text="Product Name" FontAttributes="Bold"/>
@@ -30,16 +29,28 @@
                             <Label Text="Size" FontAttributes="Bold"/>
                             <Label Text="{Binding Model.Size}" Margin="10,0"/>
                         </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Price" FontAttributes="Bold"/>
+                            <StackLayout Margin="10,0"  Orientation="Horizontal">
+                                <Label Text="Rp. "></Label>
+                                <Label  Text="{Binding Model.SelectedUnit.Sell, StringFormat='{}{0:N2}'}"/>
+                                <Label  Text="{Binding Model.SelectedUnit.Name, StringFormat='/{0}'}"/>
+
+                            </StackLayout>
+                        </StackLayout>
+
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Sisa Stock" FontAttributes="Bold"/>
+                            <Label Text="{Binding Model.Stock}" Margin="10,0"/>
+                        </StackLayout>
 
                         <StackLayout Margin="5" Spacing="0">
                             <Label Text="Description" FontAttributes="Bold"/>
                             <Label Text="{Binding Model.Description}"  Margin="10,0"/>
                         </StackLayout>
-
                     </StackLayout>
-
                 </StackLayout>
-                <StackLayout Grid.Row="1" Margin="10">
+                <StackLayout Grid.Row="1" Margin="0">
                     <Label Text="Galery" FontSize="Large" FontAttributes="Bold" />
                     <Image Source="iamge2.png" HeightRequest="200" Margin="20"/>
                 </StackLayout>

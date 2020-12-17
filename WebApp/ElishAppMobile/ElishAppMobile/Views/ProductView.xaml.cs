@@ -1,4 +1,5 @@
-﻿using ElishAppMobile.ViewModels;
+﻿using ElishAppMobile.Helpers;
+using ElishAppMobile.ViewModels;
 using ShareModels;
 using ShareModels.ModelViews;
 using System;
@@ -44,6 +45,7 @@ namespace ElishAppMobile.Views
         public Command LoadItemsCommand { get; }
         public Command AddItemCommand { get; }
         public Command ScanBarcode { get; }
+        public Command SearchScanCommand { get; }
         public Command<ProductStock> ItemTapped { get; }
 
         public ProductViewViewModel()
@@ -55,8 +57,39 @@ namespace ElishAppMobile.Views
             ItemTapped = new Command<ProductStock>(OnItemSelected);
             AddItemCommand = new Command(OnAddItem);
             ScanBarcode = new Command(ScanAction);
+            SearchScanCommand = new Command(SearchScanCommandAction);
         }
 
+        private async void SearchScanCommandAction(object obj)
+        {
+            var vm = new InputBarcodeViewModel();
+            vm.AutoCount = true;
+            vm.ShowAutoCount = false;
+            var form = new InputBarcodeView() { BindingContext = vm };
+            vm.OnResultScanHandler += async (dynamic result) => {
+
+                if (result != null && result.Article != null)
+                {
+                    var products = await DependencyService.Get<IProductService>().GetProductStock();
+                    if (products != null)
+                    {
+                        var data = products.Where(x => x.CodeArticle == result.Article).FirstOrDefault();
+                        if (data != null)
+                        {
+                            await Shell.Current.Navigation.PopModalAsync();
+                            var detailForm = new ProductDetailView() { BindingContext = new ProductDetailViewModel(data) };
+                            await Shell.Current.Navigation.PushModalAsync(detailForm);
+                            return;
+                        }
+                    }
+                }
+
+                await Toas.ShowLong($"{result.Article} Not Found !");
+            };
+
+            await Shell.Current.Navigation.PushModalAsync(form);
+        }
+            
         private async void ScanAction(object obj)
         {
             try

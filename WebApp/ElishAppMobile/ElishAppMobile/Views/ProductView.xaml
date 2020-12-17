@@ -8,6 +8,9 @@
              NavigationPage.HasNavigationBar="true"
              BackgroundColor="White"
              x:Name="BrowseItemsPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="qr.png" Command="{Binding SearchScanCommand}"/>
+    </ContentPage.ToolbarItems>
     <Shell.SearchHandler>
         <control:TextSearchHandler x:Name="search" Placeholder="Cari"></control:TextSearchHandler>
     </Shell.SearchHandler>
@@ -19,19 +22,19 @@
                 <DataTemplate>
                     <StackLayout Padding="0,1" x:DataType="model:ProductStock" BackgroundColor="LightGray" >
                         <SwipeView VerticalOptions="CenterAndExpand" >
-                            <SwipeView.RightItems>
+                            <SwipeView.LeftItems>
                                 <SwipeItems >
                                     <SwipeItemView  
-                                               BackgroundColor="LightGreen" 
+                                               BackgroundColor="OrangeRed" 
                                                  Command="{Binding Source={RelativeSource AncestorType={x:Type local:ProductViewViewModel}}, Path=ScanBarcode}"	
                                                CommandParameter="{Binding .}" >
                                         <StackLayout WidthRequest="100">
-                                            <Label Text="Scan" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"></Label>
+                                            <Label Text="Add Article" TextColor="White" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"></Label>
                                         </StackLayout>
                                     </SwipeItemView>
                                 </SwipeItems>
-                            </SwipeView.RightItems>
-                            <!-- Content -->
+                            </SwipeView.LeftItems>
+                            
                             <Grid BackgroundColor="White" Padding="10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>

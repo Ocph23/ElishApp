@@ -576,7 +576,7 @@ namespace WebClient.Services
                         var existsDb = order.Items.Where(x => x.Id == item.Id).FirstOrDefault();
                         if (existsDb == null)
                         {
-                            if (!dbContext.OrderPembelianItems.Delete(x => x.Id == item.Id))
+                            if (!dbContext.OrderPenjualanItems.Delete(x => x.Id == item.Id))
                                 throw new SystemException("Order Item Not Removed !");
                         }
                     }
