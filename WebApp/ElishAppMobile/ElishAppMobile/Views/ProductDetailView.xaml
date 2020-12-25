@@ -10,27 +10,27 @@
                 <StackLayout Grid.Row="1" Margin="10">
                     <StackLayout>
                         <StackLayout Margin="5" Spacing="0">
-                            <Label Text="Product Name" FontAttributes="Bold"/>
+                            <Label Text="Product Name" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.Name}" Margin="10,0"/>
                         </StackLayout>
                         <StackLayout Margin="5" Spacing="0">
-                            <Label Text="Merk" FontAttributes="Bold"/>
+                            <Label Text="Merk" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.Merk}" Margin="10,0"/>
                         </StackLayout>
                         <StackLayout Margin="5" Spacing="0">
-                            <Label Text="Product Code" FontAttributes="Bold"/>
+                            <Label Text="Product Code" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.CodeName}" Margin="10,0"/>
                         </StackLayout>
                         <StackLayout Margin="5" Spacing="0">
-                            <Label Text="Article" FontAttributes="Bold"/>
+                            <Label Text="Article" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.CodeArticle}" Margin="10,0"/>
                         </StackLayout>
                         <StackLayout Margin="5" Spacing="0">
-                            <Label Text="Size" FontAttributes="Bold"/>
+                            <Label Text="Size" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.Size}" Margin="10,0"/>
                         </StackLayout>
                         <StackLayout Margin="5" Spacing="0">
-                            <Label Text="Price" FontAttributes="Bold"/>
+                            <Label Text="Price" FontAttributes="Bold" FontSize="12"/>
                             <StackLayout Margin="10,0"  Orientation="Horizontal">
                                 <Label Text="Rp. "></Label>
                                 <Label  Text="{Binding Model.SelectedUnit.Sell, StringFormat='{}{0:N2}'}"/>
@@ -40,21 +40,20 @@
                         </StackLayout>
 
                         <StackLayout Margin="5" Spacing="0">
-                            <Label Text="Sisa Stock" FontAttributes="Bold"/>
+                            <Label Text="Sisa Stock" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.Stock}" Margin="10,0"/>
                         </StackLayout>
 
                         <StackLayout Margin="5" Spacing="0">
-                            <Label Text="Description" FontAttributes="Bold"/>
+                            <Label Text="Description" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.Description}"  Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Picture" FontAttributes="Bold" FontSize="12"/>
+                    <Image Source="iamge2.png" HeightRequest="150" Margin="20"/>
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>
-                <StackLayout Grid.Row="1" Margin="0">
-                    <Label Text="Galery" FontSize="Large" FontAttributes="Bold" />
-                    <Image Source="iamge2.png" HeightRequest="200" Margin="20"/>
-                </StackLayout>
-
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

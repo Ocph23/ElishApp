@@ -53,10 +53,10 @@ namespace ElishAppMobile.Views
             Title = "Products";
             Items = new ObservableCollection<ProductStock>();
             _SourceItems = new ObservableCollection<ProductStock>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             ItemTapped = new Command<ProductStock>(OnItemSelected);
             AddItemCommand = new Command(OnAddItem);
             ScanBarcode = new Command(ScanAction);
+            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             SearchScanCommand = new Command(SearchScanCommandAction);
         }
 

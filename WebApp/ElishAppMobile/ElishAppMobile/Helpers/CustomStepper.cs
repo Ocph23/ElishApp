@@ -83,7 +83,7 @@ namespace ElishAppMobile.Helpers
 
             PlusBtn.Clicked += PlusBtn_Clicked;
             MinusBtn.Clicked += MinusBtn_Clicked;
-            Entry = new Entry { PlaceholderColor = Color.Gray, Keyboard = Keyboard.Numeric, VerticalTextAlignment= TextAlignment.Center, 
+            Entry = new Entry { PlaceholderColor = Color.Gray, FontSize=14,  Keyboard = Keyboard.Numeric, VerticalTextAlignment= TextAlignment.Center, 
                 IsVisible=ShowEntry, 
                 HorizontalTextAlignment=TextAlignment.Center, BackgroundColor = Color.FromHex("#3FFF") };
             Entry.Behaviors.Add(new DecimalNumberValidationBehavior());

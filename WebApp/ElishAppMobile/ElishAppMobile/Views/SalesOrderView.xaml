@@ -2,33 +2,40 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:view="clr-namespace:ElishAppMobile.Views"
-             xmlns:model="clr-namespace:ShareModels.ModelViews;assembly=ShareModels" xmlns:helpers="clr-namespace:ElishAppMobile.Helpers"
+             xmlns:model="clr-namespace:ShareModels.ModelViews;assembly=ShareModels" 
+             xmlns:helpers="clr-namespace:ElishAppMobile.Helpers"
              x:Class="ElishAppMobile.Views.SalesOrderView"
-             Title="Create Order">
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <helpers:EnumToStringConverter x:Key="enumTostringConverter"/>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <StackLayout Grid.Row="0" Margin="10" Spacing="0">
+            <StackLayout Grid.Row="0" Margin="10,5" Spacing="0">
                 <StackLayout Orientation="Horizontal">
                     <Label WidthRequest="100" Text="Tanggal" VerticalOptions="CenterAndExpand"/>
-                    <DatePicker Date="{Binding Model.OrderDate}" VerticalOptions="CenterAndExpand"/>
-                </StackLayout>
+                    <DatePicker Date="{Binding Order.OrderDate, StringFormat='dd-MM-yyyy'}" Format="d" 
+                               FontSize="Small" VerticalOptions="CenterAndExpand"/>
+                      </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label WidthRequest="100" Text="Customer" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                     <Picker  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding DataCustomers}" 
                             VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="220"
-                             SelectedItem="{Binding CustomerSelected}"/>
+                             FontSize="Small" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/>
                     <ImageButton Clicked="ImageButton_Clicked_1" Source="customer.png"  BackgroundColor="Transparent"
-                                 WidthRequest="30" HeightRequest="30" Aspect="Fill"/>
+                                 WidthRequest="25" HeightRequest="25" Aspect="Fill"/>
                 </StackLayout>
+              
                 <StackLayout Orientation="Horizontal">
                     <Label WidthRequest="100" Text="Total" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                    <Label FontSize="Medium">
+                    <Label FontSize="Small">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="Rp."></Span>
@@ -39,21 +46,31 @@
                 </StackLayout>
             </StackLayout>
             <StackLayout Orientation="Horizontal" Grid.Row="1">
+                <Label HorizontalOptions="Start" Margin="10,0,0,0" 
+                       FontSize="Small" VerticalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Status : "/>
+                            <Span Text="{Binding Order.Status}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
                 <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" Margin="10,5">
-                    <ImageButton Command="{Binding ClearCommand}" Source="clearicon.png" WidthRequest="30" Aspect="AspectFit"/>
-                    <ImageButton Command="{Binding QRCommand}" Source="qr.png" WidthRequest="30" Aspect="AspectFit"/>
-                    <ImageButton Clicked="ImageButton_Clicked" BackgroundColor="Transparent" Source="plus.png" HeightRequest="30" Aspect="AspectFit"/>
+                    <ImageButton Command="{Binding ClearCommand}" Source="clearicon.png" WidthRequest="20" Aspect="AspectFit"/>
+                    <ImageButton Command="{Binding QRCommand}" Source="qr.png" WidthRequest="20" Aspect="AspectFit"/>
+                    <ImageButton Clicked="ImageButton_Clicked" BackgroundColor="Transparent" Source="plus.png" HeightRequest="20" Aspect="AspectFit"/>
                     <Picker x:Name="productPicker" ItemDisplayBinding="{Binding CodeName}" IsVisible="False" ItemsSource="{Binding ProductStocks}" SelectedItem="{Binding ProductSelect}"/>
                 </StackLayout>
             </StackLayout>
-            <RefreshView Grid.Row="2" x:DataType="view:SalesOrderViewModel"  Margin="0,5"
+            <ActivityIndicator Grid.Row="2" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+            <RefreshView Grid.Row="3" x:DataType="view:SalesOrderViewModel"  Margin="0,5"
                          Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
                 <CollectionView x:Name="ItemsListView"  BackgroundColor="LightGray"
                 ItemsSource="{Binding Datas}"
                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout  BackgroundColor="LightGray" Margin="0,0.5">
+                            <StackLayout   Margin="0,0.5">
                                 <SwipeView  x:DataType="model:ItemPenjualanModel"   >
                                     <SwipeView.LeftItems  >
                                         <SwipeItemView  
@@ -64,20 +81,20 @@
                                             </StackLayout>
                                         </SwipeItemView>
                                     </SwipeView.LeftItems>
-                                    <Grid  BackgroundColor="#E3EBFF" >
+                                    <Grid   >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
                                         <StackLayout  Padding="10" Spacing="0" >
-                                            <Label Text="{Binding Product.CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-                                            <Label Text="{Binding Product.Name}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" />
-                                            <Label Text="{Binding Product.CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" />
+                                            <Label Text="{Binding Product.CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
+                                            <Label Text="{Binding Product.Name}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="12" />
+                                            <Label Text="{Binding Product.CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="10" />
                                             <Label Text="{Binding Amount}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="Price : Rp. "></Span>
-                                                        <Span Text="{Binding Unit.Sell}"></Span>
+                                                        <Span Text="{Binding Unit.Sell,StringFormat='{}{0:N}'}"></Span>
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>
@@ -91,12 +108,12 @@
                                             </Label>
                                         </StackLayout>
                                         <StackLayout Grid.Column="1" HorizontalOptions="CenterAndExpand" Spacing="0"  VerticalOptions="Center">
-                                            <helpers:CustomStepper  ShowEntry="False" Text="{Binding Real}" WidthRequest="140"  Increment="0.25"  
+                                            <helpers:CustomStepper  ShowEntry="False" Text="{Binding Real}" WidthRequest="100" HeightRequest="35"  Increment="0.25"  
                                                                     Maximum="{Binding Amount}"
                                                                     Margin="5" VerticalOptions="CenterAndExpand"/>
-                                            <Picker Margin="0" ItemsSource="{Binding Product.Units}" ItemDisplayBinding="{Binding Name}"
-                                                    FontSize="15" HorizontalTextAlignment="Center" SelectedItem="{Binding Unit}"/>
-                                           <Label Text="{Binding Amount}" HorizontalOptions="CenterAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
+                                            <Picker Margin="0" ItemsSource="{Binding Product.Units}" ItemDisplayBinding="{Binding Name}" HeightRequest="32"
+                                                    FontSize="12" HorizontalTextAlignment="Center" SelectedItem="{Binding Unit}"/>
+                                           <Label HorizontalOptions="CenterAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="12" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="Rp : "></Span>
@@ -112,7 +129,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
-            <Button Grid.Row="3" Text="Save" Command="{Binding SaveCommand}"></Button>
+            <Button Grid.Row="4" Text="Save" Command="{Binding SaveCommand}"></Button>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

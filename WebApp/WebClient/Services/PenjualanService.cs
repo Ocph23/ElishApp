@@ -505,18 +505,23 @@ namespace WebClient.Services
         }
         public Task<IEnumerable<Orderpenjualan>> GetOrdersBySalesId(int salesId)
         {
-            var orders = (from a in dbContext.OrderPenjualans.Where(x => x.SalesId == salesId)
+            var orders = (from a in dbContext.OrderPenjualans.Where(x=>x.SalesId==salesId)
+                          join c in dbContext.Customers.Select() on a.CustomerId equals c.Id
+                          join s in dbContext.Karyawans.Select() on a.SalesId equals s.Id into ss
+                          from sa in ss.DefaultIfEmpty()
                           join b in dbContext.OrderPenjualanItems.Select() on a.Id equals b.OrderPenjualanId
                           into itemGroup
-                          from b in itemGroup.DefaultIfEmpty()
                           select new Orderpenjualan
                           {
+                              Customer = c,
+                              Status = a.Status,
+                              Sales = sa ?? null,
                               Discount = a.Discount,
                               OrderDate = a.OrderDate,
                               CustomerId = a.CustomerId,
                               SalesId = a.SalesId,
                               Id = a.Id,
-                              Items = itemGroup.ToList()
+                              Items = (from ig in itemGroup select ig).ToList()
                           });
             return Task.FromResult(orders.AsEnumerable());
         }

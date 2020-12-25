@@ -73,7 +73,7 @@ namespace ElishAppMobile.Views
         #region Methods
         private bool CanLogin(object arg)
         {
-            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))
+            if (IsBusy || string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))
                 return false;
             return true;
         }
@@ -82,6 +82,10 @@ namespace ElishAppMobile.Views
         {
             try
             {
+                if (IsBusy)
+                    return;
+
+                IsBusy = true;
                 var user = new UserLogin() { UserName=UserName, Password=Password };
                 var result=  await UserService.Login(user);
                 if (Account.UserIsLogin)
@@ -106,13 +110,12 @@ namespace ElishAppMobile.Views
             }
             catch (Exception ex)
             {
-                MessagingCenter.Send<MessageDataCenter>(new MessageDataCenter {
-                    Message= ex.Message, Title="Error"
-                }, "mesage");
+               await MessageHelper.ErrorAsync(ex.Message);
             }
             finally
             {
                 Helper.Url = Url;
+                IsBusy = false;
             }
         }
         #endregion

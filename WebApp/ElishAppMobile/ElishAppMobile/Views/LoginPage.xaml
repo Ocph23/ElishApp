@@ -15,6 +15,7 @@
             </Grid.RowDefinitions>
             <StackLayout Margin="0,20" >
                 <Image Source="icon.png" WidthRequest="100" VerticalOptions="CenterAndExpand"/>
+                <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
             </StackLayout>
             <StackLayout VerticalOptions="StartAndExpand" Grid.Row="1" Margin="30,0">
                 <Label Text="Login" FontSize="Title" Margin="0,20"/>

@@ -11,8 +11,7 @@ namespace ShareModels
         public int CustomerId { get => _customerId; set => SetProperty(ref _customerId, value); }
         public double Discount { get; set; }
         public int? SalesId { get; set; }
-        public OrderStatus Status { get; set; }
-
+        public OrderStatus Status { get => status; set => SetProperty(ref status, value); }
 
         #region virtual 
         public virtual string Nomor
@@ -44,12 +43,12 @@ namespace ShareModels
         #endregion
 
 
-
         #region fields 
             #pragma warning disable IDE0052 // Remove unread private members
             private double _total;
             #pragma warning restore IDE0052 // Remove unread private members
             private int _customerId;
+        private OrderStatus status;
         #endregion
     }
 }

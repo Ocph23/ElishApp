@@ -72,9 +72,20 @@ namespace ElishAppMobile.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Orderpenjualan>> GetOrdersBySalesId(int supplierId)
+        public async Task<IEnumerable<Orderpenjualan>> GetOrdersBySalesId(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var res = new RestService();
+                var response = await res.GetAsync($"{controller}/OrderBySales/{id}");
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<IEnumerable<Orderpenjualan>>();
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         public Task<IEnumerable<Pembayaranpenjualan>> GetPembayaran(int pembelianId)
@@ -107,10 +118,22 @@ namespace ElishAppMobile.Services
             throw new NotImplementedException();
         }
 
-        public Task<Orderpenjualan> UpdateOrder(int orderId, Orderpenjualan order)
+        public async Task<Orderpenjualan> UpdateOrder(int orderId, Orderpenjualan order)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var res = new RestService();
+                var response = await res.PutAsync($"{controller}/order/{orderId}", res.GenerateHttpContent(order));
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<Orderpenjualan>();
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
+    
 
         public Task<Penjualan> UpdatePenjualan(int penjualanId, Penjualan order)
         {

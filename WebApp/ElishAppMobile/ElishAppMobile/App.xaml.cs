@@ -4,6 +4,7 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using ShareModels;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -14,7 +15,7 @@ namespace ElishAppMobile
         public App()
         {
             InitializeComponent();
-
+           
             AppCenter.Start("android=b91e5f5c-614e-4fed-b3c2-eee28fd06464",
                   typeof(Analytics), typeof(Crashes));
 

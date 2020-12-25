@@ -5,12 +5,6 @@
        Title="ElishAppMobile"
        x:Class="ElishAppMobile.SalesShell">
 
-    <!--
-        The overall app visual hierarchy is defined here, along with navigation.
-    
-        https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/
-    -->
-
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">
@@ -74,18 +68,12 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <!-- 
-        When the Flyout is visible this defines the content to display in the flyout.
-        FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
-        https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
-    -->
-
     <Shell.FlyoutHeader>
         <StackLayout>
             <Grid BackgroundColor="Black">
                 <Image Aspect="AspectFit"  Source="image1.jpg" Opacity="0.8" />
             </Grid>
-                <Label x:Name="user"  TextColor="DarkViolet" FontSize="20" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
+                <Label x:Name="user"  TextColor="White" FontSize="18" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
         </StackLayout>
     </Shell.FlyoutHeader>
     
@@ -100,8 +88,8 @@
         <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:IncomingCheckView}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Create Order" Icon="icon_feed.png">
-        <ShellContent Route="CreateOrder" ContentTemplate="{DataTemplate local:SalesOrderView}" />
+    <FlyoutItem Title="Orders" Icon="icon_feed.png">
+        <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:OrdesrView}" />
     </FlyoutItem>
 
     <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">

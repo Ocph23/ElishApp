@@ -125,6 +125,22 @@ namespace WebClient.Controllers
             }
         }
 
+        [HttpGet("OrderBySales/{id}")]
+        public async Task<IActionResult> GetOrderBySales(int id)
+        {
+            try
+            {
+                var result = await service.GetOrdersBySalesId(id);
+                if (result != null)
+                    return Ok(result);
+                throw new SystemException("Order Not Created !");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
+
         [HttpGet("order/{id}")]
         public async Task<IActionResult> GetOrder(int id)
         {
@@ -147,6 +163,20 @@ namespace WebClient.Controllers
             try
             {
                 return Ok(await service.UpdatePenjualan(id, penjualan));
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ErrorMessage(ex.Message));
+            }
+        }
+
+
+        [HttpPut("order/{id}")]
+        public async Task<IActionResult> UpdateOrder(int id, Orderpenjualan penjualan)
+        {
+            try
+            {
+                return Ok(await service.UpdateOrder(id, penjualan));
             }
             catch (Exception ex)
             {

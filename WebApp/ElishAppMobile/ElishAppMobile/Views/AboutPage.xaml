@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ElishAppMobile.Views.AboutPage"
              xmlns:vm="clr-namespace:ElishAppMobile.ViewModels" xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
-             Title="{Binding Title}">
+             Title="Home">
     
     <ContentPage.BindingContext>
         <vm:AboutViewModel />
@@ -16,8 +16,8 @@
     </ContentPage.Resources>
 
     <Grid>
-        <Image Source="iamge2.png" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"  />
-        <Label Text="Sun Swallow" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" 
+        <Image Source="iamge2.png" WidthRequest="200" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"  />
+        <Label Text="SUN SWALLOW" VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand" 
                FontAttributes="Bold" TextColor="OrangeRed"
                Margin="0,0,0,100" FontSize="30"/>
     </Grid>

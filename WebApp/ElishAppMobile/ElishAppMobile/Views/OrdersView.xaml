@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:control="clr-namespace:ElishAppMobile.Helpers"
+             xmlns:local="clr-namespace:ElishAppMobile.Views"
+             xmlns:model="clr-namespace:ShareModels;assembly=ShareModels"
+             x:Class="ElishAppMobile.Views.OrdesrView">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="plus.png"  Command="{Binding AddNewCommand}"/>
+    </ContentPage.ToolbarItems>
+    <Shell.SearchHandler>
+        <control:TextSearchHandler x:Name="search" Placeholder="Cari"></control:TextSearchHandler>
+    </Shell.SearchHandler>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label Margin="10" FontSize="20" FontAttributes="Bold" Text="Sales Order"></Label>
+            <RefreshView Grid.Row="1" x:DataType="local:OrdesrViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=Default}">
+                <CollectionView x:Name="ItemsListView" 
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="0,1" x:DataType="model:Orderpenjualan" BackgroundColor="LightGray" >
+                                <SwipeView VerticalOptions="CenterAndExpand"  >
+                                    <Grid  Padding="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackLayout Spacing="0">
+                                            <Label Text="{Binding Nomor}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
+                                            <Label Text="{Binding Customer.Name}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
+                                        </StackLayout>
+                                        <StackLayout Grid.Column="1" Spacing="0">
+                                            <Label Text="{Binding OrderDate, StringFormat='{}{0:dd-MM-yyyy HH:mm}'}" HorizontalOptions="End" LineBreakMode="NoWrap"
+                                               Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
+                                            <Label Text="{Binding Status}" HorizontalOptions="EndAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" 
+                                                   FontSize="13" />
+
+                                        </StackLayout>
+                                    </Grid>
+                                    <SwipeView.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                    NumberOfTapsRequired="1"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:OrdesrViewModel}}, Path=SelectCommand}"		
+                                    CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </SwipeView.GestureRecognizers>
+                                </SwipeView>
+
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
