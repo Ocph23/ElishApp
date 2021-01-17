@@ -1,5 +1,6 @@
 using System; 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,18 +23,21 @@ using System.Threading.Tasks;
 
           public DateTime CreateDate {  get; set;} 
 
-          public DateTime PayDeadLine {  get; set;} 
+          public double PayDeadLine {  get; set;} 
 
 
-          public double Discount {  get; set;} 
+          public double Discount {  get; set;}
 
-         public PaymentType Payment {  get; set;}
+     
          public PaymentStatus Status { get; set; }
 
          public ActivityStatus Activity { get; set; }
 
-        public virtual ICollection<Penjualanitem> Items { get; set; }
+        [NotMapped]
+        public PaymentType Payment{ get => PayDeadLine <= 0 ? PaymentType.PayOff : PaymentType.Credit; }
         private double _total;
+
+        [NotMapped]
         public virtual double Total
         {
             get
@@ -51,8 +55,18 @@ using System.Threading.Tasks;
 
 
         public virtual Orderpenjualan OrderPenjualan{ get; set; }
-        public virtual Customer Customer { get; set; }
-        public virtual Karyawan Sales { get; set; }
+    
+
+
+        public Penjualan()
+        {
+            Pembayaranpenjualan = new HashSet<Pembayaranpenjualan>();
+            Items = new HashSet<Penjualanitem>();
+        }
+
+
+        public virtual ICollection<Penjualanitem> Items { get; set; }
+        public virtual ICollection<Pembayaranpenjualan> Pembayaranpenjualan { get; set; }
     }
 }
 

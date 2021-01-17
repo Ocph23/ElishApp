@@ -1,0 +1,182 @@
+﻿@page "/reports/penjualan/{id}"
+
+@using Microsoft.AspNetCore.Hosting;
+@using Microsoft.AspNetCore.Components;
+@using System.Data;
+@using FastReport.Utils;
+@using FastReport;
+@using FastReport.Web;
+@using System.IO;
+@using Microsoft.AspNetCore.Html;
+@using FastReport.Export.Html;
+@using System.Text;
+
+@inject IWebHostEnvironment _iwebhost;
+@inject IPenjualanService _penjualanService
+<h3>ReportPenjualan</h3>
+
+@if (webReport != null)
+{
+    <div>
+        @(new HtmlString(dataView))
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+    private WebReport webReport;
+    private string dataView;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var reportItem = "nota1.frx";
+        if (reportItem != null)
+        {
+            var path = $"{_iwebhost.WebRootPath}/reports/{reportItem}";
+
+            try
+            {
+                var id = Convert.ToInt32(Id);
+                var data = await _penjualanService.GetPenjualan(id);
+                var nota = GetParameters(data, data.GetType());
+                var datas = new List<ShareModels.Reports.NotaData>();
+                int nomor = 1;
+                foreach (var item in data.Items)
+                {
+                    datas.Add(new ShareModels.Reports.NotaData
+                    {
+                        No = nomor,
+                        Amount = item.Amount,
+                        CodeArticle = item.Product.CodeArticle,
+                        CodeProduct = item.Product.CodeName,
+                        ProductName = $"{item.Product.Name} {item.Product.Size}",
+                        Unit = item.Unit.Name,
+                        Price = item.Price,
+                        Total = item.Total,
+
+                    });
+
+                    nomor++;
+                }
+
+                var datasets = datas.ToDataTable();
+                dataView = Print(datasets, nota, path);
+
+                //    await InvokeAsync(() => StateHasChanged());
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+    }
+
+
+
+    private void SetParameter(Report report, ShareModels.Reports.NotaPenjualan nota)
+    {
+        report.SetParameterValue("NomorSO", nota.PoNumber);
+        report.SetParameterValue("NomorInvoice", nota.NomorInvoice);
+        report.SetParameterValue("Customer", nota.Customer);
+        report.SetParameterValue("Salesman", nota.Sales);
+        report.SetParameterValue("JatuhTempo", nota.CreateDate);
+        report.SetParameterValue("Tanggal", nota.InvoiceDeadLine);
+        report.SetParameterValue("Discount", nota.Discount);
+        report.SetParameterValue("Address", nota.Address);
+        report.SetParameterValue("Payment", nota.PaymentType);
+
+    }
+
+    private ShareModels.Reports.NotaPenjualan GetParameters(object dataParam, Type type)
+    {
+        try
+        {
+            if (type == typeof(Penjualan))
+            {
+                var data = (Penjualan)dataParam;
+                return new ShareModels.Reports.NotaPenjualan
+                {
+                    CreateDate = data.CreateDate,
+                    Customer = data.OrderPenjualan.Customer.Name,
+                    Discount = data.Discount,
+                    OrderStatus = data.Status.ToString(),
+                    PoNumber = data.OrderPenjualan.Nomor,
+                    Sales = data.OrderPenjualan.Sales.Name,
+                    NomorInvoice = data.Nomor,
+                    InvoiceDeadLine = data.CreateDate.AddDays(data.PayDeadLine),
+                    PaymentType = data.Payment == PaymentType.Credit ? "Credit" : "Tunai",
+                    Address = data.OrderPenjualan.Customer.Address
+
+                };
+            }
+            else
+            {
+                var data = (Orderpenjualan)dataParam;
+                return new ShareModels.Reports.NotaPenjualan
+                {
+                    CreateDate = data.OrderDate,
+                    Customer = data.Customer.Name,
+                    Discount = data.Discount,
+                    OrderStatus = data.Status.ToString(),
+                    PoNumber = data.Nomor,
+                    Sales = data.Sales.Name,
+                    NomorInvoice = data.Nomor,
+                    InvoiceDeadLine = data.OrderDate.AddDays(data.DeadLine),
+                    PaymentType = data.DeadLine <=0 ? "Tunai" : "Kredit",
+                    Address = data.Customer.Address
+
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new SystemException(ex.Message);
+
+        }
+    }
+
+
+    private string Print(DataTable datasets, ShareModels.Reports.NotaPenjualan nota, string path)
+    {
+
+        using MemoryStream stream = new MemoryStream();
+        try
+        {
+
+            datasets.TableName = "Table1";
+            DataSet ds = new DataSet();
+            ds.DataSetName = "Nota";
+            ds.Tables.Add(datasets);
+            ds.WriteXml($"{_iwebhost.WebRootPath}/reports/nota1.xml");
+
+            Config.WebMode = true;
+            Report report = new Report();
+            report.RegisterData(ds.Tables["Table1"], "Table1"); //Register data in the report
+            SetParameter(report, nota);
+            report.Load(path); //Load the report
+            HTMLExport export = new HTMLExport();
+            export.Layers = true;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                export.EmbedPictures = true;
+                export.Export(report, ms);
+                ms.Flush();
+                return Encoding.UTF8.GetString(ms.ToArray());
+            }
+
+        }
+        catch (Exception ex)
+        {
+            throw new SystemException(ex.Message);
+        }
+        finally
+        {
+            stream.Dispose();
+        }
+    }
+
+
+}

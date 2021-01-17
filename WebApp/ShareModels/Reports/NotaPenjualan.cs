@@ -16,7 +16,7 @@ namespace ShareModels.Reports
         public string PaymentStatus { get; set; }
         public string Sales { get; set; }
         public string OrderStatus { get; set; }
-
+        public string Address { get; set; }
     }
 
 

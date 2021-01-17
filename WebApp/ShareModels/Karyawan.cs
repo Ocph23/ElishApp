@@ -9,18 +9,20 @@ using System.Threading.Tasks;
 { 
      public class Karyawan  
    {
-          [Key]
-          public int Id {  get; set;} 
+        public Karyawan()
+        {
+            Orderpenjualan = new HashSet<Orderpenjualan>();
+        }
 
-          public string Name {  get; set;} 
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Telepon { get; set; }
+        public string Address { get; set; }
+        public string Email { get; set; }
+        public int UserId { get; set; }
 
-          public string Email {  get; set;} 
-
-          public string Telepon {  get; set;} 
-
-          public string Address {  get; set;}
-
-          public int UserId { get; set; }
+        public virtual User User { get; set; }
+        public virtual ICollection<Orderpenjualan> Orderpenjualan { get; set; }
 
     }
 }

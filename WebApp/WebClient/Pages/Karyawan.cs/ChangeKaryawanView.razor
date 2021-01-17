@@ -2,9 +2,7 @@
 
 @inject NavigationManager nav;
 @inject IKaryawanService karyawanService;
-
 @attribute [Authorize]
-
 
 <Radzen.Blazor.RadzenFieldset Text="@title">
     <div class="row">
@@ -63,7 +61,7 @@
                                 <div class="row text-center" style="margin:10px">
 
                                     <Radzen.Blazor.RadzenButton Icon="undo" ButtonType="ButtonType.Button" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" Style="margin:5px" />
-                                    <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
+                                    <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Button" Click="@(()=>Save(null))"  ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
                                 </div>
 
                             </Radzen.Blazor.RadzenFieldset>
@@ -104,7 +102,7 @@
         }
 
 
-        private async Task Save(Karyawan cust)
+        private async Task Save(Karyawan kar)
         {
             try
             {

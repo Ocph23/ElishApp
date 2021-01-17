@@ -1,5 +1,6 @@
 using System; 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,10 @@ namespace ShareModels
 
         public bool Activated { get; set; }
 
+        [NotMapped]
         public virtual ICollection<Role> Roles { get; set; }
-
+        public ICollection<Customer> Customers { get; set; }
+        public ICollection<Karyawan> Sales { get; set; }
     }
 }
 

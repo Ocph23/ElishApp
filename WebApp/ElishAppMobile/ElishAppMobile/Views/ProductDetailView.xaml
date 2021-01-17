@@ -4,6 +4,9 @@
              xmlns:model="clr-namespace:ShareModels;assembly=ShareModels"
              Title="Detail Product"
              x:Class="ElishAppMobile.Views.ProductDetailView">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  IconImageSource="camera.png" Command="{Binding AddPictureCommand}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView Padding="20" >
             <StackLayout>

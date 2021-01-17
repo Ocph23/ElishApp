@@ -6,8 +6,12 @@
              xmlns:helpers="clr-namespace:ElishAppMobile.Helpers"
              x:Class="ElishAppMobile.Views.SalesOrderView"
              Title="{Binding Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Command="{Binding SaveCommand}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Resources>
         <helpers:EnumToStringConverter x:Key="enumTostringConverter"/>
+        <helpers:EnumToBoolConverter x:Key="enumToBoolConverter"/>
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
@@ -15,37 +19,56 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackLayout Grid.Row="0" Margin="10,5" Spacing="0">
-                <StackLayout Orientation="Horizontal">
-                    <Label WidthRequest="100" Text="Tanggal" VerticalOptions="CenterAndExpand"/>
-                    <DatePicker Date="{Binding Order.OrderDate, StringFormat='dd-MM-yyyy'}" Format="d" 
-                               FontSize="Small" VerticalOptions="CenterAndExpand"/>
-                      </StackLayout>
-                <StackLayout Orientation="Horizontal">
-                    <Label WidthRequest="100" Text="Customer" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                    <Picker  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding DataCustomers}" 
+            <Expander  Grid.Row="0" Margin="10,5" IsExpanded="True" >
+                <Expander.Header>
+                    <StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label WidthRequest="100" Text="Customer" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                            <Picker  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding DataCustomers}" 
                             VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="220"
-                             FontSize="Small" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"/>
-                    <ImageButton Clicked="ImageButton_Clicked_1" Source="customer.png"  BackgroundColor="Transparent"
+                             FontSize="Small" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" />
+                            <ImageButton Clicked="ImageButton_Clicked_1" Source="customer.png"  BackgroundColor="Transparent"
                                  WidthRequest="25" HeightRequest="25" Aspect="Fill"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Expander.Header>
+                <StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label WidthRequest="100" Text="Supplier" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                        <Picker  ItemDisplayBinding="{Binding Nama}"  ItemsSource="{Binding DataSupplier}" 
+                            VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="220"
+                             FontSize="Small" SelectedIndex="{Binding SupplierIndex, Mode=TwoWay}" SelectedItem="{Binding SupplierSelected}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <StackLayout Orientation="Horizontal">
+                            <Label WidthRequest="100" Text="Tanggal" VerticalOptions="CenterAndExpand"/>
+                            <DatePicker Date="{Binding Order.OrderDate, StringFormat='dd-MM-yyyy'}" Format="d" 
+                               FontSize="Small" VerticalOptions="CenterAndExpand"/>
+                        </StackLayout>
+                       
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label WidthRequest="100" Text="Jatuh Tempo" VerticalOptions="CenterAndExpand"/>
+                        <Entry WidthRequest="40" FontSize="Small" Text="{Binding Order.DeadLine}"/>
+                        <Label WidthRequest="100" Text="Hari" VerticalOptions="CenterAndExpand"/>
+                    </StackLayout>
                 </StackLayout>
-              
-                <StackLayout Orientation="Horizontal">
-                    <Label WidthRequest="100" Text="Total" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                    <Label FontSize="Small">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Rp."></Span>
-                                <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"/>
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
-                </StackLayout>
+            </Expander>
+            <StackLayout Margin="10,5" Orientation="Horizontal" Grid.Row="1">
+                <Label WidthRequest="100" Text="Total" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                <Label FontSize="Small">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Rp."></Span>
+                            <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
             </StackLayout>
-            <StackLayout Orientation="Horizontal" Grid.Row="1">
+            <StackLayout BackgroundColor="WhiteSmoke" HeightRequest="40" Orientation="Horizontal" Grid.Row="2">
                 <Label HorizontalOptions="Start" Margin="10,0,0,0" 
                        FontSize="Small" VerticalOptions="CenterAndExpand">
                     <Label.FormattedText>
@@ -62,16 +85,16 @@
                     <Picker x:Name="productPicker" ItemDisplayBinding="{Binding CodeName}" IsVisible="False" ItemsSource="{Binding ProductStocks}" SelectedItem="{Binding ProductSelect}"/>
                 </StackLayout>
             </StackLayout>
-            <ActivityIndicator Grid.Row="2" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
-            <RefreshView Grid.Row="3" x:DataType="view:SalesOrderViewModel"  Margin="0,5"
+            <ActivityIndicator  Grid.Row="3" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+            <RefreshView Grid.Row="4" x:DataType="view:SalesOrderViewModel"  Margin="0,5"
                          Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
                 <CollectionView x:Name="ItemsListView"  BackgroundColor="LightGray"
                 ItemsSource="{Binding Datas}"
                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout   Margin="0,0.5">
-                                <SwipeView  x:DataType="model:ItemPenjualanModel"   >
+                            <StackLayout   Margin="0,0.5" >
+                                <SwipeView  x:DataType="model:ItemPenjualanModel"  >
                                     <SwipeView.LeftItems  >
                                         <SwipeItemView  
                                                BackgroundColor="OrangeRed" 
@@ -107,12 +130,12 @@
                                                 </Label.FormattedText>
                                             </Label>
                                         </StackLayout>
-                                        <StackLayout Grid.Column="1" HorizontalOptions="CenterAndExpand" Spacing="0"  VerticalOptions="Center">
-                                            <helpers:CustomStepper  ShowEntry="False" Text="{Binding Real}" WidthRequest="100" HeightRequest="35"  Increment="0.25"  
+                                        <StackLayout Grid.Column="1" x:DataType="model:ItemPenjualanModel" HorizontalOptions="CenterAndExpand" Spacing="0"  VerticalOptions="Center">
+                                            <helpers:CustomStepper  ShowEntry="False" Text="{Binding Real}" WidthRequest="120" HeightRequest="35"  Increment="0.25"  
                                                                     Maximum="{Binding Amount}"
                                                                     Margin="5" VerticalOptions="CenterAndExpand"/>
-                                            <Picker Margin="0" ItemsSource="{Binding Product.Units}" ItemDisplayBinding="{Binding Name}" HeightRequest="32"
-                                                    FontSize="12" HorizontalTextAlignment="Center" SelectedItem="{Binding Unit}"/>
+                                            <Picker Margin="0" ItemsSource="{Binding Units}" ItemDisplayBinding="{Binding Name}" HeightRequest="32"
+                                                    FontSize="12" HorizontalTextAlignment="Center" SelectedIndex="{Binding UnitIndex}" SelectedItem="{Binding Unit}"/>
                                            <Label HorizontalOptions="CenterAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="12" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
@@ -129,7 +152,6 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
-            <Button Grid.Row="4" Text="Save" Command="{Binding SaveCommand}"></Button>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

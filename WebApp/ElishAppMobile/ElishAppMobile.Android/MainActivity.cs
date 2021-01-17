@@ -21,8 +21,7 @@ namespace ElishAppMobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
-           Forms.SetFlags( new string[] { "SwipeView_Experimental" });
-
+           Forms.SetFlags( new string[] { "SwipeView_Experimental" , "Expander_Experimental" , "RadioButton_Experimental" });
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();

@@ -10,6 +10,12 @@ namespace ElishAppMobile
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(IncomingCheckView), typeof(IncomingCheckView));
+
+            var result = Account.GetProfile().Result;
+            if (result != null)
+            {
+                user.Text = result.Name;
+            }
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

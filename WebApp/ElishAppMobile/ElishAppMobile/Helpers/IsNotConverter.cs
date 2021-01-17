@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShareModels.ModelViews;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -32,6 +33,21 @@ namespace ElishAppMobile.Helpers
         }
     }
 
+    public class EnumToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value.ToString() == parameter.ToString())
+                return true;
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 
 
     public class PembelianItemStatusConverter : IValueConverter
@@ -40,9 +56,9 @@ namespace ElishAppMobile.Helpers
         {
             return value.ToString() switch
             {
-                "Kurang" => Color.FromHex("#DB324D"),
+                "Kurang" => Color.FromHex("#EA8696"),
                 "Lebih" => Color.FromHex("#E1BC29"),
-                _ => Color.FromHex("#E3EBFF")
+                _ => Color.FromHex("#F1F8F9")
             };
         }
 

@@ -13,14 +13,20 @@ namespace WebClient.Services
     public class IncommingService : ShareModels.BaseNotify, IIncommingService
     {
         private readonly IHubContext<ElishAppHub> _hub;
-        public IncommingService(IHubContext<ElishAppHub> hubContext)
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ApplicationDbContext dbContext;
+        private readonly IPembelianService pembelianService;
+        private Pembelian pembelianSelected;
+
+        public IncommingService(IHubContext<ElishAppHub> hubContext, IServiceProvider provider)
         {
             _hub = hubContext;
+            _serviceProvider = provider;
 
-            using var scope = ServiceLocator.Instance.CreateScope();
+            using var scope = provider.CreateScope();
             Pembelians = new ObservableCollection<Pembelian>();
-            dbContext = scope.ServiceProvider.GetRequiredService<OcphDbContext>();
-            var pembelianService = scope.ServiceProvider.GetRequiredService<IPembelianService>();
+            dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            pembelianService = scope.ServiceProvider.GetRequiredService<IPembelianService>();
             Task.Run(async () =>
             {
                 var pembelians = await pembelianService.GetPembelians();
@@ -33,8 +39,7 @@ namespace WebClient.Services
 
         public ObservableCollection<Pembelian> Pembelians { get; set; }
 
-        private readonly OcphDbContext dbContext;
-        private Pembelian pembelianSelected;
+       
         public Pembelian PembelianSelected
         {
             get => pembelianSelected;
@@ -52,7 +57,7 @@ namespace WebClient.Services
             this.Datas.Clear();
             Task.Run(async () =>
             {
-                using var scope = ServiceLocator.Instance.CreateScope();
+                using var scope = _serviceProvider.CreateScope();
                 var pembelianService = scope.ServiceProvider.GetRequiredService<IPembelianService>();
                 var pembelians = await pembelianService.GetPembelians();
                 Pembelians.Clear();
@@ -65,8 +70,10 @@ namespace WebClient.Services
 
         private void SetDataSource(Pembelian value)
         {
+
+
             var result = (from a in value.Items
-                         join b in dbContext.IncomingItems.Where(x => x.PembelianId == value.Id)  
+                         join b in dbContext.IncomingItem.Where(x => x.PembelianId == value.Id)  
                          on new { a.PembelianId, a.ProductId } equals new { b.PembelianId, b.ProductId }
                          into cc
                          from b in cc.DefaultIfEmpty()
@@ -93,39 +100,12 @@ namespace WebClient.Services
         //  public Pembelian Model { get; private set; }
         public ObservableCollection<IncomingItem> Datas { get; private set; } = new ObservableCollection<IncomingItem>();
 
-        public Task<PembelianModel> CreateNew(int pembelianid)
+        public async Task<PembelianModel> CreateNew(int pembelianid)
         {
-            var results = from p in dbContext.Pembelians.Where(x => x.Id == pembelianid)
-                          join o in dbContext.OrderPembelians.Select() on p.OrderPembelianId equals o.Id
-                          join s in dbContext.Suppliers.Select() on o.SupplierId equals s.Id
 
-                          select new Pembelian
-                          {
-                              CreatedDate = p.CreatedDate,
-                              Discount = p.Discount,
-                              Id = p.Id,
-                              InvoiceNumber = p.InvoiceNumber,
-                              OrderPembelian = o,
-                              PayDeadLine = p.PayDeadLine,
-                              OrderPembelianId = p.OrderPembelianId,
-                              Status = p.Status,
-                              Supplier = s
-                          };
+            var pembelian = await pembelianService.GetPembelian(pembelianid);
 
-            var datas = from i in dbContext.PembelianItems.Where(x => x.PembelianId == PembelianSelected.Id)
-                        join p in dbContext.Products.Select() on i.ProductId equals p.Id
-                        join u in dbContext.Units.Select() on i.UnitId equals u.Id
-                        select new PembelianItem
-                        {              
-                            Amount = i.Amount,  
-                            Id = i.Id,
-                            PembelianId = i.PembelianId,
-                            Price = i.Price,
-                            Product = p,
-                            ProductId = i.ProductId,
-                            Unit = u,
-                            UnitId = i.UnitId
-                        };
+            var datas = pembelian.Items.Select(x => x);
             foreach (var item in datas)
             {
                 var data = new IncomingItem(item);
@@ -133,7 +113,7 @@ namespace WebClient.Services
                 Datas.Add(data);
             }
 
-            return  Task.FromResult(new PembelianModel { Model = PembelianSelected, Datas = Datas.ToList() });
+            return new PembelianModel { Model = PembelianSelected, Datas = Datas.ToList() };
         }
 
         private Task Data_UpdateEvent(IncomingItem arg)
@@ -151,10 +131,10 @@ namespace WebClient.Services
             return Task.FromResult( new PembelianModel {Model=PembelianSelected, Datas=Datas.ToList()});
         }
 
-        public Task Save()
+        public async Task Save()
         {
 
-            var trans = dbContext.BeginTransaction();
+            var trans = dbContext.Database.BeginTransaction();
             try
             {
                 if (Datas.Count > 0)
@@ -163,23 +143,25 @@ namespace WebClient.Services
                     {
                         if (item.Id <= 0)
                         {
-                            item.Id = dbContext.IncomingItems.InsertAndGetLastID(item);
+                            dbContext.IncomingItem.Add(item);
                             if (item.Id <= 0)
                                 throw new SystemException("Not Saved !");
                         }
                         else
-                           if (!dbContext.IncomingItems.Update(x => new { x.ActualValue }, item, x => x.Id == item.Id && x.Id == item.Id))
+                        {
+                            var oldItem = dbContext.IncomingItem.SingleOrDefault(x => x.Id == item.Id);
+                            if (oldItem != null)
                             {
-                                throw new SystemException("Not Saved !");
+                                dbContext.Entry(oldItem).CurrentValues.SetValues(item);
                             }
+                        }
                     }
                 }
 
-
+                await dbContext.SaveChangesAsync();
                 trans.Commit();
-                return Task.CompletedTask;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 trans.Rollback();
                 throw new SystemException("Not Saved !");

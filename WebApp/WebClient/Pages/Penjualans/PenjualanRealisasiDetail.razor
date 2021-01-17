@@ -30,14 +30,7 @@
                                         <RadzenTextBox Value="@model.Nomor" />
                                     </div>
                                 </div>
-                                <div class="row" style="margin-top:10px">
-                                    <div class="col-md-4 align-items-center d-flex">
-                                        <RadzenLabel Text="Customer " />
-                                    </div>
-                                    <div class="col-md-8">
-                                        <RadzenTextBox @bind-Value="model.Customer.Name" />
-                                    </div>
-                                </div>
+
 
 
                                 <div class="row" style="margin-top:10px">
@@ -49,7 +42,17 @@
                                         <RadzenTextBox Value="@model.OrderPenjualan.Nomor" />
                                     </div>
                                 </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-4 align-items-center d-flex">
+                                        <RadzenLabel Text="Customer " />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <RadzenTextBox @bind-Value="model.OrderPenjualan.Customer.Name" />
+                                    </div>
+                                </div>
 
+                            </div>
+                            <div class="col-md-6">
                                 <div class="row" style="margin-top:10px">
 
                                     <div class="col-md-4 align-items-center d-flex">
@@ -59,26 +62,21 @@
                                         <RadzenNumeric @bind-Value="model.Discount" TValue="double" Placeholder="0.0" Step="0.1" />
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
                                 <div class="row" style="margin-top:10px">
                                     <div class="col-md-4 align-items-center d-flex">
-                                        <RadzenLabel Text="Payment Type" />
+                                        <RadzenLabel Text="Jatuh Tempo (Hari)" />
                                     </div>
                                     <div class="col-md-8">
-                                        <RadzenDropDown AllowClear="true" AllowFiltering="true"
-                                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                        Data=@(Enum.GetValues(typeof(PaymentType)).Cast<PaymentType>().Select(t => new { Text = $"{t}", Value = t }))
-                                                        @bind-Value=@model.Payment
-                                                        TextProperty="Text" ValueProperty="Value" />
+                                        <RadzenNumeric @bind-Value="model.PayDeadLine" TValue="double" Placeholder="0.0" Step="0.1" />
                                     </div>
                                 </div>
+
                                 <div class="row" style="margin-top:10px">
                                     <div class="col-md-4 align-items-center d-flex">
-                                        <RadzenLabel Text="Invoice DeadLine" />
+                                        <RadzenLabel Text="Payment Status" />
                                     </div>
                                     <div class="col-md-8">
-                                        <RadzenDatePicker @bind-Value="model.PayDeadLine" />
+                                        <RadzenTextBox Value="@model.Status.ToString()" />
                                     </div>
                                 </div>
 
@@ -88,14 +86,6 @@
                                     </div>
                                     <div class="col-md-8">
                                         <RadzenDatePicker @bind-Value="model.CreateDate" />
-                                    </div>
-                                </div>
-                                <div class="row" style="margin-top:10px">
-                                    <div class="col-md-4 align-items-center d-flex">
-                                        <RadzenLabel Text="Payment Status" />
-                                    </div>
-                                    <div class="col-md-8">
-                                        <RadzenTextBox Value="@model.Status.ToString()" />
                                     </div>
                                 </div>
 
@@ -113,17 +103,17 @@
                             <div class="col-md-8">
                                 <RadzenDropDown AllowClear="true" AllowFiltering="true"
                                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                Data=@products.Where(item=> !model.Items.Any(data=> data.ProductId.Equals(item.Id)))
+                                                Data=@products.Where(item=> item.SupplierId==supplierId && !model.Items.Any(data=> data.ProductId.Equals(item.Id)))
                                                 @bind-Value=@product.Id
                                                 TextProperty="CodeName" ValueProperty="Id" Style="width:400px"
                                                 Change=@(args => SelectProduct(args, "Supplier")) />
                             </div>
                         </div>
-                        <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Penjualanitem">
+                        <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true"  AllowSorting="true" TItem="Penjualanitem">
                             <Columns>
                                 <RadzenGridColumn TItem="Penjualanitem" Property="Product.CodeName" Title="Code" />
                                 <RadzenGridColumn TItem="Penjualanitem" Property="Product.Name" Title="Product" />
-                                <RadzenGridColumn TItem="Penjualanitem" Property="Product.CodeArticle" Title="Article" />
+                                <RadzenGridColumn Width="110px" TItem="Penjualanitem" Property="Product.CodeArticle" Title="Article" />
                                 <RadzenGridColumn Width="80px" TItem="Penjualanitem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
                                     <Template Context="data">
                                         @{
@@ -134,14 +124,14 @@
                                         <RadzenNumeric TValue="double" @bind-Value="item.Amount" Step="0.25" Change=@(args => OnChangeOrderItem(args, item)) />
                                     </EditTemplate>
                                 </RadzenGridColumn>
-                                <RadzenGridColumn Width="120px" TItem="Penjualanitem" Property="Unit.Name" Title="Unit">
+                                <RadzenGridColumn Width="110px" TItem="Penjualanitem" Property="Unit.Name" Title="Unit">
                                     <EditTemplate Context="item">
                                         <RadzenDropDown @bind-Value="item.UnitId" Data="@item.Product.Units"
                                                         Change=@(args => OnChangeOrderItem(args, item))
                                                         TextProperty="Name" ValueProperty="Id" Style="width:100%" />
                                     </EditTemplate>
                                 </RadzenGridColumn>
-                                <RadzenGridColumn Width="120px" TItem="Penjualanitem" Property="Price" Title="Price">
+                                <RadzenGridColumn Width="100px" TItem="Penjualanitem" Property="Price" Title="Price">
                                     <EditTemplate Context="item">
                                         <RadzenNumeric @bind-Value="item.Price" Step="0.25" />
                                     </EditTemplate>
@@ -151,7 +141,7 @@
                                         <div>Total Payment </div>
                                     </FooterTemplate>
                                 </RadzenGridColumn>
-                                <RadzenGridColumn Width="150px" TItem="Penjualanitem" Property="Total" Title="Total">
+                                <RadzenGridColumn Width="120px" TItem="Penjualanitem" Property="Total" Title="Total">
                                     <FooterTemplate>
                                         @{
                                             <div>@model.Total.ToString("N")</div>
@@ -281,6 +271,7 @@
     RadzenGrid<Pembayaranpenjualan> pembayaranGrid;
 
     bool checkall;
+    int supplierId = 0;
 
 
     void OnCheckChange(bool data)
@@ -457,6 +448,13 @@
                 this.pembayarans = (await penjualanService.GetPembayaran(paramId)).ToList();
             }
 
+
+            if(model.Items.Count>0)
+            {
+                var prod = model.Items.FirstOrDefault();
+                if (prod != null)
+                    supplierId = prod.Product.SupplierId;
+            }
 
 
             foreach (var itemData in model.Items)

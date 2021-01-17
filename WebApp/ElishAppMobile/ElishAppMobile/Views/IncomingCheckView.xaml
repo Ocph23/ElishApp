@@ -34,7 +34,8 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout  BackgroundColor="LightGray">
-                            <Grid  x:DataType="model:IncomingItem" Margin="0,0.51" BackgroundColor="{Binding Status, Converter={StaticResource pembelianColor}}" >
+                            <Grid  x:DataType="model:IncomingItem" Margin="0,0.51" 
+                                   BackgroundColor="{Binding Status, Converter={StaticResource pembelianColor}}" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>

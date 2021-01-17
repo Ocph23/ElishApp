@@ -20,7 +20,7 @@ namespace ShareModels.ModelViews
             Real = 0;
             UnitId = item.UnitId;
             Unit = item.Unit;
-            Product = item.Product;
+            Product = item.Product;            
         }
 
         public int Id { get; set; }
@@ -53,14 +53,34 @@ namespace ShareModels.ModelViews
         public virtual Unit Unit
         {
             get {
-                if (_unit == null && Product != null && Product.Units.Any())
-                    _unit = Product.Units.Where(x => x.Level == 0).FirstOrDefault();
-                    return _unit;
+                if (_unit == null)
+                {
+                    if(UnitId<=0)
+                    {
+                        if (_unit == null && Product != null && Product.Units.Any())
+                            _unit = Product.Units.Where(x => x.Level == 0).FirstOrDefault();
+                        if (_unit != null)
+                            UnitIndex = Product.Units.ToList().IndexOf(_unit);
+                    }
+                    else
+                    {
+                        if (_unit == null && Product != null && Product.Units.Any())
+                            _unit = Product.Units.Where(x => x.Id == UnitId).FirstOrDefault();
+                        if (_unit != null)
+                            UnitIndex = Product.Units.ToList().IndexOf(_unit);
+                    }
+                    
+                }
+                return _unit;
             }
-            set => SetProperty(ref _unit, value);
+            set
+            {
+                SetProperty(ref _unit, value);
+                UnitIndex = Product.Units.ToList().IndexOf(_unit);
+            }
         }
         public virtual Product Product { get; set; }
-        public virtual ObservableCollection<Unit> Units { get; set; }
+        public ObservableCollection<Unit> Units { get; set; }
         public event Func<ItemPenjualanModel, Task> UpdateEvent;
         string _status;
         private double _amount;
@@ -98,5 +118,15 @@ namespace ShareModels.ModelViews
                 SetProperty(ref _status, value);
             }
         }
+
+
+        private int unitIndex;
+
+        public int UnitIndex
+        {
+            get { return unitIndex; }
+            set {SetProperty(ref unitIndex , value); }
+        }
+
     }
 }

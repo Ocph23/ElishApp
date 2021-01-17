@@ -9,14 +9,12 @@ namespace ShareModels
 {
     public class Customer :BaseNotify
     {
-        private string _name;
-        private int _userid;
-        private string _address;
-        private string _npwp;
-        private string _telp;
-        private string _contactName;
-        private string _email;
-        private int _id;
+       
+
+        public Customer()
+        {
+            Orderpenjualan = new HashSet<Orderpenjualan>();
+        }
 
         [Key]
         public int Id { get => _id; set => SetProperty(ref _id, value); }
@@ -35,6 +33,16 @@ namespace ShareModels
 
         public int UserId { get => _userid; set => SetProperty(ref _userid, value); }
 
-        public virtual bool HasUser { get { return UserId != 0; } } 
+        private string _name;
+        private int _userid;
+        private string _address;
+        private string _npwp;
+        private string _telp;
+        private string _contactName;
+        private string _email;
+        private int _id;
+
+        public virtual User User { get; set; }
+        public virtual ICollection<Orderpenjualan> Orderpenjualan { get; set; }
     }
 }

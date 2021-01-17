@@ -47,6 +47,7 @@ namespace ElishAppMobile.Views
                 SelectedIndex = -1;
                 Title = "Create Order";
                 Order = new Orderpenjualan { OrderDate = DateTime.Now };
+                Order.DeadLine = 12;
                 RefreshProductStock();
             });
 
@@ -54,7 +55,6 @@ namespace ElishAppMobile.Views
                 var vm = new InputBarcodeViewModel();
                 vm.OnResultScanHandler += Vm_OnResultScanHandler;
                 var form = new InputBarcodeView() { BindingContext = vm };
-
                 await Shell.Current.Navigation.PushModalAsync(form);
 
             });
@@ -68,6 +68,7 @@ namespace ElishAppMobile.Views
             if (order == null)
             {
                 Order = new Orderpenjualan { SalesId = 1, OrderDate = DateTime.Now, Items = new List<OrderPenjualanItem>() };
+                Order.DeadLine = 12;
                 Title = "Create Order";
                 InitAsync(null);
             }
@@ -112,14 +113,31 @@ namespace ElishAppMobile.Views
         #region Properties
         private Orderpenjualan order;
         private int _selectedIndex=-1;
+        private int _supplierIndex;
 
         public Orderpenjualan Order
         {
             get => order;
             set => SetProperty(ref order, value);
         }
+
+        private string paymentType;
+
+        public string PaymentType
+        {
+            get => paymentType;
+            set
+            {
+                SetProperty(ref paymentType, value);
+            }
+        }
+
+
+
+
         public ObservableCollection<ItemPenjualanModel> Datas { get; set; } = new ObservableCollection<ItemPenjualanModel>();
         public ObservableCollection<Customer> DataCustomers { get; set; } = new ObservableCollection<Customer>();
+        public ObservableCollection<Supplier> DataSupplier { get; set; } = new ObservableCollection<Supplier>();
         public ObservableCollection<ProductStock> ProductStocks { get; set; } = new ObservableCollection<ProductStock>();
         public Command LoadItemsCommand { get; }
         public Command SaveCommand { get => _saveCommand; set => SetProperty(ref _saveCommand, value); }
@@ -170,6 +188,31 @@ namespace ElishAppMobile.Views
             }
         }
 
+
+        public int SupplierIndex
+        {
+            get
+            {
+                return _supplierIndex;                      
+            }
+            set
+            {
+                SetProperty(ref _supplierIndex, value);
+                SupplierSelected = DataSupplier[value];
+                RefreshProductStock();
+            }
+        }
+
+
+        private Supplier supplierSelected;
+
+        public Supplier SupplierSelected
+        {
+            get { return supplierSelected; }
+            set { SetProperty(ref supplierSelected , value); }
+        }
+
+
         #endregion
 
         #region Methods
@@ -197,15 +240,28 @@ namespace ElishAppMobile.Views
                     DataCustomers.Add(item);
                 }
                 products = await Products.GetProductStock();
-                foreach (var item in products.Where(x => x.Stock > 0))
+
+                if (products != null)
                 {
-                    ProductStocks.Add(item);
+                    foreach (var item in products.Where(x => x.Stock > 0))
+                    {
+                        ProductStocks.Add(item);
+                    }
+
+                    foreach (var p in products.GroupBy(x => x.SupplierId))
+                    {
+                        var prod = p.FirstOrDefault();
+                       DataSupplier.Add(prod.Supplier) ;
+                    }
+                    
                 }
 
                 if (order != null)
                 {
                     var customer = DataCustomers.Where(x => x.Id == order.CustomerId).FirstOrDefault();
                     SelectedIndex = DataCustomers.IndexOf(customer);
+                    var ll = order.Items.FirstOrDefault();
+                    SupplierIndex = DataSupplier.IndexOf(DataSupplier.SingleOrDefault(x=>x.Id==ll.Product.SupplierId));
                     foreach (var item in order.Items)
                     {
                         var stock = ProductStocks.ToList().Where(x => x.Id == item.ProductId).FirstOrDefault();
@@ -223,8 +279,8 @@ namespace ElishAppMobile.Views
                                 Real = item.Amount
                             };
                             Datas.Add(newData);
-
                         }
+
                     }
                 }
 
@@ -338,7 +394,6 @@ namespace ElishAppMobile.Views
         private async Task ExecuteLoadItemsCommand()
         {
             IsBusy = true;
-            await Task.Delay(100);
             RefreshProductStock();
             IsBusy = false;
         }
@@ -374,14 +429,18 @@ namespace ElishAppMobile.Views
         {
             await Task.Delay(1000);
             ProductStocks.Clear();
-            if(products!=null)
+            if(products!=null && SupplierSelected!=null)
             {
-                var productFilter = products.Where(item => item.Stock > 0 && !Datas.Any(data => data.ProductId.Equals(item.Id)));
+                var productFilter = products.Where(item => item.SupplierId==SupplierSelected.Id && item.Stock > 0 && !Datas.Any(data => data.ProductId.Equals(item.Id)));
                 foreach (var item in productFilter.OrderBy(x => x.Name))
                 {
                     ProductStocks.Add(item);
                 }
                 SaveCommand = new Command(SaveAction, CanSaved);
+
+
+
+
             }
         }
 

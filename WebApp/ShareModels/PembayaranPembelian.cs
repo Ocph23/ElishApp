@@ -24,6 +24,8 @@ namespace ShareModels
         public int Status { get; set; }
 
         public double PayValue { get; set; }
+
+        public virtual Pembelian Pembelian { get; set; }
     }
 
 

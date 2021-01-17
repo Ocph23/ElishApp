@@ -12,20 +12,21 @@ using ShareModels;
 using WebClient;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebClient.Services
 {
 
     public class UserService : IUserService
     {
-        private readonly OcphDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         private readonly AppSettings _appSettings;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public OcphDbContext OcphDbContext { get; }
+        public ApplicationDbContext ApplicationDbContext { get; }
 
-        public UserService(IOptions<AppSettings> appSettings, OcphDbContext dbcontext, IHttpContextAccessor httpContextAccessor)
+        public UserService(IOptions<AppSettings> appSettings, ApplicationDbContext dbcontext, IHttpContextAccessor httpContextAccessor)
         {
             _context = dbcontext;
             _appSettings = appSettings.Value;
@@ -37,7 +38,7 @@ namespace WebClient.Services
             try
             {
                 var password = GeneratePasswordHash(model.Password);
-                var user = (from u in _context.Users.Where(x => (x.UserName == model.UserName || x.Email == model.UserName)
+                var user = (from u in _context.User.Where(x => (x.UserName == model.UserName || x.Email == model.UserName)
                           && x.PasswordHash == password)
                             select u).FirstOrDefault();
                 if (user == null)
@@ -60,13 +61,11 @@ namespace WebClient.Services
 
         public async Task<User> FindUserById(int id)
         {
-            var user = _context.Users.Where(x => x.Id == id).FirstOrDefault();
+            var user = _context.User.Where(x => x.Id == id).FirstOrDefault();
             if (user != null)
             {
-                var roles = from ur in _context.UserRoles.Where(x => x.UserId == user.Id)
-                            join c in _context.Roles.Select() on ur.RoleId equals c.Id into rGroup
-                            from c in rGroup.DefaultIfEmpty()
-                            select c;
+                var roles = _context.Userrole.Where(x => x.UserId == user.Id)
+                    .Include(x => x.Role).Select(x => x.Role);
 
                 user.Roles = roles.ToList();
             }
@@ -75,13 +74,11 @@ namespace WebClient.Services
         }
         public async Task<User> FindUserByUserName(string username)
         {
-            var user = _context.Users.Where(x => x.UserName == username).FirstOrDefault();
+            var user = _context.User.Where(x => x.UserName == username).FirstOrDefault();
             if (user != null)
             {
-                var roles = from ur in _context.UserRoles.Where(x => x.UserId == user.Id)
-                            join c in _context.Roles.Select() on ur.RoleId equals c.Id into rGroup
-                            from c in rGroup.DefaultIfEmpty()
-                            select c;
+                var roles = _context.Userrole.Where(x => x.UserId == user.Id)
+                    .Include(x => x.Role).Select(x => x.Role);
 
                 user.Roles = roles.ToList();
             }
@@ -91,13 +88,11 @@ namespace WebClient.Services
 
         public async Task<User> FindUserByEmail(string email)
         {
-            var user = _context.Users.Where(x => x.Email == email).FirstOrDefault();
+            var user = _context.User.Where(x => x.Email == email).FirstOrDefault();
             if (user != null)
             {
-                var roles = from ur in _context.UserRoles.Where(x => x.UserId == user.Id)
-                            join c in _context.Roles.Select() on ur.RoleId equals c.Id into rGroup
-                            from c in rGroup.DefaultIfEmpty()
-                            select c;
+                var roles = _context.Userrole.Where(x => x.UserId == user.Id)
+                   .Include(x => x.Role).Select(x => x.Role);
 
                 user.Roles = roles.ToList();
             }
@@ -152,10 +147,8 @@ namespace WebClient.Services
             try
             {
                 User user = new User { Roles = model.Roles, Email = model.Email, UserName = model.UserName, PasswordHash = GeneratePasswordHash(model.Password) };
-                user.Id = _context.Users.InsertAndGetLastID(user);
-                if (user.Id <= 0)
-                    throw new SystemException("Register Not Success");
-
+                _context.User.Add(user);
+                await _context.SaveChangesAsync();
                 return await Task.FromResult(user);
             }
             catch (Exception ex)
@@ -164,9 +157,9 @@ namespace WebClient.Services
             }
         }
 
-        public Task<Customer> RegisterCustomer(Customer model)
+        public async Task<Customer> RegisterCustomer(Customer model)
         {
-            var trans = _context.BeginTransaction();
+            var trans = _context.Database.BeginTransaction();
             try
             {
 
@@ -177,21 +170,17 @@ namespace WebClient.Services
                 }
 
                 User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email) };
-                user.Id = _context.Users.InsertAndGetLastID(user);
-                if (user.Id <= 0)
-                    throw new SystemException("Register Not Success !");
+                _context.User.Add(user);
 
-                var role = _context.Roles.Where(x => x.Name == "customer").FirstOrDefault();
-                _context.UserRoles.Insert(new Userrole { RoleId = role.Id, UserId = user.Id });
+                var role = _context.Role.Where(x => x.Name == "customer").FirstOrDefault();
+                _context.Userrole.Add(new Userrole { RoleId = role.Id, UserId = user.Id });
 
                 model.UserId = user.Id;
 
-                model.Id = _context.Customers.InsertAndGetLastID(model);
-                if (model.Id <= 0)
-                    throw new SystemException("Customer Not Created !");
-
+                _context.Customer.Add(model);
+                await _context.SaveChangesAsync();
                 trans.Commit();
-                return Task.FromResult(model);
+                return model;
             }
             catch (Exception ex)
             {
@@ -200,9 +189,9 @@ namespace WebClient.Services
             }
         }
 
-        public Task<Karyawan> RegisterKaryawan(Karyawan model)
+        public async Task<Karyawan> RegisterKaryawan(Karyawan model)
         {
-            var trans = _context.BeginTransaction();
+            var trans = _context.Database.BeginTransaction();
             try
             {
                 if (string.IsNullOrEmpty(model.Email))
@@ -212,21 +201,15 @@ namespace WebClient.Services
                 }
 
                 User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email) };
-                user.Id = _context.Users.InsertAndGetLastID(user);
-                if (user.Id <= 0)
-                    throw new SystemException("Register Not Success !");
+                _context.User.Add(user);
 
-                var role = _context.Roles.Where(x => x.Name == "Sales").FirstOrDefault();
-                _context.UserRoles.Insert(new Userrole { RoleId = role.Id, UserId = user.Id });
-
+                var role = _context.Role.Where(x => x.Name == "Sales").FirstOrDefault();
+                _context.Userrole.Add(new Userrole { RoleId = role.Id, UserId = user.Id });
                 model.UserId = user.Id;
-
-                model.Id = _context.Karyawans.InsertAndGetLastID(model);
-                if (model.Id <= 0)
-                    throw new SystemException("Karyawan Not Created !");
-
+                _context.Karyawan.Add(model);
+                await _context.SaveChangesAsync();
                 trans.Commit();
-                return Task.FromResult(model);
+                return model;
             }
             catch (Exception ex)
             {
@@ -262,10 +245,10 @@ namespace WebClient.Services
         {
             try
             {
-                var role = _context.Roles.Where(x => x.Name == roleName).FirstOrDefault();
+                var role = _context.Role.Where(x => x.Name == roleName).FirstOrDefault();
                 if (role != null)
                 {
-                    _context.UserRoles.Insert(new Userrole { RoleId = role.Id, UserId = user.Id });
+                    _context.Userrole.Add(new Userrole { RoleId = role.Id, UserId = user.Id });
                 }
                 return Task.FromResult(0);
             }
@@ -281,9 +264,9 @@ namespace WebClient.Services
         {
             try
             {
-                var users = from user in _context.Users.Select()
-                            join ur in _context.UserRoles.Select() on user.Id equals ur.UserId
-                            join c in _context.Roles.Select() on ur.RoleId equals c.Id into rGroup
+                var users = from user in _context.User
+                            join ur in _context.Userrole on user.Id equals ur.UserId
+                            join c in _context.Role on ur.RoleId equals c.Id into rGroup
                             from c in rGroup.DefaultIfEmpty()
                                 select new User { 
                                  Activated=user.Activated, Email=user.Email, UserName=user.UserName,  Id=user.Id,
@@ -310,12 +293,12 @@ namespace WebClient.Services
 
                     if (role.Name == "Administrator" || role.Name == "Sales")
                     {
-                        return _context.Karyawans.Where(x => x.UserId == user.Id).FirstOrDefault();
+                        return _context.Karyawan.Where(x => x.UserId == user.Id).FirstOrDefault();
                     }
 
                     if (role.Name == "Customer")
                     {
-                        return _context.Customers.Where(x => x.UserId == user.Id).FirstOrDefault();
+                        return _context.Customer.Where(x => x.UserId == user.Id).FirstOrDefault();
                     }
                 }
             }

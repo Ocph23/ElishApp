@@ -63,15 +63,13 @@
 
     <Shell.FlyoutHeader>
         <StackLayout>
-            <Grid BackgroundColor="DarkGray">
-                <Image Aspect="AspectFit"  
-           Source="image1.jpg" 
-           Opacity="0.8" />
-                <Label Text="Admin"/>
+            <Grid BackgroundColor="Black">
+                <Image Aspect="AspectFit"  Source="image1.jpg" Opacity="0.8" />
             </Grid>
+            <Label x:Name="user"  TextColor="White" FontSize="18" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
         </StackLayout>
     </Shell.FlyoutHeader>
-    
+
     <FlyoutItem Title="Home" Icon="icon_about.png">
         <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
     </FlyoutItem>
@@ -82,7 +80,9 @@
     <FlyoutItem Title="Incoming Check" Icon="icon_feed.png">
         <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:IncomingCheckView}" />
     </FlyoutItem>
-
+    <FlyoutItem Title="Orders" Icon="icon_feed.png">
+        <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:OrdesrView}" />
+    </FlyoutItem>
     <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>
 

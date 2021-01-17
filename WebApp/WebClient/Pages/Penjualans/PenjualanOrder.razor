@@ -72,15 +72,21 @@
 
     IEnumerable<Orderpenjualan> orders;
 
-    IEnumerable<Customer> customers;
-
     OrderStatus currentTOC;
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
-        customers = await customerService.Get();
-        orders = await penjualanService.GetOrders();
+        penjualanService.GetOrders().ContinueWith(onComplete);
+        return Task.CompletedTask;
     }
+
+    public async void onComplete(Task<IEnumerable<Orderpenjualan>> task)
+    {
+        var datas = await task;
+        orders = datas.OrderByDescending(x => x.OrderDate).ToList();
+        await InvokeAsync(() => StateHasChanged());
+    }
+
 
 
     async Task CreatePenjualan(Orderpenjualan item)

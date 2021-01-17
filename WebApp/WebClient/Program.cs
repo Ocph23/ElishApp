@@ -22,7 +22,7 @@ namespace WebClient
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<OcphDbContext>();
+                    var context = services.GetRequiredService<ApplicationDbContext>();
                     var userManager = services.GetRequiredService<IUserService>();
                     await DbInitializer.Initialize(context, userManager);
                 }

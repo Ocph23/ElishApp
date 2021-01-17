@@ -77,16 +77,14 @@
         </StackLayout>
     </Shell.FlyoutHeader>
     
-    <FlyoutItem Title="About" Icon="icon_about.png">
+    <FlyoutItem Title="Home" Icon="icon_about.png">
         <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
     </FlyoutItem>
     <FlyoutItem Title="Products" Icon="qr.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ProductView}" />
     </FlyoutItem>
    
-    <FlyoutItem Title="Incoming Check" Icon="icon_feed.png">
-        <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:IncomingCheckView}" />
-    </FlyoutItem>
+  
 
     <FlyoutItem Title="Orders" Icon="icon_feed.png">
         <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:OrdesrView}" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,11 @@ namespace ShareModels
 {
     public class Orderpembelian
     {
+
+        public Orderpembelian()
+        {
+            Items = new HashSet<OrderpembelianItem>();
+        }
         public int Id { get; set; }
 
         public virtual string Nomor
@@ -32,6 +38,8 @@ namespace ShareModels
         public virtual ICollection<OrderpembelianItem> Items { get; set; }
 
         private double _total;
+
+        [NotMapped]
         public virtual double Total
         {
             get
@@ -46,6 +54,8 @@ namespace ShareModels
                 _total = value;
             }
         }
+
+        public virtual Pembelian Pembelian { get; set; }
 
     }
 }

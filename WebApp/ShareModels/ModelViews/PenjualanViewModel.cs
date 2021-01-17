@@ -22,7 +22,7 @@ namespace ShareModels.ModelViews
 
         public DateTime CreateDate { get; set; }
 
-        public DateTime PayDeadLine { get; set; }
+        public double PayDeadLine { get; set; }
 
         public double Discount { get; set; }
 

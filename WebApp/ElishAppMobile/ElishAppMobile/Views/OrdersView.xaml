@@ -19,15 +19,23 @@
             </Grid.RowDefinitions>
 
             <Label Margin="10" FontSize="20" FontAttributes="Bold" Text="Sales Order"></Label>
-            <RefreshView Grid.Row="1" x:DataType="local:OrdesrViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=Default}">
+            <RefreshView Grid.Row="1" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=Default}">
                 <CollectionView x:Name="ItemsListView" 
                 ItemsSource="{Binding Items}"
                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Padding="0,1" x:DataType="model:Orderpenjualan" BackgroundColor="LightGray" >
-                                <SwipeView VerticalOptions="CenterAndExpand"  >
-                                    <Grid  Padding="10">
+                            <SwipeView  >
+                                    <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItem  BackgroundColor="OrangeRed" Text="Packing"
+                                                         Command="{Binding Source={RelativeSource  AncestorType={x:Type local:OrdesrViewModel}}, 
+                                            Path=PackingListCommand}" CommandParameter="{Binding .}">
+                                        </SwipeItem>
+                                    </SwipeItems>
+                                    </SwipeView.LeftItems>
+                                <StackLayout>
+                                    <Grid Padding="10" Margin="3,2"  BackgroundColor="WhiteSmoke">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
@@ -44,6 +52,7 @@
 
                                         </StackLayout>
                                     </Grid>
+                                </StackLayout>
                                     <SwipeView.GestureRecognizers>
                                         <TapGestureRecognizer 
                                     NumberOfTapsRequired="1"
@@ -52,8 +61,6 @@
                                         </TapGestureRecognizer>
                                     </SwipeView.GestureRecognizers>
                                 </SwipeView>
-
-                            </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

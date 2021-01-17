@@ -50,6 +50,8 @@ using System.Threading.Tasks;
                 return Price * Amount;
             }
         }
+
+        public virtual Orderpenjualan OrderPenjualan { get; set; }
     }
 }
 

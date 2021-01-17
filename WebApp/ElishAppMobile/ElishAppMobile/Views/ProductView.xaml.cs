@@ -38,6 +38,7 @@ namespace ElishAppMobile.Views
     {
         private ProductStock _selectedItem;
 
+        public ObservableCollection<Supplier> DataSuppliers { get; }
         public ObservableCollection<ProductStock> Items { get; }
 
         private ObservableCollection<ProductStock> _SourceItems;
@@ -52,6 +53,7 @@ namespace ElishAppMobile.Views
         {
             Title = "Products";
             Items = new ObservableCollection<ProductStock>();
+            DataSuppliers = new ObservableCollection<Supplier>();
             _SourceItems = new ObservableCollection<ProductStock>();
             ItemTapped = new Command<ProductStock>(OnItemSelected);
             AddItemCommand = new Command(OnAddItem);
@@ -125,13 +127,20 @@ namespace ElishAppMobile.Views
             }
         }
 
-        async Task ExecuteLoadItemsCommand()
+        async  Task ExecuteLoadItemsCommand()
         {
             try
             {
+                var suppliers= await Suppliers.GetSuppliers();
+                DataSuppliers.Clear();
+                foreach (var supplier in suppliers)
+                {
+                    DataSuppliers.Add(supplier);
+                }
                 Items.Clear();
                 _SourceItems = new ObservableCollection<ProductStock>(await Products.GetProductStock());
-                foreach (var item in _SourceItems)
+                Supplier = DataSuppliers.FirstOrDefault();
+                foreach (var item in _SourceItems.Where(x=>x.SupplierId==Supplier.Id))
                 {
                     Items.Add(item);
                 }
@@ -183,7 +192,7 @@ namespace ElishAppMobile.Views
             Items.Clear();
             if (string.IsNullOrEmpty(textSearch))
             {
-                foreach (var item in _SourceItems)
+                foreach (var item in _SourceItems.Where(x=>x.SupplierId==Supplier.Id))
                 {
                     Items.Add(item);
                 }
@@ -191,7 +200,7 @@ namespace ElishAppMobile.Views
             else
             {
                 var data = textSearch.ToLower();
-                foreach (var item in _SourceItems.Where(x => x.CodeName.ToLower().Contains(data) ||
+                foreach (var item in _SourceItems.Where(x => x.SupplierId == Supplier.Id && x.CodeName.ToLower().Contains(data) ||
                      x.Name.ToLower().Contains(data)).AsEnumerable())
                 {
                     Items.Add(item);
@@ -199,5 +208,37 @@ namespace ElishAppMobile.Views
             }
             return Task.CompletedTask;
         }
+
+
+        private int supplierIndex;
+
+        public int SupplierIndex
+        {
+            get { return supplierIndex; }
+            set { SetProperty(ref supplierIndex , value);
+                if (DataSuppliers != null)
+                {
+                    Supplier = DataSuppliers[value];
+                }
+            }
+        }
+
+        private Supplier supplier;
+
+        public Supplier Supplier
+        {
+            get { return supplier; }
+            set { SetProperty(ref supplier , value);
+                if (value != null)
+                {
+                    Items.Clear();
+                    foreach (var item in _SourceItems.Where(x => x.SupplierId == Supplier.Id))
+                    {
+                        Items.Add(item);
+                    }
+                }
+            }
+        }
+
     }
 }

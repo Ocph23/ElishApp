@@ -4,11 +4,13 @@
 @attribute [Authorize]
 
 @inject IProductService productService;
+@inject ISupplierService supplierService
+
 
 <div class="col-md-12">
     <RadzenFieldset Text="Data Real Stok">
 
-        <RadzenGrid @ref="gridStock"  Data="@Stocks" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="ProductStock">
+        <RadzenGrid @ref="gridStock" Data="@(Stocks.Where(x=>x.SupplierId==supplierid))" AllowFiltering="true" AllowSorting="true" TItem="ProductStock">
             <Columns>
                 <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeArticle" Title="Article" />
                 <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeName" Title="Code" />
@@ -16,6 +18,11 @@
                 <RadzenGridColumn Width="75px" TItem="ProductStock" Property="Size" Title="Size" />
                 <RadzenGridColumn Width="75px" TItem="ProductStock" Property="StockView" Title="Stock" />
                 <RadzenGridColumn Width="150px" TItem="ProductStock" Title="Unit">
+                    <FilterTemplate>
+                        <RadzenDropDown @bind-Value="@supplierid" TextProperty="Nama"
+                                        ValueProperty="Id" Style="width:100%"
+                                        Data=@suppliers />
+                    </FilterTemplate>
                     <Template Context="data">
                         <Radzen.Blazor.RadzenDropDown Data="data.Units"
                                                       TextProperty="Name" @bind-Value="data.SelectedUnit">
@@ -32,10 +39,11 @@
 
     RadzenGrid<ProductStock> gridStock;
     public List<ProductStock> Stocks { get; set; }
-
-
+    public IEnumerable<Supplier> suppliers{ get; set; }
+    int supplierid = 0;
     protected override async Task OnInitializedAsync()
     {
+        suppliers = await supplierService.GetSuppliers();
         var stocks = await productService.GetProductStock();
         Stocks = stocks.ToList();
         foreach (var item in Stocks)

@@ -58,7 +58,6 @@ namespace ShareModels
 
 
         public int ProductId { get; set; }
-        public virtual Product Product { get; set; }
         public event Func<IncomingItem, Task> UpdateEvent;
         public virtual string Status
         {
@@ -81,5 +80,9 @@ namespace ShareModels
         string _status;
         private double _real;
         private Unit _unit;
+
+        public virtual Product Product { get; set; }
+
+        public virtual Pembelian Pembelian { get; set; }
     }
 }

@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:view="clr-namespace:ElishAppMobile.Views"
+             xmlns:model="clr-namespace:ShareModels.ModelViews;assembly=ShareModels" 
+             xmlns:helpers="clr-namespace:ElishAppMobile.Helpers"
+             Title="Packing List"
+             x:Class="ElishAppMobile.Views.CreatePackingList">
+    <ContentPage.Resources>
+        <helpers:PembelianItemStatusConverter x:Key="packingColor"/>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding QRCommand}" IconImageSource="qr.png"></ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackLayout Margin="10" x:DataType="view:CreatePackingListViewModel" >
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Nomor SO : "/>
+                    <Label Text="{Binding Order.Nomor}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Customer : "/>
+                    <Label Text="{Binding Order.Customer.Name}"/>
+                </StackLayout>
+            </StackLayout>
+            <RefreshView Grid.Row="1" x:DataType="view:CreatePackingListViewModel"  Margin="0,5"
+                         Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <CollectionView x:Name="ItemsListView"  BackgroundColor="LightGray"
+                ItemsSource="{Binding Datas}"
+                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout   Margin="0,0.5">
+                                <SwipeView  x:DataType="model:ItemPenjualanModel"  
+                                            BackgroundColor="{Binding Status, Converter={StaticResource packingColor}}" >
+                                    <SwipeView.LeftItems  >
+                                        <SwipeItemView  
+                                               BackgroundColor="OrangeRed" 
+                                            Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference ItemsListView}}" CommandParameter="{Binding .}">
+                                            <StackLayout WidthRequest="80">
+                                                <Label Text="Delete" TextColor="White" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"></Label>
+                                            </StackLayout>
+                                        </SwipeItemView>
+                                    </SwipeView.LeftItems>
+                                    <Grid   >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackLayout  Padding="10" Spacing="0" >
+                                            <Label Text="{Binding Product.CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
+                                            <Label Text="{Binding Product.Name}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="12" />
+                                            <Label Text="{Binding Product.CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="10" />
+                                            <Label Text="{Binding Amount}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Price : Rp. "></Span>
+                                                        <Span Text="{Binding Unit.Sell,StringFormat='{}{0:N}'}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label Text="{Binding Amount}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Jumlah Order : "></Span>
+                                                        <Span Text="{Binding Amount}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                        <StackLayout Grid.Column="1" HorizontalOptions="CenterAndExpand" Spacing="0"  VerticalOptions="Center">
+                                            <helpers:CustomStepper  ShowEntry="False" Text="{Binding Real}" WidthRequest="120" HeightRequest="35"  Increment="0.25"  
+                                                                    Maximum="{Binding Amount}"
+                                                                    Margin="5" VerticalOptions="CenterAndExpand"/>
+                                            <Picker Margin="0" ItemsSource="{Binding Units}" ItemDisplayBinding="{Binding Name}" HeightRequest="32"
+                                                    FontSize="12" HorizontalTextAlignment="Center" SelectedItem="{Binding Unit}"/>
+                                            <Label HorizontalOptions="CenterAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="12" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Rp : "></Span>
+                                                        <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </Grid>
+                                </SwipeView>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

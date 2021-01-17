@@ -5,22 +5,26 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-   
-    <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="3.0.0" />
-    <PackageReference Include="ClosedXML" Version="0.95.3" />
-    <PackageReference Include="FastReport.OpenSource" Version="2021.1.0" />
-    <PackageReference Include="FastReport.OpenSource.Web" Version="2021.1.0" />
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="FastReport.OpenSource" Version="2021.1.7" />
+    <PackageReference Include="FastReport.OpenSource.Web" Version="2021.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="QRCoderNetCore" Version="1.0.0" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605" />
-    <PackageReference Include="Radzen.Blazor" Version="2.17.10" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OcphDAL\OcphDAL.csproj" />
-    <ProjectReference Include="..\ShareModels\ShareModels.csproj" />
+    <PackageReference Include="Radzen.Blazor" Version="2.18.15" />
   </ItemGroup>
  <ItemGroup>
     <!-- extends watching group to include *.razor files -->
@@ -58,9 +62,8 @@
    <Watch Remove="Pages\Penjualans\PenjualanRealisasi.razor" />
    <Watch Remove="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
    <Watch Remove="Pages\Prints\NotaPenjualan.razor" />
-   <Watch Remove="Pages\ShareComponent\FakturPenjualanLayout.razor" />
+   <Watch Remove="Pages\Reports\ReportPenjualan.razor" />
    <Watch Remove="Pages\ShareComponent\PrintLayout.razor" />
-   <Watch Remove="Pages\ShareComponent\SalesOrderLayout.razor" />
    <Watch Remove="Pages\Suppliers\SupplierProductAddView.razor" />
    <Watch Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
@@ -76,9 +79,8 @@
    <None Include="Pages\Penjualans\PenjualanOrderDetail.razor" />
    <None Include="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
    <None Include="Pages\Prints\NotaPenjualan.razor" />
-   <None Include="Pages\ShareComponent\FakturPenjualanLayout.razor" />
+   <None Include="Pages\Reports\ReportPenjualan.razor" />
    <None Include="Shared\PrintLayout.razor" />
-   <None Include="Pages\ShareComponent\SalesOrderLayout.razor" />
    <None Include="Shared\LoadingScreen.razor" />
    <None Include="wwwroot\images\clearicon.png" />
    <None Include="wwwroot\images\customer.png" />
@@ -95,20 +97,21 @@
    <UpToDateCheckInput Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
  <ItemGroup>
+   <_ContentIncludedByDefault Remove="Pages\Reports\ReportPenjualan.razor" />
    <_ContentIncludedByDefault Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
  <ItemGroup>
    <Folder Include="wwwroot\fonts\" />
  </ItemGroup>
  <ItemGroup>
+   <ProjectReference Include="..\ShareModels\ShareModels.csproj" />
+ </ItemGroup>
+ <ItemGroup>
    <Content Update="wwwroot\reports\nota1.xsd">
      <SubType>Designer</SubType>
    </Content>
-   <Content Update="wwwroot\reports\notaorder.rdlc">
-     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-   </Content>
-   <Content Update="wwwroot\reports\notapenjualan.rdlc">
-     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-   </Content>
+ </ItemGroup>
+ <ItemGroup>
+   <UpToDateCheckInput Remove="Pages\Reports\ReportPenjualan.razor" />
  </ItemGroup>
 </Project>

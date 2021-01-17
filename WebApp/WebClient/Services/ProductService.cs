@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using Ocph.DAL;
-using Ocph.DAL.Mapping.MySql;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ShareModels;
 using ShareModels.ModelViews;
 using System;
@@ -15,51 +14,35 @@ namespace WebClient.Services
 
     public class ProductService : IProductService
     {
-        readonly OcphDbContext dbContext;
+        readonly ApplicationDbContext dbContext;
         private readonly ILogger<ProductService> logger;
 
-        public ProductService(OcphDbContext db, ILogger<ProductService> log)
+        public ProductService(ApplicationDbContext db, ILogger<ProductService> log)
         {
             dbContext = db;
             logger = log;
         }
 
-        public Task<Product> AddProduct(int supplierId, Product product)
+        public async Task<Product> AddProduct(int supplierId, Product product)
         {
-            var trans = dbContext.BeginTransaction();
+            var trans = dbContext.Database.BeginTransaction();
             try
             {
-                var exsitsProduct = dbContext.Products.Where(x => x.Id == product.Id || x.CodeArticle == product.CodeArticle || x.CodeName == product.CodeName).FirstOrDefault();
+                var exsitsProduct = dbContext.Product.Where(x => x.Id == product.Id || x.CodeArticle == product.CodeArticle || x.CodeName == product.CodeName).FirstOrDefault();
                 if (exsitsProduct == null)
                 {
-                    product.Id = dbContext.Products.InsertAndGetLastID(product);
+                    dbContext.Product.Add(product);
                     if (product.Id <= 0)
                         throw new SystemException("Product Not Created !");
 
-                    foreach (var unit in product.Units)
-                    {
-                        unit.ProductId = product.Id;
-                        unit.Id = dbContext.Units.InsertAndGetLastID(unit);
-                        if(unit.Id <=0)
-                            throw new SystemException("Product Not Created !");
-
-                    }
-
-                    exsitsProduct = product;
-                }
-
-                var supProd = dbContext.SupplierProducts.Where(x => x.SupplierId == supplierId && x.ProductId == product.Id).FirstOrDefault();
-                if (supProd != null)
+                }  else
                     throw new SystemException($"Product '{product.CodeName} / {product.CodeArticle}' Exists !");
 
-                supProd = new Supplierproduct { ProductId = exsitsProduct.Id, SupplierId = supplierId };
-
-                var supProdSaved = dbContext.SupplierProducts.Insert(supProd);
-                if (!supProdSaved)
-                    throw new SystemException($"Product '{product.CodeName} / {product.CodeArticle}' Not Added !");
-
+                product.SupplierId = supplierId;
+                dbContext.Product.Add(product);
+               await dbContext.SaveChangesAsync();
                 trans.Commit();
-                return Task.FromResult(product);
+                return product;
             }
             catch (Exception ex)
             {
@@ -71,42 +54,56 @@ namespace WebClient.Services
 
         public Task<Unit> AddUnit(int productId, Unit unit)
         {
-            var units = dbContext.Units.Where(x => x.ProductId == productId).OrderBy(x => x.Level);
-            var lastUnit = units.LastOrDefault();
-            unit.Level = lastUnit == null ? 0 : lastUnit.Level + 1;
-            unit.Id = dbContext.Units.InsertAndGetLastID(unit);
-            if (unit.Id <= 0)
-                throw new SystemException($"Unit '{unit.Name}' Not Saved !");
+            try
+            {
+                var units = dbContext.Unit.Where(x => x.ProductId == productId).OrderBy(x => x.Level);
+                var lastUnit = units.LastOrDefault();
+                unit.Level = lastUnit == null ? 0 : lastUnit.Level + 1;
+                dbContext.Unit.Add(unit);
+                if (unit.Id <= 0)
+                    throw new SystemException($"Unit '{unit.Name}' Not Saved !");
 
-            return Task.FromResult(unit);
+                return Task.FromResult(unit);
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
-        public Task<Unit> UpdateUnit(int unitId, Unit unit)
+        public async Task<Unit> UpdateUnit(int unitId, Unit unit)
         {
 
-            var existsModel = dbContext.Units.Where(x => x.Id == unitId).FirstOrDefault();
-            if (existsModel == null)
-                throw new SystemException($"Unit '{unit.Name}' Not Found !");
+            try
+            {
+                var existsModel = dbContext.Unit.Where(x => x.Id == unitId).FirstOrDefault();
+                if (existsModel == null)
+                    throw new SystemException($"Unit '{unit.Name}' Not Found !");
 
-            var updated = dbContext.Units.Update(x => new { x.Amount, x.Buy, x.Name, x.Sell, x.Level }, unit, x => x.Id == unitId);
-            if (!updated)
-                throw new SystemException($"Unit '{unit.Name}' Not Saved !");
 
-            return Task.FromResult(unit);
+                dbContext.Entry(existsModel).CurrentValues.SetValues(unit);
+
+                await dbContext.SaveChangesAsync();
+
+                return unit;
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             try
             {
-                var existsModel = dbContext.Suppliers.Where(x => x.Id == id).FirstOrDefault();
+                var existsModel = dbContext.Product.Where(x => x.Id == id).FirstOrDefault();
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");
 
-                var deleted = dbContext.Suppliers.Delete(x => x.Id == id);
-                if (deleted)
-                    throw new SystemException("Data Not Deleted !");
-                return Task.FromResult(deleted);
+                dbContext.Product.Remove(existsModel);
+                await dbContext.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
@@ -116,80 +113,34 @@ namespace WebClient.Services
 
         public Task<Product> Get(int id)
         {
-            var results = from p in dbContext.Products.Where(x => x.Id == id)
-                          join c in dbContext.Categories.Select() on p.CategoryId equals c.Id
-                          join u in dbContext.Units.Select() on p.Id equals u.ProductId into ugr
-                          from u in ugr.DefaultIfEmpty()
-                          select new Product
-                          {
-                              Category = c,
-                              CategoryId = p.CategoryId,
-                              CodeArticle = p.CodeArticle,
-                              Description = p.Description,
-                              Size = p.Size,
-                              CodeName = p.CodeName,
-                              Merk = p.Merk,
-                              Id = p.Id,
-                              Name = p.Name,
-                              Units = ugr.ToList()
-                          };
+            var results = dbContext.Product.Where(x=>x.Id==id)
+                .Include(x => x.Units).Include(x => x.Category);
             return Task.FromResult(results.FirstOrDefault());
         }
 
         public Task<IEnumerable<Product>> Get()
         {
-            var results = from p in dbContext.Products.Select()
-                          join c in dbContext.Categories.Select() on p.CategoryId equals c.Id
-                          join u in dbContext.Units.Select() on p.Id equals u.ProductId into ugr
-                          from u in ugr.DefaultIfEmpty()
-                          select new Product
-                          {
-                              Category = c,
-                              CategoryId = p.CategoryId,
-                              CodeArticle = p.CodeArticle,
-                              Description = p.Description,
-                              Size = p.Size,
-                              CodeName = p.CodeName,
-                              Merk = p.Merk,
-                              Id = p.Id,
-                              Name = p.Name,
-                              Units = ugr.ToList()
-                          };
+            var results = dbContext.Product
+               .Include(x => x.Units).Include(x => x.Category);
             return Task.FromResult(results.AsEnumerable());
         }
 
         public Task<IEnumerable<Product>> GetProductsBySupplier(int id)
         {
-            var results = from s in dbContext.SupplierProducts.Where(x => x.SupplierId == id)
-                          join p in dbContext.Products.Select() on s.ProductId equals p.Id
-                          join c in dbContext.Categories.Select() on p.CategoryId equals c.Id
-                          join u in dbContext.Units.Select() on p.Id equals u.ProductId into ugr
-                          select new Product
-                          {
-                              Category = c,
-                              CategoryId = p.CategoryId,
-                              CodeArticle = p.CodeArticle,
-                              Description = p.Description,
-                              Size = p.Size,
-                              CodeName = p.CodeName,
-                              Merk = p.Merk,
-                              Id = p.Id,
-                              Name = p.Name,
-                              Units = (from prod2 in ugr
-                                       select prod2).ToList()
-                          };
-            var datas = results.ToList();
-            return Task.FromResult(datas.AsEnumerable());
+            var results = dbContext.Product.Where(x => x.SupplierId == id)
+                .Include(x => x.Supplier);
+            return Task.FromResult(results.AsEnumerable());
         }
 
-        public Task<Product> Post(Product value)
+        public async Task<Product> Post(Product value)
         {
             try
             {
-                value.Id = dbContext.Products.InsertAndGetLastID(value);
+                dbContext.Product.Add(value);
+                await dbContext.SaveChangesAsync();
                 if (value.Id <= 0)
                     throw new SystemException("Data Not Saved !");
-                return Task.FromResult(value);
+                return (value);
             }
             catch (Exception ex)
             {
@@ -197,56 +148,64 @@ namespace WebClient.Services
             }
         }
 
-        public Task<bool> Update(int id, Product value)
+        public async Task<bool> Update(int id, Product value)
         {
-            var existsModel = dbContext.Products.Where(x => x.Id == id).FirstOrDefault();
-            if (existsModel == null)
-                throw new SystemException("Data Not Found !");
+            try
+            {
+                var existsModel = dbContext.Product.Where(x => x.Id == id).FirstOrDefault();
+                if (existsModel == null)
+                    throw new SystemException("Data Not Found !");
 
-            var updated = dbContext.Products.Update(x => new { x.CategoryId, x.Merk, x.CodeArticle, x.CodeName, x.Name, x.Description, x.Size },
-                value, x => x.Id == id);
-            if (!updated)
-                throw new SystemException("Data Not Saved !");
-            return Task.FromResult(updated);
+                dbContext.Entry(existsModel).CurrentValues.SetValues(value);
+                dbContext.Entry(existsModel).CurrentValues.SetValues(value);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new SystemException(ex.Message);
+            }
         }
 
         public Task<IEnumerable<ProductStock>> GetProductStock()
         {
             try
             {
-                var command = dbContext.CreateCommand();
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                command.CommandText = "GetStock";
-
-                var reader = command.ExecuteReader();
-                 var   list = new MappingColumn(new EntityInfo(typeof(ProductStock))).MappingWithoutInclud<ProductStock>(reader);
-                reader.Close();
-
-                var result = from a in list
-                             join k in dbContext.Categories.Select() on a.CategoryId equals k.Id
-                             join sp in dbContext.SupplierProducts.Select() on a.Id  equals sp.ProductId
-                                         join s in dbContext.Suppliers.Select() on sp.SupplierId equals s.Id
-                             join u in dbContext.Units.Select() on a.Id equals u.ProductId into gg
-                             select new ProductStock
-                             {
-                                 Category = k,
-                                 Supplier = s,
-                                 CategoryId = a.CategoryId,
-                                 CodeArticle = a.CodeArticle,
-                                 CodeName = a.CodeName,
-                                 Description = a.Description,
-                                 Id = a.Id,
-                                 Merk = a.Merk,
-                                 Name = a.Name,    
-                                 Pembelian = a.Pembelian,
-                                 Penjualan = a.Penjualan,
-                                 Size = a.Size,
-                                 Units = (from g in gg select g).ToList()
-                             };
+                var result = dbContext.Product
+                    .Include(x=>x.Supplier)
+                    .Include(x=>x.Category)
+                    .Include(x => x.PembelianItem)
+                    .Include(x => x.PenjualanItem)
+                    .Include(x=> x.Units)
+                    .Include(x => x.Orderpenjualanitem)
+                    .ThenInclude(x => x.OrderPenjualan).Select(x => new ProductStock {
+                        Category = x.Category,
+                        Supplier = x.Supplier,
+                        CategoryId = x.CategoryId,
+                        CodeArticle =x.CodeArticle,
+                        CodeName = x.CodeName,
+                        Description = x.Description,
+                        Id = x.Id,  SupplierId=x.SupplierId, 
+                        Merk = x.Merk,
+                        Name = x.Name,
+                        Pembelian = x.PembelianItem.Sum(x=>x.Amount * x.Unit.Amount),
+                        Penjualan = x.PenjualanItem.Sum(x=>x.Amount * x.Unit.Amount),
+                        Size = x.Size,
+                        Units = x.Units,
+                        SelectedUnit= x.Units.FirstOrDefault(),
+                    }).ToList();
 
 
+                var orders = dbContext.Orderpenjualan.Where(x => x.Status == OrderStatus.New).Include(x => x.Items).SelectMany(x=>x.Items).ToList();
 
-                return Task.FromResult(result);
+                foreach (var item in result)
+                {
+                    var totalNewOrder = orders.Where(x => x.ProductId == item.Id).Sum(x => x.Amount * x.Unit.Amount);
+                    item.Penjualan += totalNewOrder;
+                }
+
+                return Task.FromResult(result.AsEnumerable());
             }
             catch (Exception ex)
             {

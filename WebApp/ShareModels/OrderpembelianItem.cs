@@ -8,7 +8,6 @@ namespace ShareModels
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("OrderPembelianId")]
         public int OrderPembelianId { get; set; }
 
         public int ProductId { get; set; }
@@ -31,11 +30,6 @@ namespace ShareModels
         }
 
         public int UnitId { get; set; }
-
-        public virtual Unit Unit { get; set; }
-
-        public virtual Product Product { get; set; }
-
         public virtual double Total
         {
             get
@@ -43,6 +37,12 @@ namespace ShareModels
                 return Price * Amount;
             }
         }
+
+        public virtual Unit Unit { get; set; }
+
+        public virtual Product Product { get; set; }
+
+        public virtual Orderpembelian OrderPembelian { get; set; }
 
     }
 }

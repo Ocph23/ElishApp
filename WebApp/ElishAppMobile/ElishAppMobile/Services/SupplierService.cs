@@ -9,6 +9,7 @@ namespace ElishAppMobile
     public class SupplierService : ISupplierService
     {
         private readonly string controller = "/api/supplier";
+        private IEnumerable<Supplier> suppliers;
 
         public async Task<bool> Delete(int id)
         {
@@ -46,11 +47,15 @@ namespace ElishAppMobile
         {
             try
             {
-                using var res = new RestService();
-                var response = await res.GetAsync($"{controller}");
-                if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
-                return await response.GetResult<IEnumerable<Supplier>>();
+                if (suppliers == null)
+                {
+                    using var res = new RestService();
+                    var response = await res.GetAsync($"{controller}");
+                    if (!response.IsSuccessStatusCode)
+                        await res.Error(response);
+                    suppliers = await response.GetResult<IEnumerable<Supplier>>();
+                }
+                return suppliers;
             }
             catch (Exception ex)
             {

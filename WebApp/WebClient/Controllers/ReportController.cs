@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using QRCoder;
 using ShareModels;
 using System;
 using System.Collections.Generic;
@@ -19,7 +18,6 @@ using FastReport;
 using FastReport.Export.Html;
 using System.Data;
 using System.ComponentModel;
-using AspNetCore.Reporting;
 using FastReport.Web;
 
 namespace WebClient.Controllers
@@ -39,273 +37,206 @@ namespace WebClient.Controllers
             _appSettings = appSettings;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> PrintPenjualan(int id)
         {
-          
-
-            var data = await _penjualanService.GetOrder(10);
-            var nota = new ShareModels.Reports.NotaPenjualan
-            {
-                CreateDate = data.OrderDate,
-                Customer = data.Customer.Name,
-                Discount = data.Discount,
-                OrderStatus = data.Status.ToString(),
-                PoNumber = data.Nomor,
-                Sales = data.Sales.Name,
-            };
-
-            var datas = new List<ShareModels.Reports.NotaData>();
-            int nomor = 1;
-            foreach (var item in data.Items)
-            {
-                datas.Add(new ShareModels.Reports.NotaData
-                {
-                    No = nomor,
-                    Amount = item.Amount,
-                    CodeArticle = item.Product.CodeArticle,
-                    CodeProduct = item.Product.CodeName,
-                    ProductName = $"{item.Product.Name} {item.Product.Size}",
-                    Unit = item.Unit.Name,
-                    Price = item.Price,
-                    Total = item.Total,
-
-                });
-
-                nomor++;
-            }
-
-            var report = new WebReport();
-            report.Report.Load($"{_iwebhost.WebRootPath}/reports/nota1.frx");
-            var datasets = datas.ToDataTable();
-            report.Report.RegisterData(datasets, "Table1");
-            report.ToolbarColor = System.Drawing.Color.White;
-            report.ShowZoomButton = false;
-            report.ShowExports = false;
-            report.ShowPrint= false;
-
-            ViewBag.WebReport = report;
-            return View();
-        }
-
-        public async Task<ActionResult> PrintOrder(int id)
-        {
-            var data = await _penjualanService.GetOrder(id);
-            var path = $"{_iwebhost.WebRootPath}/reports/notaorder.rdlc";
-
-            var nota = new ShareModels.Reports.NotaPenjualan
-            {
-                CreateDate = data.OrderDate,
-                Customer = data.Customer.Name,
-                Discount = data.Discount,
-                OrderStatus = data.Status.ToString(),
-                PoNumber = data.Nomor,
-                Sales = data.Sales.Name,
-            };
-
-            var datas = new List<ShareModels.Reports.NotaData>();
-            int nomor = 1;
-            foreach (var item in data.Items)
-            {
-                datas.Add(new ShareModels.Reports.NotaData
-                {
-                    No = nomor,
-                    Amount = item.Amount,
-                    CodeArticle = item.Product.CodeArticle,
-                    CodeProduct = item.Product.CodeName,
-                    ProductName = $"{item.Product.Name} {item.Product.Size}",
-                    Unit = item.Unit.Name,
-                    Price = item.Price,
-                    Total = item.Total,
-
-                });
-
-                nomor++;
-            }
-
-
-            //paramas
-            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-            TextInfo textInfo = cultureInfo.TextInfo;
-
-            string barcode = GetBarCode(data.Nomor);
-            var accounting = _appSettings.Value.Accounting;
-            Dictionary<string, string> reportparameter = new Dictionary<string, string>();
-            LocalReport localReport = new LocalReport(path);
-            localReport.AddDataSource("HeaderNota", new List<ShareModels.Reports.NotaPenjualan>() { nota });
-            localReport.AddDataSource("DataNota", datas);
-
-
-            var result = localReport.Execute(RenderType.Pdf, 1, reportparameter, "");
-            return File(result.MainStream, "application/pdf");
-            //var result = localReport.Execute(RenderType.ExcelOpenXml, 1, null, "");
-            //return File(result.MainStream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        }
-
-
-        public async Task<ActionResult> TestFastReport(int id)
-        {
-
             var reportItem = "nota1.frx";
-
-            string mime = "application/" + "html"; //MIME-header with default value
-                                                   // Find a report
             if (reportItem != null)
             {
-
                 var path = $"{_iwebhost.WebRootPath}/reports/{reportItem}";
-                using (MemoryStream stream = new MemoryStream()) //Create the stream for the report
+                
+                try
                 {
-                    try
+                    var data = await _penjualanService.GetPenjualan(id);
+                    var nota = GetParameters(data, data.GetType());
+                    var datas = new List<ShareModels.Reports.NotaData>();
+                    int nomor = 1;
+                    foreach (var item in data.Items)
                     {
-                        var data = await _penjualanService.GetOrder(id);
-                        var nota = new ShareModels.Reports.NotaPenjualan
+                        datas.Add(new ShareModels.Reports.NotaData
                         {
-                            CreateDate = data.OrderDate,
-                            Customer = data.Customer.Name,
-                            Discount = data.Discount,
-                            OrderStatus = data.Status.ToString(),
-                            PoNumber = data.Nomor,
-                            Sales = data.Sales.Name,
-                        };
+                            No = nomor,         
+                            Amount = item.Amount,
+                            CodeArticle = item.Product.CodeArticle,
+                            CodeProduct = item.Product.CodeName,
+                            ProductName = $"{item.Product.Name} {item.Product.Size}",
+                            Unit = item.Unit.Name,
+                            Price = item.Price,
+                            Total = item.Total,    
 
-                        var datas = new List<ShareModels.Reports.NotaData>();
-                        int nomor = 1;
-                        foreach (var item in data.Items)
-                        {
-                            datas.Add(new ShareModels.Reports.NotaData
-                            {
-                                No = nomor,
-                                Amount = item.Amount,
-                                CodeArticle = item.Product.CodeArticle,
-                                CodeProduct = item.Product.CodeName,
-                                ProductName = $"{item.Product.Name} {item.Product.Size}",
-                                Unit = item.Unit.Name,
-                                Price = item.Price,
-                                Total = item.Total,
+                        });
 
-                            });
-
-                            nomor++;
-                        }
-
-                        var datasets = datas.ToDataTable();
-                        DataSet ds = new DataSet();
-                        ds.Tables.Add(datasets);
-                        ds.WriteXml($"{_iwebhost.WebRootPath}/reports/nota1.xml");
-
-                        Config.WebMode = true;
-                        using (Report report = new Report())
-                        {
-                            ds.DataSetName = "Nota";
-                            report.Load(path); //Load the report
-                         //   report.RegisterData(ds, "Nota"); //Register data in the report
-                            report.Prepare();
-                            HTMLExport html = new HTMLExport();
-                            html.SinglePage = true; //report on the one page
-                            html.Navigator = false; //navigation panel on top
-                            html.EmbedPictures = true; //build in images to the document
-                            report.Export(html, stream);
-                            mime = "text/" + "html"; //redefine mime for html
-                        }
-                        //Get the name of resulting report file with needed extension
-                        var file = String.Concat(Path.GetFileNameWithoutExtension(path), ".", "html");
-                        return File(stream.ToArray(), mime);
-                        
+                        nomor++;
                     }
-                    catch(Exception ex)
-                    {
-                        return new NoContentResult();
-                    }
-                    finally
-                    {
-                        stream.Dispose();
-                    }
+
+                    var datasets = datas.ToDataTable();
+                    return Print(datasets, nota, path);
+
+                }
+                catch (Exception)
+                {
+                    return new NoContentResult();
                 }
             }
             else
                 return NotFound();
         }
 
-
-
-        public async Task<ActionResult> PrintPenjualan(int id)
+        private ActionResult Print(DataTable datasets, ShareModels.Reports.NotaPenjualan nota, string path)
         {
 
-            var data = await _penjualanService.GetPenjualan(id);
-            var path = $"{_iwebhost.WebRootPath}/reports/notapenjualan.rdlc";
-            var nota = new ShareModels.Reports.NotaPenjualan
+            using MemoryStream stream = new MemoryStream();
+            try
             {
-                CreateDate = data.CreateDate,
-                Customer = data.Customer.Name,
-                Discount = data.Discount,
-                OrderStatus = data.Status.ToString(),
-                PoNumber = data.Nomor,
-                Sales = data.Sales.Name,
-                PaymentType = data.Payment.ToString()
-            };
+                var mime = "text/" + "html"; //redefine mime for html
+                datasets.TableName = "Table1";
+                DataSet ds = new DataSet();
+                ds.DataSetName = "Nota";
+                ds.Tables.Add(datasets);
+                ds.WriteXml($"{_iwebhost.WebRootPath}/reports/nota1.xml");
 
-
-            var datas = new List<ShareModels.Reports.NotaData>();
-            int nomor = 1;
-            foreach (var item in data.Items)
-            {
-                datas.Add(new ShareModels.Reports.NotaData
+                Config.WebMode = true;
+                using (Report report = new Report())
                 {
-                    No = nomor,
-                    Amount = item.Amount,
-                    CodeArticle = item.Product.CodeArticle,
-                    CodeProduct = item.Product.CodeName,
-                    ProductName = $"{item.Product.Name} {item.Product.Size}",
-                    Unit = item.Unit.Name,
-                    Price = item.Price,
-                    Total = item.Total,
+                    report.Load(path); //Load the report
+                    report.RegisterData(ds.Tables["Table1"], "Table1"); //Register data in the report
+                    SetParameter(report, nota);
 
-                });
 
-                nomor++;
+                    report.Prepare();
+                    HTMLExport html = new HTMLExport
+                    {
+                        SinglePage = true, //report on the one page
+                        Navigator = true, //navigation panel on top
+                        EmbedPictures = true,
+                        Print=true,  Preview=true
+                    };
+                    report.Export(html, stream);
+
+                    report.GetDataSource("Table1").Enabled = true;
+                }
+                //Get the name of resulting report file with needed extension
+                var file = String.Concat(Path.GetFileNameWithoutExtension(path), ".", "html");
+                return File(stream.ToArray(), mime);
             }
-
-            //paramas
-            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-            TextInfo textInfo = cultureInfo.TextInfo;
-
-            string barcode = data.Nomor;
-            var accounting = _appSettings.Value.Accounting;
-            Dictionary<string, string> reportparameter = new Dictionary<string, string>();
-            reportparameter.Add("acc", accounting);
-            reportparameter.Add("customer", textInfo.ToTitleCase(data.Customer.Name));
-            reportparameter.Add("barcode", barcode);
-
-            LocalReport localReport = new LocalReport(path);
-            localReport.AddDataSource("HeaderNota", new List<ShareModels.Reports.NotaPenjualan>() { nota });
-            localReport.AddDataSource("DataNota", datas);
-            var result = localReport.Execute(RenderType.Pdf, 1, reportparameter, "");
-            return File(result.MainStream, "application/pdf");
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }   
+            finally
+            {
+                stream.Dispose();
+            }
         }
 
-        private string GetBarCode(string nomor)
+        public async Task<ActionResult> PrintOrder(int id)
+        {
+
+            var reportItem = "salesorder.frx";
+
+            if (reportItem != null)
+            {
+                var path = $"{_iwebhost.WebRootPath}/reports/{reportItem}";
+                try
+                {
+                    var data = await _penjualanService.GetOrder(id);
+                    var nota = GetParameters(data, data.GetType());
+
+                    var datas = new List<ShareModels.Reports.NotaData>();
+                    int nomor = 1;
+                    foreach (var item in data.Items)
+                    {
+                        datas.Add(new ShareModels.Reports.NotaData
+                        {
+                            No = nomor,
+                            Amount = item.Amount,
+                            CodeArticle = item.Product.CodeArticle,
+                            CodeProduct = item.Product.CodeName,
+                            ProductName = $"{item.Product.Name} {item.Product.Size}",
+                            Unit = item.Unit.Name,
+                            Price = item.Price,
+                            Total = item.Total,
+
+                        });
+
+                        nomor++;
+                    }
+
+                    var datasets = datas.ToDataTable();
+                    return Print(datasets, nota, path);
+
+                }
+                catch (Exception)
+                {
+                    return new NoContentResult();
+                }
+            }
+            else
+                return NotFound();
+        }
+
+        private void SetParameter(Report report, ShareModels.Reports.NotaPenjualan nota)
+        {
+            report.SetParameterValue("NomorSO", nota.PoNumber);
+            report.SetParameterValue("NomorInvoice", nota.NomorInvoice);
+            report.SetParameterValue("Customer", nota.Customer);
+            report.SetParameterValue("Salesman", nota.Sales);
+            report.SetParameterValue("JatuhTempo", nota.InvoiceDeadLine);
+            report.SetParameterValue("Tanggal", nota.CreateDate);
+            report.SetParameterValue("Discount", nota.Discount);
+            report.SetParameterValue("Address", nota.Address);
+            report.SetParameterValue("Payment", nota.PaymentType);
+
+        }
+
+        private ShareModels.Reports.NotaPenjualan GetParameters(object dataParam, Type type)
         {
             try
             {
-                using (var ms = new MemoryStream())
+                if (type == typeof(Penjualan))
                 {
-                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(nomor, QRCodeGenerator.ECCLevel.Q);
-                    QRCode qrCode = new QRCode(qrCodeData);
+                    var data = (Penjualan)dataParam;
+                    return new ShareModels.Reports.NotaPenjualan
+                    {                   
+                        CreateDate = data.CreateDate,
+                        Customer = data.OrderPenjualan.Customer.Name,
+                        Discount = data.Discount,
+                        OrderStatus = data.Status.ToString(),
+                        PoNumber = data.OrderPenjualan.Nomor,
+                        Sales = data.OrderPenjualan.Sales.Name,
+                        NomorInvoice = data.Nomor,
+                        InvoiceDeadLine =data.CreateDate.AddDays(data.PayDeadLine),
+                        PaymentType = data.Payment == PaymentType.Credit ? "Credit" : "Tunai",
+                        Address = data.OrderPenjualan.Customer.Address
 
-                    using (Bitmap bitmap = qrCode.GetGraphic(20))
+                    };
+                }
+                else
+                {
+                    var data = (Orderpenjualan)dataParam;
+                    return new ShareModels.Reports.NotaPenjualan
                     {
-                        //bitmap.Save(ms, ImageFormat.Png);
-                        return Convert.ToBase64String(ms.ToArray());
-                    }
+                        CreateDate = data.OrderDate,
+                        Customer = data.Customer.Name,
+                        Discount = data.Discount,
+                        OrderStatus = data.Status.ToString(),
+                        PoNumber = data.Nomor,
+                        Sales = data.Sales.Name,
+                        NomorInvoice = data.Nomor,  
+                        InvoiceDeadLine = data.OrderDate.AddDays(data.DeadLine),
+                        PaymentType = data.DeadLine <=0 ? "Tunai" : "Kredit",
+                        Address = data.Customer.Address
+
+                    };
                 }
             }
             catch (Exception ex)
             {
-                throw new System.SystemException(ex.Message);
+                throw new SystemException(ex.Message);
+
             }
         }
 
+       
         public async Task<ActionResult> OrderPembelianExcel(int id)
         {
 
@@ -382,8 +313,6 @@ namespace WebClient.Controllers
             }
 
         }
-
-
 
         public  DataSet ToDataSet<OrderPenjualanItem>( List<OrderPenjualanItem> list)
         {

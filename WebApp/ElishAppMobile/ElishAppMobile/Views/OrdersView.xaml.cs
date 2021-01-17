@@ -34,6 +34,14 @@ namespace ElishAppMobile.Views
             base.OnAppearing();
             _viewModel.OnAppearing();
         }
+
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            var order = (Orderpenjualan)ItemsListView.SelectedItem;
+            var vm = new CreatePackingListViewModel(order);
+            var form = new CreatePackingList() { BindingContext = vm };
+            await Shell.Current.Navigation.PushAsync(form);
+        }
     }
 
 
@@ -44,6 +52,7 @@ namespace ElishAppMobile.Views
         public Command LoadItemsCommand { get; }
         public Command AddNewCommand { get; }
         public Command SelectCommand { get; }
+        public Command PackingListCommand { get; }
         public Profile Sales { get; }
         public ObservableCollection<Orderpenjualan> Items { get; private set; } = new ObservableCollection<Orderpenjualan>();
 
@@ -52,7 +61,16 @@ namespace ElishAppMobile.Views
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             AddNewCommand = new Command(AddNewCommandAction);
             SelectCommand = new Command(SelectCommandAction);
+            PackingListCommand = new Command(PackingListAction);
             Sales = Account.GetProfile().Result;
+        }
+
+        private async void PackingListAction(object obj)
+        {
+            var order = (Orderpenjualan)obj;
+            var vm = new CreatePackingListViewModel(order);
+            var form = new CreatePackingList() { BindingContext = vm };
+            await   Shell.Current.Navigation.PushAsync(form);
         }
 
         private void SelectCommandAction(object obj)
@@ -75,11 +93,29 @@ namespace ElishAppMobile.Views
             try
             {
                 Items.Clear();
-                _SourceItems = new ObservableCollection<Orderpenjualan>(await PenjualanService.GetOrdersBySalesId(Sales.Id));
-                foreach (var item in _SourceItems.OrderByDescending(x=>x.Id))
+               if( await Account.UserInRole("Administrator"))
+                {
+                    var orders = await PenjualanService.GetOrders();
+                    if (orders != null)
+                    {
+                        _SourceItems = new ObservableCollection<Orderpenjualan>(orders);
+                    }
+                }
+                else
+                {
+                    var orderSales = await PenjualanService.GetOrdersBySalesId(Sales.Id);
+                    if (orderSales != null)
+                    {
+                        _SourceItems = new ObservableCollection<Orderpenjualan>(orderSales);
+                    }
+                }
+
+                foreach (var item in _SourceItems.OrderByDescending(x => x.Id))
                 {
                     Items.Add(item);
                 }
+
+
             }
             catch (Exception ex)
             {

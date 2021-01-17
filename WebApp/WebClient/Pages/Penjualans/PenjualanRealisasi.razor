@@ -3,79 +3,82 @@
 @attribute [Authorize]
 
 @inject IPenjualanService penjualanService;
-@inject ICustomerService customerService;
-@inject IProductService productService;
 
 @inject NavigationManager nav;
 
-<RadzenTabs >
-                <Tabs>
-                    <RadzenTabsItem Text="Data Realisasi Penjualan">
-                        @if (penjualans == null)
-                        {
-                            <p><em>Loading...</em></p>
-                        }
-                        else
-                        {
-                            <RadzenGrid Data="@(penjualans.Where(e => currentPeyment >= 0 ? e.Status == currentPeyment: true))"
-                                        AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Penjualan">
-                                <Columns>
-                                    <RadzenGridColumn Width="120px" TItem="Penjualan" Property="CreateDate" Title="Crated" />
-                                    <RadzenGridColumn Width="160px" TItem="Penjualan" Property="Nomor" Title="Sale Number" />
-                                    <RadzenGridColumn Width="250px" TItem="Penjualan" Property="Customer.Name" Title="Customer" />
-                                    <RadzenGridColumn TItem="Penjualan" Property="Sales.Name" Title="Sales" />
-                                    <RadzenGridColumn TItem="Penjualan" Property="Payment" Width="120px" Title="Payment" />
-                                    <RadzenGridColumn TItem="Penjualan" Property="Discount" Width="75px" Title="Discount">
-                                        <Template Context="item">
-                                            @(item.Discount + "%")
-                                        </Template>
-                                    </RadzenGridColumn>
-                                    <RadzenGridColumn TItem="Penjualan" TextAlign="TextAlign.Right" Property="Total" Title="Total">
-                                        <Template Context="item">
-                                            @(item.Total.ToString("N"))
-                                        </Template>
-                                    </RadzenGridColumn>
-                                    <RadzenGridColumn Width="130px" TItem="Penjualan" Property="Status" Title="Status">
-                                        <FilterTemplate>
-                                            <RadzenDropDown @bind-Value="@currentPeyment" TextProperty="Text"
-                                                            ValueProperty="Value" Style="width:100%"
-                                                            Data="@(Enum.GetValues(typeof(PaymentStatus)).Cast<PaymentStatus>().Select(t => new { Text = $"{t}", Value = t }))" />
-                                        </FilterTemplate>
-                                    </RadzenGridColumn>
-                                    <RadzenGridColumn TItem="Penjualan" Context="item" Bubble="false" Filterable="false"
-                                                      Sortable="false" TextAlign="TextAlign.Center" Width="65px">
-                                        <Template Context="item">
-                                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list"
-                                                          Size="ButtonSize.Medium"
-                                                          Click="@(()=> nav.NavigateTo($"/penjualan/realisasidetail/{item.Id}"))" />
-                                        </Template>
-                                    </RadzenGridColumn>
-                                </Columns>
-                            </RadzenGrid>
-                        }
-                    </RadzenTabsItem>
-                </Tabs>
-            </RadzenTabs>
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="Data Realisasi Penjualan">
+            @if (penjualans == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else
+            {
+                <RadzenGrid Data="@(penjualans.Where(e => currentPeyment >= 0 ? e.Status == currentPeyment : true))" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Penjualan">
+                    <Columns>
+                        <RadzenGridColumn Width="100px" TItem="Penjualan" Property="CreateDate" Title="Crated" >
+                            <Template Context="item">
+                                @item.CreateDate.ToString("dd/MM/yyyy")
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="160px" TItem="Penjualan" Property="Nomor" Title="Sale Number" />
+                        <RadzenGridColumn TItem="Penjualan" Property="OrderPenjualan.Customer.Name" Title="Customer" />
+                        <RadzenGridColumn TItem="Penjualan" Property="OrderPenjualan.Sales.Name" Title="Sales" />
+                        <RadzenGridColumn TItem="Penjualan" Property="Payment" Width="100px" Title="Payment" />
+                        <RadzenGridColumn TItem="Penjualan" Property="Discount" Width="75px" Title="Discount">
+                            <Template Context="item">
+                                @(item.Discount + "%")
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="150px" TItem="Penjualan" TextAlign="TextAlign.Right" Property="Total" Title="Total">
+                            <Template Context="item">
+                                @(item.Total.ToString("N"))
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="130px" TItem="Penjualan" Property="Status" Title="Status">
+                            <FilterTemplate>
+                                <RadzenDropDown @bind-Value="@currentPeyment" TextProperty="Text"
+                                                ValueProperty="Value" Style="width:100%"
+                                                Data="@(Enum.GetValues(typeof(PaymentStatus)).Cast<PaymentStatus>().Select(t => new { Text = $"{t}", Value = t }))" />
+                            </FilterTemplate>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="Penjualan" Context="item" Bubble="false" Filterable="false"
+                                          Sortable="false" TextAlign="TextAlign.Center" Width="65px">
+                            <Template Context="item">
+                                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list"
+                                              Size="ButtonSize.Medium"
+                                              Click="@(() => nav.NavigateTo($"/penjualan/realisasidetail/{item.Id}"))" />
+                            </Template>
+                        </RadzenGridColumn>
+                    </Columns>
+                </RadzenGrid>
+            }
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
 
 
 @code {
-    public class Employee
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-
-    }
 
     IEnumerable<Penjualan> penjualans;
 
-    IEnumerable<Customer> customers;
-
     PaymentStatus currentPeyment;
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
-        customers = await customerService.Get();
-        penjualans = await penjualanService.GetPenjualans();
+        penjualanService.GetPenjualans().ContinueWith(onComplete);
+        return Task.CompletedTask;
     }
+
+
+
+    public async void onComplete(Task<IEnumerable<Penjualan>> task)
+    {
+        var datas = await task;
+        penjualans = datas.OrderByDescending(x => x.CreateDate).ToList();
+        await InvokeAsync(() => StateHasChanged());
+    }
+
 
 }

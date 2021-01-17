@@ -11,8 +11,9 @@ using WebClient.Models;
 using Radzen;
 using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
-using Ocph.DAL;
 using ShareModels;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace WebClient
 {
@@ -35,6 +36,16 @@ namespace WebClient
                 options.KnownProxies.Add(IPAddress.Parse("194.59.165.198"));
             });
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+
+           
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
+                options.EnableDetailedErrors();
+            });
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddBlazoredLocalStorage();
@@ -47,8 +58,7 @@ namespace WebClient
             services.AddSingleton<IIncommingService,IncommingService>();
             services.AddScoped<HttpClient>();
             services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
-            services.AddOcphService();
-            services.AddScoped<OcphDbContext>();
+            services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IUserStateService, UserStateService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISupplierService, SupplierService>();
@@ -64,12 +74,15 @@ namespace WebClient
             services.AddScoped<ContextMenuService>();
 
             services.AddSignalR();
+            services.AddControllers().AddNewtonsoftJson(options =>
+             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+             );
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            ServiceLocator.Instance = app.ApplicationServices;
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -99,8 +112,8 @@ namespace WebClient
                 endpoints.MapFallbackToPage("/_Host");
                 endpoints.MapHub<ElishAppHub>("/elishapp");
                 endpoints.MapControllerRoute(
-                    name:"default", 
-                    pattern: "{controller=Report}/{action}/{id?}");
+                    name: "default",
+                    pattern: "{controller}/{action}/{id}");
             });
         }
     }

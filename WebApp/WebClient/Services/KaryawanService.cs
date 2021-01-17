@@ -10,26 +10,25 @@ namespace WebClient.Services
     public class KaryawanService : IKaryawanService
     {
 
-        private OcphDbContext dbContext;
-        private IUserService userService;
+        private readonly ApplicationDbContext dbContext;
+        private readonly IUserService userService;
 
-        public KaryawanService(OcphDbContext db, IUserService _userService)
+        public KaryawanService(ApplicationDbContext db, IUserService _userService)
         {
             dbContext = db;
             userService = _userService;
         }
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             try
             {
-                var existsModel = dbContext.Karyawans.Where(x => x.Id == id).FirstOrDefault();
+                var existsModel = dbContext.Karyawan.Where(x => x.Id == id).FirstOrDefault();
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");
 
-                var deleted = dbContext.Karyawans.Delete(x => x.Id == id);
-                if (deleted)
-                    throw new SystemException("Data Not Deleted !");
-                return Task.FromResult(deleted);
+                dbContext.Karyawan.Remove(existsModel);
+                await dbContext.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
@@ -39,13 +38,13 @@ namespace WebClient.Services
 
         public Task<Karyawan> Get(int id)
         {
-            var result = dbContext.Karyawans.Where(x => x.Id == id).FirstOrDefault();
+            var result = dbContext.Karyawan.Where(x => x.Id == id).FirstOrDefault();
             return Task.FromResult(result);
         }
 
         public Task<IEnumerable<Karyawan>> Get()
         {
-            var results = dbContext.Karyawans.Select().ToList();
+            var results = dbContext.Karyawan;
             return Task.FromResult(results.AsEnumerable());
         }
 
@@ -65,17 +64,22 @@ namespace WebClient.Services
             }
         }
 
-        public Task<bool> Update(int id, Karyawan value)
+        public async Task<bool> Update(int id, Karyawan value)
         {
-            var existsModel = dbContext.Karyawans.Where(x => x.Id == id).FirstOrDefault();
-            if (existsModel == null)
-                throw new SystemException("Data Not Found !");
+            try
+            {
+                var existsModel = dbContext.Karyawan.Where(x => x.Id == id).FirstOrDefault();
+                if (existsModel == null)
+                    throw new SystemException("Data Not Found !");
 
-            var updated = dbContext.Karyawans.Update(x => new { x.Address, x.Email, x.Name, x.Telepon },
-                value, x => x.Id == id);
-            if (!updated)
-                throw new SystemException("Data Not Saved !");
-            return Task.FromResult(updated);
+                dbContext.Entry(existsModel).CurrentValues.SetValues(value);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
     }

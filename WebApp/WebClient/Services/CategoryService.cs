@@ -8,25 +8,23 @@ namespace WebClient.Services
 {
     public class CategoryService : ICategoryService
     {
-        private OcphDbContext dbContext;
-        private IUserService userService;
-        public CategoryService(OcphDbContext db, IUserService _userService)
+        private readonly ApplicationDbContext dbContext;
+        public CategoryService(ApplicationDbContext db)
         {
             dbContext = db;
-            userService = _userService;
         }
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             try
             {
-                var existsModel = dbContext.Categories.Where(x => x.Id == id).FirstOrDefault();
+                var existsModel = dbContext.Category.Where(x => x.Id == id).FirstOrDefault();
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");
 
-                var deleted = dbContext.Categories.Delete(x => x.Id == id);
-                if (deleted)
-                    throw new SystemException("Data Not Deleted !");
-                return Task.FromResult(deleted);
+                dbContext.Category.Remove(existsModel);
+               await dbContext.SaveChangesAsync();
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -36,24 +34,23 @@ namespace WebClient.Services
 
         public Task<Category> Get(int id)
         {
-            var result = dbContext.Categories.Where(x => x.Id == id).FirstOrDefault();
+            var result = dbContext.Category.Where(x => x.Id == id).FirstOrDefault();
             return Task.FromResult(result);
         }
 
         public Task<IEnumerable<Category>> Get()
         {
-            var results = dbContext.Categories.Select().ToList();
+            var results = dbContext.Category;
             return Task.FromResult(results.AsEnumerable());
         }
 
-        public Task<Category> Post(Category value)
+        public async Task<Category> Post(Category value)
         {
             try
             {
-                value.Id = dbContext.Categories.InsertAndGetLastID(value);
-                if (value.Id <=0 )
-                    throw new SystemException("Data Not Saved !");
-                return Task.FromResult(value);
+                dbContext.Category.Add(value);
+                await dbContext.SaveChangesAsync();
+                return value;
             }
             catch (Exception ex)
             {
@@ -61,17 +58,26 @@ namespace WebClient.Services
             }
         }
 
-        public Task<bool> Update(int id, Category value)
+        public async Task<bool> Update(int id, Category value)
         {
-            var existsModel = dbContext.Categories.Where(x => x.Id == id).FirstOrDefault();
-            if (existsModel == null)
-                throw new SystemException("Data Not Found !");
+            try
+            {
+                var existsModel = dbContext.Category.Where(x => x.Id == id).FirstOrDefault();
+                if (existsModel == null)
+                    throw new SystemException("Data Not Found !");
 
-            var updated = dbContext.Categories.Update(x => new { x.Name, x.Description},
-                value, x => x.Id == id);
-            if (!updated)
-                throw new SystemException("Data Not Saved !");
-            return Task.FromResult(updated);
+                dbContext.Entry(existsModel).CurrentValues.SetValues(value);
+
+                var updated = await dbContext.SaveChangesAsync();
+                if (updated <= 0)
+                    throw new SystemException("Data Not Saved !");
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw new SystemException(ex.Message);
+            }
         }
 
     }

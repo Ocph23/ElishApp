@@ -44,6 +44,12 @@ using System.Threading.Tasks;
                 return Price * Amount;
             }
         }
+
+
+       
+
+        public virtual Penjualan Penjualan { get; set; }
+     
     }
 }
 

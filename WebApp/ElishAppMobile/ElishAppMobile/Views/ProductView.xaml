@@ -19,7 +19,13 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Margin="10" FontSize="20" FontAttributes="Bold" Text="Data Barang"></Label>
+        <StackLayout Margin="10">
+            <Label FontSize="20" FontAttributes="Bold" Text="Data Barang"></Label>
+            <StackLayout Orientation="Horizontal">
+                <Label VerticalOptions="CenterAndExpand"  FontAttributes="Bold" Text="Supplier"></Label>
+                <Picker WidthRequest="250" FontSize="Small"  ItemDisplayBinding="{Binding Nama}" SelectedItem="{Binding Supplier}" SelectedIndex="{Binding SupplierIndex}" ItemsSource="{Binding DataSuppliers}"></Picker>
+            </StackLayout>
+        </StackLayout>
         <RefreshView Grid.Row="1" x:DataType="local:ProductViewViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=Default}">
             <CollectionView x:Name="ItemsListView" 
                 ItemsSource="{Binding Items}"

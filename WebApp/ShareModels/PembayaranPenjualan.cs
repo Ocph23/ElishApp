@@ -24,6 +24,8 @@ namespace ShareModels
 
         [Required(ErrorMessage = "{0} is required")]
         public double PayValue { get; set; }
-       
+
+        public virtual Penjualan Penjualan { get; set; }
+
     }
 }

@@ -10,29 +10,28 @@ namespace WebClient.Services
   
     public class CustomerService : ICustomerService
     {
-        private readonly OcphDbContext dbContext;
+        private readonly ApplicationDbContext dbContext;
         private readonly IUserService userService;
         public ObservableCollection<Customer> CustomerCollection { get; set; }
 
-        public CustomerService(OcphDbContext db, IUserService _userService)
+        public CustomerService(ApplicationDbContext db, IUserService _userService)
         {
             dbContext = db;
             userService = _userService;
             CustomerCollection = new ObservableCollection<Customer>();
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             try
             {
-                var existsModel = dbContext.Customers.Where(x => x.Id == id).FirstOrDefault();
+                var existsModel = dbContext.Customer.Where(x => x.Id == id).FirstOrDefault();
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");
 
-                var deleted = dbContext.Customers.Delete(x => x.Id == id);
-                if (deleted)
-                    throw new SystemException("Data Not Deleted !");
-                return Task.FromResult(deleted);
+                dbContext.Customer.Remove(existsModel);
+               await dbContext.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {
@@ -49,7 +48,7 @@ namespace WebClient.Services
             }
             else
             {
-                customer = dbContext.Customers.Where(x => x.Id == id).FirstOrDefault();
+                customer = dbContext.Customer.Where(x => x.Id == id).FirstOrDefault();
             }
             return Task.FromResult(customer);
         }
@@ -58,7 +57,7 @@ namespace WebClient.Services
         {
             if(CustomerCollection==null || CustomerCollection.Count<=0)
             {
-                var data=dbContext.Customers.Select().ToList();
+                var data=dbContext.Customer;
                 if (data != null)
                 {
                     CustomerCollection = new ObservableCollection<Customer>(data);
@@ -85,16 +84,16 @@ namespace WebClient.Services
             }
         }
 
-        public Task<bool> Update(int id, Customer value)
+        public async Task<bool> Update(int id, Customer value)
         {
-            var existsModel = dbContext.Customers.Where(x => x.Id == id).FirstOrDefault();
+            var existsModel = dbContext.Customer.Where(x => x.Id == id).FirstOrDefault();
             if (existsModel == null)
                 throw new SystemException("Data Not Found !");
 
-            var updated = dbContext.Customers.Update(x => new { x.ContactName, x.Email,x.Address, x.Name, x.NPWP, x.Telepon },
-                value, x => x.Id == id);
-            if (!updated)
-                throw new SystemException("Data Not Saved !");
+
+            dbContext.Entry(existsModel).CurrentValues.SetValues(value);
+
+            await dbContext.SaveChangesAsync();
 
             var existOnModel = CustomerCollection.Where(x => x.Id == id).FirstOrDefault();
             if (existOnModel!=null)
@@ -108,7 +107,7 @@ namespace WebClient.Services
                 existOnModel.UserId = value.UserId;
             }
 
-            return Task.FromResult(updated);
+            return true;
         }
 
     }

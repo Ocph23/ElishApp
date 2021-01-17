@@ -62,9 +62,20 @@ namespace ElishAppMobile.Services
             }
         }
 
-        public Task<IEnumerable<Orderpenjualan>> GetOrders()
+        public async Task<IEnumerable<Orderpenjualan>> GetOrders()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var res = new RestService();
+                var response = await res.GetAsync($"{controller}/order");
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<IEnumerable<Orderpenjualan>>();
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         public Task<IEnumerable<Orderpenjualan>> GetOrdersByCustomerId(int supplierId)
