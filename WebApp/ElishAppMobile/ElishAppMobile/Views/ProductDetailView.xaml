@@ -51,9 +51,39 @@
                             <Label Text="Description" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.Description}"  Margin="10,0"/>
                         </StackLayout>
-                        <StackLayout Margin="5" Spacing="0">
+                        <StackLayout >
                             <Label Text="Picture" FontAttributes="Bold" FontSize="12"/>
-                    <Image Source="iamge2.png" HeightRequest="150" Margin="20"/>
+                            <CarouselView x:Name="TheCarousel" ItemsSource="{Binding Pictures}" HeightRequest="200" WidthRequest="200" IndicatorView="indicatorview">
+                                <CarouselView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout >
+                                            <StackLayout HorizontalOptions="CenterAndExpand">
+                                                <Frame CornerRadius="5" Padding="10" MinimumHeightRequest="150">
+                                                    <Grid Padding="20">
+                                                        <Image Source="{Binding ThumbView }" Aspect="AspectFill" WidthRequest="150" HeightRequest="150"  >
+                                                            <Image.GestureRecognizers >
+                                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.ShowImageCommand, Source={x:Reference TheCarousel}}" CommandParameter="{Binding .}"/>
+                                                            </Image.GestureRecognizers>
+                                                        </Image>
+                                                        <Image Source="remove.png" WidthRequest="35" Margin="-10" HorizontalOptions="End" VerticalOptions="Start">
+                                                            <Image.GestureRecognizers >
+                                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.RemoveImageCommand, Source={x:Reference TheCarousel}}" CommandParameter="{Binding .}"/>
+                                                            </Image.GestureRecognizers>
+                                                        </Image>
+                                                    </Grid>
+                                                </Frame>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CarouselView.ItemTemplate>
+                            </CarouselView>
+                            <IndicatorView
+                                x:Name="indicatorview"
+                                AbsoluteLayout.LayoutBounds="0.5,0.95,100,100"
+                                AbsoluteLayout.LayoutFlags="PositionProportional"
+                                IndicatorColor="LightGray"
+                                IndicatorSize="10"   
+                                SelectedIndicatorColor="Black" />
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>

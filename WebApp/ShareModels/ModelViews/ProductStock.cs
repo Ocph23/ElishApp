@@ -37,7 +37,5 @@ namespace ShareModels.ModelViews
                 _selected = value;
             }
         }
-
-        public virtual Supplier Supplier { get; set; }
     }
 }

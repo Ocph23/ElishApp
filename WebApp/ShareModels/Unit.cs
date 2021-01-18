@@ -23,19 +23,19 @@ namespace ShareModels
         public int ProductId { get; set; }
 
 
-        public Unit()
-        {
-            OrderpembelianItem = new HashSet<OrderpembelianItem>();
-            OrderPenjualanItem = new HashSet<OrderPenjualanItem>();
-            PembelianItem = new HashSet<PembelianItem>();
-            Penjualanitem = new HashSet<Penjualanitem>();
-        }
+        //public Unit()
+        //{
+        //    OrderpembelianItem = new HashSet<OrderpembelianItem>();
+        //    OrderPenjualanItem = new HashSet<OrderPenjualanItem>();
+        //    PembelianItem = new HashSet<PembelianItem>();
+        //    Penjualanitem = new HashSet<Penjualanitem>();
+        //}
 
-        public virtual Product Product { get; set; }
-        public virtual ICollection<OrderpembelianItem> OrderpembelianItem { get; set; }
-        public virtual ICollection<OrderPenjualanItem> OrderPenjualanItem { get; set; }
-        public virtual ICollection<PembelianItem> PembelianItem { get; set; }
-        public virtual ICollection<Penjualanitem> Penjualanitem { get; set; }
+        //public virtual Product Product { get; set; }
+        //public virtual ICollection<OrderpembelianItem> OrderpembelianItem { get; set; }
+        //public virtual ICollection<OrderPenjualanItem> OrderPenjualanItem { get; set; }
+        //public virtual ICollection<PembelianItem> PembelianItem { get; set; }
+        //public virtual ICollection<Penjualanitem> Penjualanitem { get; set; }
 
     }
 }

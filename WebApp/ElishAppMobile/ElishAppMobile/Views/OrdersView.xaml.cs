@@ -48,6 +48,7 @@ namespace ElishAppMobile.Views
     public class OrdesrViewModel : BaseViewModel
     {
         private ObservableCollection<Orderpenjualan> _SourceItems;
+        private bool fromdetail;
 
         public Command LoadItemsCommand { get; }
         public Command AddNewCommand { get; }
@@ -75,6 +76,7 @@ namespace ElishAppMobile.Views
 
         private void SelectCommandAction(object obj)
         {
+            fromdetail = true;
             var order = (Orderpenjualan)obj;
             var vm = new SalesOrderViewModel(order);
             var form = new Views.SalesOrderView() { BindingContext = vm };
@@ -92,30 +94,31 @@ namespace ElishAppMobile.Views
         {
             try
             {
-                Items.Clear();
-               if( await Account.UserInRole("Administrator"))
+                if (!fromdetail)
                 {
-                    var orders = await PenjualanService.GetOrders();
-                    if (orders != null)
+                    Items.Clear();
+                    if (await Account.UserInRole("Administrator"))
                     {
-                        _SourceItems = new ObservableCollection<Orderpenjualan>(orders);
+                        var orders = await PenjualanService.GetOrders();
+                        if (orders != null)
+                        {
+                            _SourceItems = new ObservableCollection<Orderpenjualan>(orders);
+                        }
+                    }
+                    else
+                    {
+                        var orderSales = await PenjualanService.GetOrdersBySalesId(Sales.Id);
+                        if (orderSales != null)
+                        {
+                            _SourceItems = new ObservableCollection<Orderpenjualan>(orderSales);
+                        }
+                    }
+
+                    foreach (var item in _SourceItems.OrderByDescending(x => x.Id))
+                    {
+                        Items.Add(item);
                     }
                 }
-                else
-                {
-                    var orderSales = await PenjualanService.GetOrdersBySalesId(Sales.Id);
-                    if (orderSales != null)
-                    {
-                        _SourceItems = new ObservableCollection<Orderpenjualan>(orderSales);
-                    }
-                }
-
-                foreach (var item in _SourceItems.OrderByDescending(x => x.Id))
-                {
-                    Items.Add(item);
-                }
-
-
             }
             catch (Exception ex)
             {
@@ -124,6 +127,7 @@ namespace ElishAppMobile.Views
             finally
             {
                 IsBusy = false;
+                fromdetail = false;
             }
         }
         public void OnAppearing()
@@ -156,9 +160,5 @@ namespace ElishAppMobile.Views
             }
             return Task.CompletedTask;
         }
-
-
-       
-
     }
 }

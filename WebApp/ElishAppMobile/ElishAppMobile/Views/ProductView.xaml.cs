@@ -56,7 +56,6 @@ namespace ElishAppMobile.Views
             DataSuppliers = new ObservableCollection<Supplier>();
             _SourceItems = new ObservableCollection<ProductStock>();
             ItemTapped = new Command<ProductStock>(OnItemSelected);
-            AddItemCommand = new Command(OnAddItem);
             ScanBarcode = new Command(ScanAction);
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             SearchScanCommand = new Command(SearchScanCommandAction);
@@ -131,19 +130,24 @@ namespace ElishAppMobile.Views
         {
             try
             {
-                var suppliers= await Suppliers.GetSuppliers();
-                DataSuppliers.Clear();
-                foreach (var supplier in suppliers)
+
+                if (!FromDetail)
                 {
-                    DataSuppliers.Add(supplier);
+                    var suppliers = await Suppliers.GetSuppliers();
+                    DataSuppliers.Clear();
+                    foreach (var supplier in suppliers)
+                    {
+                        DataSuppliers.Add(supplier);
+                    }
+                    Items.Clear();
+                    _SourceItems = new ObservableCollection<ProductStock>(await Products.GetProductStock());
+                    Supplier = DataSuppliers.FirstOrDefault();
+                    foreach (var item in _SourceItems.Where(x => x.SupplierId == Supplier.Id))
+                    {
+                        Items.Add(item);
+                    }
                 }
-                Items.Clear();
-                _SourceItems = new ObservableCollection<ProductStock>(await Products.GetProductStock());
-                Supplier = DataSuppliers.FirstOrDefault();
-                foreach (var item in _SourceItems.Where(x=>x.SupplierId==Supplier.Id))
-                {
-                    Items.Add(item);
-                }
+                
             }
             catch (Exception ex)
             {
@@ -152,6 +156,7 @@ namespace ElishAppMobile.Views
             finally
             {
                 IsBusy = false;
+                FromDetail = false;
             }
         }
 
@@ -171,10 +176,6 @@ namespace ElishAppMobile.Views
             }
         }
 
-        private async void OnAddItem(object obj)
-        {
-          //  await Shell.Current.GoToAsync(nameof(NewItemPage));
-        }
 
         async void OnItemSelected(ProductStock item)
         {
@@ -182,6 +183,7 @@ namespace ElishAppMobile.Views
                 return;
             else
             {
+                FromDetail = true;
                 var form = new ProductDetailView() { BindingContext=new ProductDetailViewModel(item)};
                 await Shell.Current.Navigation.PushAsync(form);
             }
@@ -215,10 +217,11 @@ namespace ElishAppMobile.Views
         public int SupplierIndex
         {
             get { return supplierIndex; }
-            set { SetProperty(ref supplierIndex , value);
-                if (DataSuppliers != null)
+            set { 
+                if(value>=0)
                 {
-                    Supplier = DataSuppliers[value];
+                    SetProperty(ref supplierIndex, value);
+                  
                 }
             }
         }
@@ -240,5 +243,6 @@ namespace ElishAppMobile.Views
             }
         }
 
+        public bool FromDetail { get; private set; }
     }
 }

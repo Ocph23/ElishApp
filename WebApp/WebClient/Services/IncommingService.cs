@@ -93,7 +93,7 @@ namespace WebClient.Services
             }
             else
             {
-                CreateNew(value.Id);
+               _= CreateNew(value.Id).Result;
             }
         }
 

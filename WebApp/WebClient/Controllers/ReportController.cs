@@ -27,14 +27,14 @@ namespace WebClient.Controllers
         private readonly IWebHostEnvironment _iwebhost;
         private readonly IPenjualanService _penjualanService;
         private readonly IPembelianService _pembelianService;
-        private readonly IOptions<AppSettings> _appSettings;
+        //private readonly IOptions<AppSettings> _appSettings;
 
-        public ReportController(IWebHostEnvironment iwebhost, IOptions<AppSettings> appSettings, IPembelianService pembelianService, IPenjualanService penjualanService)
+        public ReportController(IWebHostEnvironment iwebhost,  IPembelianService pembelianService, IPenjualanService penjualanService)
         {
             _iwebhost = iwebhost;
             _penjualanService = penjualanService;
             _pembelianService = pembelianService;
-            _appSettings = appSettings;
+          //  _appSettings = appSettings;
         }
 
         public async Task<ActionResult> PrintPenjualan(int id)
@@ -174,7 +174,7 @@ namespace WebClient.Controllers
                 return NotFound();
         }
 
-        private void SetParameter(Report report, ShareModels.Reports.NotaPenjualan nota)
+        private static void SetParameter(Report report, ShareModels.Reports.NotaPenjualan nota)
         {
             report.SetParameterValue("NomorSO", nota.PoNumber);
             report.SetParameterValue("NomorInvoice", nota.NomorInvoice);
@@ -188,7 +188,7 @@ namespace WebClient.Controllers
 
         }
 
-        private ShareModels.Reports.NotaPenjualan GetParameters(object dataParam, Type type)
+        private static ShareModels.Reports.NotaPenjualan GetParameters(object dataParam, Type type)
         {
             try
             {

@@ -179,5 +179,37 @@ namespace ElishAppMobile
                 throw new SystemException(ex.Message);
             }
         }
+
+        public async Task<ProductImage> AddPhoto(ProductImage image)
+        {
+            try
+            {
+                using var res = new RestService();
+                var response = await res.PostAsync($"{controller}/addphoto", res.GenerateHttpContent(image));
+                if (!response.IsSuccessStatusCode)
+                     throw new SystemException(await res.Error(response));
+                return await response.GetResult<ProductImage>();
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
+        public async Task<bool> RemovePhoto(int id)
+        {
+            try
+            {
+                using var res = new RestService();
+                var response = await res.DeleteAsync($"{controller}/removephoto/{id}");
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<bool>();
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
     }
 }

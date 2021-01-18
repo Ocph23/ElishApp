@@ -9,9 +9,6 @@ using System.Threading.Tasks;
 
 namespace WebClient.Services
 {
-
-   
-
     public class ProductService : IProductService
     {
         readonly ApplicationDbContext dbContext;
@@ -114,21 +111,30 @@ namespace WebClient.Services
         public Task<Product> Get(int id)
         {
             var results = dbContext.Product.Where(x=>x.Id==id)
-                .Include(x => x.Units).Include(x => x.Category);
+                 .Include(x => x.ProductImage)
+               .Include(x => x.Supplier)
+               .Include(x => x.Units)
+               .Include(x => x.Category).AsNoTracking();
             return Task.FromResult(results.FirstOrDefault());
         }
 
         public Task<IEnumerable<Product>> Get()
         {
             var results = dbContext.Product
-               .Include(x => x.Units).Include(x => x.Category);
+               .Include(x => x.ProductImage)
+               .Include(x => x.Supplier)
+               .Include(x => x.Units)
+               .Include(x => x.Category).AsNoTracking();
             return Task.FromResult(results.AsEnumerable());
         }
 
         public Task<IEnumerable<Product>> GetProductsBySupplier(int id)
         {
             var results = dbContext.Product.Where(x => x.SupplierId == id)
-                .Include(x => x.Supplier);
+               .Include(x => x.ProductImage)
+               .Include(x => x.Supplier)
+               .Include(x => x.Units)
+               .Include(x => x.Category).AsNoTracking();
             return Task.FromResult(results.AsEnumerable());
         }
 
@@ -173,6 +179,7 @@ namespace WebClient.Services
             try
             {
                 var result = dbContext.Product
+                    .Include(x => x.ProductImage)
                     .Include(x=>x.Supplier)
                     .Include(x=>x.Category)
                     .Include(x => x.PembelianItem)
@@ -192,7 +199,7 @@ namespace WebClient.Services
                         Pembelian = x.PembelianItem.Sum(x=>x.Amount * x.Unit.Amount),
                         Penjualan = x.PenjualanItem.Sum(x=>x.Amount * x.Unit.Amount),
                         Size = x.Size,
-                        Units = x.Units,
+                        Units = x.Units, ProductImage= x.ProductImage,  
                         SelectedUnit= x.Units.FirstOrDefault(),
                     }).ToList();
 
@@ -210,6 +217,60 @@ namespace WebClient.Services
             catch (Exception ex)
             {
                 logger.LogError(ex.Message);
+                throw new SystemException(ex.Message);
+            }
+        }
+
+        public async Task<ProductImage> AddPhoto(ProductImage image)
+        {
+            try
+            {
+                image.FileName = Helper.CreateFileName("image");
+                image.Thumb = Helper.CreateFileName("image");
+                System.IO.File.WriteAllBytes(Helper.ImagePath + image.FileName, image.Buffer);
+                System.IO.File.WriteAllBytes(Helper.ThumbPath + image.Thumb, Helper.CreateThumb(image.Buffer));
+                dbContext.ProductImage.Add(image);
+                await dbContext.SaveChangesAsync();
+                if (image.Id <= 0)
+                    throw new SystemException("Data Not Saved !");
+
+                image.Buffer = null;
+                return (image);
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
+        public async Task<bool> RemovePhoto(int id)
+        {
+            try
+            {
+                var data = dbContext.ProductImage.SingleOrDefault(x => x.Id == id);
+                if (data == null)
+                    throw new SystemException("Data Not Found !");
+
+                var file = Helper.ImagePath + data.FileName;
+                var thumb = Helper.ThumbPath + data.Thumb;
+
+                if (System.IO.File.Exists(file))
+                {
+                    System.IO.File.Delete(file);
+                }
+
+                if (System.IO.File.Exists(thumb))
+                {
+                    System.IO.File.Delete(thumb);
+                }
+
+                dbContext.ProductImage.Remove(data);
+                await dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
                 throw new SystemException(ex.Message);
             }
         }

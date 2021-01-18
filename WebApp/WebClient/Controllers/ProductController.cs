@@ -79,6 +79,33 @@ namespace WebClient.Controllers
         }
 
 
+        [HttpPost("AddPhoto")]
+        public async Task<IActionResult> Addphoto(ProductImage value)
+        {
+            try
+            {
+                return Ok(await service.AddPhoto(value));
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ErrorMessage(ex.Message));
+            }
+        }
+
+        [HttpDelete("RemovePhoto/{id}")]
+        public async Task<IActionResult> RemovePhoto(int id)
+        {
+            try
+            {
+                return Ok(await service.RemovePhoto(id));
+            }
+            catch (Exception ex)
+            {
+                return Ok(new ErrorMessage(ex.Message));
+            }
+        }
+
+
         // POST api/<UnitController>
         [HttpPost("AddUnit/{productId}")]
         public async Task<IActionResult> AddUnit(int productId, [FromBody] Unit value)

@@ -48,6 +48,7 @@ using System.Threading.Tasks;
         public virtual ICollection<OrderPenjualanItem> Orderpenjualanitem { get; set; }
         public virtual ICollection<PembelianItem> PembelianItem { get; set; }
         public virtual ICollection<Penjualanitem> PenjualanItem { get; set; }
+        public virtual ICollection<ProductImage> ProductImage { get; set; }
     }
 }
 

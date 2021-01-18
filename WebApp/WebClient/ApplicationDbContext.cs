@@ -31,6 +31,7 @@ namespace WebClient
         public virtual DbSet<Penjualan> Penjualan { get; set; }
         public virtual DbSet<Penjualanitem> Penjualanitem { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<ProductImage> ProductImage { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<Supplier> Supplier { get; set; }
         public virtual DbSet<Unit> Unit { get; set; }
@@ -168,11 +169,11 @@ namespace WebClient
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_OrderPembelianItem_Product1");
 
-                entity.HasOne(d => d.Unit)
-                    .WithMany(p => p.OrderpembelianItem)
-                    .HasForeignKey(d => d.UnitId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_PembelianItem_Unit1");
+                //entity.HasOne(d => d.Unit)
+                //    .WithMany(p => p.OrderpembelianItem)
+                //    .HasForeignKey(d => d.UnitId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("fk_PembelianItem_Unit1");
             });
 
             modelBuilder.Entity<Orderpenjualan>(entity =>
@@ -222,11 +223,11 @@ namespace WebClient
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_OrderPenjualanItem_Product1");
 
-                entity.HasOne(d => d.Unit)
-                    .WithMany(p => p.OrderPenjualanItem)
-                    .HasForeignKey(d => d.UnitId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_PenjualanItem_Unit1");
+                //entity.HasOne(d => d.Unit)
+                //    .WithMany(p => p.OrderPenjualanItem)
+                //    .HasForeignKey(d => d.UnitId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("fk_PenjualanItem_Unit1");
             });
 
             modelBuilder.Entity<Pembayaranpembelian>(entity =>
@@ -304,11 +305,11 @@ namespace WebClient
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_OrderPembelianItem_Product10");
 
-                entity.HasOne(d => d.Unit)
-                    .WithMany(p => p.PembelianItem)
-                    .HasForeignKey(d => d.UnitId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_PembelianItem_Unit10");
+                //entity.HasOne(d => d.Unit)
+                //    .WithMany(p => p.PembelianItem)
+                //    .HasForeignKey(d => d.UnitId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("fk_PembelianItem_Unit10");
             });
 
             modelBuilder.Entity<Penjualan>(entity =>
@@ -350,12 +351,13 @@ namespace WebClient
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_OrderPembelianItem_Product100");
 
-                entity.HasOne(d => d.Unit)
-                    .WithMany(p => p.Penjualanitem)
-                    .HasForeignKey(d => d.UnitId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_PembelianItem_Unit100");
+                //entity.HasOne(d => d.Unit)
+                //    .WithMany(p => p.Penjualanitem)
+                //    .HasForeignKey(d => d.UnitId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("fk_PembelianItem_Unit100");
             });
+
 
             modelBuilder.Entity<Product>(entity =>
             {
@@ -384,6 +386,15 @@ namespace WebClient
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Product_Category");
+            });
+
+            modelBuilder.Entity<ProductImage>(entity=> {
+                entity.HasIndex(e => e.ProductId)
+                    .HasName("fk_ProductImage_Product1");
+                entity.Property(e => e.FileName).HasMaxLength(200);
+                entity.Property(e => e.Thumb).HasMaxLength(200);
+                entity.Property(e => e.FileType).HasMaxLength(200);
+
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -433,11 +444,11 @@ namespace WebClient
 
                 entity.Property(e => e.Name).HasMaxLength(45);
 
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.Units)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_Unit_Product1");
+                //entity.HasOne(d => d.Product)
+                //    .WithMany(p => p.Units)
+                //    .HasForeignKey(d => d.ProductId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("fk_Unit_Product1");
             });
 
             modelBuilder.Entity<User>(entity =>

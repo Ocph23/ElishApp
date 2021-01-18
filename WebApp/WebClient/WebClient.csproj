@@ -102,6 +102,8 @@
  </ItemGroup>
  <ItemGroup>
    <Folder Include="wwwroot\fonts\" />
+   <Folder Include="wwwroot\images\thumbs\" />
+   <Folder Include="wwwroot\images\products\" />
  </ItemGroup>
  <ItemGroup>
    <ProjectReference Include="..\ShareModels\ShareModels.csproj" />

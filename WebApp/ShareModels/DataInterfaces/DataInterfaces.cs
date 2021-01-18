@@ -102,6 +102,8 @@ namespace ShareModels
         Task<Unit> AddUnit(int productId, Unit unit);
         Task<Unit> UpdateUnit(int unitId, Unit unit);
         Task<IEnumerable<ProductStock>> GetProductStock();
+        Task<ProductImage> AddPhoto(ProductImage image);
+        Task<bool> RemovePhoto(int id);
     }
 
     public interface ISupplierService
