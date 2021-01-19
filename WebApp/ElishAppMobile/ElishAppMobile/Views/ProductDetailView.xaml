@@ -41,12 +41,10 @@
 
                             </StackLayout>
                         </StackLayout>
-
                         <StackLayout Margin="5" Spacing="0">
                             <Label Text="Sisa Stock" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.Stock}" Margin="10,0"/>
                         </StackLayout>
-
                         <StackLayout Margin="5" Spacing="0">
                             <Label Text="Description" FontAttributes="Bold" FontSize="12"/>
                             <Label Text="{Binding Model.Description}"  Margin="10,0"/>
