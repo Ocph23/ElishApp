@@ -3,6 +3,7 @@ using ShareModels.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 
 namespace ElishAppMobile.Models
 {
@@ -25,7 +26,8 @@ namespace ElishAppMobile.Models
             {
                 if (!string.IsNullOrEmpty(FileName))
                 {
-                    return new Uri($"{Helper.Url}/images/products/{FileName}");
+                    var uri= new   Uri($"{Helper.Url}/images/products/{FileName}");
+                    return uri;
                 }
                 else
                     return new Uri($"noimage.png");

@@ -30,7 +30,7 @@ namespace WebClient.Api
             }
             catch (System.Exception ex)
             {
-                return this.OnError(ex);
+                return BadRequest(new ErrorMessage(ex.Message));
             }
         }
 
@@ -66,7 +66,7 @@ namespace WebClient.Api
             }
             catch (System.Exception ex)
             {
-               return this.OnError(ex);
+                return BadRequest(new ErrorMessage(ex.Message));
             }
         }
 
@@ -103,7 +103,7 @@ namespace WebClient.Api
             }
             catch (System.Exception ex)
             {
-                return this.OnError(ex);
+               return BadRequest(new ErrorMessage(ex.Message));
             }
         }
 

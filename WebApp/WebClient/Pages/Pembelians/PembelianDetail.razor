@@ -131,7 +131,7 @@
                     <RadzenGridColumn Width="120px" TItem="PembelianItem" Property="Product.CodeArticle" Title="Article" />
                     <RadzenGridColumn Width="180px" TItem="PembelianItem" Property="Product.CodeName" Title="Code" />
                     <RadzenGridColumn  TItem="PembelianItem" Property="Product.Name" Title="Product" />
-                    <RadzenGridColumn Width="75px" TItem="PembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
+                    <RadzenGridColumn Width="85px" TItem="PembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
                         <Template Context="data">
                             @data.Amount
                         </Template>
@@ -154,7 +154,7 @@
                             <RadzenNumeric @bind-Value="item.Price" Step="0.25" />
                         </EditTemplate>
                         <FooterTemplate>
-                            <div>Total</div>
+                            <div>Total</div> 
                             <div>Discount</div>
                             <div>Total Payment </div>
                         </FooterTemplate>
@@ -480,8 +480,8 @@
         }
 
 
-        var productStok = products.Where(x => x.Id == item.ProductId).FirstOrDefault();
-        if (productStok != null)
+      //  var productStok = products.Where(x => x.Id == item.ProductId).FirstOrDefault();
+        @*if (productStok != null)
         {
             var readyStok = productStok.Stock / item.Unit.Amount;
             if (item.Amount > readyStok)
@@ -493,7 +493,7 @@
                 });
                 item.Amount = readyStok;
             }
-        }
+        }*@
 
 
         StateHasChanged();

@@ -49,7 +49,7 @@ namespace WebClient.Services
 
         }
 
-        public Task<Unit> AddUnit(int productId, Unit unit)
+        public async Task<Unit> AddUnit(int productId, Unit unit)
         {
             try
             {
@@ -57,10 +57,11 @@ namespace WebClient.Services
                 var lastUnit = units.LastOrDefault();
                 unit.Level = lastUnit == null ? 0 : lastUnit.Level + 1;
                 dbContext.Unit.Add(unit);
+                await dbContext.SaveChangesAsync();
                 if (unit.Id <= 0)
                     throw new SystemException($"Unit '{unit.Name}' Not Saved !");
 
-                return Task.FromResult(unit);
+                return unit;
             }
             catch (Exception ex)
             {

@@ -17,7 +17,7 @@ namespace ElishAppMobile.Views
         public ShowImagePage(ProductImageModel model)
         {
           InitializeComponent();
-          pinchImage.Source= ImageSource.FromUri(model.PhotoView);
+          pinchImage.Source= model.PhotoView;
         }
 
         public ImageSource Photo { get; }

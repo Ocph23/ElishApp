@@ -32,7 +32,7 @@ namespace WebClient.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new ErrorMessage(ex.Message));
+                return BadRequest(new ErrorMessage(ex.Message));
             }
         }
 
@@ -47,7 +47,7 @@ namespace WebClient.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new ErrorMessage(ex.Message));
+                return BadRequest(new ErrorMessage(ex.Message));
             }
         }
 
@@ -62,7 +62,7 @@ namespace WebClient.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new ErrorMessage(ex.Message));
+                return BadRequest(new ErrorMessage(ex.Message));
             }
         }
 
@@ -76,7 +76,7 @@ namespace WebClient.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new ErrorMessage(ex.Message));
+                return BadRequest(new ErrorMessage(ex.Message));
             }
         }
 
@@ -90,7 +90,7 @@ namespace WebClient.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new ErrorMessage(ex.Message));
+                return BadRequest(new ErrorMessage(ex.Message));
             }
         }
 
@@ -105,7 +105,7 @@ namespace WebClient.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new ErrorMessage(ex.Message));
+                return BadRequest(new ErrorMessage(ex.Message));
             }
         }
 
@@ -121,7 +121,7 @@ namespace WebClient.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new ErrorMessage(ex.Message));
+                return BadRequest(new ErrorMessage(ex.Message));
             }
         }
     }

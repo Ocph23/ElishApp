@@ -63,6 +63,7 @@
    <Watch Remove="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
    <Watch Remove="Pages\Prints\NotaPenjualan.razor" />
    <Watch Remove="Pages\Reports\ReportPenjualan.razor" />
+   <Watch Remove="Pages\Reports\ReportStock.razor" />
    <Watch Remove="Pages\ShareComponent\PrintLayout.razor" />
    <Watch Remove="Pages\Suppliers\SupplierProductAddView.razor" />
    <Watch Remove="Shared\LoadingScreen.razor" />
@@ -80,6 +81,7 @@
    <None Include="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
    <None Include="Pages\Prints\NotaPenjualan.razor" />
    <None Include="Pages\Reports\ReportPenjualan.razor" />
+   <None Include="Pages\Reports\ReportStock.razor" />
    <None Include="Shared\PrintLayout.razor" />
    <None Include="Shared\LoadingScreen.razor" />
    <None Include="wwwroot\images\clearicon.png" />
@@ -98,6 +100,7 @@
  </ItemGroup>
  <ItemGroup>
    <_ContentIncludedByDefault Remove="Pages\Reports\ReportPenjualan.razor" />
+   <_ContentIncludedByDefault Remove="Pages\Reports\ReportStock.razor" />
    <_ContentIncludedByDefault Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
  <ItemGroup>
@@ -115,5 +118,8 @@
  </ItemGroup>
  <ItemGroup>
    <UpToDateCheckInput Remove="Pages\Reports\ReportPenjualan.razor" />
+ </ItemGroup>
+ <ItemGroup>
+   <UpToDateCheckInput Remove="Pages\Reports\ReportStock.razor" />
  </ItemGroup>
 </Project>

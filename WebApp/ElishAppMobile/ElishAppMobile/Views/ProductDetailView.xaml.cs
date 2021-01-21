@@ -83,6 +83,8 @@ namespace ElishAppMobile.Views
         {
             try
             {
+                IsBusy = true;
+
                 if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
                 {
                     await MessageHelper.ErrorAsync(":( Permission not granted to photos.");
@@ -122,6 +124,10 @@ namespace ElishAppMobile.Views
             catch (Exception ex)
             {
                await MessageHelper.ErrorAsync(ex.Message);
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

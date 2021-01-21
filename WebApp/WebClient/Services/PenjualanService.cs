@@ -91,11 +91,15 @@ namespace WebClient.Services
                     if (item.Id <= 0)
                     {
                         item.PenjualanId = order.Id;
+                        if (item.Product != null)
+                            dbContext.Entry(item.Product).State = EntityState.Unchanged;
                         dbContext.Penjualanitem.Add(item);
                     }
                     else
                     {
                         var oldItem = lastPenjualan.Items.SingleOrDefault(x => x.Id == item.Id);
+                        if (item.Product != null)
+                            dbContext.Entry(item.Product).State = EntityState.Unchanged;
                         dbContext.Entry(oldItem).CurrentValues.SetValues(item);
                     }
                 }

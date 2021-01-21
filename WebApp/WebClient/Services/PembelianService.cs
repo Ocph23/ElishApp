@@ -53,10 +53,6 @@ namespace WebClient.Services
 
                     pembelian.Items.Add(data);
 
-                    if (data.Id <= 0)
-                        throw new SystemException("Item Pembelian Not Saved !");
-                    pembelian.Items.Add(data);
-
                 }
 
                 dbContext.Pembelian.Add(pembelian);
@@ -74,12 +70,12 @@ namespace WebClient.Services
                 {
                     _logger.LogError(ex.Message);
                     trans.Rollback();
+                    throw new SystemException(ex.Message);
                 }
                 catch (System.Exception exx)
                 {
                     throw new SystemException(exx.Message);
                 }
-                throw new SystemException(ex.Message);
             }
         }
       

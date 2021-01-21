@@ -1,10 +1,7 @@
-﻿<div class="justPrint">
-@ChildContent
+﻿@inherits LayoutComponentBase
+
+<div class="container">
+    @Body
 </div>
 
 
-
-@code{
-    [Parameter]
-    public RenderFragment ChildContent { get; set; }
-}

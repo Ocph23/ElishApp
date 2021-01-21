@@ -1,4 +1,5 @@
 ﻿using ElishAppMobile.Services;
+using FFImageLoading;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
@@ -35,6 +36,14 @@ namespace ElishAppMobile
 
         private async void Load()
         {
+
+            var config = new FFImageLoading.Config.Configuration()
+            {
+                ExecuteCallbacksOnUIThread = true,
+                 HttpClient= new System.Net.Http.HttpClient(RestService.GetHandler())
+            };
+
+            ImageService.Instance.Initialize(config);
             MessagingCenter.Subscribe<MessageDataCenter>(this, "message", async (sender) => {
                 await MainPage.DisplayAlert(sender.Title, sender.Message, sender.Cancel = "Close");
             });

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:model="clr-namespace:ShareModels;assembly=ShareModels"
+             xmlns:model="clr-namespace:ShareModels;assembly=ShareModels" xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Title="Detail Product"
              x:Class="ElishAppMobile.Views.ProductDetailView">
     <ContentPage.ToolbarItems>
@@ -10,6 +10,7 @@
     <ContentPage.Content>
         <ScrollView Padding="20" >
             <StackLayout>
+                
                 <StackLayout Grid.Row="1" Margin="10">
                     <StackLayout>
                         <StackLayout Margin="5" Spacing="0">
@@ -51,37 +52,43 @@
                         </StackLayout>
                         <StackLayout >
                             <Label Text="Picture" FontAttributes="Bold" FontSize="12"/>
-                            <CarouselView x:Name="TheCarousel" ItemsSource="{Binding Pictures}" HeightRequest="200" WidthRequest="200" IndicatorView="indicatorview">
-                                <CarouselView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackLayout >
-                                            <StackLayout HorizontalOptions="CenterAndExpand">
-                                                <Frame CornerRadius="5" Padding="10" MinimumHeightRequest="150">
-                                                    <Grid Padding="20">
-                                                        <Image Source="{Binding ThumbView }" Aspect="AspectFill" WidthRequest="150" HeightRequest="150"  >
-                                                            <Image.GestureRecognizers >
-                                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.ShowImageCommand, Source={x:Reference TheCarousel}}" CommandParameter="{Binding .}"/>
-                                                            </Image.GestureRecognizers>
-                                                        </Image>
-                                                        <Image Source="remove.png" WidthRequest="35" Margin="-10" HorizontalOptions="End" VerticalOptions="Start">
-                                                            <Image.GestureRecognizers >
-                                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.RemoveImageCommand, Source={x:Reference TheCarousel}}" CommandParameter="{Binding .}"/>
-                                                            </Image.GestureRecognizers>
-                                                        </Image>
-                                                    </Grid>
-                                                </Frame>
-                                            </StackLayout>
-                                        </StackLayout>
-                                    </DataTemplate>
-                                </CarouselView.ItemTemplate>
-                            </CarouselView>
-                            <IndicatorView
+                            <StackLayout>
+                                <IndicatorView
                                 x:Name="indicatorview"
                                 AbsoluteLayout.LayoutBounds="0.5,0.95,100,100"
                                 AbsoluteLayout.LayoutFlags="PositionProportional"
                                 IndicatorColor="LightGray"
                                 IndicatorSize="10"   
                                 SelectedIndicatorColor="Black" />
+                                <CarouselView x:Name="TheCarousel" ItemsSource="{Binding Pictures}" WidthRequest="150" HeightRequest="200"  IndicatorView="indicatorview">
+                                    <CarouselView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout  >
+                                                <Grid HorizontalOptions="CenterAndExpand" WidthRequest="200">
+
+                                                    <Frame CornerRadius="5" WidthRequest="180" Padding="10" >
+                                                        <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center"
+                                                                                    HeightRequest="150" WidthRequest="180" Aspect="AspectFill"
+                                                                                    DownsampleToViewSize="true" Source = "{Binding ThumbView}">
+                                                            <ffimageloading:CachedImage.GestureRecognizers >
+                                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.ShowImageCommand, Source={x:Reference TheCarousel}}" CommandParameter="{Binding .}"/>
+                                                            </ffimageloading:CachedImage.GestureRecognizers>
+                                                        </ffimageloading:CachedImage>
+                                                    </Frame>
+                                                    <Image Source="remove.png" WidthRequest="30" Margin="0" HorizontalOptions="End" VerticalOptions="Start">
+                                                        <Image.GestureRecognizers >
+                                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.RemoveImageCommand, Source={x:Reference TheCarousel}}" CommandParameter="{Binding .}"/>
+                                                        </Image.GestureRecognizers>
+                                                    </Image>
+                                                </Grid>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CarouselView.ItemTemplate>
+                                </CarouselView>
+                                
+                              
+                            </StackLayout>
+                           
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>

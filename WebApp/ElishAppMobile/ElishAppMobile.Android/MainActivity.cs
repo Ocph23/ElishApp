@@ -23,6 +23,7 @@ namespace ElishAppMobile.Droid
             base.OnCreate(savedInstanceState);
            Forms.SetFlags( new string[] { "SwipeView_Experimental" , "Expander_Experimental" , "RadioButton_Experimental" });
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: true);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             LoadApplication(new App());

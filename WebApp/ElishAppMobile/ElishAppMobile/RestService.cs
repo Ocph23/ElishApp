@@ -12,9 +12,17 @@ namespace ElishAppMobile
 {
     public class RestService : HttpClient
     {
+
+        public static  HttpClientHandler GetHandler()
+        {
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            return clientHandler;
+        }
+
         public static string DeviceToken { get; set; }
 
-        public RestService():base(DependencyService.Get<Helpers.IHTTPClientHandlerCreationService>().GetInsecureHandler())
+        public RestService() : base(GetHandler()) ////:base(DependencyService.Get<Helpers.IHTTPClientHandlerCreationService>().GetInsecureHandler())
         {
             string _server = Helper.Url;
             this.BaseAddress = new Uri(_server);
