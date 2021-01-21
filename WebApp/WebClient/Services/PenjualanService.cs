@@ -388,10 +388,9 @@ namespace WebClient.Services
 
                 var status = sisa > 0 ? PaymentStatus.DownPayment : PaymentStatus.PaidOff;
                 penjualan.Status = status;
-                penjualan.OrderPenjualan.Status = OrderStatus.Complete;
-
-               await dbContext.SaveChangesAsync();
                 dbContext.Pembayaranpenjualan.Add(pembayaran);
+                penjualan.OrderPenjualan.Status = OrderStatus.Complete;
+                await dbContext.SaveChangesAsync();
                 trans.Commit();
                 return pembayaran;
             }

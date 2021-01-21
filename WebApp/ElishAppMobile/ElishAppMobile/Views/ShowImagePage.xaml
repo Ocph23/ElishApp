@@ -9,8 +9,8 @@
             <local:PinchToZoomContainer >
                 <local:PinchToZoomContainer.Content>
                     <ffimageloading:CachedImage  x:Name="pinchImage" 
-                                                                                    Aspect="AspectFill"
-                                                                                    DownsampleToViewSize="true" >
+                           Aspect="Fill"
+                           DownsampleToViewSize="true" >
                     </ffimageloading:CachedImage>
                 </local:PinchToZoomContainer.Content>
             </local:PinchToZoomContainer>

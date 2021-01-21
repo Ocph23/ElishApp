@@ -77,9 +77,9 @@ namespace ElishAppMobile.Views
                         var data = products.Where(x => x.CodeArticle == result.Article).FirstOrDefault();
                         if (data != null)
                         {
-                            await Shell.Current.Navigation.PopModalAsync();
                             var detailForm = new ProductDetailView() { BindingContext = new ProductDetailViewModel(data) };
-                            await Shell.Current.Navigation.PushModalAsync(detailForm);
+                            await Shell.Current.Navigation.PushAsync(detailForm);
+                            await Shell.Current.Navigation.PopModalAsync();
                             return;
                         }
                     }

@@ -66,10 +66,10 @@
                                             <StackLayout  >
                                                 <Grid HorizontalOptions="CenterAndExpand" WidthRequest="200">
 
-                                                    <Frame CornerRadius="5" WidthRequest="180" Padding="10" >
+                                                    <Frame CornerRadius="5" WidthRequest="180" Padding="10" Margin="2" >
                                                         <ffimageloading:CachedImage HorizontalOptions="Center" VerticalOptions="Center"
-                                                                                    HeightRequest="150" WidthRequest="180" Aspect="AspectFill"
-                                                                                    DownsampleToViewSize="true" Source = "{Binding ThumbView}">
+                                                                                    HeightRequest="200" WidthRequest="180" Aspect="Fill"
+                                                                                    DownsampleToViewSize="true" Source = "{Binding PhotoView}">
                                                             <ffimageloading:CachedImage.GestureRecognizers >
                                                                 <TapGestureRecognizer Command="{Binding Path=BindingContext.ShowImageCommand, Source={x:Reference TheCarousel}}" CommandParameter="{Binding .}"/>
                                                             </ffimageloading:CachedImage.GestureRecognizers>

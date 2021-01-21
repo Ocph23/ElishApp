@@ -47,7 +47,7 @@ namespace WebClient
                 OriginalImage = System.Drawing.Image.FromStream(ms);
 
                 // Shrink the Original Image to a thumbnail size.
-                imThumbnailImage = OriginalImage.GetThumbnailImage(100, 100, new System.Drawing.Image.GetThumbnailImageAbort(ThumbnailCallBack), IntPtr.Zero);
+                imThumbnailImage = OriginalImage.GetThumbnailImage(300, 300, new System.Drawing.Image.GetThumbnailImageAbort(ThumbnailCallBack), IntPtr.Zero);
 
                 // Save Thumbnail to Memory Stream for Conversion to Byte Array.
                 MemoryStream myMS = new MemoryStream();
