@@ -169,14 +169,12 @@ namespace WebClient.Services
                     model.Email = userName[0..5];
                 }
 
-                User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email) };
+                User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email), Activated=true };
                 _context.User.Add(user);
-
+                await _context.SaveChangesAsync();
                 var role = _context.Role.Where(x => x.Name == "customer").FirstOrDefault();
                 _context.Userrole.Add(new Userrole { RoleId = role.Id, UserId = user.Id });
-
                 model.UserId = user.Id;
-
                 _context.Customer.Add(model);
                 await _context.SaveChangesAsync();
                 trans.Commit();
@@ -200,12 +198,12 @@ namespace WebClient.Services
                     model.Email = userName[0..5];
                 }
 
-                User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email) };
+                User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email), Activated=true };
                 _context.User.Add(user);
-
-                var role = _context.Role.Where(x => x.Name == "Sales").FirstOrDefault();
-                _context.Userrole.Add(new Userrole { RoleId = role.Id, UserId = user.Id });
+                await _context.SaveChangesAsync();
                 model.UserId = user.Id;
+                var role = _context.Role.Where(x => x.Name == "Sales").AsNoTracking().FirstOrDefault();
+                _context.Userrole.Add(new Userrole { RoleId = role.Id, UserId = user.Id });
                 _context.Karyawan.Add(model);
                 await _context.SaveChangesAsync();
                 trans.Commit();

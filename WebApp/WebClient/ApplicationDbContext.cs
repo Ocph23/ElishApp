@@ -50,6 +50,7 @@ namespace WebClient
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<Category>(entity =>
             {
                // //entity.ToTable("category");
@@ -464,9 +465,6 @@ namespace WebClient
 
             modelBuilder.Entity<Userrole>(entity =>
             {
-                entity.HasNoKey();
-
-                //entity.ToTable("userrole");
 
                 entity.HasIndex(e => e.RoleId)
                     .HasName("fk_UserRole_Role1_idx");
