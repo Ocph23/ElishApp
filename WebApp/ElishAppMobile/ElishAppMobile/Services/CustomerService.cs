@@ -1,4 +1,6 @@
-﻿using ShareModels;
+﻿using ElishAppMobile.Models;
+using ElishAppMobile.Services;
+using ShareModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,20 +55,40 @@ namespace ElishAppMobile
         {
             try
             {
-                if (CustomerCollection.Any())
-                    return CustomerCollection.ToList();
-
-                using var res = new RestService();
-                var response = await res.GetAsync($"{controller}");
-                if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
-                var results = await response.GetResult<IEnumerable<Customer>>();
-                CustomerCollection.Clear();
-                foreach (var item in results)
+                if (!CustomerCollection.Any())
                 {
-                    CustomerCollection.Add(item);
+                    var connection = Helper.CheckInterNetConnection();
+                    var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                    if (connection.Item1)
+                    {
+                        using var res = new RestService();
+                        var response = await res.GetAsync($"{controller}");
+                        if (!response.IsSuccessStatusCode)
+                            await res.Error(response);
+                        var results = await response.GetResult<IEnumerable<Customer>>();
+                        CustomerCollection.Clear();
+                        foreach (var item in results)
+                        {
+                            CustomerCollection.Add(item);
+                        }
+
+                      _= db.Save<SqlDataModelCustomer, Customer>(results);
+
+                    }
+                    else
+                    {
+                        var datas = await db.Get<SqlDataModelCustomer, Customer>();
+                        CustomerCollection.Clear();
+                        foreach (var item in datas)
+                        {
+                            CustomerCollection.Add(item);
+                        }
+                    }
                 }
-                return results;
+                return CustomerCollection.ToList();
+
+
+
             }
             catch (Exception ex)
             {

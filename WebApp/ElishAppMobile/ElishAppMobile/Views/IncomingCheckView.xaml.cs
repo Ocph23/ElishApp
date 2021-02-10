@@ -185,7 +185,7 @@ namespace ElishAppMobile.Views
         }
      
 
-        private async void OnAddItem(object obj)
+        private  void OnAddItem(object obj)
         {
             //await Shell.Current.GoToAsync(nameof(NewItemPage));
         }

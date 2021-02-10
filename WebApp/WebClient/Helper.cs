@@ -10,6 +10,10 @@ namespace WebClient
 {
     public static class Helper
     {
+        public static string ApplicationName => "Alpha Papua Sejahterah";
+        public static string DirectorName => "Herman Hamid";
+        public static string OfficeTelp => "08114810279";
+
         public static DataTable ToDataTable<T>(this List<T> data)
         {
             PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
@@ -31,7 +35,6 @@ namespace WebClient
         public static string ThumbPath => Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/thumbs/");
         public static string ProfilePath => Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles/");
         public static string LogoPath => Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/logo/");
-
 
         public static byte[] CreateThumb(byte[] byteArray)
         {

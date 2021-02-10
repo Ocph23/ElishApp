@@ -6,7 +6,7 @@
              xmlns:model="clr-namespace:ShareModels;assembly=ShareModels"
              x:Class="ElishAppMobile.Views.OrdesrView">
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="plus.png"  Command="{Binding AddNewCommand}"/>
+        <ToolbarItem IconImageSource="plus.png"   Command="{Binding AddNewCommand}"/>
     </ContentPage.ToolbarItems>
     <Shell.SearchHandler>
         <control:TextSearchHandler x:Name="search" Placeholder="Cari"></control:TextSearchHandler>
@@ -28,9 +28,14 @@
                             <SwipeView  >
                                     <SwipeView.LeftItems>
                                     <SwipeItems>
-                                        <SwipeItem  BackgroundColor="OrangeRed" Text="Packing"
+                                        <SwipeItem  BackgroundColor="OrangeRed" Text="Cancel"
                                                          Command="{Binding Source={RelativeSource  AncestorType={x:Type local:OrdesrViewModel}}, 
                                             Path=PackingListCommand}" CommandParameter="{Binding .}">
+                                        </SwipeItem>
+                                        <SwipeItem   BackgroundColor="LimeGreen" Text="Packing"
+                                                         Command="{Binding Source={RelativeSource  AncestorType={x:Type local:OrdesrViewModel}}, 
+                                            Path=PackingListCommand}" CommandParameter="{Binding .}">
+
                                         </SwipeItem>
                                     </SwipeItems>
                                     </SwipeView.LeftItems>
@@ -43,13 +48,21 @@
                                         <StackLayout Spacing="0">
                                             <Label Text="{Binding Nomor}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
                                             <Label Text="{Binding Customer.Name}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
+                                            <Label  LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Rp."></Span>
+                                                        <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
                                         </StackLayout>
                                         <StackLayout Grid.Column="1" Spacing="0">
                                             <Label Text="{Binding OrderDate, StringFormat='{}{0:dd-MM-yyyy HH:mm}'}" HorizontalOptions="End" LineBreakMode="NoWrap"
                                                Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
                                             <Label Text="{Binding Status}" HorizontalOptions="EndAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" 
                                                    FontSize="13" />
-
+                                           
                                         </StackLayout>
                                     </Grid>
                                 </StackLayout>

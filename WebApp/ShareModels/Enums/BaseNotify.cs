@@ -5,6 +5,12 @@ using System.Runtime.CompilerServices;
 
 namespace ShareModels
 {
+    public interface IEntity
+    {
+        int Id { get; set; }
+    }
+
+
     public  class  BaseNotify: INotifyPropertyChanged
     {
         public  bool SetProperty<T>(ref T backingStore, T value,

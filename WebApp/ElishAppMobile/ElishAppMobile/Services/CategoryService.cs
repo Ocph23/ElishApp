@@ -1,4 +1,6 @@
-﻿using ShareModels;
+﻿using ElishAppMobile.Models;
+using ElishAppMobile.Services;
+using ShareModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace ElishAppMobile
     public class CategoryService : ICategoryService
     {
         private string controller = "/api/category";
-        private IUserService userService;
+        private IEnumerable<Category> categories;
 
         public async Task<bool> Delete(int id)
         {
@@ -51,13 +53,28 @@ namespace ElishAppMobile
         {
             try
             {
-                using (var res = new RestService())
+                if (categories == null)
                 {
-                    var response = await res.GetAsync($"{controller}");
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    return await response.GetResult<IEnumerable<Category>>();
+                    var connection = Helper.CheckInterNetConnection();
+                    var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                    if (connection.Item1)
+                    {
+                        using var res = new RestService();
+                        var response = await res.GetAsync($"{controller}");
+                        if (!response.IsSuccessStatusCode)
+                            await res.Error(response);
+                        var datas = await response.GetResult<IEnumerable<Category>>();
+                        _ = db.Save<SqlDataModelCategory, Category>(datas);
+                        categories = datas;
+                    }
+                    else
+                    {
+                        var datas = await db.Get<SqlDataModelCategory, Category>();
+                        categories = datas;
+                    }
+
                 }
+                return categories;
             }
             catch (Exception ex)
             {

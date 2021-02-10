@@ -225,4 +225,8 @@ a, .btn-link {
         top: 0.5rem;
     }
 
-        
+
+
+.ui-dialog {
+    min-width: 360px !important;
+}

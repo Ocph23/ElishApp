@@ -14,25 +14,27 @@
     <Shell.SearchHandler>
         <control:TextSearchHandler x:Name="search" Placeholder="Cari"></control:TextSearchHandler>
     </Shell.SearchHandler>
-    <Grid>
+    <Grid BackgroundColor="LightGray">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackLayout Margin="10">
-            <Label FontSize="20" FontAttributes="Bold" Text="Data Barang"></Label>
-            <StackLayout Orientation="Horizontal">
-                <Label VerticalOptions="CenterAndExpand"  FontAttributes="Bold" Text="Supplier"></Label>
-                <Picker WidthRequest="250" FontSize="Small"  ItemDisplayBinding="{Binding Nama}" SelectedItem="{Binding Supplier}" SelectedIndex="{Binding SupplierIndex}" ItemsSource="{Binding DataSuppliers}"></Picker>
+        <Frame>
+            <StackLayout>
+                <Label FontSize="20" FontAttributes="Bold" Text="Data Barang"></Label>
+                <StackLayout  Orientation="Horizontal">
+                    <Label VerticalOptions="CenterAndExpand"  FontAttributes="Bold" Text="Supplier"></Label>
+                    <Picker WidthRequest="250" FontSize="Small"  ItemDisplayBinding="{Binding Nama}" SelectedItem="{Binding Supplier}" SelectedIndex="{Binding SupplierIndex}" ItemsSource="{Binding DataSuppliers}"></Picker>
+                </StackLayout>
             </StackLayout>
-        </StackLayout>
+        </Frame>
         <RefreshView Grid.Row="1" x:DataType="local:ProductViewViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=Default}">
             <CollectionView x:Name="ItemsListView" 
                 ItemsSource="{Binding Items}"
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Padding="0,1" x:DataType="model:ProductStock" BackgroundColor="LightGray" >
+                        <StackLayout Padding="0,1" x:DataType="model:ProductStock"  >
                             <SwipeView VerticalOptions="CenterAndExpand" >
                                 <SwipeView.LeftItems>
                                     <SwipeItems >
@@ -46,29 +48,42 @@
                                         </SwipeItemView>
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
-
-                                <Grid BackgroundColor="White" Padding="10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="75"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackLayout Spacing="0">
-                                        <Label Text="{Binding CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
-                                        <Label Text="{Binding Name}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-                                        <Label Text="{Binding CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" />
-                                        <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer 
+                                <StackLayout BackgroundColor="LightGray">
+                                    <Frame CornerRadius="10" Margin="5,1">
+                                        <Grid BackgroundColor="White" Padding="3">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackLayout Spacing="0">
+                                                <Label Text="{Binding CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
+                                                <Label Text="{Binding Name}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+                                                <Label Text="{Binding CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" />
+                                                <StackLayout.GestureRecognizers>
+                                                    <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type local:ProductViewViewModel}}, Path=ItemTapped}"		
                                 CommandParameter="{Binding .}">
-                                            </TapGestureRecognizer>
-                                        </StackLayout.GestureRecognizers>
-                                    </StackLayout>
-                                    <StackLayout Grid.Column="1" Spacing="0">
-                                        <Label Text="{Binding StockView}" FontSize="15" HorizontalOptions="CenterAndExpand"/>
-                                        <Label HorizontalOptions="CenterAndExpand" Text="{Binding SelectedUnit.Name}" FontSize="15"/>
-                                    </StackLayout>
-                                </Grid>
+                                                    </TapGestureRecognizer>
+                                                </StackLayout.GestureRecognizers>
+                                            </StackLayout>
+                                            <StackLayout Grid.Column="1" Spacing="0">
+                                                <Label Text="{Binding StockView}" FontSize="15" HorizontalOptions="CenterAndExpand"/>
+                                                <Label HorizontalOptions="CenterAndExpand" Text="{Binding SelectedUnit.Name}" FontSize="15"/>
+                                                <Label FontSize="12">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span>Rp.</Span>
+                                                            <Span Text="{Binding SelectedUnit.Sell, StringFormat='{}{0:N2}'}" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </StackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </StackLayout>
+
+                         
                             </SwipeView>
 
                         </StackLayout>

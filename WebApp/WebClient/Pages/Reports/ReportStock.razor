@@ -6,8 +6,6 @@
 @inject ISupplierService supplierService
 
 
-
-
 @if (datas != null)
 {
     var nomor = 0;
@@ -89,9 +87,9 @@
     }
 
 
-    async Task ChangeSupplier(object value)
+    Task ChangeSupplier(object value)
     {
-
+        return Task.CompletedTask;
     }
 
 }

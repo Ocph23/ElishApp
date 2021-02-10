@@ -1,7 +1,9 @@
-﻿using ShareModels;
+﻿using ElishAppMobile.Models;
+using ShareModels;
 using ShareModels.ModelViews;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,15 +12,32 @@ namespace ElishAppMobile.Services
     public class PenjualanService : IPenjualanService
     {
         readonly string controller = "/api/penjualan";
+        private IEnumerable<Orderpenjualan> orders;
+
         public async Task<Orderpenjualan> CreateOrder(Orderpenjualan order)
         {
             try
             {
-                using var res = new RestService();
-                var response = await res.PostAsync($"{controller}/order", res.GenerateHttpContent(order));
-                if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
-                return await response.GetResult<Orderpenjualan>();
+                var connection = Helper.CheckInterNetConnection();
+                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+
+                if (connection.Item1)
+                {
+                    using var res = new RestService();
+                    var response = await res.PostAsync($"{controller}/order", res.GenerateHttpContent(order));
+                    if (!response.IsSuccessStatusCode)
+                        await res.Error(response);
+                    return await response.GetResult<Orderpenjualan>();
+                }
+                else
+                {
+                    var datas = (await db.Get<SqlDataModelOrder, Orderpenjualan>()).ToList();
+                    if (datas == null)
+                        datas = new List<Orderpenjualan>();
+                    datas.Add(order);
+                    _ = db.Save<SqlDataModelOrder, Orderpenjualan>(datas.AsEnumerable());
+                    return order;
+                }
             }
             catch (Exception ex)
             {
@@ -66,11 +85,22 @@ namespace ElishAppMobile.Services
         {
             try
             {
-                using var res = new RestService();
-                var response = await res.GetAsync($"{controller}/order");
-                if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
-                return await response.GetResult<IEnumerable<Orderpenjualan>>();
+                var connection = Helper.CheckInterNetConnection();
+                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                if (connection.Item1)
+                {
+                    using var res = new RestService();
+                    var response = await res.GetAsync($"{controller}/order");
+                    if (!response.IsSuccessStatusCode)
+                        await res.Error(response);
+                    return await response.GetResult<IEnumerable<Orderpenjualan>>();
+                }
+                else
+                {
+                    var datas = await db.Get<SqlDataModelOrder, Orderpenjualan>();
+                    orders = datas;
+                    return orders;
+                }
             }
             catch (Exception ex)
             {
@@ -87,11 +117,53 @@ namespace ElishAppMobile.Services
         {
             try
             {
-                using var res = new RestService();
-                var response = await res.GetAsync($"{controller}/OrderBySales/{id}");
-                if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
-                return await response.GetResult<IEnumerable<Orderpenjualan>>();
+                var connection = Helper.CheckInterNetConnection();
+                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                if (connection.Item1)
+                {
+                    await SyncOrders();
+                    using var res = new RestService();
+                    var response = await res.GetAsync($"{controller}/OrderBySales/{id}");
+                    if (!response.IsSuccessStatusCode)
+                        await res.Error(response);
+                    return await response.GetResult<IEnumerable<Orderpenjualan>>();
+                }
+                else
+                {
+                    var datas = await db.Get<SqlDataModelOrder, Orderpenjualan>();
+                    orders = datas;
+                    return orders;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
+        private async Task SyncOrders()
+        {
+            try
+            {
+                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                var datas = (await db.Get<SqlDataModelOrder, Orderpenjualan>()).ToList();
+                if (datas != null && datas.Count>0)
+                {
+                    using var res = new RestService();
+                    foreach (Orderpenjualan item in datas.ToList())
+                    {
+                        var response = await res.PostAsync($"{controller}/order", res.GenerateHttpContent(item));
+                        if (!response.IsSuccessStatusCode)
+                            throw new SystemException(await res.Error(response));
+                        var model= await response.GetResult<Orderpenjualan>();
+                        if (model != null)
+                        {
+                            datas.Remove(item);
+                        }
+                    }
+
+                   _= db.Save<SqlDataModelOrder, Orderpenjualan>(datas.AsEnumerable());
+                }
             }
             catch (Exception ex)
             {

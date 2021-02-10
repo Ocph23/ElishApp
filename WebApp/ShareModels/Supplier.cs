@@ -6,7 +6,7 @@ using System.Threading.Tasks;
  
  namespace ShareModels 
 {
-    public class Supplier
+    public class Supplier:IEntity
     {
         public Supplier()
         {

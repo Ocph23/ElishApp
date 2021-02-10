@@ -1,4 +1,5 @@
-@page "/supplier/product/{supplierId?}/{id?}";
+@page "/product/detail/{id?}";
+@page "/product/add";
 
 @attribute [Authorize]
 
@@ -27,7 +28,17 @@
                     </div>
                     <div class="col-md-8">
                         <RadzenDropDown @bind-Value="model.CategoryId" AllowClear="true" Placeholder="Select Category"
-                                        Data="@categories" style="width: 60%;" TextProperty="Name" ValueProperty="Id" Name="CardId">
+                                        Data="@categories" style="width: 60%;" TextProperty="Name" ValueProperty="Id" Name="CategoryId">
+                        </RadzenDropDown>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Supplier" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenDropDown @bind-Value="model.SupplierId" AllowClear="true" Placeholder="Select Supplier"
+                                        Data="@suppliers" style="width: 60%;" TextProperty="Nama" ValueProperty="Id" Name="SupplierId">
                         </RadzenDropDown>
                     </div>
                 </div>
@@ -172,12 +183,10 @@
     [Parameter]
     public string id { get; set; }
 
-    [Parameter]
-    public string supplierId { get; set; }
-
     public Product model { get; set; }
 
-    public IEnumerable<Category> categories { get; set; }
+    public IEnumerable<Category> categories;
+    public IEnumerable<Supplier> suppliers;
 
     List<ButtonLitleSave> components = new List<ButtonLitleSave>();
 
@@ -187,14 +196,20 @@
     {
         set { components.Add(value); }
     }
+
     protected override async Task OnInitializedAsync()
     {
+        suppliers = await supplierService.GetSuppliers();
         categories = await categoryService.Get();
 
-        if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(supplierId))
+        if (!string.IsNullOrEmpty(id))
         {
             var Id = Convert.ToInt32(id);
             model = await productService.Get(Id);
+        }
+        else
+        {
+            model = new Product();
         }
     }
 
@@ -227,8 +242,7 @@
             }
             else
             {
-                var Id = Convert.ToInt32(supplierId);
-                var result = await productService.AddProduct(Id, model);
+                var result = await productService.AddProduct(model.SupplierId, model);
                 if (result != null)
                     saved = true;
 
@@ -260,7 +274,7 @@
 
     public void GoBack()
     {
-        nav.NavigateTo($"/supplier/products/{supplierId}");
+        nav.NavigateTo($"/product");
     }
 
 
@@ -303,7 +317,7 @@
     }
 
 
-    async  Task SaveUnit(Unit unit)
+    async Task SaveUnit(Unit unit)
     {
 
         Unit temUnit;
@@ -320,7 +334,7 @@
             }
         }
 
-      await  unitGrid.UpdateRow(unit);
+        await unitGrid.UpdateRow(unit);
 
         StateHasChanged();
     }

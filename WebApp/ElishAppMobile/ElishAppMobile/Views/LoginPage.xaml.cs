@@ -82,6 +82,11 @@ namespace ElishAppMobile.Views
         {
             try
             {
+                if (!Helper.CheckInterNetConnection().Item1)
+                {
+                    return;
+                }
+
                 if (IsBusy)
                     return;
 

@@ -1,4 +1,6 @@
-﻿using ShareModels;
+﻿using ElishAppMobile.Models;
+using ElishAppMobile.Services;
+using ShareModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,11 +51,24 @@ namespace ElishAppMobile
             {
                 if (suppliers == null)
                 {
-                    using var res = new RestService();
-                    var response = await res.GetAsync($"{controller}");
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    suppliers = await response.GetResult<IEnumerable<Supplier>>();
+                    var connection = Helper.CheckInterNetConnection();
+                    var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                    if (connection.Item1)
+                    {
+                        using var res = new RestService();
+                        var response = await res.GetAsync($"{controller}");
+                        if (!response.IsSuccessStatusCode)
+                            await res.Error(response);
+                        var datas = await response.GetResult<IEnumerable<Supplier>>();
+                        _ = db.Save<SqlDataModelSupplier,Supplier>(datas);
+                        suppliers = datas;
+                    }
+                    else
+                    {
+                        var datas = await db.Get<SqlDataModelSupplier, Supplier>();
+                        suppliers= datas;
+                    }
+
                 }
                 return suppliers;
             }

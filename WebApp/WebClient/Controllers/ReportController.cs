@@ -108,7 +108,8 @@ namespace WebClient.Controllers
                         SinglePage = true, //report on the one page
                         Navigator = true, //navigation panel on top
                         EmbedPictures = true,
-                        Print=true,  Preview=true
+                        Print=true,  Preview=true, 
+                        PageBreaks=false
                     };
                     report.Export(html, stream);
 
@@ -161,7 +162,7 @@ namespace WebClient.Controllers
                         nomor++;
                     }
 
-                    var datasets = datas.ToDataTable();
+                    var datasets = datas.OrderBy(x=>x.ProductName).ToList().ToDataTable();
                     return Print(datasets, nota, path);
 
                 }
@@ -180,12 +181,14 @@ namespace WebClient.Controllers
             report.SetParameterValue("NomorInvoice", nota.NomorInvoice);
             report.SetParameterValue("Customer", nota.Customer);
             report.SetParameterValue("Salesman", nota.Sales);
-            report.SetParameterValue("JatuhTempo", nota.InvoiceDeadLine);
-            report.SetParameterValue("Tanggal", nota.CreateDate);
+            report.SetParameterValue("JatuhTempo", nota.InvoiceDeadLine.ToString("dd MMM yyyy"));
+            report.SetParameterValue("Tanggal", nota.CreateDate.ToString("dd MMM yyyy"));
             report.SetParameterValue("Discount", nota.Discount);
             report.SetParameterValue("Address", nota.Address);
             report.SetParameterValue("Payment", nota.PaymentType);
-
+            report.SetParameterValue("AppName", Helper.ApplicationName);
+            report.SetParameterValue("DirectorName", Helper.DirectorName);
+            report.SetParameterValue("OfficeTelp", Helper.OfficeTelp);
         }
 
         private static ShareModels.Reports.NotaPenjualan GetParameters(object dataParam, Type type)

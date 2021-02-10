@@ -1,9 +1,13 @@
-﻿using ShareModels;
+﻿using ElishAppMobile.Models;
+using ElishAppMobile.Services;
+using Newtonsoft.Json;
+using ShareModels;
 using ShareModels.ModelViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace ElishAppMobile
 {
@@ -66,11 +70,26 @@ namespace ElishAppMobile
         {
             try
             {
-                using var res = new RestService();
-                var response = await res.GetAsync($"{controller}/stock");
-                if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
-                return await response.GetResult<IEnumerable<ProductStock>>();
+                var connection= Helper.CheckInterNetConnection();
+
+                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                if (connection.Item1)
+                {
+                    using var res = new RestService();
+                    var response = await res.GetAsync($"{controller}/stock");
+                    if (!response.IsSuccessStatusCode)
+                        await res.Error(response);
+                    var datas = await response.GetResult<IEnumerable<ProductStock>>();
+
+                    _ = db.Save<SqlDataModelStock, ProductStock>(datas);
+                   
+                    return datas;
+                }
+                else
+                {
+                    var datas = await db.Get<SqlDataModelStock,ProductStock>();
+                    return datas;
+                }
             }
             catch (Exception ex)
             {

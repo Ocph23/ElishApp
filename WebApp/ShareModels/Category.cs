@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ShareModels
 {
-    public class Category  
+    public class Category :IEntity
    {
 
         public int Id { get; set; }

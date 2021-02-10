@@ -225,24 +225,21 @@ namespace WebClient.Services
         #region Order
         public async Task<Orderpenjualan> CreateOrder(Orderpenjualan order)
         {
-            var trans = dbContext.Database.BeginTransaction();
-
             try
             {
-                dbContext.Orderpenjualan.Add(order);
-
+                if (order.Customer != null)
+                    dbContext.Entry(order.Customer).State = EntityState.Unchanged;
                 foreach (var item in order.Items)
                 {
                     dbContext.Entry(item.Product).State = EntityState.Unchanged;
+                    dbContext.Entry(item.Unit).State = EntityState.Unchanged;
                 }   
+                dbContext.Orderpenjualan.Add(order);
                 await dbContext.SaveChangesAsync();
-
-                trans.Commit();
                 return order;
             }
             catch (Exception ex)
             {
-                trans.Rollback();
                 throw new SystemException(ex.Message);
             }
         }
@@ -251,9 +248,16 @@ namespace WebClient.Services
         {
             try
             {
-                var oldData = dbContext.Orderpenjualan.SingleOrDefault(x => x.Id == id);
+                var oldData = dbContext.Orderpenjualan.Where(x => x.Id == id)
+                    .Include(x=>x.Penjualan)
+                    .ThenInclude(x=>x.Pembayaranpenjualan)
+                    .FirstOrDefault();
                 if (oldData==null)
                     throw new SystemException("Order Not Found !");
+
+                if(oldData.Penjualan!=null && oldData.Penjualan.Pembayaranpenjualan.Count>0)
+                    throw new SystemException("Data Tidak Dihapus Karena Telah Ada Pembayaran !");
+
                 dbContext.Orderpenjualan.Remove(oldData);
                 await dbContext.SaveChangesAsync();
                 return true;

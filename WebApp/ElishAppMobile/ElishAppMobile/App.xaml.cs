@@ -29,6 +29,7 @@ namespace ElishAppMobile
             DependencyService.Register<IIncommingService, IncomingCheckService>();
             DependencyService.Register<IPenjualanService, PenjualanService>();
             DependencyService.Register<IUserStateService, UserService>();
+            DependencyService.Register<ElishDbStore>();
            
 
             Load();

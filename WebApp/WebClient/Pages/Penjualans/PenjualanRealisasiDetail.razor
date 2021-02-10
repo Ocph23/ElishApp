@@ -305,7 +305,6 @@
     {
         try
         {
-            model.CreateDate = DateTime.Now;
             var result = await penjualanService.UpdatePenjualan(model.Id, model);
             if (result != null)
             {

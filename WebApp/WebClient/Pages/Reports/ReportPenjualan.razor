@@ -26,7 +26,7 @@
 
     [Parameter]
     public string Id { get; set; }
-    private WebReport webReport;
+    private WebReport webReport= new WebReport();
     private string dataView;
 
     protected override async Task OnInitializedAsync()

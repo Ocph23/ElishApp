@@ -123,6 +123,12 @@ namespace ShareModels
     public interface IKaryawanService : IService<Karyawan>{}
 
 
+    public interface IReportService
+    {
+        Task<IEnumerable<Penjualan>> GetPiutang();
+    }
+
+
 
 
 

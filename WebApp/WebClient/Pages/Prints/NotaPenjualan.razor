@@ -28,8 +28,8 @@
 
     [Parameter]
     public string Id { get; set; }
-    private WebReport webReport;
-    private HtmlString HTMLBody;
+    private WebReport webReport = new WebReport();
+    private HtmlString HTMLBody = new HtmlString("");
     protected override Task OnInitializedAsync()
     {
         webReport = new WebReport();

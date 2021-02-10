@@ -8,10 +8,10 @@ namespace ElishAppMobile
 {
     public class MessageDataCenter
     {
-        public string Title { get; internal set; }
-        public string Message { get; internal set; }
-        public string? Ok { get; internal set; }
-        public string? Cancel { get; internal set; }
+        public string Title { get;  set; }
+        public string Message { get;  set; }
+        public string Ok { get;  set; }
+        public string Cancel { get;  set; }
     }
 
 

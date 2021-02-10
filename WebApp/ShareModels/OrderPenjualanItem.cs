@@ -6,7 +6,7 @@ using System.Threading.Tasks;
  
  namespace ShareModels 
 {
-    public class OrderPenjualanItem     :BaseNotify
+    public class OrderPenjualanItem :BaseNotify
     {
         public int Id { get; set; }
         public int OrderPenjualanId { get; set; }

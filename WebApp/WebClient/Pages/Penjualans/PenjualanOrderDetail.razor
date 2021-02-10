@@ -12,6 +12,8 @@
 @inject IKaryawanService karyawanService;
 @inject NotificationService NotificationService;
 @inject NavigationManager nav;
+@inject DialogService dialog;
+
 
 <div class="noprint">
     <RadzenTabs>
@@ -109,12 +111,15 @@
                                 <RadzenLabel Text="Cari Product" />
                             </div>
                             <div class="col-md-8">
-                                <RadzenDropDown AllowClear="true" AllowFiltering="true"
-                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                Data=@products.Where(item=> item.Supplier.Id==supplierid && !model.Items.Any(data=> data.ProductId.Equals(item.Id)))
-                                                @bind-Value=@product.Id
-                                                TextProperty="CodeName" ValueProperty="Id" Style="width:400px"
-                                                Change=@(args => SelectProduct(args, "Supplier")) />
+                                @if (supplierid>0)
+                                {
+                                    <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                    Data=@products.Where(item=> item.Id<0?true:item.Supplier.Id==supplierid && !model.Items.Any(data=> data.ProductId.Equals(item.Id)))
+                                                    @bind-Value=@product.Id
+                                                    TextProperty="CodeName" ValueProperty="Id" Style="width:400px"
+                                                    Change=@(args => SelectProduct(args, "Supplier")) />
+                                }
                             </div>
                         </div>
 
@@ -190,6 +195,7 @@
                         <RadzenButton Visible="@(model.Items.Count>0 && model.Status== OrderStatus.New)" Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
                         <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only"
                            href="@($"/report/printorder/{model.Id}")"><i class="ui-button-icon-left pi">print</i></a>
+                        <RadzenButton Click=@(args => Delete()) Icon="remove" ButtonStyle="ButtonStyle.Danger" />
                     </div>
                 </Radzen.Blazor.RadzenFieldset>
 
@@ -206,7 +212,7 @@
     public string id { get; set; }
 
     private Product product = new Product();
-    private int supplierid= 0;
+    private int supplierid = 0;
     private IEnumerable<Supplier> suppliers;
     private IEnumerable<Customer> customers;
     private IEnumerable<Karyawan> sales;
@@ -218,7 +224,11 @@
     {
         customers = await customerService.Get();
         suppliers = await supplierService.GetSuppliers();
-        products = await productService.GetProductStock();
+        var productSource= (await productService.GetProductStock()).ToList();
+
+        productSource.Add(new ProductStock { Id = -1, CodeName="All", Name = "All"});
+
+        products = productSource.Where(x => x.Id<0?true:x.Stock > 0).OrderBy(x=>x.Name);
         sales = await karyawanService.Get();
         if (!string.IsNullOrEmpty(id))
         {
@@ -226,7 +236,7 @@
             if (paramId > 0)
             {
                 this.model = await penjualanService.GetOrder(paramId);
-                if(this.model!=null && this.model.Items.Count > 0)
+                if (this.model != null && this.model.Items.Count > 0)
                 {
                     supplierid = this.model.Items.FirstOrDefault().Product.SupplierId;
                 }
@@ -274,6 +284,42 @@
     private void Cancel()
     {
         model = new Orderpenjualan() { OrderDate = DateTime.Now, DeadLine = 12, Items = new List<OrderPenjualanItem>() };
+    }
+
+    private async Task Delete()
+    {
+        try
+        {
+            var resultDialog = await dialog.Confirm("Yakin Hapus Order ? ", "Order", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
+            if (resultDialog != null && resultDialog == true)
+            {
+                var deleted = await penjualanService.DeleteOrder(model.Id);
+
+                if (deleted)
+                {
+                    NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Success",
+                        Detail = "Order Berhasil DIhapus !",
+                        Duration = 3000
+                    });
+
+                    nav.NavigateTo($"/penjualan/order");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            NotificationService.Notify(new NotificationMessage
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = ex.Message,
+                Duration = 3000
+            });
+
+        }
     }
 
     void EditRow(OrderPenjualanItem item)
@@ -338,15 +384,31 @@
     async Task SelectProduct(object value, string name)
     {
         var prodId = (int)value;
-        var _product = products.Where(x => x.Id == prodId).FirstOrDefault();
-        if (_product != null && model.Items.Where(x => x.ProductId == _product.Id).FirstOrDefault() == null)
+        if (prodId > 0)
         {
-            var item = new OrderPenjualanItem { Product = _product, ProductId = prodId, Amount = 1 };
-            item.Unit = _product.Units.FirstOrDefault();
-            item.UnitId = item.Unit.Id;
-            if (model.Items == null)
-                model.Items = new List<OrderPenjualanItem>();
-            model.Items.Add(item);
+            var _product = products.Where(x => x.Id == prodId).FirstOrDefault();
+            if (_product != null && model.Items.Where(x => x.ProductId == _product.Id).FirstOrDefault() == null)
+            {
+                var item = new OrderPenjualanItem { Product = _product, ProductId = prodId, Amount = 1 };
+                item.Unit = _product.Units.FirstOrDefault();
+                item.UnitId = item.Unit.Id;
+                if (model.Items == null)
+                    model.Items = new List<OrderPenjualanItem>();
+                model.Items.Add(item);
+            }
+
+
+        }
+        else if(prodId < 0)
+        {
+            model.Items = new List<OrderPenjualanItem>();
+            foreach (var _product in products.Where(x=>x.Id>0 && x.SupplierId==supplierid && x.Stock>0))
+            {
+                var item = new OrderPenjualanItem { Product = _product, ProductId = _product.Id, Amount = 1 };
+                item.Unit = _product.Units.FirstOrDefault();
+                item.UnitId = item.Unit.Id;
+                model.Items.Add(item);
+            }
         }
 
         product = new Product();

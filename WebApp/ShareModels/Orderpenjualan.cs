@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ShareModels
 {
-    public class Orderpenjualan   :BaseNotify
+    public class Orderpenjualan   :BaseNotify, IEntity
     {
         public Orderpenjualan()
         {

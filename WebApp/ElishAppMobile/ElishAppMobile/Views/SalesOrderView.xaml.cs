@@ -136,7 +136,7 @@ namespace ElishAppMobile.Views
 
 
         public ObservableCollection<ItemPenjualanModel> Datas { get; set; } = new ObservableCollection<ItemPenjualanModel>();
-        public ObservableCollection<Customer> DataCustomers { get; set; } = new ObservableCollection<Customer>();
+      //  public ObservableCollection<Customer> DataCustomers { get; set; } = new ObservableCollection<Customer>();
         public ObservableCollection<Supplier> DataSupplier { get; set; } = new ObservableCollection<Supplier>();
         public ObservableCollection<ProductStock> ProductStocks { get; set; } = new ObservableCollection<ProductStock>();
         public Command LoadItemsCommand { get; }
@@ -178,7 +178,7 @@ namespace ElishAppMobile.Views
             {
                 if (value >= 0)
                 {
-                    Order.Customer = DataCustomers[value];
+                    Order.Customer = Customers.CustomerCollection[value];
                     if (Order.Customer != null)
                     {
                         Order.CustomerId = Order.Customer.Id;
@@ -234,11 +234,9 @@ namespace ElishAppMobile.Views
             try
             {
                 IsBusy = true;
+              
                 var customers = await Customers.Get();
-                foreach (var item in customers)
-                {
-                    DataCustomers.Add(item);
-                }
+               
                 products = await Products.GetProductStock();
 
                 if (products != null)
@@ -258,8 +256,8 @@ namespace ElishAppMobile.Views
 
                 if (order != null)
                 {
-                    var customer = DataCustomers.Where(x => x.Id == order.CustomerId).FirstOrDefault();
-                    SelectedIndex = DataCustomers.IndexOf(customer);
+                    var customer = Customers.CustomerCollection.Where(x => x.Id == order.CustomerId).FirstOrDefault();
+                    SelectedIndex = Customers.CustomerCollection.IndexOf(customer);
                     var ll = order.Items.FirstOrDefault();
                     SupplierIndex = DataSupplier.IndexOf(DataSupplier.SingleOrDefault(x=>x.Id==ll.Product.SupplierId));
                     foreach (var item in order.Items)
@@ -296,6 +294,11 @@ namespace ElishAppMobile.Views
             {
                 IsBusy = false;
             }
+        }
+
+        private void CustomerCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private async void SaveAction(object obj)
@@ -391,11 +394,12 @@ namespace ElishAppMobile.Views
             }
         }
 
-        private async Task ExecuteLoadItemsCommand()
+        private Task ExecuteLoadItemsCommand()
         {
             IsBusy = true;
             RefreshProductStock();
             IsBusy = false;
+            return Task.CompletedTask;
         }
 
         private async void AddNewItem(ProductStock value)

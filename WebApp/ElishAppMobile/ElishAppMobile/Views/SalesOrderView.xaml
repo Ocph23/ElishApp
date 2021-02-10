@@ -27,7 +27,7 @@
                     <StackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Label WidthRequest="100" Text="Customer" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                            <Picker  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding DataCustomers}" 
+                            <Picker  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding Customers.CustomerCollection}" 
                             VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="220"
                              FontSize="Small" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" />
                             <ImageButton Clicked="ImageButton_Clicked_1" Source="customer.png"  BackgroundColor="Transparent"

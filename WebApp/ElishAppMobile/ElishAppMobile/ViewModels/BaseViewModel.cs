@@ -19,6 +19,7 @@ namespace ElishAppMobile.ViewModels
         public IPembelianService PembelianService=> DependencyService.Get<IPembelianService>();
         public IPenjualanService PenjualanService=> DependencyService.Get<IPenjualanService>();
         public IUserStateService UserService  => DependencyService.Get<IUserStateService>();
+        public ElishDbStore ElishDbStore => DependencyService.Get<ElishDbStore>();
 
         bool isBusy = false;
         public bool IsBusy

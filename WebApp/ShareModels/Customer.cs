@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ShareModels
 {
-    public class Customer :BaseNotify
+    public class Customer :BaseNotify, IEntity
     {
        
 

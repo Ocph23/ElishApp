@@ -24,19 +24,23 @@
             <Label Text="Welcome To"  HorizontalOptions="CenterAndExpand" 
                FontAttributes="Bold" TextColor="OrangeRed"
                Margin="0" FontSize="20"/>
-            <Label Text="ELISH STORE"  HorizontalOptions="CenterAndExpand" 
+            <Label Text="Alpha Papua"  HorizontalOptions="CenterAndExpand" 
                FontAttributes="Bold" TextColor="OrangeRed"
                Margin="0" FontSize="30"/>
+            <Label Text="Sejahtera"  HorizontalOptions="CenterAndExpand" 
+               FontAttributes="Bold" TextColor="OrangeRed"
+               Margin="0" FontSize="30"/>
+
+        </StackLayout>
+        <StackLayout Grid.Row="1" HorizontalOptions="CenterAndExpand">
             <StackLayout Margin="20" Orientation="Horizontal" HorizontalOptions="Center" >
                 <Image  Source="iamge2.png" Aspect="AspectFit" WidthRequest="40"  HeightRequest="40"  />
                 <Image  Source="playboy.png" Aspect="AspectFit" WidthRequest="40"  HeightRequest="40"/>
             </StackLayout>
-        </StackLayout>
-        <StackLayout Grid.Row="1" HorizontalOptions="CenterAndExpand">
-          
             <Label Text="Copyright @Ocph23 - 2021"  HorizontalOptions="CenterAndExpand" 
                FontAttributes="Bold" TextColor="OrangeRed"
                Margin="0,0,0,20" FontSize="10"/>
+            
             
         </StackLayout>
     </Grid>

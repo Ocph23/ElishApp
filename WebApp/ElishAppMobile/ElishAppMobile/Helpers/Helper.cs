@@ -1,14 +1,30 @@
-﻿using System;
+﻿using ElishAppMobile.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ElishAppMobile
 {
     public class Helper
     {
+        //public static string Url { get; set; } = "http://192.168.1.7:4300";
         public static string  Url { get; set; } = "https://waena-desa.id";
-        //public static string Url { get; set; } = "http://192.168.1.4";
+
+        internal static Tuple<bool, NetworkAccess> CheckInterNetConnection()
+        {
+            var current = Connectivity.NetworkAccess;
+
+            if (current == NetworkAccess.Internet)
+            {
+                return Tuple.Create(true, current);
+            }
+
+            DependencyService.Get<IToas>().ShowLong("Tidak Ada Koneksi Internet !");
+
+            return Tuple.Create(false, current);
+        }
     }
 
     public class IMageSourceConverter : IValueConverter
@@ -31,7 +47,9 @@ namespace ElishAppMobile
     public class MyDatePicker : DatePicker
     {
         private string _format = null;
-        public static readonly BindableProperty NullableDateProperty = BindableProperty.Create<MyDatePicker, DateTime?>(p => p.NullableDate, null);
+        #pragma warning disable CS0618 // Type or member is obsolete
+                public static readonly BindableProperty NullableDateProperty = BindableProperty.Create<MyDatePicker, DateTime?>(p => p.NullableDate, null);
+        #pragma warning restore CS0618 // Type or member is obsolete
 
         public DateTime? NullableDate
         {

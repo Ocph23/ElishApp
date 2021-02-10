@@ -215,7 +215,7 @@ namespace WebClient
                 entity.HasOne(d => d.OrderPenjualan)
                     .WithMany(p => p.Items)
                     .HasForeignKey(d => d.OrderPenjualanId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_OrderPenjualanItem_OrderPenjualan1");
 
                 entity.HasOne(d => d.Product)
@@ -324,7 +324,7 @@ namespace WebClient
                 entity.HasOne(d => d.OrderPenjualan)
                     .WithOne(p => p.Penjualan)
                     .HasForeignKey<Penjualan>(d => d.OrderPenjualanId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_Penjualan_OrderPenjualan1");
             });
 
@@ -344,6 +344,7 @@ namespace WebClient
                 entity.HasOne(d => d.Penjualan)
                     .WithMany(p => p.Items)
                     .HasForeignKey(d => d.PenjualanId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_PenjualanItem_Penjualan1");
 
                 entity.HasOne(d => d.Product)

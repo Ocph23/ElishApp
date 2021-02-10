@@ -1,4 +1,10 @@
 @page "/pembelian/order"
+
+@using System.Linq.Dynamic.Core
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization
+
+@inject ApplicationDbContext dbContext;
 @inject IPembelianService pembelianService;
 @inject NavigationManager nav;
 @inject NotificationService NotificationService;
@@ -7,84 +13,109 @@
 
 @attribute [Authorize]
 
-    <RadzenTabs>
-        <Tabs>
-            <RadzenTabsItem Text="Data Order Pembelian">
-                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => Nav.NavigateTo("/pembelian/order/detail")) Style="margin-bottom:10px" />
-             
-                <RadzenGrid Data="@orders.Where(e=> (Int32)currentTOC >= -1 ?e.Status==currentTOC:true)"
-                            AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Orderpembelian">
-                    <Columns>
-                        <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="Orderpembelian" Title="Order Date" Property="OrderDate" />
-                        <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="Orderpembelian" Title="PO Number" Property="Nomor" />
-                        <Radzen.Blazor.RadzenGridColumn TItem="Orderpembelian" Title="Supplier" Property="Supplier.Nama" />
-                        <Radzen.Blazor.RadzenGridColumn Width="100px" TItem="Orderpembelian" TextAlign="TextAlign.Center" Context="item" Title="Discount" Property="Discount">
-                            <Template>
-                                @(item.Discount + "%")
-                            </Template>
-                        </Radzen.Blazor.RadzenGridColumn>
-                        <Radzen.Blazor.RadzenGridColumn Width="120px" TItem="Orderpembelian" Title="Status" Property="Status">
-                            <FilterTemplate>
-                                <RadzenDropDown @bind-Value="@currentTOC" TextProperty="Text"
-                                                ValueProperty="Value" Style="width:100%"
-                                                Data="@(Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().Select(t => new { Text = $"{t}", Value = t }))" />
-                            </FilterTemplate>
-                        </Radzen.Blazor.RadzenGridColumn>
-                        <Radzen.Blazor.RadzenGridColumn TItem="Orderpembelian" Width="100px">
-                            <Template Context="item">
-                                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list" Click=@(args => Nav.NavigateTo($"pembelian/order/detail/{item.Id}")) />
-                                @if (item.Status == OrderStatus.New)
-                                {
-                                    <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => CreatePembelian(item.Id)) />
-                                }
-                                else if (item.Status == OrderStatus.Proccess)
-                                {
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="Data Order Pembelian">
+            <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => Nav.NavigateTo("/pembelian/order/detail")) Style="margin-bottom:10px" />
 
-                                }
-                            </Template>
-                        </Radzen.Blazor.RadzenGridColumn>
-                    </Columns>
-                </RadzenGrid>
+            <RadzenGrid Data="@orders"
+                        @ref="grid"  LoadData="@LoadData" Count="@count" PageSize="10"
+                        AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Orderpembelian">
+                <Columns>
+                    <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="Orderpembelian" Title="Order Date" Property="OrderDate" />
+                    <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="Orderpembelian" Title="PO Number" Property="Nomor" />
+                    <Radzen.Blazor.RadzenGridColumn TItem="Orderpembelian" Title="Supplier" Property="Supplier.Nama" />
+                    <Radzen.Blazor.RadzenGridColumn Width="100px" TItem="Orderpembelian" TextAlign="TextAlign.Center" Context="item" Title="Discount" Property="Discount">
+                        <Template>
+                            @(item.Discount + "%")
+                        </Template>
+                    </Radzen.Blazor.RadzenGridColumn>
+                    <Radzen.Blazor.RadzenGridColumn Width="120px" TItem="Orderpembelian" Title="Status" Property="Status">
+                        <FilterTemplate>
+                            <RadzenDropDown @bind-Value="@currentTOC" TextProperty="Text"
+                                            ValueProperty="Value" Style="width:100%" Change="@(()=>grid.Reload())"
+                                            Data="@(Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().Select(t => new { Text = $"{t}", Value = t }))" />
+                        </FilterTemplate>
+                    </Radzen.Blazor.RadzenGridColumn>
+                    <Radzen.Blazor.RadzenGridColumn TItem="Orderpembelian" Width="100px">
+                        <Template Context="item">
+                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list" Click=@(args => Nav.NavigateTo($"pembelian/order/detail/{item.Id}")) />
+                            @if (item.Status == OrderStatus.New)
+                            {
+                                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => CreatePembelian(item.Id)) />
+                            }
+                            else if (item.Status == OrderStatus.Proccess)
+                            {
 
-            </RadzenTabsItem>
-        </Tabs>
-    </RadzenTabs>
+                            }
+                        </Template>
+                    </Radzen.Blazor.RadzenGridColumn>
+                </Columns>
+            </RadzenGrid>
 
-    @code{
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+@code{
 
 
-        OrderStatus currentTOC;
-        private IEnumerable<Orderpembelian> orders;
-        protected override async Task OnInitializedAsync()
+    OrderStatus currentTOC;
+    RadzenGrid<Orderpembelian> grid;
+    int count;
+
+
+    private IEnumerable<Orderpembelian> orders;
+
+    async Task LoadData(LoadDataArgs args)
+    {
+        var query = dbContext.Orderpembelian.Include(x => x.Supplier).AsQueryable();
+
+        if (currentTOC !=  OrderStatus.All)
+            query = query.Where(x => x.Status == currentTOC);
+
+        if (!string.IsNullOrEmpty(args.Filter))
         {
-            orders = await pembelianService.GetOrders();
+            query = query.Where(args.Filter);
         }
 
-        private async Task CreatePembelian(int orderId)
+        if (!string.IsNullOrEmpty(args.OrderBy))
         {
-            try
+            query = query.OrderBy(args.OrderBy);
+        }
+
+        orders = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+
+        count = dbContext.Orderpembelian.Count();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task CreatePembelian(int orderId)
+    {
+        try
+        {
+            var resultDialog = await dialog.Confirm("Yakin Buat Pembelian ? ", "Buat Pembelian", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
+            if (resultDialog != null && resultDialog == true)
             {
-                var resultDialog = await dialog.Confirm("Yakin Buat Pembelian ? ","Buat Pembelian", new ConfirmOptions { OkButtonText="Ya", CancelButtonText="Tidak" }  );
-                if (resultDialog!=null && resultDialog==true)
+                var result = await pembelianService.CreatePembelian(orderId);
+                if (result != null)
                 {
-                    var result = await pembelianService.CreatePembelian(orderId);
-                    if (result != null)
-                    {
-                        Nav.NavigateTo($"/pembelian/realisasi/detail/{result.Id}");
-                    }
+                    Nav.NavigateTo($"/pembelian/realisasi/detail/{result.Id}");
                 }
             }
-            catch (System.Exception ex)
+        }
+        catch (System.Exception ex)
+        {
+            NotificationService.Notify(new NotificationMessage
             {
-                NotificationService.Notify(new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Error,
-                    Summary = "Error",
-                    Detail = ex.Message,
-                    Duration = 3000
-                });
-            }
-
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = ex.Message,
+                Duration = 3000
+            });
         }
 
     }
+
+}

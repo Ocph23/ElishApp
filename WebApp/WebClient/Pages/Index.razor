@@ -5,23 +5,24 @@
 @using Microsoft.AspNetCore.Authorization
 @inject NavigationManager nav;
 
-<AuthorizeView>
-    <Authorized>
-        <h1>Hello, @context.User.Identity.Name!</h1>
-        <p>You can only see this content if you're authorized.</p>
-    </Authorized>
-    <NotAuthorized>
-        <p><em>@loading</em></p>
-        <h1>Authentication Failure!</h1>
-        <p>You're not signed in.</p>
-        <button class="btn btn-success" @onclick="@dologin">Login</button>
-    </NotAuthorized>
-</AuthorizeView>
+<div style="height:100vh; display:flex; justify-content:center; align-items:center">
+        <AuthorizeView>
+            <Authorized>
+                <img src="/images/apslogowithtext.png" />
+            </Authorized>
+            <NotAuthorized>
+                <p><em>@loading</em></p>
+                <h1>Authentication Failure!</h1>
+                <p>You're not signed in.</p>
+                <button class="btn btn-success" @onclick="@dologin">Login</button>
+            </NotAuthorized>
+        </AuthorizeView>
+</div>
 
 @code{
 
     string loading ="Loading....";
-    bool login = false;
+    //bool login = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,6 +38,6 @@
     {
         await Task.Delay(2000);
         loading = string.Empty;
-        login = true;
+      //  login = true;
     }
 }

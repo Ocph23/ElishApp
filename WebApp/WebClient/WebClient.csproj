@@ -65,7 +65,7 @@
    <Watch Remove="Pages\Reports\ReportPenjualan.razor" />
    <Watch Remove="Pages\Reports\ReportStock.razor" />
    <Watch Remove="Pages\ShareComponent\PrintLayout.razor" />
-   <Watch Remove="Pages\Suppliers\SupplierProductAddView.razor" />
+   <Watch Remove="Pages\Suppliers\ProductDetail.razor" />
    <Watch Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
  <ItemGroup>
