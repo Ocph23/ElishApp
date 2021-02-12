@@ -9,7 +9,7 @@
 
 <div class="col-md-12">
     <RadzenFieldset Text="Data Real Stok">
-
+        <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" href="@($"/report/printstock/{supplierid}")"><i class="ui-button-icon-left pi">print</i></a>
         <RadzenGrid @ref="gridStock" Data="@(Stocks.Where(x=>x.SupplierId==supplierid))" AllowFiltering="true" AllowSorting="true" TItem="ProductStock">
             <Columns>
                 <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeArticle" Title="Article" />

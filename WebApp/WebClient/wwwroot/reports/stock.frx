@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/11/2021 19:42:00" ReportInfo.Modified="02/11/2021 21:46:11" ReportInfo.CreatorVersion="2021.1.0.0">
+  <Styles Name="Standard">
+    <Style Name="Title" Font="Arial, 12pt, style=Bold"/>
+    <Style Name="Header" Font="Arial, 10pt, style=Bold"/>
+    <Style Name="Group" Font="Arial, 10pt, style=Bold"/>
+    <Style Name="Data" Font="Arial, 10pt"/>
+    <Style Name="Footer" Font="Arial, 10pt"/>
+    <Style Name="EvenRows" Fill.Color="WhiteSmoke" Font="Arial, 10pt"/>
+  </Styles>
+  <Dictionary>
+    <XmlDataConnection Name="Stock" ConnectionString="rijcmlqgsY9uIG8zf4cJoD1cREbfNXIEarcjozDYkL5qYtp/PnXfKKK92D98+yZ/8EinX0a7INKgOYSoRHruk/wDDMoMu+xSqxAESEY8zk6gODMoQFH17b+RzQXO8uxeV2LAD6uhNZqp/rJJLR6zSHFfviF3dCjkj8a8HaXMg80veKycFNEvsrjAIDwTx4gbLbRVwWrBCjz0pYyKDVWEwCRaCUAfg==">
+      <TableDataSource Name="Table1" DataType="System.Int32" Enabled="true" TableName="Table1">
+        <Column Name="No" DataType="System.Int32"/>
+        <Column Name="CodeArticle" DataType="System.String"/>
+        <Column Name="CodeProduct" DataType="System.String"/>
+        <Column Name="ProductName" DataType="System.String"/>
+        <Column Name="Unit" DataType="System.String"/>
+        <Column Name="Amount" DataType="System.Double"/>
+        <Column Name="Price" DataType="System.Double"/>
+        <Column Name="Total" DataType="System.Double"/>
+        <Column Name="Size" DataType="System.String"/>
+      </TableDataSource>
+    </XmlDataConnection>
+    <Parameter Name="Supplier" DataType="System.String"/>
+    <Total Name="GrandTotal" Expression="[Table1.Total]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader1" Width="740.5" Height="95.7">
+      <TextObject Name="Text21" Top="48" Width="67.2" Height="19.2" Text="Supplier" Font="Arial, 9pt"/>
+      <TextObject Name="Text23" Left="67.2" Top="48" Width="297.6" Height="19.2" Text=": [Supplier]" Font="Arial, 9pt"/>
+      <TextObject Name="Text20" Top="28.8" Width="67.2" Height="19.2" Text="Periode" Font="Arial, 9pt"/>
+      <TextObject Name="Text22" Left="67.2" Top="28.8" Width="297.6" Height="19.2" Text=": [Date]" Font="Arial, 9pt"/>
+      <TextObject Name="Text19" Top="9.6" Width="144" Height="19.2" Text="LAPORAN STOCK" Font="Arial, 10pt, style=Bold"/>
+      <TableObject Name="Table3" Top="76.8" Width="741.47" Height="18.9">
+        <TableColumn Name="Column8" Width="30.47"/>
+        <TableColumn Name="Column9" Width="107.27"/>
+        <TableColumn Name="Column10" Width="145.67"/>
+        <TableColumn Name="Column11" Width="241.67"/>
+        <TableColumn Name="Column12" Width="49.67"/>
+        <TableColumn Name="Column13" Width="65.94"/>
+        <TableColumn Name="Column14" Width="100.78"/>
+        <TableRow Name="Row2">
+          <TableCell Name="Cell8" Border.Lines="All" Border.Width="0.25" Text="No" Font="Arial, 8pt"/>
+          <TableCell Name="Cell9" Border.Lines="All" Border.Width="0.25" Text="Article" Font="Arial, 8pt"/>
+          <TableCell Name="Cell10" Border.Lines="All" Border.Width="0.25" Text="Code Product" Font="Arial, 8pt"/>
+          <TableCell Name="Cell11" Border.Lines="All" Border.Width="0.25" Text="Product Name" Font="Arial, 8pt"/>
+          <TableCell Name="Cell12" Border.Lines="All" Border.Width="0.25" Text="Amount" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Arial, 8pt"/>
+          <TableCell Name="Cell13" Border.Lines="All" Border.Width="0.25" Text="Unit" HorzAlign="Center" Font="Arial, 8pt"/>
+          <TableCell Name="Cell14" Border.Lines="All" Border.Width="0.25" Text="Total" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Center" Font="Arial, 8pt"/>
+        </TableRow>
+      </TableObject>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="98.37" Width="740.5" Height="18.9" DataSource="Table1">
+      <TableObject Name="Table2" Width="741.47" Height="18.9">
+        <TableColumn Name="Column1" Width="30.47"/>
+        <TableColumn Name="Column2" Width="107.27"/>
+        <TableColumn Name="Column3" Width="145.67"/>
+        <TableColumn Name="Column4" Width="241.67"/>
+        <TableColumn Name="Column5" Width="49.67"/>
+        <TableColumn Name="Column6" Width="65.94"/>
+        <TableColumn Name="Column7" Width="100.78"/>
+        <TableRow Name="Row1">
+          <TableCell Name="Cell1" Border.Lines="All" Border.Width="0.25" Text="[Table1.No]" Font="Arial, 8pt"/>
+          <TableCell Name="Cell2" Border.Lines="All" Border.Width="0.25" Text="[Table1.CodeArticle]" Font="Arial, 8pt"/>
+          <TableCell Name="Cell3" Border.Lines="All" Border.Width="0.25" Text="[Table1.CodeProduct]" Font="Arial, 8pt"/>
+          <TableCell Name="Cell4" Border.Lines="All" Border.Width="0.25" Text="[Table1.ProductName]" Font="Arial, 8pt"/>
+          <TableCell Name="Cell5" Border.Lines="All" Border.Width="0.25" Text="[Table1.Amount]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Arial, 8pt"/>
+          <TableCell Name="Cell6" Border.Lines="All" Border.Width="0.25" Text="[Table1.Unit]" HorzAlign="Center" Font="Arial, 8pt"/>
+          <TableCell Name="Cell7" Border.Lines="All" Border.Width="0.25" Text="[Table1.Total]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Arial, 8pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="119.93" Width="740.5" Height="19.2">
+      <TableObject Name="Table4" Width="741.47" Height="18.9">
+        <TableColumn Name="Column15" Width="30.47"/>
+        <TableColumn Name="Column16" Width="107.27"/>
+        <TableColumn Name="Column17" Width="145.67"/>
+        <TableColumn Name="Column18" Width="241.67"/>
+        <TableColumn Name="Column19" Width="49.67"/>
+        <TableColumn Name="Column20" Width="65.94"/>
+        <TableColumn Name="Column21" Width="100.78"/>
+        <TableRow Name="Row3">
+          <TableCell Name="Cell15" Border.Lines="All" Border.Width="0.25" Font="Arial, 8pt"/>
+          <TableCell Name="Cell16" Border.Lines="All" Border.Width="0.25" Font="Arial, 8pt"/>
+          <TableCell Name="Cell17" Border.Lines="All" Border.Width="0.25" Font="Arial, 8pt"/>
+          <TableCell Name="Cell18" Border.Lines="All" Border.Width="0.25" Text="Total" Font="Arial, 8pt" ColSpan="2"/>
+          <TableCell Name="Cell19" Border.Lines="All" Border.Width="0.25" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Arial, 8pt"/>
+          <TableCell Name="Cell20" Border.Lines="All" Border.Width="0.25" Text="[GrandTotal]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Arial, 8pt" ColSpan="2"/>
+          <TableCell Name="Cell21" Border.Lines="All" Border.Width="0.25" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Arial, 8pt"/>
+        </TableRow>
+      </TableObject>
+    </ReportSummaryBand>
+    <PageFooterBand Name="PageFooter1" Top="141.8" Width="740.5" Height="13.2">
+      <TextObject Name="Text24" Left="643.2" Width="96" Height="13.2" Text="[PageN]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Arial, 8pt"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

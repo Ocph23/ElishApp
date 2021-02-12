@@ -31,6 +31,7 @@ namespace ShareModels.Reports
         public string DiscountValue { get; set; }
         public double Price { get; set; }
         public double Total { get; set; }
+        public string Size{ get; set; }
     }
 
 

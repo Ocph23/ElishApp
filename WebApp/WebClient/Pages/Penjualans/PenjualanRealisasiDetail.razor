@@ -50,16 +50,23 @@
                                         <RadzenTextBox @bind-Value="model.OrderPenjualan.Customer.Name" />
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="col-md-6">
                                 <div class="row" style="margin-top:10px">
-
                                     <div class="col-md-4 align-items-center d-flex">
                                         <RadzenLabel Text="Discount (%)" />
                                     </div>
                                     <div class="col-md-8">
                                         <RadzenNumeric @bind-Value="model.Discount" TValue="double" Placeholder="0.0" Step="0.1" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-4 align-items-center d-flex">
+                                        <RadzenLabel Text="Fee Salesman (%)" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <RadzenNumeric @bind-Value="model.FeeSalesman" TValue="double" Placeholder="0.0" Step="0.1" />
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:10px">

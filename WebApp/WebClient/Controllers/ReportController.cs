@@ -25,13 +25,17 @@ namespace WebClient.Controllers
     public class ReportController : Controller
     {
         private readonly IWebHostEnvironment _iwebhost;
+        private readonly IReportService _reportService;
+        private readonly IProductService _productService;
         private readonly IPenjualanService _penjualanService;
         private readonly IPembelianService _pembelianService;
         //private readonly IOptions<AppSettings> _appSettings;
 
-        public ReportController(IWebHostEnvironment iwebhost,  IPembelianService pembelianService, IPenjualanService penjualanService)
+        public ReportController(IWebHostEnvironment iwebhost, IReportService reportService, IProductService productService,  IPembelianService pembelianService, IPenjualanService penjualanService)
         {
             _iwebhost = iwebhost;
+            _reportService = reportService;
+            _productService = productService;
             _penjualanService = penjualanService;
             _pembelianService = pembelianService;
           //  _appSettings = appSettings;
@@ -47,7 +51,7 @@ namespace WebClient.Controllers
                 try
                 {
                     var data = await _penjualanService.GetPenjualan(id);
-                    var nota = GetParameters(data, data.GetType());
+                    var nota = GetNotaParameters(data, data.GetType());
                     var datas = new List<ShareModels.Reports.NotaData>();
                     int nomor = 1;
                     foreach (var item in data.Items)
@@ -81,6 +85,192 @@ namespace WebClient.Controllers
                 return NotFound();
         }
 
+        public async Task<ActionResult> PrintPiutang()
+        {
+            var reportItem = "piutang.frx";
+            if (reportItem != null)
+            {
+                var path = $"{_iwebhost.WebRootPath}/reports/{reportItem}";
+
+                try
+                {
+                    var param1 = DateTime.Now.ToString("dd-MM-yyyy");
+                    IEnumerable<Penjualan> data = (await _reportService.GetPiutang());
+                    var datas = new List<ShareModels.Reports.PiutangData>();
+                    foreach (var item in data)
+                    {
+                        datas.Add(new ShareModels.Reports.PiutangData
+                        {
+                            Nomor = item.Nomor,
+                            Customer = item.OrderPenjualan.Customer.Name,
+                            JatuhTempo = item.CreateDate.AddDays(item.PayDeadLine),
+                            Tagihan = item.Total,
+                            Panjar = item.Pembayaranpenjualan.Sum(x=>x.PayValue),
+                            Sisa = item.Total - item.Pembayaranpenjualan.Sum(x => x.PayValue),
+                        });
+                    }
+
+                    var datasets = datas.ToDataTable();
+                    return PrintPiutangction(datasets, param1, path);
+
+                }
+                catch (Exception)
+                {
+                    return new NoContentResult();
+                }
+            }
+            else
+                return NotFound();
+        }
+
+        private ActionResult PrintPiutangction(DataTable datasets, string param, string path)
+        {
+
+            using MemoryStream stream = new MemoryStream();
+            try
+            {
+                var mime = "text/" + "html"; //redefine mime for html
+                datasets.TableName = "Table1";
+                DataSet ds = new DataSet();
+                ds.DataSetName = "Piutang";
+                ds.Tables.Add(datasets);
+                ds.WriteXml($"{_iwebhost.WebRootPath}/reports/Piutang.xml");
+
+                Config.WebMode = true;
+                using (Report report = new Report())
+                {
+                    report.Load(path); //Load the report
+                    report.RegisterData(ds.Tables["Table1"], "Table1"); //Register data in the report
+
+                    report.SetParameterValue("Periode", param);
+                    
+                    report.Prepare();
+                    HTMLExport html = new HTMLExport
+                    {
+                        SinglePage = true, //report on the one page
+                        Navigator = true, //navigation panel on top
+                        EmbedPictures = true,
+                        Print = true,
+                        Preview = true,
+                        PageBreaks = true
+                    };
+                    report.Export(html, stream);
+
+                    report.GetDataSource("Table1").Enabled = true;
+                }
+                //Get the name of resulting report file with needed extension
+                var file = String.Concat(Path.GetFileNameWithoutExtension(path), ".", "html");
+                return File(stream.ToArray(), mime);
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+            finally
+            {
+                stream.Dispose();
+            }
+        }
+
+        public async Task<ActionResult> PrintStock(int id)
+        {
+            var reportItem = "stock.frx";
+            if (reportItem != null)
+            {
+                var path = $"{_iwebhost.WebRootPath}/reports/{reportItem}";
+
+                try
+                {
+                    var supplier = "ALL";
+                    IEnumerable<ShareModels.ModelViews.ProductStock> data = new List<ShareModels.ModelViews.ProductStock>();
+                    if(id<=0)
+                        data = (await _productService.GetProductStock()).OrderBy(x=>x.Name);
+                    else
+                    {
+                        data = (await _productService.GetProductStock()).Where(x => x.SupplierId == id).OrderBy(x => x.Name);
+                        supplier = data.FirstOrDefault().Supplier.Nama;
+                    }
+                    var datas = new List<ShareModels.Reports.NotaData>();
+                    int nomor = 1;
+                    foreach (var item in data)
+                    {
+                        datas.Add(new ShareModels.Reports.NotaData
+                        {
+                            No = nomor,
+                            Amount = item.StockView,
+                            CodeArticle = item.CodeArticle,
+                            CodeProduct = item.CodeName,
+                            ProductName = $"{item.Name} {item.Size}",
+                            Unit = item.SelectedUnit.Name,
+                            Price = item.SelectedUnit.Sell,
+                            Size = item.Size,
+                            Total = item.SelectedUnit.Sell * item.StockView,
+
+                        });
+
+                        nomor++;
+                    }
+
+                    var datasets = datas.ToDataTable();
+                    return PrintStockAction(datasets, supplier, path);
+
+                }
+                catch (Exception)
+                {
+                    return new NoContentResult();
+                }
+            }
+            else
+                return NotFound();
+        }
+
+        private ActionResult PrintStockAction(DataTable datasets, string param, string path)
+        {
+
+            using MemoryStream stream = new MemoryStream();
+            try
+            {
+                var mime = "text/" + "html"; //redefine mime for html
+                datasets.TableName = "Table1";
+                DataSet ds = new DataSet();
+                ds.DataSetName = "Stock";
+                ds.Tables.Add(datasets);
+                ds.WriteXml($"{_iwebhost.WebRootPath}/reports/Stock.xml");
+
+                Config.WebMode = true;
+                using (Report report = new Report())
+                {
+                    report.Load(path); //Load the report
+                    report.RegisterData(ds.Tables["Table1"], "Table1"); //Register data in the report
+
+                    report.SetParameterValue("Supplier", param);
+
+                    report.Prepare();
+                    HTMLExport html = new HTMLExport
+                    {
+                        SinglePage = true, //report on the one page
+                        Navigator = true, //navigation panel on top
+                        EmbedPictures = true,
+                        Print=true,  Preview=true, 
+                        PageBreaks=true
+                    };
+                    report.Export(html, stream);
+
+                    report.GetDataSource("Table1").Enabled = true;
+                }
+                //Get the name of resulting report file with needed extension
+                var file = String.Concat(Path.GetFileNameWithoutExtension(path), ".", "html");
+                return File(stream.ToArray(), mime);
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }   
+            finally
+            {
+                stream.Dispose();
+            }
+        }
         private ActionResult Print(DataTable datasets, ShareModels.Reports.NotaPenjualan nota, string path)
         {
 
@@ -140,7 +330,7 @@ namespace WebClient.Controllers
                 try
                 {
                     var data = await _penjualanService.GetOrder(id);
-                    var nota = GetParameters(data, data.GetType());
+                    var nota = GetNotaParameters(data, data.GetType());
 
                     var datas = new List<ShareModels.Reports.NotaData>();
                     int nomor = 1;
@@ -191,7 +381,7 @@ namespace WebClient.Controllers
             report.SetParameterValue("OfficeTelp", Helper.OfficeTelp);
         }
 
-        private static ShareModels.Reports.NotaPenjualan GetParameters(object dataParam, Type type)
+        private static ShareModels.Reports.NotaPenjualan GetNotaParameters(object dataParam, Type type)
         {
             try
             {

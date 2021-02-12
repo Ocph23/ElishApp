@@ -185,28 +185,28 @@ namespace WebClient.Services
             }
         }
 
-        public Task<IEnumerable<PenjualanViewModel>> GetPenjualans(DateTime startDate, DateTime endDate)
+        public Task<IEnumerable<Penjualan>> GetPenjualans(DateTime startDate, DateTime endDate)
         {
             try
             {
-                var orders =
-                    dbContext.Penjualanitem
-                    .Include(x => x.Product)
-                    .Include(x => x.Penjualan)
-                        .ThenInclude(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
-                    .Include(x => x.Penjualan)
-                        .ThenInclude(x => x.OrderPenjualan).ThenInclude(x => x.Sales).AsNoTracking();
 
-                var datas = from a in orders.Where(x => x.Penjualan.CreateDate >= startDate && x.Penjualan.CreateDate <= endDate)
-                            select new PenjualanViewModel { 
-                             Activity=a.Penjualan.Activity, Amount=a.Amount, OrderPenjualanId=a.Penjualan.OrderPenjualanId,
-                              CodeArticle=a.Product.CodeArticle, CodeName=a.Product.CodeName, CreateDate=a.Penjualan.CreateDate,
-                                CustomerName = a.Penjualan.OrderPenjualan.Customer.Name,
-                                SalesName = a.Penjualan.OrderPenjualan.Sales.Name,
-                            Discount=a.Penjualan.Discount, Merk=a.Product.Merk,
-                             Name=a.Product.Name, PayDeadLine=a.Penjualan.PayDeadLine, Payment=a.Penjualan.Payment, Price = a.Price, Size=a.Product.Size,
-                                Unit=a.Unit.Name, Status=a.Penjualan.Status, Id=a.Id
-                            };
+                var datas = dbContext.Penjualan.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDate)
+                    .Include(x => x.Items).ThenInclude(x=>x.Unit)
+                    .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x=>x.Supplier).AsNoTracking()
+                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer).AsNoTracking()
+                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales).AsNoTracking();
+
+
+                //var datas = from a in orders
+                //            select new PenjualanViewModel { 
+                //             Activity=a.Activity, Amount=a.Amount, OrderPenjualanId=a.OrderPenjualanId,
+                //              CodeArticle=a.Product.CodeArticle, CodeName=a.Product.CodeName, CreateDate=a.CreateDate,
+                //                CustomerName = a.OrderPenjualan.Customer.Name,
+                //                SalesName = a.OrderPenjualan.Sales.Name,
+                //            Discount=a.Discount, Merk=a.Product.Merk,
+                //             Name=a.Product.Name, PayDeadLine=a.PayDeadLine, Payment=a.Payment, Price = a.Price, Size=a.Product.Size,
+                //                Unit=a.Unit.Name, Status=a.Status, Id=a.Id
+                //            };
 
                 return Task.FromResult(datas.AsEnumerable());
 
@@ -255,7 +255,7 @@ namespace WebClient.Services
                 if (oldData==null)
                     throw new SystemException("Order Not Found !");
 
-                if(oldData.Penjualan!=null && oldData.Penjualan.Pembayaranpenjualan.Count>0)
+                if(oldData!=null && oldData.Penjualan.Pembayaranpenjualan.Count>0)
                     throw new SystemException("Data Tidak Dihapus Karena Telah Ada Pembayaran !");
 
                 dbContext.Orderpenjualan.Remove(oldData);

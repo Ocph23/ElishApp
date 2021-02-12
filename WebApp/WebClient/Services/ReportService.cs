@@ -20,7 +20,8 @@ namespace WebClient.Services
         {
             var penjualans = _dbContext.Penjualan
                  .Where(x => x.Status == PaymentStatus.None || x.Status == PaymentStatus.DownPayment)
-                 .Include(x => x.OrderPenjualan)
+                 .Include(x=>x.Items)
+                 .Include(x => x.OrderPenjualan).ThenInclude(x=>x.Customer)
                  .Include(x => x.Pembayaranpenjualan);
             return Task.FromResult(penjualans.AsEnumerable());
         }

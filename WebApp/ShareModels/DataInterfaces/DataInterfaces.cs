@@ -84,7 +84,7 @@ namespace ShareModels
         Task<Penjualan> UpdatePenjualan(int penjualanId, Penjualan order);
         Task<Penjualan> GetPenjualan(int id);
         Task<IEnumerable<Penjualan>> GetPenjualans();
-        Task<IEnumerable<PenjualanViewModel>> GetPenjualans(DateTime start, DateTime end);
+        Task<IEnumerable<Penjualan>> GetPenjualans(DateTime start, DateTime end);
         Task<IEnumerable<Penjualan>> GetPenjualansByCustomerId(int id);
         Task<IEnumerable<Penjualan>> GetPenjualansBySalesId(int id);
         Task<bool> DeletePenjualan(int id);

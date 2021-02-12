@@ -68,6 +68,7 @@ namespace WebClient
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IKaryawanService, KaryawanService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IReportService, ReportService>();
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<TooltipService>();

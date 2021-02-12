@@ -31,7 +31,6 @@
     <Watch Include="**\*.razor" />
   </ItemGroup>
  <ItemGroup>
-   <Content Remove="Pages\Datas\PiutangView.razor" />
    <Content Remove="Shared\LoadingScreen.razor" />
    <Content Remove="wwwroot\images\clearicon.png" />
    <Content Remove="wwwroot\images\customer.png" />
@@ -61,9 +60,6 @@
    <Watch Remove="Pages\Penjualans\PenjualanOrderDetail.razor" />
    <Watch Remove="Pages\Penjualans\PenjualanRealisasi.razor" />
    <Watch Remove="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
-   <Watch Remove="Pages\Prints\NotaPenjualan.razor" />
-   <Watch Remove="Pages\Reports\ReportPenjualan.razor" />
-   <Watch Remove="Pages\Reports\ReportStock.razor" />
    <Watch Remove="Pages\ShareComponent\PrintLayout.razor" />
    <Watch Remove="Pages\Suppliers\ProductDetail.razor" />
    <Watch Remove="Shared\LoadingScreen.razor" />
@@ -79,9 +75,6 @@
    <None Include="Pages\Penjualans\EditPenjualanPembayaran.razor" />
    <None Include="Pages\Penjualans\PenjualanOrderDetail.razor" />
    <None Include="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
-   <None Include="Pages\Prints\NotaPenjualan.razor" />
-   <None Include="Pages\Reports\ReportPenjualan.razor" />
-   <None Include="Pages\Reports\ReportStock.razor" />
    <None Include="Shared\PrintLayout.razor" />
    <None Include="Shared\LoadingScreen.razor" />
    <None Include="wwwroot\images\clearicon.png" />
@@ -99,8 +92,6 @@
    <UpToDateCheckInput Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
  <ItemGroup>
-   <_ContentIncludedByDefault Remove="Pages\Reports\ReportPenjualan.razor" />
-   <_ContentIncludedByDefault Remove="Pages\Reports\ReportStock.razor" />
    <_ContentIncludedByDefault Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
  <ItemGroup>
@@ -112,14 +103,42 @@
    <ProjectReference Include="..\ShareModels\ShareModels.csproj" />
  </ItemGroup>
  <ItemGroup>
+   <Content Update="wwwroot\reports\nota1 - Copy.xsc">
+     <DependentUpon>nota1.xsc</DependentUpon>
+   </Content>
+   <Content Update="wwwroot\reports\Stock - Copy.Designer.cs">
+     <DependentUpon>Stock.xsd</DependentUpon>
+     <DesignTime>True</DesignTime>
+     <AutoGen>True</AutoGen>
+   </Content>
+   <Content Update="wwwroot\reports\Stock - Copy.xsc">
+     <DependentUpon>Stock.xsc</DependentUpon>
+   </Content>
+   <Content Update="wwwroot\reports\Piutang.xsd">
+     <SubType>Designer</SubType>
+     <LastGenOutput>Piutang.Designer.cs</LastGenOutput>
+     <Generator>MSDataSetGenerator</Generator>
+   </Content>
+   <Content Update="wwwroot\reports\Stock - Copy.xss">
+     <DependentUpon>Stock.xss</DependentUpon>
+   </Content>
+   <Content Update="wwwroot\reports\Stock.xsd">
+     <SubType>Designer</SubType>
+     <LastGenOutput>Piutang.Designer.cs</LastGenOutput>
+     <Generator>MSDataSetGenerator</Generator>
+   </Content>
+   <Content Update="wwwroot\reports\nota1 - Copy.xss">
+     <DependentUpon>nota1.xss</DependentUpon>
+   </Content>
+   <Content Update="wwwroot\reports\Piutang.Designer.cs">
+     <DesignTime>True</DesignTime>
+     <AutoGen>True</AutoGen>
+     <DependentUpon>Piutang.xsd</DependentUpon>
+   </Content>
    <Content Update="wwwroot\reports\nota1.xsd">
      <SubType>Designer</SubType>
+     <Generator>MSDataSetGenerator</Generator>
+     <LastGenOutput>Stock.Designer.cs</LastGenOutput>
    </Content>
- </ItemGroup>
- <ItemGroup>
-   <UpToDateCheckInput Remove="Pages\Reports\ReportPenjualan.razor" />
- </ItemGroup>
- <ItemGroup>
-   <UpToDateCheckInput Remove="Pages\Reports\ReportStock.razor" />
  </ItemGroup>
 </Project>

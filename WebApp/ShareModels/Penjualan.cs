@@ -33,6 +33,11 @@ using System.Threading.Tasks;
 
          public ActivityStatus Activity { get; set; }
 
+
+        public double FeeSalesman { get; set; }
+
+
+
         [NotMapped]
         public PaymentType Payment{ get => PayDeadLine <= 0 ? PaymentType.PayOff : PaymentType.Credit; }
         private double _total;

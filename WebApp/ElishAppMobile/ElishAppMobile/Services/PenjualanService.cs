@@ -186,7 +186,7 @@ namespace ElishAppMobile.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<PenjualanViewModel>> GetPenjualans(DateTime start, DateTime end)
+        public Task<IEnumerable<Penjualan>> GetPenjualans(DateTime start, DateTime end)
         {
             throw new NotImplementedException();
         }

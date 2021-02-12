@@ -51,7 +51,7 @@ namespace ShareModels.ModelViews
         public string AmountView { get; set; }
         public string TotalDiscountView { get; set; }
         public string GrandTotal { get; set; }
-
+        public string TotalFeeSalesman { get; set; }
         public string ProductView => $"{Name} {Size}";
 
     }
