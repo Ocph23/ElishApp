@@ -2,918 +2,105 @@
 <Stock>
   <Table1>
     <No>1</No>
-    <CodeProduct>Black Boy Drift.M</CodeProduct>
-    <ProductName>Black Boy Drift M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>63900</Price>
-    <Total>1725300</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>2</No>
-    <CodeProduct>Black Boy Drift.L</CodeProduct>
-    <ProductName>Black Boy Drift L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>63900</Price>
-    <Total>1725300</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>3</No>
-    <CodeProduct>Black Boy Drift.XL</CodeProduct>
-    <ProductName>Black Boy Drift XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>63900</Price>
-    <Total>1725300</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>4</No>
-    <CodeProduct>Black Boy Skyline.M</CodeProduct>
-    <ProductName>Black Boy Skyline M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>63900</Price>
-    <Total>1725300</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>5</No>
-    <CodeProduct>Black Boy Skyline.L</CodeProduct>
-    <ProductName>Black Boy Skyline L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>63900</Price>
-    <Total>1725300</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>6</No>
-    <CodeProduct>Black Boy Skyline.XL</CodeProduct>
-    <ProductName>Black Boy Skyline XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>63900</Price>
-    <Total>1725300</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>7</No>
-    <CodeProduct>Black Boy Soccer.M</CodeProduct>
-    <ProductName>Black Boy Soccer M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>63900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>8</No>
-    <CodeProduct>Black Boy Soccer.L</CodeProduct>
-    <ProductName>Black Boy Soccer L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>63900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>9</No>
-    <CodeProduct>Black Boy Soccer.XL</CodeProduct>
-    <ProductName>Black Boy Soccer XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>63900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>10</No>
-    <CodeProduct>BXR.03-001.M</CodeProduct>
-    <ProductName>Boxer 03-001 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>129900</Price>
-    <Total>3507300</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>11</No>
-    <CodeProduct>BXR.03-001.L</CodeProduct>
-    <ProductName>Boxer 03-001 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>129900</Price>
-    <Total>3507300</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>12</No>
-    <CodeProduct>BXR.03-001.XL</CodeProduct>
-    <ProductName>Boxer 03-001 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>129900</Price>
-    <Total>3507300</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>13</No>
-    <CodeProduct>BXR 03-002.M</CodeProduct>
-    <ProductName>Boxer 03-002 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>129900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>14</No>
-    <CodeProduct>BXR.03-002.L</CodeProduct>
-    <ProductName>Boxer 03-002 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>129900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>15</No>
-    <CodeProduct>BXR.03-002.XL</CodeProduct>
-    <ProductName>Boxer 03-002 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>129900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>16</No>
-    <CodeProduct>BXR.03-003.M</CodeProduct>
-    <ProductName>Boxer 03-003 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>129900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>17</No>
-    <CodeProduct>BXR.03-003.L</CodeProduct>
-    <ProductName>Boxer 03-003 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>129900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>18</No>
-    <CodeProduct>BXR.03-003.XL</CodeProduct>
-    <ProductName>Boxer 03-003 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>129900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>19</No>
-    <CodeProduct>BXR.03-004.M</CodeProduct>
-    <ProductName>Boxer 03-004 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>129900</Price>
-    <Total>3507300</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>20</No>
-    <CodeProduct>BXR.03-004.L</CodeProduct>
-    <ProductName>Boxer 03-004 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>129900</Price>
-    <Total>3507300</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>21</No>
-    <CodeProduct>BXR.03-004.XL</CodeProduct>
-    <ProductName>Boxer 03-004 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>129900</Price>
-    <Total>3507300</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>22</No>
-    <CodeProduct>BXR.03-005.M</CodeProduct>
-    <ProductName>Boxer 03-005 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>129900</Price>
-    <Total>3507300</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>23</No>
-    <CodeArticle>856889055552</CodeArticle>
-    <CodeProduct>BXR.03-005.L</CodeProduct>
-    <ProductName>Boxer 03-005 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>129900</Price>
-    <Total>3507300</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>24</No>
-    <CodeProduct>BXR.03-005.XL</CodeProduct>
-    <ProductName>Boxer 03-005 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>129900</Price>
-    <Total>3507300</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>25</No>
-    <CodeArticle />
-    <CodeProduct>PB.03-081.L</CodeProduct>
-    <ProductName>Mens Underwear  Sporty 3/1 PB.03-081 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>57900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>26</No>
-    <CodeProduct>PB.02-081.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-081 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>27</No>
-    <CodeProduct>PB.02-081.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-081 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>28</No>
-    <CodeProduct>PB.02-081.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-081 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>29</No>
-    <CodeProduct>PB.02-082.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-082 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>311400</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>30</No>
-    <CodeProduct>PB.02-082.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-082 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>31</No>
-    <CodeProduct>PB.02-082.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-082 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>32</No>
-    <CodeProduct>PB.02-083.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-083 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>33</No>
-    <CodeProduct>PB.02-083.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-083 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>34</No>
-    <CodeProduct>PB.02-083.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-0833 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>35</No>
-    <CodeProduct>PB.02-084.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-084 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>36</No>
-    <CodeProduct>PB.02-084.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-084 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>37</No>
-    <CodeProduct>PB.02-084.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-084 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>38</No>
-    <CodeProduct>PB.02-085.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-085 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>39</No>
-    <CodeProduct>PB.02-085.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-085 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>40</No>
-    <CodeProduct>PB.02-085.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 2/1 PB.02-085 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>51900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>41</No>
-    <CodeProduct>PB.03-082.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>57900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>42</No>
-    <CodeProduct>PB-MIX.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB-MIX M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>43</No>
-    <CodeProduct>PB-MIX.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB-MIX L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>44</No>
-    <CodeProduct>PB-MIX.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB-MIX XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>45</No>
-    <CodeArticle />
-    <CodeProduct>PB.03-081.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-081 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>57900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>46</No>
-    <CodeProduct>PB.03-081.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-081  XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>57900</Price>
-    <Total>0</Total>
-    <Size> XL</Size>
-  </Table1>
-  <Table1>
-    <No>47</No>
-    <CodeProduct>PB.03-082.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-082 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>57900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>48</No>
-    <CodeProduct>PB.03-082.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-082 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>57900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>49</No>
-    <CodeProduct>PB.03-083.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-083 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>30</Amount>
-    <Price>57900</Price>
-    <Total>1737000</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>50</No>
-    <CodeProduct>PB.03-083.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-083 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>30</Amount>
-    <Price>57900</Price>
-    <Total>1737000</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>51</No>
-    <CodeProduct>PB.03-083.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-083 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>30</Amount>
-    <Price>57900</Price>
-    <Total>1737000</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>52</No>
-    <CodeProduct>PB.03-084.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-084 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>59900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>53</No>
-    <CodeProduct>PB.03-084.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-084 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>59900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>54</No>
-    <CodeProduct>PB.03-084.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-084 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>239600</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>55</No>
-    <CodeProduct>PB.03-086.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-086 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>69900</Price>
-    <Total>1887300</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>56</No>
-    <CodeProduct>PB.03-086.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-086 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>69900</Price>
-    <Total>1887300</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>57</No>
-    <CodeProduct>PB.03-086.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-086 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>69900</Price>
-    <Total>1887300</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>58</No>
-    <CodeProduct>PB.03-087.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-087 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>69900</Price>
-    <Total>1887300</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>59</No>
-    <CodeProduct>PB.03-087.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-087 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>69900</Price>
-    <Total>1887300</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>60</No>
-    <CodeProduct>PB.03-087.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-087 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>69900</Price>
-    <Total>1887300</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>61</No>
-    <CodeProduct>PB.03-088.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-088 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>69900</Price>
-    <Total>1887300</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>62</No>
-    <CodeProduct>BP.03-088.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-088 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>69900</Price>
-    <Total>1887300</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>63</No>
-    <CodeProduct>PB.03-088.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-088 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>27</Amount>
-    <Price>69900</Price>
-    <Total>1887300</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>64</No>
-    <CodeProduct>PB.03-090.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-090 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>65</No>
-    <CodeProduct>PB.03-090.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-090 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>66</No>
-    <CodeProduct>PB.03-090.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-090 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>67</No>
-    <CodeProduct>BP.03-091.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-091 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>68</No>
-    <CodeProduct>BP.03-091.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-091 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>69</No>
-    <CodeProduct>BP.03-091.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-091  XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size> XL</Size>
-  </Table1>
-  <Table1>
-    <No>70</No>
-    <CodeProduct>BP.03-094.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-094 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>71</No>
-    <CodeProduct>BP.03-094.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-094 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>72</No>
-    <CodeProduct>BP.03-094.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-094  XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size> XL</Size>
-  </Table1>
-  <Table1>
-    <No>73</No>
-    <CodeProduct>PB.03-095.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-095 M</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>M</Size>
-  </Table1>
-  <Table1>
-    <No>74</No>
-    <CodeProduct>PB.03-095.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-095 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>75</No>
-    <CodeProduct>PB.03-095.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-095 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>76</No>
-    <CodeProduct>PB.03-097.M</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-097 M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>77</No>
-    <CodeProduct>PB.03-097.L</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-097 L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>78</No>
-    <CodeProduct>PB.03-097.XL</CodeProduct>
-    <ProductName>Mens Underwear Sporty 3/1 PB.03-097 XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>0</Amount>
-    <Price>69900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>79</No>
-    <CodeProduct>CD Kids Warna.M</CodeProduct>
-    <ProductName>OHSEE KIDS M </ProductName>
-    <Unit>Box</Unit>
-    <Amount>30</Amount>
-    <Price>58500</Price>
-    <Total>1755000</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>80</No>
-    <CodeProduct>CD Kids Warna.L</CodeProduct>
-    <ProductName>OHSEE KIDS L</ProductName>
-    <Unit>Box</Unit>
-    <Amount>30</Amount>
-    <Price>58500</Price>
-    <Total>1755000</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>81</No>
-    <CodeProduct>CD Kids Warna.XL</CodeProduct>
-    <ProductName>OHSEE KIDS XL</ProductName>
-    <Unit>Box</Unit>
-    <Amount>30</Amount>
-    <Price>58500</Price>
-    <Total>1755000</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>82</No>
     <CodeArticle>8993559391564</CodeArticle>
     <CodeProduct>SSWL06L.9.5</CodeProduct>
     <ProductName>Sun Swallow 06 Ladies 9.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>8.42</Amount>
+    <Amount>8.17</Amount>
     <Price>215000</Price>
-    <Total>1810300</Total>
+    <Total>1756550</Total>
     <Size>9.5</Size>
   </Table1>
   <Table1>
-    <No>83</No>
+    <No>2</No>
     <CodeArticle>8993559391571</CodeArticle>
     <CodeProduct>SSWL06L.10</CodeProduct>
     <ProductName>Sun Swallow 06 Ladies 10</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>4</Amount>
+    <Amount>3.75</Amount>
     <Price>215000</Price>
-    <Total>860000</Total>
+    <Total>806250</Total>
     <Size>10</Size>
   </Table1>
   <Table1>
-    <No>84</No>
+    <No>3</No>
     <CodeArticle>8993559391588</CodeArticle>
     <CodeProduct>SSWL06L-10.5</CodeProduct>
     <ProductName>Sun Swallow 06 Ladies 10.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>5.59</Amount>
+    <Amount>5.34</Amount>
     <Price>215000</Price>
-    <Total>1201850</Total>
+    <Total>1148100</Total>
     <Size>10.5</Size>
   </Table1>
   <Table1>
-    <No>85</No>
+    <No>4</No>
     <CodeArticle>8993559389370</CodeArticle>
     <CodeProduct>SSWL06D.10.5</CodeProduct>
     <ProductName>Sun Swallow 06D 10.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>5.917</Amount>
+    <Amount>5.667</Amount>
     <Price>225000</Price>
-    <Total>1331325</Total>
+    <Total>1275075</Total>
     <Size>10.5</Size>
   </Table1>
   <Table1>
-    <No>86</No>
+    <No>5</No>
     <CodeArticle>8993559389363</CodeArticle>
     <CodeProduct>SSWL06D.10</CodeProduct>
     <ProductName>Sun Swallow 06D 10</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>1.5</Amount>
+    <Amount>1.25</Amount>
     <Price>225000</Price>
-    <Total>337500</Total>
+    <Total>281250</Total>
     <Size>10</Size>
   </Table1>
   <Table1>
-    <No>87</No>
+    <No>6</No>
     <CodeArticle>8993559389387</CodeArticle>
     <CodeProduct>SSWL06D.11</CodeProduct>
     <ProductName>Sun Swallow 06D 11</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>4.25</Amount>
+    <Amount>4</Amount>
     <Price>250000</Price>
-    <Total>1062500</Total>
+    <Total>1000000</Total>
     <Size>11</Size>
   </Table1>
   <Table1>
-    <No>88</No>
+    <No>7</No>
     <CodeArticle>8993559389394</CodeArticle>
     <CodeProduct>SSWL06D.11.5</CodeProduct>
     <ProductName>Sun Swallow 06D 11.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>6.5</Amount>
+    <Amount>6.25</Amount>
     <Price>250000</Price>
-    <Total>1625000</Total>
+    <Total>1562500</Total>
     <Size>11.5</Size>
   </Table1>
   <Table1>
-    <No>89</No>
+    <No>8</No>
     <CodeArticle>8993559389400</CodeArticle>
     <CodeProduct>SSWL06D.12</CodeProduct>
     <ProductName>Sun Swallow 06D 12</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>6.75</Amount>
+    <Amount>6.5</Amount>
     <Price>250000</Price>
-    <Total>1687500</Total>
+    <Total>1625000</Total>
     <Size>12</Size>
   </Table1>
   <Table1>
-    <No>90</No>
+    <No>9</No>
     <CodeArticle>8993559388410</CodeArticle>
     <CodeProduct>SSWL938-9.5</CodeProduct>
     <ProductName>Sun Swallow 938 9.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>1.75</Amount>
+    <Amount>1</Amount>
     <Price>225000</Price>
-    <Total>393750</Total>
+    <Total>225000</Total>
     <Size>9.5</Size>
   </Table1>
   <Table1>
-    <No>91</No>
+    <No>10</No>
     <CodeProduct>SSWL938-10.5</CodeProduct>
     <ProductName>Sun Swallow 938 10.5</ProductName>
     <Unit>Lusin</Unit>
@@ -923,27 +110,29 @@
     <Size>10.5</Size>
   </Table1>
   <Table1>
-    <No>92</No>
+    <No>11</No>
+    <CodeArticle>8993559388441</CodeArticle>
     <CodeProduct>SSWL938-11</CodeProduct>
     <ProductName>Sun Swallow 938 11</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>4.25</Amount>
+    <Amount>3.5</Amount>
     <Price>230000</Price>
-    <Total>977500</Total>
+    <Total>805000</Total>
     <Size>11</Size>
   </Table1>
   <Table1>
-    <No>93</No>
+    <No>12</No>
+    <CodeArticle>8993559388458</CodeArticle>
     <CodeProduct>SSWL938-11.5</CodeProduct>
     <ProductName>Sun Swallow 938 11.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>4.25</Amount>
+    <Amount>3.5</Amount>
     <Price>230000</Price>
-    <Total>977500</Total>
+    <Total>805000</Total>
     <Size>11.5</Size>
   </Table1>
   <Table1>
-    <No>94</No>
+    <No>13</No>
     <CodeArticle>8993559388571</CodeArticle>
     <CodeProduct>SSWL938-12</CodeProduct>
     <ProductName>Sun Swallow 938 12</ProductName>
@@ -954,18 +143,18 @@
     <Size>12</Size>
   </Table1>
   <Table1>
-    <No>95</No>
+    <No>14</No>
     <CodeArticle>8993559388427</CodeArticle>
     <CodeProduct>SSWL938-10</CodeProduct>
     <ProductName>Sun Swallow 938 10</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
+    <Amount>0</Amount>
     <Price>225000</Price>
-    <Total>56250</Total>
+    <Total>0</Total>
     <Size>10</Size>
   </Table1>
   <Table1>
-    <No>96</No>
+    <No>15</No>
     <CodeArticle>8993559388526</CodeArticle>
     <CodeProduct>SSWL938L-9.5</CodeProduct>
     <ProductName>Sun Swallow 938 Ladies 9.5</ProductName>
@@ -976,7 +165,7 @@
     <Size>9.5</Size>
   </Table1>
   <Table1>
-    <No>97</No>
+    <No>16</No>
     <CodeProduct>SSWL938L-10</CodeProduct>
     <ProductName>Sun Swallow 938 Ladies 10</ProductName>
     <Unit>Lusin</Unit>
@@ -986,50 +175,50 @@
     <Size>10</Size>
   </Table1>
   <Table1>
-    <No>98</No>
+    <No>17</No>
     <CodeProduct>SSWL938L-10.5</CodeProduct>
     <ProductName>Sun Swallow 938 Ladies 10.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>4.25</Amount>
+    <Amount>3.5</Amount>
     <Price>274000</Price>
-    <Total>1164500</Total>
+    <Total>959000</Total>
     <Size>10.5</Size>
   </Table1>
   <Table1>
-    <No>99</No>
+    <No>18</No>
     <CodeArticle>8993559393674</CodeArticle>
     <CodeProduct>SUNDESIGN 9,5 - 10,5</CodeProduct>
     <ProductName>Sun Swallow Designer 9,5 - 10,5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>0.9199999999999999</Amount>
+    <Amount>0.41999999999999993</Amount>
     <Price>418000</Price>
-    <Total>384559.99999999994</Total>
+    <Total>175559.99999999997</Total>
     <Size>9,5 - 10,5</Size>
   </Table1>
   <Table1>
-    <No>100</No>
+    <No>19</No>
     <CodeArticle>8993559393681</CodeArticle>
     <CodeProduct>SUNEVOLVE 10,5 - 11,5</CodeProduct>
     <ProductName>Sun Swallow Evolve 10,5 - 11,5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>4.584</Amount>
+    <Amount>3.5839999999999996</Amount>
     <Price>321600</Price>
-    <Total>1474214.4</Total>
+    <Total>1152614.4</Total>
     <Size>10,5 - 11,5</Size>
   </Table1>
   <Table1>
-    <No>101</No>
+    <No>20</No>
     <CodeArticle>8993559389080</CodeArticle>
     <CodeProduct>SSWLHTMEXC-12</CodeProduct>
     <ProductName>Sun swallow Htm Exclusive 12</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>4.5</Amount>
+    <Amount>4.25</Amount>
     <Price>270000</Price>
-    <Total>1215000</Total>
+    <Total>1147500</Total>
     <Size>12</Size>
   </Table1>
   <Table1>
-    <No>102</No>
+    <No>21</No>
     <CodeArticle>8993559388922</CodeArticle>
     <CodeProduct>SSWLHTMEXC-10</CodeProduct>
     <ProductName>Sun Swallow Htm exclusive 10</ProductName>
@@ -1040,59 +229,59 @@
     <Size>10</Size>
   </Table1>
   <Table1>
-    <No>103</No>
+    <No>22</No>
     <CodeProduct>SSWLHTMEXC-10.5</CodeProduct>
     <ProductName>Sun Swallow Htm Exclusive 10.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>5.25</Amount>
+    <Amount>5</Amount>
     <Price>248000</Price>
-    <Total>1302000</Total>
+    <Total>1240000</Total>
     <Size>10.5</Size>
   </Table1>
   <Table1>
-    <No>104</No>
+    <No>23</No>
     <CodeProduct>SSWLHTMEXC-11</CodeProduct>
     <ProductName>Sun Swallow Htm Exclusive 11</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>5.25</Amount>
+    <Amount>5</Amount>
     <Price>270000</Price>
-    <Total>1417500</Total>
+    <Total>1350000</Total>
     <Size>11</Size>
   </Table1>
   <Table1>
-    <No>105</No>
+    <No>24</No>
     <CodeProduct>SSWLHTMEXC-11.5</CodeProduct>
     <ProductName>Sun Swallow Htm Exclusive 11.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>5.25</Amount>
+    <Amount>5</Amount>
     <Price>270000</Price>
-    <Total>1417500</Total>
+    <Total>1350000</Total>
     <Size>11.5</Size>
   </Table1>
   <Table1>
-    <No>106</No>
+    <No>25</No>
     <CodeArticle>8993559388885</CodeArticle>
     <CodeProduct>SSWLLDSBTY-9.5</CodeProduct>
     <ProductName>Sun Swallow Ladies Beauty 9.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>4.25</Amount>
+    <Amount>4</Amount>
     <Price>274000</Price>
-    <Total>1164500</Total>
+    <Total>1096000</Total>
     <Size>9.5</Size>
   </Table1>
   <Table1>
-    <No>107</No>
+    <No>26</No>
     <CodeArticle>8993559388892</CodeArticle>
     <CodeProduct>SSWLLDSBTY-10</CodeProduct>
     <ProductName>Sun Swallow Ladies Beauty 10</ProductName>
     <Unit>Lusn</Unit>
-    <Amount>3.25</Amount>
+    <Amount>3</Amount>
     <Price>274000</Price>
-    <Total>890500</Total>
+    <Total>822000</Total>
     <Size>10</Size>
   </Table1>
   <Table1>
-    <No>108</No>
+    <No>27</No>
     <CodeArticle>8993559388908</CodeArticle>
     <CodeProduct>SSWLLDSBTY - 10,5</CodeProduct>
     <ProductName>Sun Swallow Ladies Beauty 10,5</ProductName>
@@ -1103,40 +292,40 @@
     <Size>10,5</Size>
   </Table1>
   <Table1>
-    <No>109</No>
+    <No>28</No>
     <CodeArticle>8993559388847</CodeArticle>
     <CodeProduct>SSWLELGNT-10</CodeProduct>
     <ProductName>Sun Swallow Man Elegant 10</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>4.75</Amount>
+    <Amount>4.5</Amount>
     <Price>270000</Price>
-    <Total>1282500</Total>
+    <Total>1215000</Total>
     <Size>10</Size>
   </Table1>
   <Table1>
-    <No>110</No>
+    <No>29</No>
     <CodeArticle>8993559388854</CodeArticle>
     <CodeProduct>SSWLELGNT-10.5</CodeProduct>
     <ProductName>Sun Swallow Man Elegant 10.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>3.25</Amount>
+    <Amount>3</Amount>
     <Price>270000</Price>
-    <Total>877500</Total>
+    <Total>810000</Total>
     <Size>10.5</Size>
   </Table1>
   <Table1>
-    <No>111</No>
+    <No>30</No>
     <CodeArticle>8993559388861</CodeArticle>
     <CodeProduct>SSWLELGNT-11</CodeProduct>
     <ProductName>Sun Swallow Man Elegant 11</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>3.667</Amount>
+    <Amount>3.417</Amount>
     <Price>270000</Price>
-    <Total>990090</Total>
+    <Total>922590</Total>
     <Size>11</Size>
   </Table1>
   <Table1>
-    <No>112</No>
+    <No>31</No>
     <CodeProduct>SSWLELGNT-11.5</CodeProduct>
     <ProductName>Sun Swallow Man Elegant 11.5</ProductName>
     <Unit>Lusin</Unit>
@@ -1146,178 +335,58 @@
     <Size>11.5</Size>
   </Table1>
   <Table1>
-    <No>113</No>
+    <No>32</No>
     <CodeArticle>8993559391526</CodeArticle>
     <CodeProduct>SSWLTREK - 10</CodeProduct>
     <ProductName>Sun Swallow Trek 10</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>3</Amount>
+    <Amount>2.25</Amount>
     <Price>270000</Price>
-    <Total>810000</Total>
+    <Total>607500</Total>
     <Size>10</Size>
   </Table1>
   <Table1>
-    <No>114</No>
+    <No>33</No>
     <CodeArticle>8993559391533</CodeArticle>
     <CodeProduct>SSWLTREK - 10,5</CodeProduct>
     <ProductName>Sun Swallow Trek 10,5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>2.5</Amount>
+    <Amount>1.75</Amount>
     <Price>270000</Price>
-    <Total>675000</Total>
+    <Total>472500</Total>
     <Size>10,5</Size>
   </Table1>
   <Table1>
-    <No>115</No>
+    <No>34</No>
     <CodeArticle>8993559391540</CodeArticle>
     <CodeProduct>SSWLTREK - 11</CodeProduct>
     <ProductName>Sun Swallow Trek 11</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>2.5</Amount>
+    <Amount>1.75</Amount>
     <Price>273600</Price>
-    <Total>684000</Total>
+    <Total>478800</Total>
     <Size>11</Size>
   </Table1>
   <Table1>
-    <No>116</No>
+    <No>35</No>
     <CodeArticle>8993559391557</CodeArticle>
     <CodeProduct>SSWLTREK - 11,5</CodeProduct>
     <ProductName>Sun Swallow Trek 11,5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>2.17</Amount>
+    <Amount>1.42</Amount>
     <Price>273600</Price>
-    <Total>593712</Total>
+    <Total>388512</Total>
     <Size>11,5</Size>
   </Table1>
   <Table1>
-    <No>117</No>
+    <No>36</No>
     <CodeArticle>8993559393698</CodeArticle>
     <CodeProduct>SUNURBAN 10 - 11</CodeProduct>
     <ProductName>Sun Swallow Urban 10 - 11</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>3.0839999999999996</Amount>
+    <Amount>2.0839999999999996</Amount>
     <Price>336000</Price>
-    <Total>1036223.9999999999</Total>
+    <Total>700223.9999999999</Total>
     <Size>10 - 11</Size>
-  </Table1>
-  <Table1>
-    <No>118</No>
-    <CodeProduct>TANG TOP HITAM.M</CodeProduct>
-    <ProductName>TANG TOP M </ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>0</Amount>
-    <Price>62900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>119</No>
-    <CodeProduct>TANG TOP HITAM.L</CodeProduct>
-    <ProductName>TANG TOP L</ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>0</Amount>
-    <Price>62900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>120</No>
-    <CodeProduct>TANG TOP HITAM.XL</CodeProduct>
-    <ProductName>TANG TOP XL</ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>0</Amount>
-    <Price>62900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>121</No>
-    <CodeProduct>TANG TOP PUTIH.M</CodeProduct>
-    <ProductName>TANG TOP M </ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>0</Amount>
-    <Price>59900</Price>
-    <Total>0</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>122</No>
-    <CodeProduct>TANG TOP PUTIH.L</CodeProduct>
-    <ProductName>TANG TOP L</ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>0</Amount>
-    <Price>59900</Price>
-    <Total>0</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>123</No>
-    <CodeProduct>TANG TOP PUTIH.XL</CodeProduct>
-    <ProductName>TANG TOP XL</ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>0</Amount>
-    <Price>59900</Price>
-    <Total>0</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>124</No>
-    <CodeProduct>Tshirt Hitam Sporty.M</CodeProduct>
-    <ProductName>Tshirt PB Hitam M </ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>18</Amount>
-    <Price>68900</Price>
-    <Total>1240200</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>125</No>
-    <CodeProduct>Tshirt Hitam Sporty.L</CodeProduct>
-    <ProductName>Tshirt PB Hitam L</ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>18</Amount>
-    <Price>68900</Price>
-    <Total>1240200</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>126</No>
-    <CodeProduct>Tshirt Hitam Sporty.XL</CodeProduct>
-    <ProductName>Tshirt PB Hitam XL</ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>18</Amount>
-    <Price>68900</Price>
-    <Total>1240200</Total>
-    <Size>XL</Size>
-  </Table1>
-  <Table1>
-    <No>127</No>
-    <CodeProduct>Tshirt Putih Sporty.M</CodeProduct>
-    <ProductName>Tshirt PB Putih M </ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>6</Amount>
-    <Price>64900</Price>
-    <Total>389400</Total>
-    <Size>M </Size>
-  </Table1>
-  <Table1>
-    <No>128</No>
-    <CodeProduct>Tshirt Putih Sporty.L</CodeProduct>
-    <ProductName>Tshirt PB Putih L</ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>6</Amount>
-    <Price>64900</Price>
-    <Total>389400</Total>
-    <Size>L</Size>
-  </Table1>
-  <Table1>
-    <No>129</No>
-    <CodeProduct>Tshirt Putih Sporty.XL</CodeProduct>
-    <ProductName>Tshirt PB Putih XL</ProductName>
-    <Unit>Pcs</Unit>
-    <Amount>6</Amount>
-    <Price>64900</Price>
-    <Total>389400</Total>
-    <Size>XL</Size>
   </Table1>
 </Stock>

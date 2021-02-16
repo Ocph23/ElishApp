@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="12/16/2020 03:42:33" ReportInfo.Modified="02/10/2021 13:01:25" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="12/16/2020 03:42:33" ReportInfo.Modified="02/15/2021 08:20:53" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
     <XmlDataConnection Name="Nota">
       <TableDataSource Name="Table1" DataType="System.Int32" Enabled="true" TableName="Table1">
@@ -52,7 +52,7 @@
           <TableCell Name="Cell14" Border.Lines="Top, Bottom" Border.Style="Dot" Text="Total" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <BarcodeObject Name="Barcode1" Left="289.4" Top="-0.45" Width="104.4" Height="104.4" Text="[NomorInvoice]" ShowText="false" Zoom="0.9" AllowExpressions="true" AsBitmap="true" Barcode="QR Code" Barcode.ErrorCorrection="L" Barcode.Encoding="UTF8" Barcode.QuietZone="true"/>
+      <BarcodeObject Name="Barcode1" Left="289.4" Top="-0.45" Width="104.4" Height="104.4" AutoSize="false" Text="Inv : [NomorInvoice]&#13;&#10;So :  [NomorSO]&#13;&#10;Cust:[Customer]&#13;&#10;Dl:[JatuhTempo]" ShowText="false" Zoom="0.9" AllowExpressions="true" AsBitmap="true" Barcode="QR Code" Barcode.ErrorCorrection="L" Barcode.Encoding="UTF8" Barcode.QuietZone="true"/>
       <TextObject Name="Text16" Left="2.85" Top="23.58" Width="217.35" Height="28.35" Text="Perum Permata Indah No 216&#13;&#10;Abepura, Jayapura , [OfficeTelp]" Font="Arial, 7pt"/>
       <TextObject Name="Text10" Left="74.85" Top="59.7" Width="198.45" Height="18.9" Text=": [Tanggal]" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
       <TextObject Name="Text11" Left="-0.15" Top="59.7" Width="75.3" Height="18.9" Text="Tanggal" Font="Arial, 9pt"/>
@@ -94,7 +94,7 @@
         <TableColumn Name="Column18" Width="102.33"/>
         <TableColumn Name="Column19" Width="111.78"/>
         <TableRow Name="Row3" Height="28.35">
-          <TableCell Name="Cell15" Text="Barang2 telah diterima dengan baik dan cukup Barang2 telah dibeli tidak dapat ditukar/ dikembalian Pembayaran dapat ditransfer Ke : &#13;&#10;Nama : Elisabeth Hamid &#13;&#10;Ac : (Bank Mandiri) 154-00-1667520-3" Font="Arial, 9pt" RowSpan="4"/>
+          <TableCell Name="Cell15" Text="Barang2 telah diterima dengan baik dan cukup Barang2 telah dibeli tidak dapat ditukar/ dikembalian Pembayaran dapat ditransfer Ke : &#13;&#10;Nama : Ajenkris Yanto Kungkung&#13;&#10;Ac : (Bank Mandiri) 154-00-1395694-5" Font="Arial, 9pt" RowSpan="4"/>
           <TableCell Name="Cell16" Text="Hormat Kami" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt"/>
           <TableCell Name="Cell17" Text="Customer" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt"/>
           <TableCell Name="Cell18" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="Total" VertAlign="Center" Font="Arial, 9pt"/>

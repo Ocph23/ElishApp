@@ -10,9 +10,12 @@ namespace WebClient
 {
     public static class Helper
     {
-        public static string ApplicationName => "Alpha Papua Sejahterah";
+        public static string ApplicationName => "Alpha Papua Sejahtera";
         public static string DirectorName => "Herman Hamid";
-        public static string OfficeTelp => "08114810279";
+        public static string OfficeTelp => "081354699393";
+        public static string Bank=> "Bank Mandiri";
+        public static string AccountBank => "Ajenkris Yanto Kungkung";
+        public static string Rekening => "154-00-1395694-5";
 
         public static DataTable ToDataTable<T>(this List<T> data)
         {

@@ -54,7 +54,7 @@ namespace WebClient.Controllers
                     var nota = GetNotaParameters(data, data.GetType());
                     var datas = new List<ShareModels.Reports.NotaData>();
                     int nomor = 1;
-                    foreach (var item in data.Items)
+                    foreach (var item in data.Items.OrderBy(x=>x.Product.Name))
                     {
                         datas.Add(new ShareModels.Reports.NotaData
                         {
@@ -334,7 +334,7 @@ namespace WebClient.Controllers
 
                     var datas = new List<ShareModels.Reports.NotaData>();
                     int nomor = 1;
-                    foreach (var item in data.Items)
+                    foreach (var item in data.Items.OrderBy(x=>x.Product.Name))
                     {
                         datas.Add(new ShareModels.Reports.NotaData
                         {
@@ -352,8 +352,7 @@ namespace WebClient.Controllers
                         nomor++;
                     }
 
-                    var datasets = datas.OrderBy(x=>x.ProductName).ToList().ToDataTable();
-                    return Print(datasets, nota, path);
+                    return Print(datas.ToDataTable(), nota, path);
 
                 }
                 catch (Exception)
