@@ -64,7 +64,7 @@ namespace ElishAppMobile
                 }
                 else
                 {
-                    MainPage = new AppShell();
+                    MainPage = new CustomerShell();
                 }
             }
             else

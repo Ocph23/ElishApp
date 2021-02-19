@@ -296,7 +296,7 @@ namespace WebClient.Services
 
                     if (role.Name == "Customer")
                     {
-                        return _context.Customer.Where(x => x.UserId == user.Id).FirstOrDefault();
+                        return _context.Customer.Where(x => x.UserId == user.Id).Include(x=>x.Karyawan).FirstOrDefault();
                     }
                 }
             }

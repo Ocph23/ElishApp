@@ -19,8 +19,9 @@ namespace ElishAppMobile.Models
         public string NPWP { get; set; }
 
         public string Address { get; set; }
-
         public int UserId { get; set; }
+
+        public Profile Karyawan { get; set; }
 
     }
 }

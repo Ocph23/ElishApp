@@ -31,6 +31,7 @@ namespace ShareModels
 
         public string Address { get => _address; set => SetProperty(ref _address, value); }
 
+        public int KaryawanId { get => _karyawanId; set => SetProperty(ref _karyawanId, value); }
         public int UserId { get => _userid; set => SetProperty(ref _userid, value); }
 
         private string _name;
@@ -41,8 +42,11 @@ namespace ShareModels
         private string _contactName;
         private string _email;
         private int _id;
+        private int _karyawanId;
 
         public virtual User User { get; set; }
+        public virtual Karyawan Karyawan{ get; set; }
         public virtual ICollection<Orderpenjualan> Orderpenjualan { get; set; }
+
     }
 }

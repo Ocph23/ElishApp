@@ -4,7 +4,7 @@
              xmlns:view="clr-namespace:ElishAppMobile.Views"
              xmlns:model="clr-namespace:ShareModels.ModelViews;assembly=ShareModels" 
              xmlns:helpers="clr-namespace:ElishAppMobile.Helpers"
-             x:Class="ElishAppMobile.Views.SalesOrderView"
+             x:Class="ElishAppMobile.Views.PenjualanViews.PenjualanDetailView"
              Title="{Binding Title}">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save" Command="{Binding SaveCommand}"/>

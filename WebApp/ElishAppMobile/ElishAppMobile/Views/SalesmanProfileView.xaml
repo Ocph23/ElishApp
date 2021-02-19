@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ElishAppMobile.Views.SalesmanProfileView" Title="Salesman Profile">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="20">
+                <Frame HorizontalOptions="Center" Margin="0,20" CornerRadius="100" 
+                       HeightRequest="80" WidthRequest="75">
+                    <Image Source="playboy.png" ></Image>
+                </Frame>
+                <StackLayout Margin="0,0,0,30">
+                    <Label HorizontalOptions="Center" Text="{Binding Karyawan.Nama}" FontSize="Large" FontAttributes="Bold"></Label>
+                </StackLayout>
+                <StackLayout Margin="10,5" Orientation="Horizontal">
+                    <Label Text="Alamat" WidthRequest="120"/>
+                    <Label Text="{Binding Karyawan.Address}"  HorizontalOptions="Start" />
+                </StackLayout>
+                <StackLayout Margin="10,5" Orientation="Horizontal">
+                    <Label Text="Kontak" WidthRequest="120"/>
+                </StackLayout>
+                <StackLayout Margin="20,0" Orientation="Horizontal">
+                    <Label Text="Handpone" WidthRequest="110"/>
+                    <Label Text="+6282398586575" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    
+                </StackLayout>
+                <StackLayout Margin="20,0" Orientation="Horizontal">
+                    <Label Text="Email" WidthRequest="110"/>
+                    <Label Text="{Binding Karyawan.Email}" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

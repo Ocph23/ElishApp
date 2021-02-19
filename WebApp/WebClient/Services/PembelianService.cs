@@ -198,18 +198,23 @@ namespace WebClient.Services
         #region Orders
         public async Task<Orderpembelian> CreateOrder(Orderpembelian order)
         {
-            var trans = dbContext.Database.BeginTransaction();
             try
             {
+
+                if (order.Supplier != null)
+                    dbContext.Entry(order.Supplier).State = EntityState.Unchanged;
+                foreach (var item in order.Items)
+                {
+                    dbContext.Entry(item.Product).State = EntityState.Unchanged;
+                    dbContext.Entry(item.Unit).State = EntityState.Unchanged;
+                }
                 dbContext.Orderpembelian.Add(order);
                 await dbContext.SaveChangesAsync();
-                trans.Commit();
                 return order;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                trans.Rollback();
                 throw new SystemException(ex.Message);
             }
         }
@@ -236,7 +241,7 @@ namespace WebClient.Services
         {
             var lastOrder = dbContext.Orderpembelian.Where(x => x.Id == id)
                             .Include(x => x.Supplier)
-                            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units).AsNoTracking();             
+                            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);             
             return Task.FromResult(lastOrder.FirstOrDefault());
         }
 
@@ -260,32 +265,35 @@ namespace WebClient.Services
 
         public async Task<Orderpembelian> UpdateOrder(int id, Orderpembelian order)
         {
-            var trans = dbContext.Database.BeginTransaction();
             try
             {
 
 
-                var lastOrder = await GetOrder(id);
+                var lastOrder = dbContext.Orderpembelian.Where(x=>x.Id==id).Include(x => x.Items).AsNoTracking().FirstOrDefault();
+
 
                 if (lastOrder == null)
                     throw new SystemException("Order Not Found  !");
 
-              
 
-                dbContext.Entry(lastOrder).CurrentValues.SetValues(order);
-
+                lastOrder.Discount = order.Discount;
+                lastOrder.OrderDate = order.OrderDate;
+                lastOrder.Status = order.Status;
+                lastOrder.SupplierId = order.SupplierId;
                 foreach (var item in order.Items)
                 {
                     if (item.Id <= 0)
                     {
+                        dbContext.Entry(item.Unit).State = EntityState.Unchanged;
+                        dbContext.Entry(item.Product).State = EntityState.Unchanged;
                         dbContext.OrderpembelianItem.Add(item);
                     }
                     else
                     {
-                       var updatedItem = dbContext.OrderpembelianItem.SingleOrDefault(x => x.Id == item.Id);
+                       var updatedItem = dbContext.OrderpembelianItem.AsNoTracking().SingleOrDefault(x => x.Id == item.Id);
                         if (updatedItem==null)
                             throw new SystemException("Order Item Not Found !");
-                        dbContext.Entry(updatedItem).CurrentValues.SetValues(updatedItem);
+                        dbContext.Entry(updatedItem).CurrentValues.SetValues(item);
                     }
                 }
 
@@ -302,13 +310,14 @@ namespace WebClient.Services
                         }
                     }
                 }
+
+                
+
                 await dbContext.SaveChangesAsync();
-                trans.Commit();
                 return order;
             }
             catch (Exception ex)
             {
-                trans.Rollback();
                 _logger.LogError(ex.Message);
                 throw new SystemException(ex.Message);
             }

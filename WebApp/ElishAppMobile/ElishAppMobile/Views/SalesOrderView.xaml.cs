@@ -132,7 +132,7 @@ namespace ElishAppMobile.Views
             }
         }
 
-
+        public bool AddCustomerVisible => !Account.UserInRole("Customer").Result;
 
 
         public ObservableCollection<ItemPenjualanModel> Datas { get; set; } = new ObservableCollection<ItemPenjualanModel>();

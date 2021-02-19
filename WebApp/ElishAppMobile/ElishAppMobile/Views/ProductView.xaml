@@ -23,8 +23,9 @@
             <StackLayout>
                 <Label FontSize="20" FontAttributes="Bold" Text="Data Barang"></Label>
                 <StackLayout  Orientation="Horizontal">
-                    <Label VerticalOptions="CenterAndExpand"  FontAttributes="Bold" Text="Supplier"></Label>
-                    <Picker WidthRequest="250" FontSize="Small"  ItemDisplayBinding="{Binding Nama}" SelectedItem="{Binding Supplier}" SelectedIndex="{Binding SupplierIndex}" ItemsSource="{Binding DataSuppliers}"></Picker>
+                    <Label VerticalOptions="CenterAndExpand"  FontAttributes="Bold" Text="Merk"></Label>
+                    <Picker WidthRequest="250" FontSize="Small"  SelectedItem="{Binding Merk}" 
+                            SelectedIndex="{Binding SupplierIndex}" ItemsSource="{Binding DataMerk}"></Picker>
                 </StackLayout>
             </StackLayout>
         </Frame>
@@ -38,7 +39,7 @@
                             <SwipeView VerticalOptions="CenterAndExpand" >
                                 <SwipeView.LeftItems>
                                     <SwipeItems >
-                                        <SwipeItemView  
+                                        <SwipeItemView IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:ProductViewViewModel}}, Path=IsNotCustomer}"  
                                                BackgroundColor="OrangeRed" 
                                                  Command="{Binding Source={RelativeSource AncestorType={x:Type local:ProductViewViewModel}}, Path=ScanBarcode}"	
                                                CommandParameter="{Binding .}" >
@@ -49,7 +50,7 @@
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
                                 <StackLayout BackgroundColor="LightGray">
-                                    <Frame CornerRadius="10" Margin="5,1">
+                                    <Frame CornerRadius="5" Margin="5,1">
                                         <Grid BackgroundColor="White" Padding="3">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>

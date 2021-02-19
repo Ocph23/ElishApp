@@ -57,7 +57,7 @@
                             </div>
                             <div class="col-md-8">
                                 <RadzenDropDown AllowClear="true" AllowFiltering="true"
-                                                FilterCaseSensitivity="FilterCaseSensitivity.Default"
+                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                                 Data=@products.Where(item=> !model.Items.Any(data=> data.ProductId.Equals(item.Id)))
                                                 @bind-Value=@product.Id
                                                 TextProperty="CodeName" ValueProperty="Id"
@@ -65,7 +65,7 @@
                             </div>
                         </div>
 
-                        <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" AllowPaging="true"
+                        <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" 
                                     AllowSorting="true" TItem="OrderpembelianItem">
                             <Columns>
                                 <RadzenGridColumn Width="120px" TItem="OrderpembelianItem" Property="Product.CodeArticle" Title="Article" />

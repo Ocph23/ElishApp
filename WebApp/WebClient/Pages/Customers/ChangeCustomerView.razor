@@ -2,6 +2,7 @@
 
 @inject NavigationManager nav;
 @inject ICustomerService customerService;
+@inject IKaryawanService karyawanService;
 
 @attribute [Authorize]
 
@@ -10,7 +11,7 @@
 <Radzen.Blazor.RadzenFieldset Text="Data">
     <div class="row">
         <div class="col-xl-12">
-            <RadzenTabs  style="height: 750px">
+            <RadzenTabs style="height: 750px">
                 <Tabs>
                     <RadzenTabsItem Text="Customer">
                         <RadzenTemplateForm Data="model" Submit="@(async(Customer arg)=>await Save(arg))">
@@ -50,7 +51,7 @@
                                                 <RadzenLabel Text="Telepon" />
                                             </div>
                                             <div class="col-md-8">
-                                                <RadzenTextBox @bind-Value="model.Telepon"  Name="Telepon"/>
+                                                <RadzenTextBox @bind-Value="model.Telepon" Name="Telepon" />
                                                 <RadzenRequiredValidator Component="Telepon" Text="Telepon is required" Popup=true Style="position: absolute" />
                                             </div>
                                         </div>
@@ -76,6 +77,19 @@
                                                 <RadzenRequiredValidator Component="Address" Text="Address is required" Popup=true Style="position: absolute" />
                                             </div>
                                         </div>
+
+                                        <div class="row" style="margin-top:10px">
+                                            <div class="col-md-4 align-items-center d-flex">
+                                                <RadzenLabel Text="Salesman" />
+                                            </div>
+                                            <div class="col-md-8">
+                                                <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                                Data=@salesmans @bind-Value=@model.KaryawanId SelectedItemChanged="@((arg)=> SelectSalesman(arg))"
+                                                                TextProperty="Name" ValueProperty="Id" />
+                                            </div>
+                                        </div>
+                                      
                                     </div>
                                 </div>
                                 <hr />
@@ -98,76 +112,86 @@
                 </Tabs>
             </RadzenTabs>
         </div>
-       
+
     </div>
 
 </Radzen.Blazor.RadzenFieldset>
 
-    @code {
-        [Parameter]
-        public string id { get; set; }
+@code {
+    [Parameter]
+    public string id { get; set; }
 
-        public string title = "Add Customer";
+    public string title = "Add Customer";
 
-        public Customer model { get; set; } = new Customer();
+    public Customer model { get; set; } = new Customer();
+    public IEnumerable<Karyawan> salesmans = new List<Karyawan>();
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        try
         {
-            try
+
+            salesmans = await karyawanService.Get();
+            if (string.IsNullOrEmpty(id))
             {
-                if (string.IsNullOrEmpty(id))
-                {
-                    model = new Customer();
-                }
-                else
-                {
-                    title = "Edit Customer";
-                    model = await customerService.Get(Convert.ToInt32(id));
-                }
+                model = new Customer();
             }
-            catch
+            else
             {
-                //ex.Message;
+                title = "Edit Customer";
+                model = await customerService.Get(Convert.ToInt32(id));
             }
         }
-
-
-        private async Task Save(Customer cust)
+        catch
         {
-            try
+            //ex.Message;
+        }
+    }
+
+
+    void SelectSalesman(object arg)
+    {
+        var kar = (Karyawan)arg;
+        if (kar != null)
+            model.Karyawan = kar;
+    }
+
+    private async Task Save(Customer cust)
+    {
+        try
+        {
+            var Id = Convert.ToInt32(id);
+            if (Id <= 0)
             {
-                var Id = Convert.ToInt32(id);
-                if (Id <= 0)
+                var data = await customerService.Post(model);
+                if (data != null)
                 {
-                    var data = await customerService.Post(model);
-                    if (data != null)
-                    {
-                        nav.NavigateTo("/customer");
-                    }
-                }
-                else
-                {
-                    var updated = await customerService.Update(Convert.ToInt32(id), model);
-                    if (updated)
-                    {
-                        nav.NavigateTo("/customer");
-                    }
+                    nav.NavigateTo("/customer");
                 }
             }
-            catch
+            else
             {
-                //ex.Message;
+                var updated = await customerService.Update(Convert.ToInt32(id), model);
+                if (updated)
+                {
+                    nav.NavigateTo("/customer");
+                }
             }
-
-
         }
-
-
-        private void GoBack()
+        catch
         {
-            nav.NavigateTo("/customer");
+            //ex.Message;
         }
-
 
 
     }
+
+
+    private void GoBack()
+    {
+        nav.NavigateTo("/customer");
+    }
+
+
+
+}

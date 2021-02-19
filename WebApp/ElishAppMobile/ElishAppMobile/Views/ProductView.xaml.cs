@@ -38,7 +38,7 @@ namespace ElishAppMobile.Views
     {
         private ProductStock _selectedItem;
 
-        public ObservableCollection<Supplier> DataSuppliers { get; }
+        public ObservableCollection<string> DataMerk { get; }
         public ObservableCollection<ProductStock> Items { get; }
 
         private ObservableCollection<ProductStock> _SourceItems;
@@ -48,12 +48,12 @@ namespace ElishAppMobile.Views
         public Command ScanBarcode { get; }
         public Command SearchScanCommand { get; }
         public Command<ProductStock> ItemTapped { get; }
-
+        public bool IsNotCustomer => !Account.UserInRole("Customer").Result;
         public ProductViewViewModel()
         {
             Title = "Products";
             Items = new ObservableCollection<ProductStock>();
-            DataSuppliers = new ObservableCollection<Supplier>();
+            DataMerk = new ObservableCollection<string>();
             _SourceItems = new ObservableCollection<ProductStock>();
             ItemTapped = new Command<ProductStock>(OnItemSelected);
             ScanBarcode = new Command(ScanAction);
@@ -133,16 +133,24 @@ namespace ElishAppMobile.Views
 
                 if (!FromDetail)
                 {
-                    var suppliers = await Suppliers.GetSuppliers();
-                    DataSuppliers.Clear();
-                    foreach (var supplier in suppliers)
-                    {
-                        DataSuppliers.Add(supplier);
-                    }
+                    //var suppliers = await Suppliers.GetSuppliers();
+                    DataMerk.Clear();
+                    //foreach (var supplier in suppliers)
+                    //{
+                    //    DataMerk.Add(supplier);
+                    //}
                     Items.Clear();
-                    _SourceItems = new ObservableCollection<ProductStock>(await Products.GetProductStock());
-                    Supplier = DataSuppliers.FirstOrDefault();
-                    foreach (var item in _SourceItems.Where(x => x.SupplierId == Supplier.Id))
+                    var dataSource = await Products.GetProductStock();
+                    _SourceItems = new ObservableCollection<ProductStock>(dataSource.OrderByDescending(x=>x.Stock).ToList());
+
+                    var gg = _SourceItems.GroupBy(x => x.Merk);
+                    foreach (var item in gg)
+                    {
+                        DataMerk.Add(item.Key);
+                    }
+
+                    Merk = DataMerk.FirstOrDefault();
+                    foreach (var item in _SourceItems.Where(x => x.Merk == Merk))
                     {
                         Items.Add(item);
                     }
@@ -194,7 +202,7 @@ namespace ElishAppMobile.Views
             Items.Clear();
             if (string.IsNullOrEmpty(textSearch))
             {
-                foreach (var item in _SourceItems.Where(x=>x.SupplierId==Supplier.Id))
+                foreach (var item in _SourceItems.Where(x=>x.Merk==Merk))
                 {
                     Items.Add(item);
                 }
@@ -202,7 +210,7 @@ namespace ElishAppMobile.Views
             else
             {
                 var data = textSearch.ToLower();
-                foreach (var item in _SourceItems.Where(x => x.SupplierId == Supplier.Id && x.CodeName.ToLower().Contains(data) ||
+                foreach (var item in _SourceItems.Where(x => x.Merk == Merk && x.CodeName.ToLower().Contains(data) ||
                      x.Name.ToLower().Contains(data)).AsEnumerable())
                 {
                     Items.Add(item);
@@ -226,16 +234,17 @@ namespace ElishAppMobile.Views
             }
         }
 
-        private Supplier supplier;
+        private string merk;
 
-        public Supplier Supplier
+        public string Merk
         {
-            get { return supplier; }
-            set { SetProperty(ref supplier , value);
+            get { return merk; }
+            set { SetProperty(ref merk , value);
                 if (value != null)
                 {
                     Items.Clear();
-                    foreach (var item in _SourceItems.Where(x => x.SupplierId == Supplier.Id))
+                    var supp = _SourceItems.Where(x => x.Merk == value).FirstOrDefault();
+                    foreach (var item in _SourceItems.Where(x => x.SupplierId== supp.SupplierId))
                     {
                         Items.Add(item);
                     }

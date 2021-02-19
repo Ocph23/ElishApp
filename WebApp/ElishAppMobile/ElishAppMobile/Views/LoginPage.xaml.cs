@@ -105,7 +105,7 @@ namespace ElishAppMobile.Views
                     }
                     else
                     {
-                        Application.Current.MainPage = new AppShell();
+                        Application.Current.MainPage = new CustomerShell();
                     }
                 }
                 else

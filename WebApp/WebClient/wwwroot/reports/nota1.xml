@@ -2,146 +2,83 @@
 <Nota>
   <Table1>
     <No>1</No>
-    <CodeArticle>8993559388526</CodeArticle>
-    <CodeProduct>SSWL938L-9.5</CodeProduct>
-    <ProductName>Sun Swallow 938 Ladies 9.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>274800</Price>
-    <Total>68700</Total>
+    <CodeProduct>PB.03-083.M</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-083 M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>4</Amount>
+    <Price>57900</Price>
+    <Total>231600</Total>
   </Table1>
   <Table1>
     <No>2</No>
-    <CodeProduct>SSWL938L-10.5</CodeProduct>
-    <ProductName>Sun Swallow 938 Ladies 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>274800</Price>
-    <Total>68700</Total>
+    <CodeProduct>PB.03-083.L</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-083 L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>4</Amount>
+    <Price>57900</Price>
+    <Total>231600</Total>
   </Table1>
   <Table1>
     <No>3</No>
-    <CodeArticle>8993559391564</CodeArticle>
-    <CodeProduct>SSWL06L.9.5</CodeProduct>
-    <ProductName>Sun Swallow 06 Ladies 9.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>216000</Price>
-    <Total>54000</Total>
+    <CodeProduct>PB.03-083.XL</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-083 XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>4</Amount>
+    <Price>57900</Price>
+    <Total>231600</Total>
   </Table1>
   <Table1>
     <No>4</No>
-    <CodeArticle>8993559391588</CodeArticle>
-    <CodeProduct>SSWL06L-10.5</CodeProduct>
-    <ProductName>Sun Swallow 06 Ladies 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>216000</Price>
-    <Total>54000</Total>
+    <CodeProduct>PB.03-086.M</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-086 M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>4</Amount>
+    <Price>69900</Price>
+    <Total>279600</Total>
   </Table1>
   <Table1>
     <No>5</No>
-    <CodeArticle>8993559388892</CodeArticle>
-    <CodeProduct>SSWLLDSBTY-10</CodeProduct>
-    <ProductName>Sun Swallow Ladies Beauty 10</ProductName>
-    <Unit>Lusn</Unit>
-    <Amount>0.25</Amount>
-    <Price>274800</Price>
-    <Total>68700</Total>
+    <CodeProduct>PB.03-086.L</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-086 L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>4</Amount>
+    <Price>69900</Price>
+    <Total>279600</Total>
   </Table1>
   <Table1>
     <No>6</No>
-    <CodeProduct>SSWL938-10.5</CodeProduct>
-    <ProductName>Sun Swallow 938 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>225000</Price>
-    <Total>56250</Total>
+    <CodeProduct>PB.03-086.XL</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-086 XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>4</Amount>
+    <Price>69900</Price>
+    <Total>279600</Total>
   </Table1>
   <Table1>
     <No>7</No>
-    <CodeArticle>8993559388441</CodeArticle>
-    <CodeProduct>SSWL938-11</CodeProduct>
-    <ProductName>Sun Swallow 938 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>230400</Price>
-    <Total>57600</Total>
+    <CodeProduct>PB.03-088.M</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-088 M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>4</Amount>
+    <Price>69900</Price>
+    <Total>279600</Total>
   </Table1>
   <Table1>
     <No>8</No>
-    <CodeArticle>8993559388458</CodeArticle>
-    <CodeProduct>SSWL938-11.5</CodeProduct>
-    <ProductName>Sun Swallow 938 11.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>230400</Price>
-    <Total>57600</Total>
+    <CodeProduct>PB.03-088.XL</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-088 XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>4</Amount>
+    <Price>69900</Price>
+    <Total>279600</Total>
   </Table1>
   <Table1>
     <No>9</No>
-    <CodeArticle>8993559388854</CodeArticle>
-    <CodeProduct>SSWLELGNT-10.5</CodeProduct>
-    <ProductName>Sun Swallow Man Elegant 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>270000</Price>
-    <Total>67500</Total>
-  </Table1>
-  <Table1>
-    <No>10</No>
-    <CodeArticle>8993559388861</CodeArticle>
-    <CodeProduct>SSWLELGNT-11</CodeProduct>
-    <ProductName>Sun Swallow Man Elegant 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>273000</Price>
-    <Total>68250</Total>
-  </Table1>
-  <Table1>
-    <No>11</No>
-    <CodeProduct>SSWLELGNT-11.5</CodeProduct>
-    <ProductName>Sun Swallow Man Elegant 11.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>273000</Price>
-    <Total>68250</Total>
-  </Table1>
-  <Table1>
-    <No>12</No>
-    <CodeProduct>SSWLHTMEXC-10.5</CodeProduct>
-    <ProductName>Sun Swallow Htm Exclusive 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>248400</Price>
-    <Total>62100</Total>
-  </Table1>
-  <Table1>
-    <No>13</No>
-    <CodeProduct>SSWLHTMEXC-11</CodeProduct>
-    <ProductName>Sun Swallow Htm Exclusive 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>270000</Price>
-    <Total>67500</Total>
-  </Table1>
-  <Table1>
-    <No>14</No>
-    <CodeProduct>SSWLHTMEXC-11.5</CodeProduct>
-    <ProductName>Sun Swallow Htm Exclusive 11.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>270000</Price>
-    <Total>67500</Total>
-  </Table1>
-  <Table1>
-    <No>15</No>
-    <CodeArticle>8993559389080</CodeArticle>
-    <CodeProduct>SSWLHTMEXC-12</CodeProduct>
-    <ProductName>Sun swallow Htm Exclusive 12</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>270000</Price>
-    <Total>67500</Total>
+    <CodeProduct>BP.03-088.L</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-088 L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>4</Amount>
+    <Price>69900</Price>
+    <Total>279600</Total>
   </Table1>
 </Nota>

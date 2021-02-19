@@ -108,9 +108,32 @@ namespace ElishAppMobile.Services
             }
         }
 
-        public Task<IEnumerable<Orderpenjualan>> GetOrdersByCustomerId(int supplierId)
+        public async Task<IEnumerable<Orderpenjualan>> GetOrdersByCustomerId(int customerId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var connection = Helper.CheckInterNetConnection();
+                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                if (connection.Item1)
+                {
+                    await SyncOrders();
+                    using var res = new RestService();
+                    var response = await res.GetAsync($"{controller}/OrderByCustomer/{customerId}");
+                    if (!response.IsSuccessStatusCode)
+                        await res.Error(response);
+                    return await response.GetResult<IEnumerable<Orderpenjualan>>();
+                }
+                else
+                {
+                    var datas = await db.Get<SqlDataModelOrder, Orderpenjualan>();
+                    orders = datas;
+                    return orders;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         public async Task<IEnumerable<Orderpenjualan>> GetOrdersBySalesId(int id)

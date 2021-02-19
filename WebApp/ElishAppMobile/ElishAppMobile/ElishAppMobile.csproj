@@ -25,6 +25,9 @@
     <ProjectReference Include="..\..\ShareModels\ShareModels.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="CustomerShell.xaml.cs">
+      <DependentUpon>CustomerShell.xaml</DependentUpon>
+    </Compile>
     <Compile Update="SalesShell.xaml.cs">
       <DependentUpon>SalesShell.xaml</DependentUpon>
     </Compile>
@@ -33,6 +36,12 @@
     </Compile>
     <Compile Update="Views\OrdersView.xaml.cs">
       <DependentUpon>OrdersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PenjualanViews\PenjualanView.xaml.cs">
+      <DependentUpon>PenjualanView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PenjualanViews\PenjualanDetailView.xaml.cs">
+      <DependentUpon>PenjualanDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ProductView.xaml.cs">
       <DependentUpon>ProductView.xaml</DependentUpon>
@@ -49,6 +58,9 @@
     <EmbeddedResource Update="Views\CreatePackingList.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\CustomerViews\CustomerProfileView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\IncomingCheckView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -59,6 +71,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ProductDetailView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SalesmanProfileView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SalesOrderView.xaml">

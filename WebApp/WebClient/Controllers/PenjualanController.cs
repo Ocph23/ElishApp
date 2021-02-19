@@ -141,6 +141,22 @@ namespace WebClient.Controllers
             }
         }
 
+        [HttpGet("OrderByCustomer/{id}")]
+        public async Task<IActionResult> OrderByCustomer(int id)
+        {
+            try
+            {
+                var result = await service.GetOrdersByCustomerId(id);
+                if (result != null)
+                    return Ok(result);
+                throw new SystemException("Order Not Created !");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
+
         [HttpGet("order/{id}")]
         public async Task<IActionResult> GetOrder(int id)
         {

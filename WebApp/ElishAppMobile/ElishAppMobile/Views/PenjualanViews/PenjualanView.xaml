@@ -4,7 +4,7 @@
              xmlns:control="clr-namespace:ElishAppMobile.Helpers"
              xmlns:local="clr-namespace:ElishAppMobile.Views"
              xmlns:model="clr-namespace:ShareModels;assembly=ShareModels"
-             x:Class="ElishAppMobile.Views.OrdesrView">
+             x:Class="ElishAppMobile.Views.PenjualanViews.PenjualanView">
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="plus.png"   Command="{Binding AddNewCommand}"/>
     </ContentPage.ToolbarItems>

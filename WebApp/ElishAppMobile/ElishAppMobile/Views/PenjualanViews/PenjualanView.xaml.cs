@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace ElishAppMobile.Views
+namespace ElishAppMobile.Views.PenjualanViews
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class OrdesrView : ContentPage
+    public partial class PenjualanView : ContentPage
     {
-        private OrdesrViewModel _viewModel;
+        private PenjualanViewModel _viewModel;
 
-        public OrdesrView()
+        public PenjualanView()
         {
             InitializeComponent();
-            BindingContext= _viewModel = new OrdesrViewModel();
+            BindingContext= _viewModel = new PenjualanViewModel();
             search.OnSearchFound += Search_OnSearchFound;
         }
 
@@ -34,59 +34,41 @@ namespace ElishAppMobile.Views
             base.OnAppearing();
             _viewModel.OnAppearing();
         }
-
-        private async void Button_Clicked(object sender, EventArgs e)
-        {
-            var order = (Orderpenjualan)ItemsListView.SelectedItem;
-            var vm = new CreatePackingListViewModel(order);
-            var form = new CreatePackingList() { BindingContext = vm };
-            await Shell.Current.Navigation.PushAsync(form);
-        }
     }
 
 
-    public class OrdesrViewModel : BaseViewModel
+    public class PenjualanViewModel : BaseViewModel
     {
-        private ObservableCollection<Orderpenjualan> _SourceItems;
+        private ObservableCollection<Penjualan> _SourceItems;
         private bool fromdetail;
 
         public Command LoadItemsCommand { get; }
         public Command AddNewCommand { get; }
         public Command SelectCommand { get; }
-        public Command PackingListCommand { get; }
-        public Profile Sales { get; }
-        public ObservableCollection<Orderpenjualan> Items { get; private set; } = new ObservableCollection<Orderpenjualan>();
+        public Profile UserProfile { get; }
+        public ObservableCollection<Penjualan> Items { get; private set; } = new ObservableCollection<Penjualan>();
 
-        public OrdesrViewModel()
+        public PenjualanViewModel()
         {
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             AddNewCommand = new Command(AddNewCommandAction);
             SelectCommand = new Command(SelectCommandAction);
-            PackingListCommand = new Command(PackingListAction);
-            Sales = Account.GetProfile().Result;
-        }
-
-        private async void PackingListAction(object obj)
-        {
-            var order = (Orderpenjualan)obj;
-            var vm = new CreatePackingListViewModel(order);
-            var form = new CreatePackingList() { BindingContext = vm };
-            await   Shell.Current.Navigation.PushAsync(form);
+            UserProfile = Account.GetProfile().Result;
         }
 
         private void SelectCommandAction(object obj)
         {
             fromdetail = true;
-            var order = (Orderpenjualan)obj;
-            var vm = new SalesOrderViewModel(order);
-            var form = new Views.SalesOrderView() { BindingContext = vm };
+            var order = (Penjualan)obj;
+            var vm = new PenjualanDetailViewModel(order);
+            var form = new PenjualanDetailView() { BindingContext = vm };
             Shell.Current.Navigation.PushAsync(form);
         }
 
         private void AddNewCommandAction(object obj)
         {
-            var vm = new SalesOrderViewModel(null);
-            var form = new Views.SalesOrderView() { BindingContext = vm };
+            var vm = new PenjualanDetailViewModel(null);
+            var form = new PenjualanDetailView() { BindingContext = vm };
             Shell.Current.Navigation.PushAsync(form);
         }
 
@@ -99,26 +81,26 @@ namespace ElishAppMobile.Views
                     Items.Clear();
                     if (await Account.UserInRole("Administrator"))
                     {
-                        var orders = await PenjualanService.GetOrders();
+                        var orders = await PenjualanService.GetPenjualans();
                         if (orders != null)
                         {
-                            _SourceItems = new ObservableCollection<Orderpenjualan>(orders);
+                            _SourceItems = new ObservableCollection<Penjualan>(orders);
                         }
                     }
                     else if(await Account.UserInRole("Sales"))
                     {
-                        var orderSales = await PenjualanService.GetOrdersBySalesId(Sales.Id);
+                        var orderSales = await PenjualanService.GetPenjualansBySalesId(UserProfile.Id);
                         if (orderSales != null)
                         {
-                            _SourceItems = new ObservableCollection<Orderpenjualan>(orderSales);
+                            _SourceItems = new ObservableCollection<Penjualan>(orderSales);
                         }
                     }
                     else
                     {
-                        var orderSales = await PenjualanService.GetOrdersByCustomerId(Sales.Id);
+                        var orderSales = await PenjualanService.GetPenjualansByCustomerId(UserProfile.Id);
                         if (orderSales != null)
                         {
-                            _SourceItems = new ObservableCollection<Orderpenjualan>(orderSales);
+                            _SourceItems = new ObservableCollection<Penjualan>(orderSales);
                         }
                     }
 
@@ -160,11 +142,6 @@ namespace ElishAppMobile.Views
             {
                 Items.Clear();
                 var data = textSearch.ToLower();
-                foreach (var item in _SourceItems.Where(x => x.Customer.Name.ToLower().Contains(data) ||
-                     x.Nomor.ToLower().Contains(data)).AsEnumerable())
-                {
-                    Items.Add(item);
-                }
             }
             return Task.CompletedTask;
         }

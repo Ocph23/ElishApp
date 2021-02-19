@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding Title}"
+             x:Class="ElishAppMobile.Views.CustomerViews.CustomerProfileView">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="20">
+                
+                <StackLayout Margin="10,5"  Orientation="Horizontal">
+                    <Label Text="Nama Usaha" WidthRequest="120"/>
+                    <Label Text="{Binding MyProfile.Name}" />
+                </StackLayout>
+                <StackLayout Margin="10,5" Orientation="Horizontal">
+                    <Label Text="Nama Kontak" WidthRequest="120"/>
+                    <Label Text="{Binding MyProfile.ContactName}" />
+                </StackLayout>
+                <StackLayout Margin="10,5" Orientation="Horizontal">
+                    <Label Text="Kontak" WidthRequest="120"/>
+                </StackLayout>
+                <StackLayout Margin="20,0" Orientation="Horizontal">
+                    <Label Text="Handpone" WidthRequest="110"/>
+                    <Label Text="{Binding MyProfile.Handphone}" />
+                </StackLayout>
+                <StackLayout Margin="20,0" Orientation="Horizontal">
+                    <Label Text="Telepon" WidthRequest="110"/>
+                    <Label Text="{Binding MyProfile.Telepon}" />
+                </StackLayout>
+                <StackLayout Margin="20,0" Orientation="Horizontal">
+                    <Label Text="Email" WidthRequest="110"/>
+                    <Label Text="{Binding MyProfile.Email}" />
+                </StackLayout>
+                <StackLayout Margin="10,5" Orientation="Horizontal">
+                    <Label Text="Alamat" WidthRequest="120"/>
+                    <Label Text="{Binding MyProfile.Address}" />
+                </StackLayout>
+                <StackLayout Margin="10,5" Orientation="Horizontal">
+                    <Label Text="Lokasi" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
