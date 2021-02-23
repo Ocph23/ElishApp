@@ -1,0 +1,107 @@
+﻿@page "/customermap"
+
+@inject ApplicationDbContext context 
+
+
+<style>
+    .customer{
+        padding:15px;
+        border-radius:10px;
+        background-color :deepskyblue;
+        margin:5px;
+    }
+</style>
+
+
+<h3>Customer Map View</h3>
+
+<div class="row">
+    <div class="col-xl-3" style="background-color: white; height: 90vh; overflow-y: auto;">
+        @foreach (var item in customers)
+        {
+            <div @onclick="@(()=> SelectCustomer(item))" class="customer" style="@( CustomerSelected!=null && item.Id==CustomerSelected.Id ? "background-color:goldenrod" : "")">
+                <Radzen.Blazor.RadzenLabel Text="@item.Name" ></Radzen.Blazor.RadzenLabel>
+                <div style="">
+                    <Radzen.Blazor.RadzenLabel Style="font-size:small" Text="@item.Location" @onclick="@(()=> SelectCustomer(item))"></Radzen.Blazor.RadzenLabel>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-xl-9">
+        <RadzenGoogleMap @ref="map" style="height: 90vh" ApiKey="AIzaSyBVoxKIqCOGybbDmgLYrTGiFSfDjeMC5DA" Zoom=@zoom
+                         Center=@mapcenter MapClick=@OnMapClick MarkerClick=@OnMarkerClick>
+            <Markers>
+                @if (customers.Count() > 0)
+                {
+                    foreach (var item in customers)
+                    {
+                        if (!string.IsNullOrEmpty(item.Location))
+                        {
+                            <RadzenGoogleMapMarker Title="@item.Name" Label="@item.Name" Position=@(GetLocationFromString(item.Location)) />
+                        }
+                    }
+                }
+            </Markers>
+        </RadzenGoogleMap>
+    </div>
+    </div>
+
+    @code {
+
+        RadzenGoogleMap map;
+        ICollection<RadzenGoogleMapMarker> markers = new List<RadzenGoogleMapMarker>();
+        IEnumerable<Customer> customers;
+
+        protected override Task OnInitializedAsync()
+        {
+            customers = context.Customer.AsEnumerable();
+            return Task.CompletedTask;
+        }
+
+        int zoom = 18;
+        bool showMadridMarker;
+        GoogleMapPosition mapcenter = new GoogleMapPosition() { Lat = -2.612870, Lng = 140.678475 };
+
+        Customer CustomerSelected;
+
+
+        GoogleMapPosition GetLocationFromString(string location)
+        {
+            var args = location.Split(',');
+            return new GoogleMapPosition() { Lat = Convert.ToDouble(args[0]), Lng = Convert.ToDouble(args[1]) };
+        }
+
+        void OnMapClick(GoogleMapClickEventArgs args)
+        {
+            if (CustomerSelected != null)
+            {
+                CustomerSelected.Location = $"{args.Position.Lat}, {args.Position.Lng}";
+                mapcenter = new GoogleMapPosition() { Lat = args.Position.Lat, Lng = args.Position.Lng };
+
+                var cust = context.Customer.Where(x => x.Id == CustomerSelected.Id).FirstOrDefault();
+                if (cust != null)
+                {
+                    context.Entry(cust).CurrentValues.SetValues(CustomerSelected);
+                    context.SaveChanges();
+                }
+
+            }
+        }
+
+        void OnMarkerClick(RadzenGoogleMapMarker marker)
+        {
+            
+            //console.Log($"Map {marker.Title} marker clicked. Marker position -> Lat: {marker.Position.Lat}, Lng: {marker.Position.Lng}");
+        }
+
+        void SelectCustomer(Customer data)
+        {
+            CustomerSelected = data;
+
+            if (!string.IsNullOrEmpty(data.Location))
+            {
+                var args = data.Location.Split(',');
+                mapcenter = new GoogleMapPosition() { Lat = Convert.ToDouble(args[0]), Lng =Convert.ToDouble(args[1]) };
+            }
+        }
+    }

@@ -74,29 +74,38 @@
 
     async Task LoadData(LoadDataArgs args)
     {
-        var query = dbContext.Orderpenjualan
+
+
+        try
+        {
+            var query = dbContext.Orderpenjualan
             .Include(x => x.Sales)
             .Include(x => x.Items)
             .Include(x => x.Customer).AsQueryable();
 
-        if (currentTOC != OrderStatus.All)
-            query = query.Where(x => x.Status == currentTOC);
+            if (currentTOC != OrderStatus.All)
+                query = query.Where(x => x.Status == currentTOC);
 
-        if (!string.IsNullOrEmpty(args.Filter))
-        {
-            query = query.Where(args.Filter);
+            if (!string.IsNullOrEmpty(args.Filter))
+            {
+                query = query.Where(args.Filter);
+            }
+
+            if (!string.IsNullOrEmpty(args.OrderBy))
+            {
+                query = query.OrderBy(args.OrderBy);
+            }
+
+            orders = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+
+            count = dbContext.Orderpenjualan.Count();
+
+            await InvokeAsync(StateHasChanged);
         }
-
-        if (!string.IsNullOrEmpty(args.OrderBy))
+        catch (Exception ex)
         {
-            query = query.OrderBy(args.OrderBy);
+            Console.WriteLine(ex.Message);
         }
-
-        orders = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
-
-        count = dbContext.Orderpenjualan.Count();
-
-        await InvokeAsync(StateHasChanged);
     }
 
     public async void onComplete(Task<IEnumerable<Orderpenjualan>> task)

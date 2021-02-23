@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MySql.Data.MySqlClient;
 using ShareModels;
 using ShareModels.ModelViews;
 using System;
@@ -10,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace WebClient.Services
 {
-    
-
     public class PenjualanService : IPenjualanService
     {
         private readonly ApplicationDbContext dbContext;
@@ -127,44 +124,83 @@ namespace WebClient.Services
             }
         }
 
-        public Task<IEnumerable<Penjualan>> GetPenjualans()
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualans()
         {
-            var orders = dbContext.Penjualan
-                          .Include(x => x.OrderPenjualan).ThenInclude(x=>x.Customer)
-                          .Include(x => x.OrderPenjualan).ThenInclude(x=>x.Sales)
-                          .Include(x=>x.Items).ThenInclude(x=>x.Product).ThenInclude(x => x.Units).AsNoTracking()
-                          ;
-            return Task.FromResult(orders.AsEnumerable());
+            var datas = dbContext.Penjualan
+                    .Include(x => x.Items)
+                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
+                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales);
+
+            var result = datas.Select(x => new PenjualanAndOrderModel
+            {
+                PenjualanId = x.Id,
+                OrderId = x.OrderPenjualanId,
+                Invoice = x.Nomor,
+                Customer = x.OrderPenjualan.Customer.Name,
+                Sales = x.OrderPenjualan.Sales.Name,
+                Total = x.Total,
+                DeadLine = x.PayDeadLine,
+                Created = x.CreateDate,
+                Discount = x.Discount,
+                NomorSO = x.OrderPenjualan.Nomor,
+                PaymentStatus = x.Status,
+                OrderStatus = x.OrderPenjualan.Status,
+            });
+
+            return Task.FromResult(result.AsEnumerable());
         }
         public Task<Penjualan> GetPenjualan(int id)
         {
             var orders = dbContext.Penjualan.Where(x=>x.Id==id)
-                          .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x=>x.Units)
                           .Include(x => x.Items).ThenInclude(x => x.Unit)
+                          .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x=>x.Units)
                           .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
                           .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales).AsNoTracking();
             return Task.FromResult(orders.FirstOrDefault());
         }
 
-        public Task<IEnumerable<Penjualan>> GetPenjualansBySalesId(int id)
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansBySalesId(int id)
         {
-
-            var orders = dbContext.Penjualan.Where(x => x.Id == id)
-                        .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
-                        .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
-                        .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales).AsNoTracking()
-                        ;
-            return Task.FromResult(orders.Where(x=>x.OrderPenjualan.SalesId==id).AsEnumerable());
+            var datas = dbContext.Penjualan.Where(x => x.OrderPenjualan.SalesId == id )
+                .Include(x=>x.Items)
+                .Include(x=>x.OrderPenjualan).ThenInclude(x=>x.Sales)
+                .Include(x=>x.OrderPenjualan).ThenInclude(x=>x.Customer)
+                .Select(x => new PenjualanAndOrderModel {
+                PenjualanId = x.Id,
+                OrderId = x.OrderPenjualanId,
+                Invoice = x.Nomor,
+                Customer = x.OrderPenjualan.Customer.Name,
+                Sales = x.OrderPenjualan.Sales.Name,
+                Total = x.Total,
+                DeadLine = x.PayDeadLine,
+                Created = x.CreateDate, 
+                PaymentStatus = x.Status, Discount = x.Discount, NomorSO=x.OrderPenjualan.Nomor, OrderStatus=x.OrderPenjualan.Status
+            });
+            return Task.FromResult(datas.AsEnumerable());
         }
 
-        public Task<IEnumerable<Penjualan>> GetPenjualansByCustomerId(int id)
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansByCustomerId(int id)
         {
-            var orders = dbContext.Penjualan.Where(x => x.Id == id)
-                         .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
-                         .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
-                         .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales).AsNoTracking()
-                         ;
-            return Task.FromResult(orders.Where(x => x.OrderPenjualan.CustomerId== id).AsEnumerable());
+            var datas = dbContext.Penjualan.Where(x => x.OrderPenjualan.CustomerId == id)
+              .Include(x => x.Items)
+              .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
+              .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
+              .Select(x => new PenjualanAndOrderModel
+              {
+                  PenjualanId = x.Id,
+                  OrderId = x.OrderPenjualanId,
+                  Invoice = x.Nomor,
+                  Customer = x.OrderPenjualan.Customer.Name,
+                  Sales = x.OrderPenjualan.Sales.Name,
+                  Total = x.Total,
+                  DeadLine = x.PayDeadLine,
+                  Created = x.CreateDate,
+                  PaymentStatus = x.Status,
+                  Discount = x.Discount,
+                  NomorSO = x.OrderPenjualan.Nomor,
+                  OrderStatus = x.OrderPenjualan.Status
+              });
+            return Task.FromResult(datas.AsEnumerable());
         }
 
 
@@ -185,30 +221,32 @@ namespace WebClient.Services
             }
         }
 
-        public Task<IEnumerable<Penjualan>> GetPenjualans(DateTime startDate, DateTime endDate)
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualans(DateTime startDate, DateTime endDate)
         {
             try
             {
-
                 var datas = dbContext.Penjualan.Where(x => x.CreateDate >= startDate && x.CreateDate <= endDate)
-                    .Include(x => x.Items).ThenInclude(x=>x.Unit)
-                    .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x=>x.Supplier).AsNoTracking()
-                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer).AsNoTracking()
-                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales).AsNoTracking();
+                    .Include(x => x.Items)
+                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
+                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales);
 
+                var result = datas.Select(x => new PenjualanAndOrderModel
+                {
+                    PenjualanId = x.Id,
+                    OrderId = x.OrderPenjualanId,
+                    Invoice = x.Nomor,
+                    Customer = x.OrderPenjualan.Customer.Name,
+                    Sales = x.OrderPenjualan.Sales.Name,
+                    Total = x.Total,
+                    DeadLine = x.PayDeadLine,
+                    Created = x.CreateDate,
+                    Discount = x.Discount,
+                    NomorSO = x.OrderPenjualan.Nomor,
+                    PaymentStatus = x.Status,
+                    OrderStatus = x.OrderPenjualan.Status,
+                });
 
-                //var datas = from a in orders
-                //            select new PenjualanViewModel { 
-                //             Activity=a.Activity, Amount=a.Amount, OrderPenjualanId=a.OrderPenjualanId,
-                //              CodeArticle=a.Product.CodeArticle, CodeName=a.Product.CodeName, CreateDate=a.CreateDate,
-                //                CustomerName = a.OrderPenjualan.Customer.Name,
-                //                SalesName = a.OrderPenjualan.Sales.Name,
-                //            Discount=a.Discount, Merk=a.Product.Merk,
-                //             Name=a.Product.Name, PayDeadLine=a.PayDeadLine, Payment=a.Payment, Price = a.Price, Size=a.Product.Size,
-                //                Unit=a.Unit.Name, Status=a.Status, Id=a.Id
-                //            };
-
-                return Task.FromResult(datas.AsEnumerable());
+                return Task.FromResult(result.AsEnumerable());
 
 
             }
@@ -280,32 +318,68 @@ namespace WebClient.Services
             return Task.FromResult(orders.FirstOrDefault());
         }
 
-        public Task<IEnumerable<Orderpenjualan>> GetOrders()
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetOrders()
         {
             var orders = dbContext.Orderpenjualan
-              .Include(x => x.Customer)
-              .Include(x => x.Sales)
-              .Include(x => x.Items)
-              .ThenInclude(x => x.Product).ThenInclude(x => x.Units).AsNoTracking();
+          .Include(x => x.Customer)
+               .Include(x => x.Sales)
+               .Include(x => x.Items);
 
-            return Task.FromResult(orders.AsEnumerable());
+            var results = orders.Select(x => new PenjualanAndOrderModel
+            {
+                OrderId = x.Id,
+                NomorSO = x.Nomor,
+                Customer = x.Customer.Name,
+                Sales = x.Sales.Name,
+                Total = x.Total,
+                DeadLine = x.DeadLine,
+                Created = x.OrderDate,
+                Discount = x.Discount,
+                OrderStatus = x.Status, 
+            });
+
+            return Task.FromResult(results.AsEnumerable());
         }
 
-        public Task<IEnumerable<Orderpenjualan>> GetOrdersByCustomerId(int customerId)
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersByCustomerId(int customerId)
         {
             var orders = dbContext.Orderpenjualan.Where(x => x.CustomerId == customerId)
-           .Include(x => x.Customer)
-           .Include(x => x.Sales)
-           .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units).AsNoTracking();
+          .Include(x => x.Customer)
+               .Include(x => x.Sales)
+               .Include(x => x.Items);
 
-            return Task.FromResult(orders.AsEnumerable());
+            var results = orders.Select(x => new PenjualanAndOrderModel
+            {
+                OrderId = x.Id,
+                NomorSO = x.Nomor,
+                Customer = x.Customer.Name,
+                Sales = x.Sales.Name,
+                Total = x.Total,
+                DeadLine = x.DeadLine,
+                Created = x.OrderDate,
+                Discount = x.Discount,
+                OrderStatus = x.Status
+            });
+
+            return Task.FromResult(results.AsEnumerable());
         }
-        public Task<IEnumerable<Orderpenjualan>> GetOrdersBySalesId(int salesId)
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersBySalesId(int salesId)
         {
             var orders = dbContext.Orderpenjualan.Where(x => x.SalesId == salesId)
-          .Include(x => x.Customer)
-          .Include(x => x.Sales)
-          .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units).AsNoTracking();
+               .Include(x => x.Customer)
+               .Include(x => x.Sales)
+               .Include(x => x.Items).Select(x => new PenjualanAndOrderModel
+            {
+                OrderId = x.Id,
+                NomorSO = x.Nomor,
+                Customer = x.Customer.Name,
+                Sales = x.Sales.Name,
+                Total = x.Total,
+                DeadLine = x.DeadLine,
+                Created = x.OrderDate,
+                Discount = x.Discount,
+                OrderStatus = x.Status
+            });
 
             return Task.FromResult(orders.AsEnumerable());
         }

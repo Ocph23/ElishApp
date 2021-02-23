@@ -4,6 +4,7 @@
              xmlns:view="clr-namespace:ElishAppMobile.Views"
              xmlns:model="clr-namespace:ShareModels.ModelViews;assembly=ShareModels" 
              xmlns:helpers="clr-namespace:ElishAppMobile.Helpers"
+             xmlns:xcs="http://xamarin.com/schemas/2020/toolkit"
              x:Class="ElishAppMobile.Views.SalesOrderView"
              Title="{Binding Title}">
     <ContentPage.ToolbarItems>
@@ -22,8 +23,9 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Expander  Grid.Row="0" Margin="10,5" IsExpanded="True" >
-                <Expander.Header>
+            
+            <xcs:Expander Grid.Row="0" Margin="10,5" IsExpanded="True" >
+                <xcs:Expander.Header>
                     <StackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Label WidthRequest="100" Text="Customer" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
@@ -34,7 +36,7 @@
                                  WidthRequest="25" HeightRequest="25" Aspect="Fill"/>
                         </StackLayout>
                     </StackLayout>
-                </Expander.Header>
+                </xcs:Expander.Header>
                 <StackLayout>
                     <StackLayout Orientation="Horizontal">
                         <Label WidthRequest="100" Text="Supplier" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
@@ -56,7 +58,7 @@
                         <Label WidthRequest="100" Text="Hari" VerticalOptions="CenterAndExpand"/>
                     </StackLayout>
                 </StackLayout>
-            </Expander>
+            </xcs:Expander>
             <StackLayout Margin="10,5" Orientation="Horizontal" Grid.Row="1">
                 <Label WidthRequest="100" Text="Total" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                 <Label FontSize="Small">
@@ -93,7 +95,7 @@
                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout   Margin="0,0.5" >
+                            <StackLayout Margin="0,0.5" >
                                 <SwipeView  x:DataType="model:ItemPenjualanModel"  >
                                     <SwipeView.LeftItems  >
                                         <SwipeItemView  
@@ -104,12 +106,12 @@
                                             </StackLayout>
                                         </SwipeItemView>
                                     </SwipeView.LeftItems>
-                                    <Grid   >
+                                    <Grid  BackgroundColor="WhiteSmoke">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <StackLayout  Padding="10" Spacing="0" >
+                                        <StackLayout  Padding="10" >
                                             <Label Text="{Binding Product.CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
                                             <Label Text="{Binding Product.Name}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="12" />
                                             <Label Text="{Binding Product.CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="10" />

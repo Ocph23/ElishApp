@@ -10,7 +10,7 @@
                     <Image Source="playboy.png" ></Image>
                 </Frame>
                 <StackLayout Margin="0,0,0,30">
-                    <Label HorizontalOptions="Center" Text="{Binding Karyawan.Nama}" FontSize="Large" FontAttributes="Bold"></Label>
+                    <Label HorizontalOptions="Center" Text="{Binding Karyawan.Name}" FontSize="Large" FontAttributes="Bold"></Label>
                 </StackLayout>
                 <StackLayout Margin="10,5" Orientation="Horizontal">
                     <Label Text="Alamat" WidthRequest="120"/>
@@ -21,12 +21,11 @@
                 </StackLayout>
                 <StackLayout Margin="20,0" Orientation="Horizontal">
                     <Label Text="Handpone" WidthRequest="110"/>
-                    <Label Text="+6282398586575" >
+                    <Label Text="{Binding Karyawan.Telepon}" TextColor="CadetBlue"  FontAttributes="Bold">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
                         </Label.GestureRecognizers>
                     </Label>
-                    
                 </StackLayout>
                 <StackLayout Margin="20,0" Orientation="Horizontal">
                     <Label Text="Email" WidthRequest="110"/>

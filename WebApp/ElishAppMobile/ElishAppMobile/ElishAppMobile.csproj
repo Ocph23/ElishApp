@@ -8,17 +8,19 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.0.0" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.0.0" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.3" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.0.2" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />  
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />  
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />  
+    <PackageReference Include="Xamarin.Forms.Maps" Version="5.0.0.2012" />  
     <PackageReference Include="ZXing.Net.MobileX.Forms" Version="3.0.1" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +63,9 @@
     <EmbeddedResource Update="Views\CustomerViews\CustomerProfileView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\CustomerViews\HomeCustomerView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\IncomingCheckView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -73,7 +78,10 @@
     <EmbeddedResource Update="Views\ProductDetailView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SalesmanProfileView.xaml">
+    <EmbeddedResource Update="Views\SalesmanView\HomeSalesman.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SalesmanView\SalesmanProfileView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SalesOrderView.xaml">

@@ -34,6 +34,9 @@ namespace ShareModels
         public int KaryawanId { get => _karyawanId; set => SetProperty(ref _karyawanId, value); }
         public int UserId { get => _userid; set => SetProperty(ref _userid, value); }
 
+        public string Location { get => _location; set => SetProperty(ref _location, value); }
+
+
         private string _name;
         private int _userid;
         private string _address;
@@ -43,6 +46,7 @@ namespace ShareModels
         private string _email;
         private int _id;
         private int _karyawanId;
+        private string _location;
 
         public virtual User User { get; set; }
         public virtual Karyawan Karyawan{ get; set; }

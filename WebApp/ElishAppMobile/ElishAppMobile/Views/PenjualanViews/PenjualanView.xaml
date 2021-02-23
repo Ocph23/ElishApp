@@ -2,80 +2,60 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:control="clr-namespace:ElishAppMobile.Helpers"
-             xmlns:local="clr-namespace:ElishAppMobile.Views"
+             xmlns:local="clr-namespace:ElishAppMobile.Views.PenjualanViews"
              xmlns:model="clr-namespace:ShareModels;assembly=ShareModels"
+             Title="{Binding Title}"
              x:Class="ElishAppMobile.Views.PenjualanViews.PenjualanView">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="plus.png"   Command="{Binding AddNewCommand}"/>
-    </ContentPage.ToolbarItems>
-    <Shell.SearchHandler>
-        <control:TextSearchHandler x:Name="search" Placeholder="Cari"></control:TextSearchHandler>
-    </Shell.SearchHandler>
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
-            <Label Margin="10" FontSize="20" FontAttributes="Bold" Text="Sales Order"></Label>
             <RefreshView Grid.Row="1" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=Default}">
                 <CollectionView x:Name="ItemsListView" 
                 ItemsSource="{Binding Items}"
                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <SwipeView  >
-                                    <SwipeView.LeftItems>
-                                    <SwipeItems>
-                                        <SwipeItem  BackgroundColor="OrangeRed" Text="Cancel"
-                                                         Command="{Binding Source={RelativeSource  AncestorType={x:Type local:OrdesrViewModel}}, 
-                                            Path=PackingListCommand}" CommandParameter="{Binding .}">
-                                        </SwipeItem>
-                                        <SwipeItem   BackgroundColor="LimeGreen" Text="Packing"
-                                                         Command="{Binding Source={RelativeSource  AncestorType={x:Type local:OrdesrViewModel}}, 
-                                            Path=PackingListCommand}" CommandParameter="{Binding .}">
-
-                                        </SwipeItem>
-                                    </SwipeItems>
-                                    </SwipeView.LeftItems>
-                                <StackLayout>
-                                    <Frame BackgroundColor="WhiteSmoke" Margin="5" Padding="10" CornerRadius="5">
-                                        <Grid >
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <StackLayout Spacing="0">
-                                                <Label Text="{Binding Nomor}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
-                                                <Label Text="{Binding Customer.Name}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
-                                                <Label Text="{Binding Sales.Name}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
-                                            </StackLayout>
-                                            <StackLayout Grid.Column="1" Spacing="0">
-                                                <Label Text="{Binding OrderDate, StringFormat='{}{0:dd-MM-yyyy HH:mm}'}" HorizontalOptions="End" LineBreakMode="NoWrap"
-                                               Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
-                                                <Label Text="{Binding Status}" HorizontalOptions="EndAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" 
+                            <StackLayout>
+                                <Frame  Margin="3"  BackgroundColor="#FF0C9E" CornerRadius="10" Padding="10,0,0,0">
+                                <Frame BackgroundColor="WhiteSmoke" Padding="15" CornerRadius="5">
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackLayout Spacing="0">
+                                            <Label Text="{Binding Invoice}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
+                                            <Label Text="{Binding Customer}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
+                                            <Label Text="{Binding Sales}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
+                                        </StackLayout>
+                                        <StackLayout Grid.Column="1" Spacing="0">
+                                            <Label Text="{Binding Created, StringFormat='{}{0:dd-MM-yyyy HH:mm}'}" HorizontalOptions="EndAndExpand" LineBreakMode="NoWrap"
+                                               Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" />
+                                            <Label Text="{Binding PaymentStatus}" HorizontalOptions="EndAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" 
                                                    FontSize="13" />
-                                                <Label  LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15">
-                                                    <Label.FormattedText>
-                                                        <FormattedString>
-                                                            <Span Text="Rp."></Span>
-                                                            <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"></Span>
-                                                        </FormattedString>
-                                                    </Label.FormattedText>
-                                                </Label>
-                                            </StackLayout>
-                                        </Grid>
-                                    </Frame>
-                                </StackLayout>
-                                    <SwipeView.GestureRecognizers>
+                                            <Label  LineBreakMode="NoWrap" HorizontalOptions="EndAndExpand" Style="{DynamicResource ListItemTextStyle}" FontSize="15">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Rp."></Span>
+                                                        <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </Grid>
+                                    <Frame.GestureRecognizers>
                                         <TapGestureRecognizer 
                                     NumberOfTapsRequired="1"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:OrdesrViewModel}}, Path=SelectCommand}"		
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:PenjualanViewModel}}, Path=SelectCommand}"		
                                     CommandParameter="{Binding .}">
                                         </TapGestureRecognizer>
-                                    </SwipeView.GestureRecognizers>
-                                </SwipeView>
+                                    </Frame.GestureRecognizers>
+                                </Frame>
+                                </Frame>
+                            </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

@@ -1,4 +1,5 @@
-﻿using ShareModels;
+﻿using Microsoft.EntityFrameworkCore;
+using ShareModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,8 @@ namespace WebClient.Services
 
         public Task<Karyawan> Get(int id)
         {
-            var result = dbContext.Karyawan.Where(x => x.Id == id).FirstOrDefault();
+            var result = dbContext.Karyawan.Where(x => x.Id == id)
+                .Include(x=>x.User).FirstOrDefault();
             return Task.FromResult(result);
         }
 
@@ -80,6 +82,15 @@ namespace WebClient.Services
             {
                 throw new SystemException(ex.Message);
             }
+        }
+
+
+
+        public async  Task<bool> UpdateUser(User user) {
+            var result = dbContext.User.Where(x => x.Id == user.Id).FirstOrDefault();
+            result.UserName = user.UserName;
+           await dbContext.SaveChangesAsync();
+            return true;
         }
 
     }

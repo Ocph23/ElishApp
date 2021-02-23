@@ -1,41 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="{Binding Title}"
+             Title="Profil Pelaggan"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:Class="ElishAppMobile.Views.CustomerViews.CustomerProfileView">
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="20">
-                
-                <StackLayout Margin="10,5"  Orientation="Horizontal">
-                    <Label Text="Nama Usaha" WidthRequest="120"/>
-                    <Label Text="{Binding MyProfile.Name}" />
+                <StackLayout Margin="10,5"  >
+                    <Label Text="Nama Usaha" />
+                    <Entry Text="{Binding MyProfile.Name}" />
                 </StackLayout>
-                <StackLayout Margin="10,5" Orientation="Horizontal">
-                    <Label Text="Nama Kontak" WidthRequest="120"/>
-                    <Label Text="{Binding MyProfile.ContactName}" />
+                <StackLayout Margin="10,5" >
+                    <Label Text="Nama Kontak" />
+                    <Entry Text="{Binding MyProfile.ContactName}" />
                 </StackLayout>
-                <StackLayout Margin="10,5" Orientation="Horizontal">
-                    <Label Text="Kontak" WidthRequest="120"/>
+                <StackLayout Margin="10,5" >
+                    <Label Text="Handpone" />
+                    <Entry Text="{Binding MyProfile.Handphone}" />
                 </StackLayout>
-                <StackLayout Margin="20,0" Orientation="Horizontal">
-                    <Label Text="Handpone" WidthRequest="110"/>
-                    <Label Text="{Binding MyProfile.Handphone}" />
+                <StackLayout Margin="10,5" >
+                    <Label Text="Telepon" />
+                    <Entry Text="{Binding MyProfile.Telepon}" />
                 </StackLayout>
-                <StackLayout Margin="20,0" Orientation="Horizontal">
-                    <Label Text="Telepon" WidthRequest="110"/>
-                    <Label Text="{Binding MyProfile.Telepon}" />
+                <StackLayout Margin="10,5" >
+                    <Label Text="Email/User/" />
+                    <Entry Text="{Binding MyProfile.Email}" />
                 </StackLayout>
-                <StackLayout Margin="20,0" Orientation="Horizontal">
-                    <Label Text="Email" WidthRequest="110"/>
-                    <Label Text="{Binding MyProfile.Email}" />
+                <StackLayout Margin="10,5" >
+                    <Label Text="Alamat" />
+                    <Editor Text="{Binding MyProfile.Address}" />
                 </StackLayout>
-                <StackLayout Margin="10,5" Orientation="Horizontal">
-                    <Label Text="Alamat" WidthRequest="120"/>
-                    <Label Text="{Binding MyProfile.Address}" />
-                </StackLayout>
-                <StackLayout Margin="10,5" Orientation="Horizontal">
-                    <Label Text="Lokasi" />
+                <StackLayout Margin="10,5" >
+                    <Grid >
+                        <Label Text="Lokasi" />
+                        <Button HorizontalOptions="End" Margin="0" Padding="5" Command="{Binding SetLocationCommand}" HeightRequest="25" FontSize="Micro" Text="Set Lokasi"></Button>
+                    </Grid>
+                    <maps:Map x:Name="map" Margin="0,10" IsShowingUser="True"  HeightRequest="300"/>
                 </StackLayout>
             </StackLayout>
         </ScrollView>

@@ -37,7 +37,7 @@ namespace ElishAppMobile.Views
     public class SalesOrderViewModel : BaseViewModel
     {
         #region Constructor
-        public SalesOrderViewModel(Orderpenjualan order)
+        public SalesOrderViewModel(PenjualanAndOrderModel order)
         {
            
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
@@ -74,9 +74,9 @@ namespace ElishAppMobile.Views
             }
             else
             {
-                Order = order;
+                Order = PenjualanService.GetOrder(order.OrderId).Result;
                 Title = "View/Edit Order";
-                InitAsync(order);
+                InitAsync(Order);
               
             }
 
@@ -188,7 +188,6 @@ namespace ElishAppMobile.Views
             }
         }
 
-
         public int SupplierIndex
         {
             get
@@ -199,6 +198,7 @@ namespace ElishAppMobile.Views
             {
                 SetProperty(ref _supplierIndex, value);
                 SupplierSelected = DataSupplier[value];
+                Datas.Clear();
                 RefreshProductStock();
             }
         }

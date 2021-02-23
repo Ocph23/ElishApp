@@ -9,8 +9,8 @@ namespace ElishAppMobile
 {
     public class Helper
     {
-        //public static string Url { get; set; } = "http://192.168.1.7:4300";
-        public static string  Url { get; set; } = "https://waena-desa.id";
+        public static string Url { get; set; } = "http://192.168.1.2";
+        //public static string  Url { get; set; } = "https://waena-desa.id";
 
         internal static Tuple<bool, NetworkAccess> CheckInterNetConnection()
         {

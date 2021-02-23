@@ -2,6 +2,8 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:ElishAppMobile.Views"
+       xmlns:penjualan="clr-namespace:ElishAppMobile.Views.PenjualanViews"
+       xmlns:salesView="clr-namespace:ElishAppMobile.Views.SalesmanView"
        Title="ElishAppMobile"
        x:Class="ElishAppMobile.SalesShell">
     <Shell.Resources>
@@ -74,7 +76,7 @@
     </Shell.FlyoutHeader>
     
     <FlyoutItem Title="Home" Icon="icon_about.png">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
+        <ShellContent Route="HomeCustomerView" ContentTemplate="{DataTemplate salesView:HomeSalesman}" />
     </FlyoutItem>
     <FlyoutItem Title="Products" Icon="qr.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ProductView}" />
@@ -84,6 +86,10 @@
 
     <FlyoutItem Title="Orders" Icon="icon_feed.png">
         <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:OrdesrView}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Penjualan" Icon="icon_feed.png">
+        <ShellContent Route="PenjualanView" ContentTemplate="{DataTemplate penjualan:PenjualanView}" />
     </FlyoutItem>
 
     <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">

@@ -21,18 +21,19 @@ namespace ElishAppMobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
-           Forms.SetFlags( new string[] { "SwipeView_Experimental" , "Expander_Experimental" , "RadioButton_Experimental" });
+            // Forms.SetFlags( new string[] { "SwipeView_Experimental" , "Expander_Experimental" , "RadioButton_Experimental" });
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: true);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
+            Xamarin.FormsMaps.Init(this, savedInstanceState);
             LoadApplication(new App());
         }
 
         [Obsolete]
-#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
+        #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
-#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
+        #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);

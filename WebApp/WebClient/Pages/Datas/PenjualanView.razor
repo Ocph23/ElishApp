@@ -1,10 +1,10 @@
 ﻿@page "/data/penjualan"
 
 @using ShareModels.ModelViews;
-@using Newtonsoft.Json;
+@using Microsoft.EntityFrameworkCore;
 
+@inject ApplicationDbContext dbContext
 @inject IPenjualanService penjualanService
-
 @attribute [Authorize]
 
 <RadzenFieldset Text="Laporan Penjualan">
@@ -53,6 +53,8 @@
 
     public async Task GetData(bool forced)
     {
+        await Task.Delay(1);
+
         if (forced)
             source = new List<Penjualan>();
 
@@ -60,7 +62,11 @@
         {
             if (source.Count() <= 0 || forced)
             {
-                source = await penjualanService.GetPenjualans(start.Value, endDate.Value);
+                source = dbContext.Penjualan.Where(x => x.CreateDate >= start.Value && x.CreateDate <= endDate.Value)
+                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
+                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
+                    .Include(x => x.Items).ThenInclude(x=>x.Unit)
+                .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x=>x.Units);
             }
 
             grid.ColumnsCollection.Clear();
@@ -178,10 +184,14 @@
                     {
                         datas.Add(item);
                     }
-                   
+
                     grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "SalesName", Title = "Sales" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "TotalFeeSalesman", Title = "Fee Sales", 
-                        TextAlign= TextAlign.Right });
+                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>()
+                    {
+                        Property = "TotalFeeSalesman",
+                        Title = "Fee Sales",
+                        TextAlign = TextAlign.Right
+                    });
                     break;
             }
 

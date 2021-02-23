@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShareModels;
+using ShareModels.ModelViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,12 @@ namespace WebClient.Controllers
     [ApiController]
     public class PenjualanController : ControllerBase
     {
+        private readonly IUserService _userService;
         private readonly IPenjualanService service;
 
-        public PenjualanController(IPenjualanService _service)
+        public PenjualanController(IPenjualanService _service, IUserService userService)
         {
+            _userService = userService;
             service = _service;
         }
 
@@ -27,7 +30,30 @@ namespace WebClient.Controllers
         {
             try
             {
-                return Ok(await service.GetPenjualans());
+                if (User.IsInRole("Administrator"))
+                {
+                    return Ok(await service.GetPenjualans());
+                }
+                else
+                {
+                    var profile = await _userService.Profile();
+                    if (profile != null)
+                    {
+                        if (profile.GetType() == typeof(Karyawan))
+                        {
+                            Karyawan karyawan = profile as Karyawan;
+                            return Ok(await service.GetPenjualansBySalesId(karyawan.Id));
+                        }
+                        else
+                        {
+                            Customer karyawan = profile as Customer;
+                            return Ok(await service.GetPenjualansByCustomerId(karyawan.Id));
+                        }
+                    }
+                }
+
+                throw new SystemException("Not Found !");
+
             }
             catch (Exception ex)
             {
@@ -51,31 +77,31 @@ namespace WebClient.Controllers
         }
 
 
-        [HttpGet("ByCustomerId/{id}")]
-        public async Task<IActionResult> GetPenjualanByCustomerId(int id)
-        {
-            try
-            {
-                return Ok(await service.GetPenjualansByCustomerId(id));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorMessage(ex.Message));
-            }
-        }
+        //[HttpGet("ByCustomerId/{id}")]
+        //public async Task<IActionResult> GetPenjualanByCustomerId(int id)
+        //{
+        //    try
+        //    {
+        //        return Ok(await service.GetPenjualansByCustomerId(id));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new ErrorMessage(ex.Message));
+        //    }
+        //}
 
-        [HttpGet("BySalesId/{id}")]
-        public async Task<IActionResult> GetPenjualanBySalesId(int id)
-        {
-            try
-            {
-                return Ok(await service.GetPenjualansBySalesId(id));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorMessage(ex.Message));
-            }
-        }
+        //[HttpGet("BySalesId/{id}")]
+        //public async Task<IActionResult> GetPenjualanBySalesId(int id)
+        //{
+        //    try
+        //    {
+        //        return Ok(await service.GetPenjualansBySalesId(id));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new ErrorMessage(ex.Message));
+        //    }
+        //}
 
 
         [ApiAuthorize]
@@ -114,10 +140,30 @@ namespace WebClient.Controllers
         {
             try
             {
-                var result = await service.GetOrders();
-                if (result != null)
-                    return Ok(result);
-                throw new SystemException("Order Not Created !");
+                if (User.IsInRole("Administrator"))
+                {
+                   return Ok(await service.GetOrders());
+                }
+                else
+                {
+                    var profile = await _userService.Profile();
+                    if (profile != null)
+                    {
+                        if (profile.GetType() == typeof(Karyawan))
+                        {
+                            Karyawan karyawan = profile as Karyawan;
+                            return Ok( await service.GetOrdersBySalesId(karyawan.Id));
+                        }
+                        else
+                        {
+                            Customer karyawan = profile as Customer;
+                            return Ok(await service.GetOrdersByCustomerId(karyawan.Id));
+                        }
+                    }
+                }
+
+                throw new SystemException("Not Found !");
+
             }
             catch (Exception ex)
             {
@@ -125,37 +171,37 @@ namespace WebClient.Controllers
             }
         }
 
-        [HttpGet("OrderBySales/{id}")]
-        public async Task<IActionResult> GetOrderBySales(int id)
-        {
-            try
-            {
-                var result = await service.GetOrdersBySalesId(id);
-                if (result != null)
-                    return Ok(result);
-                throw new SystemException("Order Not Created !");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorMessage(ex.Message));
-            }
-        }
+        //[HttpGet("OrderBySales/{id}")]
+        //public async Task<IActionResult> GetOrderBySales(int id)
+        //{
+        //    try
+        //    {
+        //        var result = await service.GetOrdersBySalesId(id);
+        //        if (result != null)
+        //            return Ok(result);
+        //        throw new SystemException("Order Not Created !");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new ErrorMessage(ex.Message));
+        //    }
+        //}
 
-        [HttpGet("OrderByCustomer/{id}")]
-        public async Task<IActionResult> OrderByCustomer(int id)
-        {
-            try
-            {
-                var result = await service.GetOrdersByCustomerId(id);
-                if (result != null)
-                    return Ok(result);
-                throw new SystemException("Order Not Created !");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new ErrorMessage(ex.Message));
-            }
-        }
+        //[HttpGet("OrderByCustomer/{id}")]
+        //public async Task<IActionResult> OrderByCustomer(int id)
+        //{
+        //    try
+        //    {
+        //        var result = await service.GetOrdersByCustomerId(id);
+        //        if (result != null)
+        //            return Ok(result);
+        //        throw new SystemException("Order Not Created !");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new ErrorMessage(ex.Message));
+        //    }
+        //}
 
         [HttpGet("order/{id}")]
         public async Task<IActionResult> GetOrder(int id)

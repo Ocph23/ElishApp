@@ -1,6 +1,7 @@
 ﻿using ElishAppMobile.Models;
 using ElishAppMobile.ViewModels;
 using ShareModels;
+using ShareModels.ModelViews;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -47,7 +48,7 @@ namespace ElishAppMobile.Views
 
     public class OrdesrViewModel : BaseViewModel
     {
-        private ObservableCollection<Orderpenjualan> _SourceItems;
+        private ObservableCollection<PenjualanAndOrderModel> _SourceItems;
         private bool fromdetail;
 
         public Command LoadItemsCommand { get; }
@@ -55,7 +56,7 @@ namespace ElishAppMobile.Views
         public Command SelectCommand { get; }
         public Command PackingListCommand { get; }
         public Profile Sales { get; }
-        public ObservableCollection<Orderpenjualan> Items { get; private set; } = new ObservableCollection<Orderpenjualan>();
+        public ObservableCollection<PenjualanAndOrderModel> Items { get; private set; } = new ObservableCollection<PenjualanAndOrderModel>();
 
         public OrdesrViewModel()
         {
@@ -77,7 +78,7 @@ namespace ElishAppMobile.Views
         private void SelectCommandAction(object obj)
         {
             fromdetail = true;
-            var order = (Orderpenjualan)obj;
+            var order = (PenjualanAndOrderModel)obj;
             var vm = new SalesOrderViewModel(order);
             var form = new Views.SalesOrderView() { BindingContext = vm };
             Shell.Current.Navigation.PushAsync(form);
@@ -97,32 +98,13 @@ namespace ElishAppMobile.Views
                 if (!fromdetail)
                 {
                     Items.Clear();
-                    if (await Account.UserInRole("Administrator"))
+                    var orders = await PenjualanService.GetOrders();
+                    if (orders != null)
                     {
-                        var orders = await PenjualanService.GetOrders();
-                        if (orders != null)
-                        {
-                            _SourceItems = new ObservableCollection<Orderpenjualan>(orders);
-                        }
-                    }
-                    else if(await Account.UserInRole("Sales"))
-                    {
-                        var orderSales = await PenjualanService.GetOrdersBySalesId(Sales.Id);
-                        if (orderSales != null)
-                        {
-                            _SourceItems = new ObservableCollection<Orderpenjualan>(orderSales);
-                        }
-                    }
-                    else
-                    {
-                        var orderSales = await PenjualanService.GetOrdersByCustomerId(Sales.Id);
-                        if (orderSales != null)
-                        {
-                            _SourceItems = new ObservableCollection<Orderpenjualan>(orderSales);
-                        }
+                        _SourceItems = new ObservableCollection<PenjualanAndOrderModel>(orders);
                     }
 
-                    foreach (var item in _SourceItems.OrderByDescending(x => x.Id))
+                    foreach (var item in _SourceItems.Where(x=>x.OrderStatus == OrderStatus.New).OrderByDescending(x => x.OrderId))
                     {
                         Items.Add(item);
                     }
@@ -160,8 +142,8 @@ namespace ElishAppMobile.Views
             {
                 Items.Clear();
                 var data = textSearch.ToLower();
-                foreach (var item in _SourceItems.Where(x => x.Customer.Name.ToLower().Contains(data) ||
-                     x.Nomor.ToLower().Contains(data)).AsEnumerable())
+                foreach (var item in _SourceItems.Where(x => x.Customer.ToLower().Contains(data) ||
+                     x.NomorSO.ToLower().Contains(data)).AsEnumerable())
                 {
                     Items.Add(item);
                 }

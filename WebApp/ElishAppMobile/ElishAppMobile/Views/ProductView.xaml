@@ -50,37 +50,39 @@
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
                                 <StackLayout BackgroundColor="LightGray">
-                                    <Frame CornerRadius="5" Margin="5,1">
-                                        <Grid BackgroundColor="White" Padding="3">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition Width="auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <StackLayout Spacing="0">
-                                                <Label Text="{Binding CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
-                                                <Label Text="{Binding Name}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-                                                <Label Text="{Binding CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" />
-                                                <StackLayout.GestureRecognizers>
-                                                    <TapGestureRecognizer 
+                                    <Frame CornerRadius="10" BackgroundColor="OrangeRed" Padding="10,0,0,0" Margin="5,2">
+                                        <Frame CornerRadius="5" >
+                                            <Grid BackgroundColor="White" Padding="3">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackLayout Spacing="0">
+                                                    <Label Text="{Binding CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
+                                                    <Label Text="{Binding Name}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Default" />
+                                                    <Label Text="{Binding CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" />
+                                                    <StackLayout.GestureRecognizers>
+                                                        <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type local:ProductViewViewModel}}, Path=ItemTapped}"		
                                 CommandParameter="{Binding .}">
-                                                    </TapGestureRecognizer>
-                                                </StackLayout.GestureRecognizers>
-                                            </StackLayout>
-                                            <StackLayout Grid.Column="1" Spacing="0">
-                                                <Label Text="{Binding StockView}" FontSize="15" HorizontalOptions="CenterAndExpand"/>
-                                                <Label HorizontalOptions="CenterAndExpand" Text="{Binding SelectedUnit.Name}" FontSize="15"/>
-                                                <Label FontSize="12">
-                                                    <Label.FormattedText>
-                                                        <FormattedString>
-                                                            <Span>Rp.</Span>
-                                                            <Span Text="{Binding SelectedUnit.Sell, StringFormat='{}{0:N2}'}" />
-                                                        </FormattedString>
-                                                    </Label.FormattedText>
-                                                </Label>
-                                            </StackLayout>
-                                        </Grid>
+                                                        </TapGestureRecognizer>
+                                                    </StackLayout.GestureRecognizers>
+                                                </StackLayout>
+                                                <StackLayout Grid.Column="1" Spacing="0">
+                                                    <Label Text="{Binding StockView}" FontSize="15" HorizontalOptions="CenterAndExpand"/>
+                                                    <Label HorizontalOptions="CenterAndExpand" Text="{Binding SelectedUnit.Name}" FontSize="Micro"/>
+                                                    <Label FontSize="Small">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span>Rp.</Span>
+                                                                <Span Text="{Binding SelectedUnit.Sell, StringFormat='{}{0:N2}'}" />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </StackLayout>
+                                            </Grid>
+                                        </Frame>
                                     </Frame>
                                 </StackLayout>
 

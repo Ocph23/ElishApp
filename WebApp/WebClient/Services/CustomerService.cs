@@ -86,29 +86,61 @@ namespace WebClient.Services
 
         public async Task<bool> Update(int id, Customer value)
         {
-            var existsModel = dbContext.Customer.Where(x => x.Id == id).FirstOrDefault();
-            if (existsModel == null)
-                throw new SystemException("Data Not Found !");
-
-
-            dbContext.Entry(existsModel).CurrentValues.SetValues(value);
-
-            await dbContext.SaveChangesAsync();
-
-            var existOnModel = CustomerCollection.Where(x => x.Id == id).FirstOrDefault();
-            if (existOnModel!=null)
+            try
             {
-                existOnModel.Address = value.Address;
-                existOnModel.ContactName = value.ContactName;
-                existOnModel.Email = value.Email;
-                existOnModel.Name = value.Name;
-                existOnModel.NPWP = value.NPWP;
-                existOnModel.Telepon = value.Telepon;
-                existOnModel.UserId = value.UserId;
+                var existsModel = dbContext.Customer.Where(x => x.Id == id).FirstOrDefault();
+                if (existsModel == null)
+                    throw new SystemException("Data Not Found !");
+
+                dbContext.Entry(existsModel).CurrentValues.SetValues(value);
+
+                await dbContext.SaveChangesAsync();
+
+                var existOnModel = CustomerCollection.Where(x => x.Id == id).FirstOrDefault();
+                if (existOnModel != null)
+                {
+                    existOnModel.Address = value.Address;
+                    existOnModel.ContactName = value.ContactName;
+                    existOnModel.Email = value.Email;
+                    existOnModel.Name = value.Name;
+                    existOnModel.NPWP = value.NPWP;
+                    existOnModel.Telepon = value.Telepon;
+                    existOnModel.UserId = value.UserId;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
             }
 
-            return true;
+
+           
         }
 
+        public Task<IEnumerable<Customer>> GetBySales(int id)
+        {
+            var customers = dbContext.Customer.Where(x => x.KaryawanId== id);
+            return Task.FromResult(customers.AsEnumerable());
+        }
+
+        public async Task<bool> UpdateLocation(Customer cust)
+        {
+            try
+            {
+                var existsModel = dbContext.Customer.Where(x => x.Id == cust.Id).FirstOrDefault();
+                if (existsModel == null)
+                    throw new SystemException("Data Not Found !");
+
+                existsModel.Location = cust.Location;
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
     }
 }

@@ -76,7 +76,8 @@ namespace ShareModels.ModelViews
             set
             {
                 SetProperty(ref _unit, value);
-                UnitIndex = Product.Units.ToList().IndexOf(_unit);
+                if(Product!=null)
+                    UnitIndex = Product.Units.ToList().IndexOf(_unit);
             }
         }
         public virtual Product Product { get; set; }

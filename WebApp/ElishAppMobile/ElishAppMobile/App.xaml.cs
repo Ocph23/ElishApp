@@ -79,6 +79,9 @@ namespace ElishAppMobile
 
         protected override void OnSleep()
         {
+
+
+
         }
 
         protected override void OnResume()

@@ -1,0 +1,17 @@
+﻿@page "/test"
+
+@inject IPenjualanService penjualan
+
+<h3>TestPage</h3>
+
+@code {
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var result = await penjualan.GetOrdersBySalesId(2);
+
+    }
+
+}

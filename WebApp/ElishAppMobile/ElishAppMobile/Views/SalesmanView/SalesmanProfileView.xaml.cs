@@ -1,4 +1,5 @@
 ﻿using ElishAppMobile.Models;
+using ElishAppMobile.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,12 +35,11 @@ namespace ElishAppMobile.Views
     }
 
 
-    public class SalesmanProfileViewModel
+    public class SalesmanProfileViewModel:BaseViewModel
     {
-        Profile Karyawan { get; set; }
+        public Profile Karyawan { get; set; }
         public SalesmanProfileViewModel()
         {
-
             var result = Account.GetProfile().Result;
             Karyawan = result.Karyawan;
         }

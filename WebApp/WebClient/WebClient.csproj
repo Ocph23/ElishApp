@@ -47,6 +47,7 @@
    <Watch Remove="Pages\Category\CategoryView.razor" />
    <Watch Remove="Pages\Category\EditCategory.razor" />
    <Watch Remove="Pages\Customers\ChangeCustomerView.razor" />
+   <Watch Remove="Pages\Customers\CustomerMapView.razor" />
    <Watch Remove="Pages\Customers\CustomerView.razor" />
    <Watch Remove="Pages\Datas\IncommingCheckListView.razor" />
    <Watch Remove="Pages\Datas\PenjualanView.razor" />
@@ -62,10 +63,12 @@
    <Watch Remove="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
    <Watch Remove="Pages\ShareComponent\PrintLayout.razor" />
    <Watch Remove="Pages\Suppliers\ProductDetail.razor" />
+   <Watch Remove="Pages\TestPage.razor" />
    <Watch Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
  <ItemGroup>
    <None Include="Pages\Category\EditCategory.razor" />
+   <None Include="Pages\Customers\CustomerMapView.razor" />
    <None Include="Pages\Datas\IncommingCheckListView.razor" />
    <None Include="Pages\Datas\PiutangView.razor" />
    <None Include="Pages\Datas\PenjualanView.razor" />
@@ -75,6 +78,7 @@
    <None Include="Pages\Penjualans\EditPenjualanPembayaran.razor" />
    <None Include="Pages\Penjualans\PenjualanOrderDetail.razor" />
    <None Include="Pages\Penjualans\PenjualanRealisasiDetail.razor" />
+   <None Include="Pages\TestPage.razor" />
    <None Include="Shared\PrintLayout.razor" />
    <None Include="Shared\LoadingScreen.razor" />
    <None Include="wwwroot\images\clearicon.png" />
@@ -92,6 +96,7 @@
    <UpToDateCheckInput Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
  <ItemGroup>
+   <_ContentIncludedByDefault Remove="Pages\TestPage.razor" />
    <_ContentIncludedByDefault Remove="Shared\LoadingScreen.razor" />
  </ItemGroup>
  <ItemGroup>
@@ -140,5 +145,8 @@
      <Generator>MSDataSetGenerator</Generator>
      <LastGenOutput>Stock.Designer.cs</LastGenOutput>
    </Content>
+ </ItemGroup>
+ <ItemGroup>
+   <UpToDateCheckInput Remove="Pages\TestPage.razor" />
  </ItemGroup>
 </Project>

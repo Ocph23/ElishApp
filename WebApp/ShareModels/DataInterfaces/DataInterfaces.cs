@@ -73,9 +73,9 @@ namespace ShareModels
     public interface IPenjualanService
     {
         Task<Orderpenjualan> CreateOrder(Orderpenjualan order);
-        Task<IEnumerable<Orderpenjualan>> GetOrdersBySalesId(int supplierId);
-        Task<IEnumerable<Orderpenjualan>> GetOrdersByCustomerId(int supplierId);
-        Task<IEnumerable<Orderpenjualan>> GetOrders();
+        Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersBySalesId(int supplierId);
+        Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersByCustomerId(int supplierId);
+        Task<IEnumerable<PenjualanAndOrderModel>> GetOrders();
         Task<Orderpenjualan> GetOrder(int id);
         Task<Orderpenjualan> UpdateOrder(int orderId, Orderpenjualan order);
         Task<bool> DeleteOrder(int id);
@@ -83,10 +83,10 @@ namespace ShareModels
         Task<Penjualan> CreatePenjualan(int orderid);
         Task<Penjualan> UpdatePenjualan(int penjualanId, Penjualan order);
         Task<Penjualan> GetPenjualan(int id);
-        Task<IEnumerable<Penjualan>> GetPenjualans();
-        Task<IEnumerable<Penjualan>> GetPenjualans(DateTime start, DateTime end);
-        Task<IEnumerable<Penjualan>> GetPenjualansByCustomerId(int id);
-        Task<IEnumerable<Penjualan>> GetPenjualansBySalesId(int id);
+        Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualans();
+        Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualans(DateTime start, DateTime end);
+        Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansByCustomerId(int id);
+        Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansBySalesId(int id);
         Task<bool> DeletePenjualan(int id);
 
         #region Pembayaran
@@ -119,6 +119,9 @@ namespace ShareModels
     public interface ICategoryService : IService<Category>{}
     public interface ICustomerService : IService<Customer>{
      ObservableCollection<Customer> CustomerCollection { get; set; }
+
+        Task<IEnumerable<Customer>> GetBySales(int id);
+        Task<bool> UpdateLocation(Customer cust);
     }
     public interface IKaryawanService : IService<Karyawan>{}
 

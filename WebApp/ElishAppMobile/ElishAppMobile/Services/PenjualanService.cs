@@ -12,7 +12,7 @@ namespace ElishAppMobile.Services
     public class PenjualanService : IPenjualanService
     {
         readonly string controller = "/api/penjualan";
-        private IEnumerable<Orderpenjualan> orders;
+        private IEnumerable<PenjualanAndOrderModel> orders;
 
         public async Task<Orderpenjualan> CreateOrder(Orderpenjualan order)
         {
@@ -81,7 +81,7 @@ namespace ElishAppMobile.Services
             }
         }
 
-        public async Task<IEnumerable<Orderpenjualan>> GetOrders()
+        public async Task<IEnumerable<PenjualanAndOrderModel>> GetOrders()
         {
             try
             {
@@ -93,11 +93,11 @@ namespace ElishAppMobile.Services
                     var response = await res.GetAsync($"{controller}/order");
                     if (!response.IsSuccessStatusCode)
                         await res.Error(response);
-                    return await response.GetResult<IEnumerable<Orderpenjualan>>();
+                    return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
                 }
                 else
                 {
-                    var datas = await db.Get<SqlDataModelOrder, Orderpenjualan>();
+                    var datas = await db.Get<SqlDataModelOrder, PenjualanAndOrderModel>();
                     orders = datas;
                     return orders;
                 }
@@ -108,61 +108,61 @@ namespace ElishAppMobile.Services
             }
         }
 
-        public async Task<IEnumerable<Orderpenjualan>> GetOrdersByCustomerId(int customerId)
-        {
-            try
-            {
-                var connection = Helper.CheckInterNetConnection();
-                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
-                if (connection.Item1)
-                {
-                    await SyncOrders();
-                    using var res = new RestService();
-                    var response = await res.GetAsync($"{controller}/OrderByCustomer/{customerId}");
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    return await response.GetResult<IEnumerable<Orderpenjualan>>();
-                }
-                else
-                {
-                    var datas = await db.Get<SqlDataModelOrder, Orderpenjualan>();
-                    orders = datas;
-                    return orders;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new SystemException(ex.Message);
-            }
-        }
+        //public async Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersByCustomerId(int customerId)
+        //{
+        //    try
+        //    {
+        //        var connection = Helper.CheckInterNetConnection();
+        //        var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+        //        if (connection.Item1)
+        //        {
+        //            await SyncOrders();
+        //            using var res = new RestService();
+        //            var response = await res.GetAsync($"{controller}/OrderByCustomer/{customerId}");
+        //            if (!response.IsSuccessStatusCode)
+        //                await res.Error(response);
+        //            return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
+        //        }
+        //        else
+        //        {
+        //            var datas = await db.Get<SqlDataModelOrder, PenjualanAndOrderModel>();
+        //            orders = datas;
+        //            return orders;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new SystemException(ex.Message);
+        //    }
+        //}
 
-        public async Task<IEnumerable<Orderpenjualan>> GetOrdersBySalesId(int id)
-        {
-            try
-            {
-                var connection = Helper.CheckInterNetConnection();
-                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
-                if (connection.Item1)
-                {
-                    await SyncOrders();
-                    using var res = new RestService();
-                    var response = await res.GetAsync($"{controller}/OrderBySales/{id}");
-                    if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
-                    return await response.GetResult<IEnumerable<Orderpenjualan>>();
-                }
-                else
-                {
-                    var datas = await db.Get<SqlDataModelOrder, Orderpenjualan>();
-                    orders = datas;
-                    return orders;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new SystemException(ex.Message);
-            }
-        }
+        //public async Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersBySalesId(int id)
+        //{
+        //    try
+        //    {
+        //        var connection = Helper.CheckInterNetConnection();
+        //        var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+        //        if (connection.Item1)
+        //        {
+        //            await SyncOrders();
+        //            using var res = new RestService();
+        //            var response = await res.GetAsync($"{controller}/OrderBySales/{id}");
+        //            if (!response.IsSuccessStatusCode)
+        //                await res.Error(response);
+        //            return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
+        //        }
+        //        else
+        //        {
+        //            var datas = await db.Get<SqlDataModelOrder, PenjualanAndOrderModel>();
+        //            orders = datas;
+        //            return orders;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new SystemException(ex.Message);
+        //    }
+        //}
 
         private async Task SyncOrders()
         {
@@ -199,30 +199,134 @@ namespace ElishAppMobile.Services
             throw new NotImplementedException();
         }
 
-        public Task<Penjualan> GetPenjualan(int id)
+        public async Task<Penjualan> GetPenjualan(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var connection = Helper.CheckInterNetConnection();
+                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                if (connection.Item1)
+                {
+                    using var res = new RestService();
+                    var response = await res.GetAsync($"{controller}/{id}");
+                    if (!response.IsSuccessStatusCode)
+                        await res.Error(response);
+                    return await response.GetResult<Penjualan>();
+                }
+                else
+                {
+                    throw new SystemException("Tidak Ada Koneksi Internet !");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
-        public Task<IEnumerable<Penjualan>> GetPenjualans()
+        public async Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualans()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var connection = Helper.CheckInterNetConnection();
+                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                if (connection.Item1)
+                {
+                    using var res = new RestService();
+                    var response = await res.GetAsync($"{controller}");
+                    if (!response.IsSuccessStatusCode)
+                        await res.Error(response);
+                    return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
+                }
+                else
+                {
+                    var datas = await db.Get<SqlDataModelOrder, PenjualanAndOrderModel>();
+                    return datas;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
-        public Task<IEnumerable<Penjualan>> GetPenjualans(DateTime start, DateTime end)
+        public async Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualans(DateTime start, DateTime end)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var connection = Helper.CheckInterNetConnection();
+                var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                if (connection.Item1)
+                {
+                    using var res = new RestService();
+                    var response = await res.GetAsync($"{controller}/ByDate/{start}/{end}");
+                    if (!response.IsSuccessStatusCode)
+                        throw new SystemException(await res.Error(response));
+                    return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
+                }
+                else
+                {
+                    var datas = await db.Get<SqlDataModelOrder, PenjualanAndOrderModel>();
+                    return datas;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
-        public Task<IEnumerable<Penjualan>> GetPenjualansByCustomerId(int id)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansByCustomerId(int id)
+        //{
+        //    try
+        //    {
+        //        var connection = Helper.CheckInterNetConnection();
+        //        var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+        //        if (connection.Item1)
+        //        {
+        //            using var res = new RestService();
+        //            var response = await res.GetAsync($"{controller}/ByCustomerId/{id}");
+        //            if (!response.IsSuccessStatusCode)
+        //                await res.Error(response);
+        //            return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
+        //        }
+        //        else
+        //        {
+        //            var datas = await db.Get<SqlDataModelOrder, PenjualanAndOrderModel>();
+        //            return datas;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new SystemException(ex.Message);
+        //    }
+        //}
 
-        public Task<IEnumerable<Penjualan>> GetPenjualansBySalesId(int id)
-        {
-            throw new NotImplementedException();
-        }
+        //public async Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansBySalesId(int id)
+        //{
+        //    try
+        //    {
+        //        var connection = Helper.CheckInterNetConnection();
+        //        var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+        //        if (connection.Item1)
+        //        {
+        //            using var res = new RestService();
+        //            var response = await res.GetAsync($"{controller}/BySalesId/{id}");
+        //            if (!response.IsSuccessStatusCode)
+        //                throw new SystemException(await res.Error(response));
+        //            return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
+        //        }
+        //        else
+        //        {
+        //            var datas = await db.Get<SqlDataModelOrder, PenjualanAndOrderModel>();
+        //            return datas;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new SystemException(ex.Message);
+        //    }
+        //}
 
         public async Task<Orderpenjualan> UpdateOrder(int orderId, Orderpenjualan order)
         {
@@ -242,6 +346,26 @@ namespace ElishAppMobile.Services
     
 
         public Task<Penjualan> UpdatePenjualan(int penjualanId, Penjualan order)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersBySalesId(int supplierId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersByCustomerId(int supplierId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansByCustomerId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansBySalesId(int id)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
 ﻿using ElishAppMobile.Helpers;
+using ElishAppMobile.Models;
 using ElishAppMobile.ViewModels;
 using ShareModels;
 using ShareModels.ModelViews;
@@ -15,205 +16,63 @@ namespace ElishAppMobile.Views.PenjualanViews
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PenjualanDetailView : ContentPage
     {
-
         public PenjualanDetailView()
         {
             InitializeComponent();
-        }
-
-        private void ImageButton_Clicked(object sender, EventArgs e)
-        {
-            productPicker.Focus();
-        }
-
-        private void ImageButton_Clicked_1(object sender, EventArgs e)
-        {
-            var form = new CreateCustomer();
-            Shell.Current.Navigation.PushModalAsync(form);
         }
     }
 
 
     public class PenjualanDetailViewModel : BaseViewModel
     {
-        #region Constructor
-        public PenjualanDetailViewModel(Penjualan order)
+        public PenjualanDetailViewModel(PenjualanAndOrderModel penjualanModel)
         {
+            OrderDetailCommand = new Command(async () => await ShowDetail());
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-            Order = order;
+            _penjualanModel = penjualanModel;
             Title = "Detail Penjualan";
+            _ = ExecuteLoadItemsCommand();
         }
 
-        private void PenjualanDetailViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private async Task ShowDetail()
         {
-            SaveCommand.ChangeCanExecute();
+            var order = await PenjualanService.GetOrder(_penjualanModel.OrderId);
+            var form = new SalesOrderView();
+            form.BindingContext = new SalesOrderViewModel(_penjualanModel);
+            await  Shell.Current.Navigation.PushModalAsync(form);
         }
 
-        private void DeleteAction(object obj)
+        private Penjualan penjualan;
+
+        public Command OrderDetailCommand { get; }
+        public Command LoadItemsCommand { get; }
+
+        private PenjualanAndOrderModel _penjualanModel;
+
+        public Penjualan Penjualan
         {
-           var item= (ItemPenjualanModel)obj;
-            if (item != null)
-            {
-                Datas.Remove(item);
-                RefreshProductStock();
-            }
-
-        }
-        #endregion
-
-        #region Fields 
-        private double total;
-        private Command _saveCommand;
-        private ProductStock productSelect;
-        private IEnumerable<ProductStock> products;
-        #endregion
-        
-
-        #region Properties
-        private Penjualan order;
-        private int _selectedIndex=-1;
-        private int _supplierIndex;
-
-        public Penjualan Order
-        {
-            get => order;
-            set => SetProperty(ref order, value);
-        }
-
-        private string paymentType;
-
-        public string PaymentType
-        {
-            get => paymentType;
-            set
-            {
-                SetProperty(ref paymentType, value);
-            }
+            get => penjualan;
+            set => SetProperty(ref penjualan, value);
         }
 
         public bool AddCustomerVisible => !Account.UserInRole("Customer").Result;
 
 
-        public ObservableCollection<ItemPenjualanModel> Datas { get; set; } = new ObservableCollection<ItemPenjualanModel>();
-      //  public ObservableCollection<Customer> DataCustomers { get; set; } = new ObservableCollection<Customer>();
-        public ObservableCollection<Supplier> DataSupplier { get; set; } = new ObservableCollection<Supplier>();
-        public ObservableCollection<ProductStock> ProductStocks { get; set; } = new ObservableCollection<ProductStock>();
-        public Command LoadItemsCommand { get; }
-        public Command SaveCommand { get => _saveCommand; set => SetProperty(ref _saveCommand, value); }
-        public Command ClearCommand { get; }
-        public Command DeleteCommand { get; set; }
-        public Command QRCommand { get; }
-        public Command AddCommand { get; }
-        public ProductStock ProductSelect
+        public ObservableCollection<ItemPenjualanModel> Items { get; set; } = new ObservableCollection<ItemPenjualanModel>();
+        private async Task ExecuteLoadItemsCommand()
         {
-            get { return productSelect; }
-            set
+            try
             {
-                SetProperty(ref productSelect, value);
-                if (value != null)
-                {
-                    var data = Datas.Where(x => x.ProductId == value.Id).FirstOrDefault();
-                    if (data == null)
-                    {
-                        AddNewItem(value);
-
-                    }
-                }
+                if (IsBusy)
+                    return;
+                IsBusy = true;
+                Penjualan = await PenjualanService.GetPenjualan(_penjualanModel.PenjualanId);
+                IsBusy = false;
+            }
+            finally 
+            {
+                IsBusy = false;
             }
         }
-        public double Total
-        {
-            get { return total; }
-            set { SetProperty(ref total, value); }
-        }
-
-        public int SelectedIndex
-        {
-            get
-            {
-                return _selectedIndex;
-            }
-            set
-            {
-                SetProperty(ref _selectedIndex, value);
-            }
-        }
-
-
-        private Supplier supplierSelected;
-
-        public Supplier SupplierSelected
-        {
-            get { return supplierSelected; }
-            set { SetProperty(ref supplierSelected , value); }
-        }
-
-
-        #endregion
-
-        #region Methods
-        private bool CanSaved(object arg)
-        {
-            return false;
-        }
-
-        private void Datas_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-           
-            Total = Datas.Sum(x => x.Total);
-        }
-
-        private Task ExecuteLoadItemsCommand()
-        {
-            IsBusy = true;
-            RefreshProductStock();
-            IsBusy = false;
-            return Task.CompletedTask;
-        }
-
-        private async void AddNewItem(ProductStock value)
-        {
-
-            var unit = value.Units.First();
-            var newData = new ItemPenjualanModel()
-            {
-                Amount = value.StockView,
-                Units = new ObservableCollection<Unit>(value.Units),
-                Product = value,
-                ProductId = value.Id,
-                Unit = unit,
-                UnitId = unit.Id,
-                Real = value.Stock < 0.5 ? value.Stock : 0.5 
-            };
-
-            newData.UpdateEvent += NewData_UpdateEvent;
-            Datas.Add(newData);
-            RefreshProductStock();
-            await Toas.ShowLong($"{newData.Product.Name} , Amount : {newData.Real}");
-        }
-
-        private Task NewData_UpdateEvent(ItemPenjualanModel arg)
-        {
-            Datas_CollectionChanged(arg, null);
-            return Task.CompletedTask;
-        }
-
-        private async void RefreshProductStock()
-        {
-            await Task.Delay(1000);
-            ProductStocks.Clear();
-            if(products!=null && SupplierSelected!=null)
-            {
-                var productFilter = products.Where(item => item.SupplierId==SupplierSelected.Id && item.Stock > 0 && !Datas.Any(data => data.ProductId.Equals(item.Id)));
-                foreach (var item in productFilter.OrderBy(x => x.Name))
-                {
-                    ProductStocks.Add(item);
-                }
-            }
-        }
-
-
-        #endregion
-
     }
 }

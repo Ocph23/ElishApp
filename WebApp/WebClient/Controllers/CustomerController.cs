@@ -49,6 +49,20 @@ namespace WebClient.Controllers
             }
         }
 
+        // GET api/<UnitController>/5
+        [HttpGet("BySales/{id}")]
+        public async Task<IActionResult> GetBySales(int id)
+        {
+            try
+            {
+                return Ok(await customerService.GetBySales(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
+
         // POST api/<UnitController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Customer value)
@@ -70,6 +84,20 @@ namespace WebClient.Controllers
             try
             {
                 return Ok(await customerService.Update(id, value));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
+
+
+        [HttpPut("location/{id}")]
+        public async Task<IActionResult> PutLocation(int id, [FromBody] Customer value)
+        {
+            try
+            {
+                return Ok(await customerService.UpdateLocation(value));
             }
             catch (Exception ex)
             {

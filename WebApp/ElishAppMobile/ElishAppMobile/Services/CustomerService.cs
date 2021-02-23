@@ -96,6 +96,48 @@ namespace ElishAppMobile
             }
         }
 
+        public async Task<IEnumerable<Customer>> GetBySales(int id)
+        {
+            try
+            {
+                if (!CustomerCollection.Any())
+                {
+                    var connection = Helper.CheckInterNetConnection();
+                    var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
+                    if (connection.Item1)
+                    {
+                        using var res = new RestService();
+                        var response = await res.GetAsync($"{controller}/BySales/{id}");
+                        if (!response.IsSuccessStatusCode)
+                            await res.Error(response);
+                        var results = await response.GetResult<IEnumerable<Customer>>();
+                        CustomerCollection.Clear();
+                        foreach (var item in results)
+                        {
+                            CustomerCollection.Add(item);
+                        }
+
+                        _ = db.Save<SqlDataModelCustomer, Customer>(results);
+
+                    }
+                    else
+                    {
+                        var datas = await db.Get<SqlDataModelCustomer, Customer>();
+                        CustomerCollection.Clear();
+                        foreach (var item in datas)
+                        {
+                            CustomerCollection.Add(item);
+                        }
+                    }
+                }
+                return CustomerCollection.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
         public async Task<Customer> Post(Customer value)
         {
 
@@ -134,5 +176,20 @@ namespace ElishAppMobile
             }
         }
 
+        public async Task<bool> UpdateLocation(Customer cust)
+        {
+            try
+            {
+                using var res = new RestService();
+                var response = await res.PutAsync($"{controller}/location/{cust.Id}", res.GenerateHttpContent(cust));
+                if (!response.IsSuccessStatusCode)
+                    await res.Error(response);
+                return await response.GetResult<bool>();
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@
                 <RadzenGrid @ref="grid" Data="@(datas)" FilterCaseSensitivity="FilterCaseSensitivity.Default"
                             AllowFiltering="true" AllowSorting="true" TItem="Penjualan">
                     <Columns>
-                        <RadzenGridColumn TItem="Penjualan" Property="Nomor" Title="Nomor" Width="200px" />
+                        <RadzenGridColumn TItem="Penjualan" Property="Nomor" Title="Nomor" Width="180px" />
                         <RadzenGridColumn TItem="Penjualan" Property="OrderPenjualan.Customer.Name" Title="Customer" />
                         <RadzenGridColumn TItem="Penjualan" Title="Jatuh Tempo" Width="100px">
                             <Template Context="item">
@@ -35,17 +35,17 @@
                                 }
                             </Template>
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="Penjualan" Property="Total" Title="Tagihan" TextAlign="TextAlign.Right" Width="200px">
+                        <RadzenGridColumn TItem="Penjualan" Property="Total" Title="Tagihan" TextAlign="TextAlign.Right" Width="160px">
                             <Template Context="item">
                                 @item.Total.ToString("N2")
                             </Template>
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="Penjualan" Title="Panjar" TextAlign="TextAlign.Right" Width="200px">
+                        <RadzenGridColumn TItem="Penjualan" Title="Panjar" TextAlign="TextAlign.Right" Width="160px">
                             <Template Context="item">
                                 @item.Pembayaranpenjualan.Sum(x => x.PayValue).ToString("N2")
                             </Template>
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="Penjualan" Title="Sisa" TextAlign="TextAlign.Right" Width="200px">
+                        <RadzenGridColumn TItem="Penjualan" Title="Sisa" TextAlign="TextAlign.Right" Width="160px">
                             <Template Context="item">
                                 @((item.Total- item.Pembayaranpenjualan.Sum(x => x.PayValue)).ToString("N2"))
                             </Template>

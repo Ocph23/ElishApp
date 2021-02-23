@@ -1,7 +1,9 @@
 ﻿using ElishAppMobile.Models;
 using ElishAppMobile.ViewModels;
 using ShareModels;
+using ShareModels.ModelViews;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -21,13 +23,9 @@ namespace ElishAppMobile.Views.PenjualanViews
         {
             InitializeComponent();
             BindingContext= _viewModel = new PenjualanViewModel();
-            search.OnSearchFound += Search_OnSearchFound;
         }
 
-        private void Search_OnSearchFound(object data)
-        {
-            _viewModel.Search(data.ToString());
-        }
+       
 
         protected override void OnAppearing()
         {
@@ -39,14 +37,14 @@ namespace ElishAppMobile.Views.PenjualanViews
 
     public class PenjualanViewModel : BaseViewModel
     {
-        private ObservableCollection<Penjualan> _SourceItems;
+        private ObservableCollection<PenjualanAndOrderModel> _SourceItems;
         private bool fromdetail;
 
         public Command LoadItemsCommand { get; }
         public Command AddNewCommand { get; }
         public Command SelectCommand { get; }
         public Profile UserProfile { get; }
-        public ObservableCollection<Penjualan> Items { get; private set; } = new ObservableCollection<Penjualan>();
+        public ObservableCollection<PenjualanAndOrderModel> Items { get; private set; } = new ObservableCollection<PenjualanAndOrderModel>();
 
         public PenjualanViewModel()
         {
@@ -59,7 +57,7 @@ namespace ElishAppMobile.Views.PenjualanViews
         private void SelectCommandAction(object obj)
         {
             fromdetail = true;
-            var order = (Penjualan)obj;
+            var order = (PenjualanAndOrderModel)obj;
             var vm = new PenjualanDetailViewModel(order);
             var form = new PenjualanDetailView() { BindingContext = vm };
             Shell.Current.Navigation.PushAsync(form);
@@ -78,33 +76,22 @@ namespace ElishAppMobile.Views.PenjualanViews
             {
                 if (!fromdetail)
                 {
+                    Title = "Penjualan";
                     Items.Clear();
-                    if (await Account.UserInRole("Administrator"))
+
+                    var orders = await PenjualanService.GetPenjualans();
+                    if (orders != null)
                     {
-                        var orders = await PenjualanService.GetPenjualans();
-                        if (orders != null)
-                        {
-                            _SourceItems = new ObservableCollection<Penjualan>(orders);
-                        }
-                    }
-                    else if(await Account.UserInRole("Sales"))
-                    {
-                        var orderSales = await PenjualanService.GetPenjualansBySalesId(UserProfile.Id);
-                        if (orderSales != null)
-                        {
-                            _SourceItems = new ObservableCollection<Penjualan>(orderSales);
-                        }
-                    }
-                    else
-                    {
-                        var orderSales = await PenjualanService.GetPenjualansByCustomerId(UserProfile.Id);
-                        if (orderSales != null)
-                        {
-                            _SourceItems = new ObservableCollection<Penjualan>(orderSales);
-                        }
+                        _SourceItems = new ObservableCollection<PenjualanAndOrderModel>(orders);
                     }
 
-                    foreach (var item in _SourceItems.OrderByDescending(x => x.Id))
+
+                    if(await Account.UserInRole("Customer"))
+                    {
+                        Title = "Pembelian";
+                    }
+
+                    foreach (var item in _SourceItems.OrderByDescending(x => x.PenjualanId))
                     {
                         Items.Add(item);
                     }

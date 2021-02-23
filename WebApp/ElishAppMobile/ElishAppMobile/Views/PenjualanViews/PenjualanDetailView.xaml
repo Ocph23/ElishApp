@@ -1,14 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:view="clr-namespace:ElishAppMobile.Views"
-             xmlns:model="clr-namespace:ShareModels.ModelViews;assembly=ShareModels" 
-             xmlns:helpers="clr-namespace:ElishAppMobile.Helpers"
+             xmlns:view="clr-namespace:ElishAppMobile.Views.PenjualanViews"
+             xmlns:model="clr-namespace:ShareModels;assembly=ShareModels" 
+             xmlns:helpers="clr-namespace:ElishAppMobile.Helpers" 
+             xmlns:xcs="http://xamarin.com/schemas/2020/toolkit"
              x:Class="ElishAppMobile.Views.PenjualanViews.PenjualanDetailView"
-             Title="{Binding Title}">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save" Command="{Binding SaveCommand}"/>
-    </ContentPage.ToolbarItems>
+             Title="{Binding Penjualan.Nomor}">
     <ContentPage.Resources>
         <helpers:EnumToStringConverter x:Key="enumTostringConverter"/>
         <helpers:EnumToBoolConverter x:Key="enumToBoolConverter"/>
@@ -22,48 +20,47 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Expander  Grid.Row="0" Margin="10,5" IsExpanded="True" >
-                <Expander.Header>
+            <xcs:Expander  Grid.Row="0" Margin="10,5" IsExpanded="True" >
+                <xcs:Expander.Header>
                     <StackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Label WidthRequest="100" Text="Customer" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                            <Picker IsEnabled="{Binding AddCustomerVisible}"  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding Customers.CustomerCollection}" 
-                            VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="220"
-                             FontSize="Small" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" />
-                            <ImageButton IsVisible="{Binding AddCustomerVisible}" Clicked="ImageButton_Clicked_1" Source="customer.png"  BackgroundColor="Transparent"
-                                 WidthRequest="25" HeightRequest="25" Aspect="Fill"/>
+                            <Label  Text="{Binding Penjualan.OrderPenjualan.Customer.Name}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                         </StackLayout>
                     </StackLayout>
-                </Expander.Header>
+                </xcs:Expander.Header>
                 <StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label WidthRequest="100" Text="Supplier" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                        <Picker IsEnabled="{Binding AddCustomerVisible}" ItemDisplayBinding="{Binding Nama}"  ItemsSource="{Binding DataSupplier}" 
-                            VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="220"
-                             FontSize="Small" SelectedIndex="{Binding SupplierIndex, Mode=TwoWay}" SelectedItem="{Binding SupplierSelected}"/>
+                    <StackLayout Orientation="Horizontal" Margin="0,10,0,0" x:DataType="view:PenjualanDetailViewModel">
+                        <Label WidthRequest="100" Text="Nomor SO" VerticalOptions="CenterAndExpand" HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OrderDetailCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label  Text="{Binding Penjualan.OrderPenjualan.Nomor}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                     </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <StackLayout Orientation="Horizontal">
-                            <Label WidthRequest="100" Text="Tanggal" VerticalOptions="CenterAndExpand"/>
-                            <DatePicker IsEnabled="{Binding AddCustomerVisible}" Date="{Binding Order.OrderDate, StringFormat='dd-MM-yyyy'}" Format="d" 
+                    <StackLayout Orientation="Horizontal" Margin="0,10,0,0">
+                        <Label WidthRequest="100" Text="Salesman" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                        <Label  Text="{Binding Penjualan.OrderPenjualan.Sales.Name}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" >
+                        <Label WidthRequest="100" Text="Tanggal" VerticalOptions="CenterAndExpand"/>
+                        <DatePicker IsEnabled="{Binding AddCustomerVisible}" Date="{Binding Penjualan.Created, StringFormat='dd-MM-yyyy'}" Format="d" 
                                FontSize="Small" VerticalOptions="CenterAndExpand"/>
-                        </StackLayout>
-                       
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
                         <Label WidthRequest="100" Text="Jatuh Tempo" VerticalOptions="CenterAndExpand"/>
-                        <Entry IsEnabled="{Binding AddCustomerVisible}" WidthRequest="40" FontSize="Small" Text="{Binding Order.DeadLine}"/>
+                        <Entry IsEnabled="{Binding AddCustomerVisible}" WidthRequest="40" FontSize="Small" Text="{Binding Penjualan.PayDeadLine}"/>
                         <Label WidthRequest="100" Text="Hari" VerticalOptions="CenterAndExpand"/>
                     </StackLayout>
                 </StackLayout>
-            </Expander>
+            </xcs:Expander>
             <StackLayout Margin="10,5" Orientation="Horizontal" Grid.Row="1">
                 <Label WidthRequest="100" Text="Total" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                 <Label FontSize="Small">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Rp."></Span>
-                            <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"/>
+                            <Span Text="{Binding Penjualan.Total,StringFormat='{}{0:N2}'}"/>
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
@@ -74,27 +71,20 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Status : "/>
-                            <Span Text="{Binding Order.Status}"/>
+                            <Span Text="{Binding Penjualan.Status}"/>
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <StackLayout IsVisible="{Binding AddCustomerVisible}" Orientation="Horizontal" HorizontalOptions="EndAndExpand" Margin="10,5">
-                    <ImageButton Command="{Binding ClearCommand}" Source="clearicon.png" WidthRequest="20" Aspect="AspectFit"/>
-                    <ImageButton Command="{Binding QRCommand}" Source="qr.png" WidthRequest="20" Aspect="AspectFit"/>
-                    <ImageButton Clicked="ImageButton_Clicked" BackgroundColor="Transparent" Source="plus.png" HeightRequest="20" Aspect="AspectFit"/>
-                    <Picker x:Name="productPicker" ItemDisplayBinding="{Binding CodeName}" IsVisible="False" ItemsSource="{Binding ProductStocks}" SelectedItem="{Binding ProductSelect}"/>
-                </StackLayout>
             </StackLayout>
-            <ActivityIndicator  Grid.Row="3" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
-            <RefreshView Grid.Row="4" x:DataType="view:SalesOrderViewModel"  Margin="0,5"
+            <RefreshView Grid.Row="4"  Margin="0,5" 
                          Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-                <CollectionView x:Name="ItemsListView"  BackgroundColor="LightGray"
-                ItemsSource="{Binding Datas}"
+                <CollectionView x:Name="ItemsListView" x:DataType="view:PenjualanDetailViewModel" BackgroundColor="LightGray"
+                ItemsSource="{Binding Penjualan.Items}"
                 SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout   Margin="0,0.5" >
-                                <SwipeView  x:DataType="model:ItemPenjualanModel"  >
+                            <StackLayout Margin="0,0.5" >
+                                <SwipeView x:DataType="model:Penjualanitem"  >
                                     <SwipeView.LeftItems  >
                                         <SwipeItemView  
                                                BackgroundColor="OrangeRed" 
@@ -104,7 +94,7 @@
                                             </StackLayout>
                                         </SwipeItemView>
                                     </SwipeView.LeftItems>
-                                    <Grid   >
+                                    <Grid  BackgroundColor="White" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
@@ -112,7 +102,7 @@
                                         <StackLayout  Padding="10" Spacing="0" >
                                             <Label Text="{Binding Product.CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
                                             <Label Text="{Binding Product.Name}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="12" />
-                                            <Label Text="{Binding Product.CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="10" />
+                                            <Label Text="{Binding Product.CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="11" />
                                             <Label Text="{Binding Amount}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
@@ -121,22 +111,19 @@
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>
-                                            <Label Text="{Binding Amount}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
+                                        </StackLayout>
+                                        <StackLayout Grid.Column="1" Padding="10" HorizontalOptions="End" Spacing="0" 
+                                                     VerticalOptions="StartAndExpand">
+                                            <Label Text="{Binding Amount}" HorizontalOptions="End" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
-                                                        <Span Text="Sisa Stok : "></Span>
                                                         <Span Text="{Binding Amount}"></Span>
+                                                        <Span Text="  "></Span>
+                                                        <Span Text="{Binding Unit.Name}"></Span>
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>
-                                        </StackLayout>
-                                        <StackLayout Grid.Column="1" x:DataType="model:ItemPenjualanModel" HorizontalOptions="CenterAndExpand" Spacing="0"  VerticalOptions="Center">
-                                            <helpers:CustomStepper  ShowEntry="False" Text="{Binding Real}" WidthRequest="120" HeightRequest="35"  Increment="0.25"  
-                                                                    Maximum="{Binding Amount}"
-                                                                    Margin="5" VerticalOptions="CenterAndExpand"/>
-                                            <Picker Margin="0" ItemsSource="{Binding Units}" ItemDisplayBinding="{Binding Name}" HeightRequest="32"
-                                                    FontSize="12" HorizontalTextAlignment="Center" SelectedIndex="{Binding UnitIndex}" SelectedItem="{Binding Unit}"/>
-                                           <Label HorizontalOptions="CenterAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="12" >
+                                            <Label HorizontalOptions="End" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="Rp : "></Span>
