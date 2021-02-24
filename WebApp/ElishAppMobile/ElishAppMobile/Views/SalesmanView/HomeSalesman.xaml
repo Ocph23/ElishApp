@@ -21,7 +21,7 @@
                     <FormattedString>
                         <Span Text="Hi,  "/>
                         <Span Text="{Binding SalesName }" FontSize="20" FontAttributes="Bold"/>
-                        <Span Text=".... !"/>
+                        <Span Text="... !"/>
                     </FormattedString>
                 </Label.FormattedText>
             </Label>
