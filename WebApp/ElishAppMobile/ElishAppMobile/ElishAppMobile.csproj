@@ -36,6 +36,9 @@
     <Compile Update="Views\BarcodeScanner.xaml.cs">
       <DependentUpon>BarcodeScanner.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\CustomerViews\CustomerPageView.xaml.cs">
+      <DependentUpon>CustomerPageView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\OrdersView.xaml.cs">
       <DependentUpon>OrdersView.xaml</DependentUpon>
     </Compile>

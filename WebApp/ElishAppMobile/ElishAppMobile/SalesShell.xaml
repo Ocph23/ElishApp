@@ -4,6 +4,7 @@
        xmlns:local="clr-namespace:ElishAppMobile.Views"
        xmlns:penjualan="clr-namespace:ElishAppMobile.Views.PenjualanViews"
        xmlns:salesView="clr-namespace:ElishAppMobile.Views.SalesmanView"
+       xmlns:custView="clr-namespace:ElishAppMobile.Views.CustomerViews"
        Title="ElishAppMobile"
        x:Class="ElishAppMobile.SalesShell">
     <Shell.Resources>
@@ -77,6 +78,9 @@
     
     <FlyoutItem Title="Home" Icon="icon_about.png">
         <ShellContent Route="HomeCustomerView" ContentTemplate="{DataTemplate salesView:HomeSalesman}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Customer" Icon="customer.png">
+        <ShellContent Route="CustomerPageView" ContentTemplate="{DataTemplate custView:CustomerPageView}" />
     </FlyoutItem>
     <FlyoutItem Title="Products" Icon="qr.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ProductView}" />

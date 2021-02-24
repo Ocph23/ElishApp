@@ -17,7 +17,7 @@
                 </StackLayout>
                 <StackLayout Margin="10,5" >
                     <Label Text="Handpone" />
-                    <Entry Text="{Binding MyProfile.Handphone}" />
+                    <Entry Text="{Binding MyProfile.NPWP}" />
                 </StackLayout>
                 <StackLayout Margin="10,5" >
                     <Label Text="Telepon" />

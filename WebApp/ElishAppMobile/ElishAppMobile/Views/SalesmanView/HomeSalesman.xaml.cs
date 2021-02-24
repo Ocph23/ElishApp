@@ -1,4 +1,5 @@
 ﻿using ElishAppMobile.ViewModels;
+using ShareModels;
 using ShareModels.ModelViews;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace ElishAppMobile.Views.SalesmanView
         public ObservableCollection<HomeSalesModel> PeriodePenjualan { get; set; }
         public ObservableCollection<PenjualanAndOrderModel> JatuhTempo { get; set; } = new ObservableCollection<PenjualanAndOrderModel>();
         public ObservableCollection<PenjualanAndOrderModel> Orders { get; set; } = new ObservableCollection<PenjualanAndOrderModel>();
+        public ObservableCollection<Customer> LastCustomers { get; set; } = new ObservableCollection<Customer>();
         public Command LoadItemsCommand { get; }
 
         public HomeSalesmanViewModel()
@@ -74,6 +76,13 @@ namespace ElishAppMobile.Views.SalesmanView
                     Orders.Add(new PenjualanAndOrderModel());
                 }
 
+                var dataorders = penjualanSource.Where(x => x.Created >= DateTime.Now.AddMonths(-1)).GroupBy(x=>x.Customer).Select(x=> new {Name=x.Key });
+                var customers = await Customers.Get();
+                var selectedCustomers = customers.Where(x => !dataorders.Any(d => d.Name.ToLower().Equals(x.Name.ToLower())));
+                foreach (var item in selectedCustomers)
+                {
+                    LastCustomers.Add(item);
+                }
             }
             catch (Exception ex)
             {

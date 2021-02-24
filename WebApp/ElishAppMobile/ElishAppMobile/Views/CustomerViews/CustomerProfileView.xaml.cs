@@ -1,5 +1,6 @@
 ﻿using ElishAppMobile.Models;
 using ElishAppMobile.ViewModels;
+using Newtonsoft.Json;
 using ShareModels;
 using System;
 using System.Threading;
@@ -18,6 +19,12 @@ namespace ElishAppMobile.Views.CustomerViews
             InitializeComponent();
             BindingContext = new CustomerProfileViewModel(map);
         }
+
+        public CustomerProfileView(Customer cust)
+        {
+            InitializeComponent();
+            BindingContext = new CustomerProfileViewModel(map, cust);
+        }
     }
 
 
@@ -28,15 +35,22 @@ namespace ElishAppMobile.Views.CustomerViews
         public Command SetLocationCommand { get; }
 
         private Xamarin.Forms.Maps.Map _map;
+        private Customer cust;
 
         public Profile MyProfile { get; set; }
         public CustomerProfileViewModel(Xamarin.Forms.Maps.Map map)
         {
-
             SetLocationCommand = new Command(SetLocation);
             _map = map;
             MyProfile = Account.GetProfile().Result;
             Load();
+        }
+
+        public CustomerProfileViewModel(Xamarin.Forms.Maps.Map map, Customer cust) : this(map)
+        {
+            SetLocationCommand = new Command(SetLocation);
+            _map = map;
+             MyProfile =  JsonConvert.DeserializeObject<Profile>(JsonConvert.SerializeObject(cust)) ;
         }
 
         private async void SetLocation(object obj)
@@ -51,7 +65,7 @@ namespace ElishAppMobile.Views.CustomerViews
 
                 var customer = new Customer() { Id = MyProfile.Id, Location = $"{location.Latitude}, {location.Longitude}" };
 
-                Customers.UpdateLocation(customer);
+              await  Customers.UpdateLocation(customer);
                 _map.MoveToRegion(newMap);
             }
         }
