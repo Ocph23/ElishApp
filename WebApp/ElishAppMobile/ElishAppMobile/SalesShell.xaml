@@ -68,11 +68,11 @@
     </Shell.Resources>
 
     <Shell.FlyoutHeader>
-        <StackLayout>
+        <StackLayout BackgroundColor="LightGray">
             <Grid BackgroundColor="Black">
                 <Image Aspect="AspectFit"  Source="image1.jpg" Opacity="0.8" />
             </Grid>
-                <Label x:Name="user"  TextColor="White" FontSize="18" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
+            <Label x:Name="user"  FontSize="18" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
         </StackLayout>
     </Shell.FlyoutHeader>
     
@@ -85,8 +85,6 @@
     <FlyoutItem Title="Products" Icon="qr.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ProductView}" />
     </FlyoutItem>
-   
-  
 
     <FlyoutItem Title="Orders" Icon="icon_feed.png">
         <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:OrdesrView}" />
@@ -95,7 +93,9 @@
     <FlyoutItem Title="Penjualan" Icon="icon_feed.png">
         <ShellContent Route="PenjualanView" ContentTemplate="{DataTemplate penjualan:PenjualanView}" />
     </FlyoutItem>
-
+    <FlyoutItem Title="Map" Icon="icon_feed.png">
+        <ShellContent Route="MapPageView" ContentTemplate="{DataTemplate local:MapPageView}" />
+    </FlyoutItem>
     <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>
 

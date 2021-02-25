@@ -43,6 +43,8 @@ namespace ElishAppMobile.Views.SalesmanView
             {
                 if (IsBusy)
                     return;
+
+                IsBusy = true;
                 var now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                 var profile = await Account.GetProfile();
                 SalesName = profile.Name;
@@ -83,15 +85,15 @@ namespace ElishAppMobile.Views.SalesmanView
                 {
                     LastCustomers.Add(item);
                 }
+
+                IsBusy = false;
             }
             catch (Exception ex)
             {
+                IsBusy = false;
                 Console.WriteLine(ex.Message);
             }
-            finally
-            {
-                IsBusy = false;
-            }
+           
         }
 
 

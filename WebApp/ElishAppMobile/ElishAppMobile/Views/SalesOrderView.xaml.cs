@@ -106,6 +106,7 @@ namespace ElishAppMobile.Views
         private double total;
         private Command _saveCommand;
         private ProductStock productSelect;
+        private IEnumerable<Customer> customers;
         private IEnumerable<ProductStock> products;
         #endregion
         
@@ -178,7 +179,7 @@ namespace ElishAppMobile.Views
             {
                 if (value >= 0)
                 {
-                    Order.Customer = Customers.CustomerCollection[value];
+                    Order.Customer = customers.ToList()[value];
                     if (Order.Customer != null)
                     {
                         Order.CustomerId = Order.Customer.Id;
@@ -235,7 +236,7 @@ namespace ElishAppMobile.Views
             {
                 IsBusy = true;
               
-                var customers = await Customers.Get();
+                customers = await Customers.Get();
                
                 products = await Products.GetProductStock();
 
@@ -256,8 +257,8 @@ namespace ElishAppMobile.Views
 
                 if (order != null)
                 {
-                    var customer = Customers.CustomerCollection.Where(x => x.Id == order.CustomerId).FirstOrDefault();
-                    SelectedIndex = Customers.CustomerCollection.IndexOf(customer);
+                    var customer = customers.Where(x=>x.Id == order.CustomerId).FirstOrDefault();
+                    SelectedIndex = customers.ToList().IndexOf(customer);
                     var ll = order.Items.FirstOrDefault();
                     SupplierIndex = DataSupplier.IndexOf(DataSupplier.SingleOrDefault(x=>x.Id==ll.Product.SupplierId));
                     foreach (var item in order.Items)

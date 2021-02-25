@@ -25,6 +25,17 @@ namespace ElishAppMobile
 
             return Tuple.Create(false, current);
         }
+
+        public static Tuple<double, double> GetLocationView(string location)
+        {
+            if (string.IsNullOrEmpty(location))
+                return null;
+            else
+            {
+                var datas = location.Split(',');
+                return Tuple.Create(Convert.ToDouble(datas[0]), Convert.ToDouble(datas[1]));
+            }
+        }
     }
 
     public class IMageSourceConverter : IValueConverter
@@ -75,4 +86,6 @@ namespace ElishAppMobile
             if (propertyName == "Date") NullableDate = Date;
         }
     }
+
+   
 }

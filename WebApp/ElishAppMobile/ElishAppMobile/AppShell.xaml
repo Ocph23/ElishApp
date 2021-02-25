@@ -2,6 +2,7 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:ElishAppMobile.Views"
+       xmlns:custView="clr-namespace:ElishAppMobile.Views.CustomerViews"
        Title="ElishAppMobile"
        x:Class="ElishAppMobile.AppShell">
 
@@ -62,11 +63,11 @@
     </Shell.Resources>
 
     <Shell.FlyoutHeader>
-        <StackLayout>
+        <StackLayout BackgroundColor="LightGray">
             <Grid BackgroundColor="Black">
                 <Image Aspect="AspectFit"  Source="image1.jpg" Opacity="0.8" />
             </Grid>
-            <Label x:Name="user"  TextColor="White" FontSize="18" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
+            <Label x:Name="user"  FontSize="18" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
         </StackLayout>
     </Shell.FlyoutHeader>
 
@@ -76,7 +77,9 @@
     <FlyoutItem Title="Products" Icon="qr.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ProductView}" />
     </FlyoutItem>
-
+    <FlyoutItem Title="Customer" Icon="customer.png">
+        <ShellContent Route="CustomerPageView" ContentTemplate="{DataTemplate custView:CustomerPageView}" />
+    </FlyoutItem>
     <FlyoutItem Title="Incoming Check" Icon="icon_feed.png">
         <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:IncomingCheckView}" />
     </FlyoutItem>

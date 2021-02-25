@@ -118,7 +118,7 @@ namespace ShareModels
 
     public interface ICategoryService : IService<Category>{}
     public interface ICustomerService : IService<Customer>{
-     ObservableCollection<Customer> CustomerCollection { get; set; }
+        //ObservableCollection<Customer> CustomerCollection { get; set; }
 
         Task<IEnumerable<Customer>> GetBySales(int id);
         Task<bool> UpdateLocation(Customer cust);

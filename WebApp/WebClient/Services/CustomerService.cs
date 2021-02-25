@@ -1,4 +1,5 @@
-﻿using ShareModels;
+﻿using Microsoft.EntityFrameworkCore;
+using ShareModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,13 +13,13 @@ namespace WebClient.Services
     {
         private readonly ApplicationDbContext dbContext;
         private readonly IUserService userService;
-        public ObservableCollection<Customer> CustomerCollection { get; set; }
+        //public ObservableCollection<Customer> CustomerCollection { get; set; }
 
         public CustomerService(ApplicationDbContext db, IUserService _userService)
         {
             dbContext = db;
             userService = _userService;
-            CustomerCollection = new ObservableCollection<Customer>();
+           // CustomerCollection = new ObservableCollection<Customer>();
         }
 
         public async Task<bool> Delete(int id)
@@ -41,29 +42,14 @@ namespace WebClient.Services
 
         public Task<Customer> Get(int id)
         {
-            Customer customer;
-            if (CustomerCollection != null || CustomerCollection.Count > 0)
-            {
-                customer = CustomerCollection.Where(x => x.Id == id).FirstOrDefault();
-            }
-            else
-            {
-                customer = dbContext.Customer.Where(x => x.Id == id).FirstOrDefault();
-            }
+            var customer = dbContext.Customer.Where(x => x.Id == id).Include(x=>x.Karyawan).FirstOrDefault();
             return Task.FromResult(customer);
         }
 
         public Task<IEnumerable<Customer>> Get()
         {
-            if(CustomerCollection==null || CustomerCollection.Count<=0)
-            {
-                var data=dbContext.Customer;
-                if (data != null)
-                {
-                    CustomerCollection = new ObservableCollection<Customer>(data);
-                }
-            }
-            return Task.FromResult(CustomerCollection.AsEnumerable());
+            var customer = dbContext.Customer;
+            return Task.FromResult(customer.AsEnumerable());
         }
 
 
@@ -74,8 +60,6 @@ namespace WebClient.Services
                 Customer result = await userService.RegisterCustomer(value);
                 if (result == null)
                     throw new SystemException("Data Not Saved !");
-                if (CustomerCollection != null)
-                    CustomerCollection.Add(result);
                 return result;
             }
             catch (Exception ex)
@@ -91,24 +75,9 @@ namespace WebClient.Services
                 var existsModel = dbContext.Customer.Where(x => x.Id == id).FirstOrDefault();
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");
-
                 dbContext.Entry(existsModel).CurrentValues.SetValues(value);
-
                 await dbContext.SaveChangesAsync();
-
-                var existOnModel = CustomerCollection.Where(x => x.Id == id).FirstOrDefault();
-                if (existOnModel != null)
-                {
-                    existOnModel.Address = value.Address;
-                    existOnModel.ContactName = value.ContactName;
-                    existOnModel.Email = value.Email;
-                    existOnModel.Name = value.Name;
-                    existOnModel.NPWP = value.NPWP;
-                    existOnModel.Telepon = value.Telepon;
-                    existOnModel.UserId = value.UserId;
-                }
-
-                return true;
+              return true;
             }
             catch (Exception ex)
             {

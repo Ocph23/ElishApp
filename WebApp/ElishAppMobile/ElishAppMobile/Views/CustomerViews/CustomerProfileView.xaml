@@ -4,32 +4,37 @@
              Title="Profil Pelaggan"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:Class="ElishAppMobile.Views.CustomerViews.CustomerProfileView">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding SaveCommand}" Text="Simpan"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="20">
+                <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" HorizontalOptions="CenterAndExpand"/>
                 <StackLayout Margin="10,5"  >
                     <Label Text="Nama Usaha" />
-                    <Entry Text="{Binding MyProfile.Name}" />
+                    <Entry Text="{Binding Model.Name}" />
+                </StackLayout>
+                <StackLayout Margin="10,5" >
+                    <Label Text="NPWP" />
+                    <Entry Text="{Binding Model.NPWP}" />
                 </StackLayout>
                 <StackLayout Margin="10,5" >
                     <Label Text="Nama Kontak" />
-                    <Entry Text="{Binding MyProfile.ContactName}" />
+                    <Entry Text="{Binding Model.ContactName}" />
                 </StackLayout>
-                <StackLayout Margin="10,5" >
-                    <Label Text="Handpone" />
-                    <Entry Text="{Binding MyProfile.NPWP}" />
-                </StackLayout>
+               
                 <StackLayout Margin="10,5" >
                     <Label Text="Telepon" />
-                    <Entry Text="{Binding MyProfile.Telepon}" />
+                    <Entry Text="{Binding Model.Telepon}" />
                 </StackLayout>
                 <StackLayout Margin="10,5" >
                     <Label Text="Email/User/" />
-                    <Entry Text="{Binding MyProfile.Email}" />
+                    <Entry Text="{Binding Model.Email}" />
                 </StackLayout>
                 <StackLayout Margin="10,5" >
                     <Label Text="Alamat" />
-                    <Editor Text="{Binding MyProfile.Address}" />
+                    <Editor Text="{Binding Model.Address}" />
                 </StackLayout>
                 <StackLayout Margin="10,5" >
                     <Grid >

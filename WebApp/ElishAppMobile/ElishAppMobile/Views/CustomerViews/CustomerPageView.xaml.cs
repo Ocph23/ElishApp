@@ -93,9 +93,17 @@ namespace ElishAppMobile.Views.CustomerViews
                 {
                     Items.Clear();
                     var orders = await Customers.Get();
+                    var profile = await Account.GetProfile();
                     if (orders != null)
                     {
-                        _SourceItems = new ObservableCollection<Customer>(orders);
+                        if (await Account.UserInRole("Sales"))
+                        {
+                            _SourceItems = new ObservableCollection<Customer>(orders.Where(x=>x.KaryawanId==profile.Id));
+                        }
+                        else
+                        {
+                            _SourceItems = new ObservableCollection<Customer>(orders);
+                        }
                     }
 
                     foreach (var item in _SourceItems)

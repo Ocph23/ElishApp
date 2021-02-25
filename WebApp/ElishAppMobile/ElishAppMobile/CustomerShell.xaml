@@ -71,11 +71,11 @@
     </Shell.Resources>
 
     <Shell.FlyoutHeader>
-        <StackLayout>
+        <StackLayout BackgroundColor="LightGray">
             <Grid BackgroundColor="Black">
                 <Image Aspect="AspectFit"  Source="image1.jpg" Opacity="0.8" />
             </Grid>
-                <Label x:Name="user"  TextColor="White" FontSize="18" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
+                <Label x:Name="user"  FontSize="18" VerticalOptions="CenterAndExpand" Margin="10" Padding="5"/>
         </StackLayout>
     </Shell.FlyoutHeader>
     

@@ -23,7 +23,7 @@ namespace ElishAppMobile
                 using var res = new RestService();
                 var response = await res.DeleteAsync($"{controller}/{id}");
                 if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
+                    throw new SystemException(await res.Error(response));
                 return await response.GetResult<bool>();
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace ElishAppMobile
                 using var res = new RestService();
                 var response = await res.GetAsync($"{controller}/{id}");
                 if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
+                    throw new SystemException(await res.Error(response));
                 return await response.GetResult<Customer>();
             }
             catch (Exception ex)
@@ -64,7 +64,7 @@ namespace ElishAppMobile
                         using var res = new RestService();
                         var response = await res.GetAsync($"{controller}");
                         if (!response.IsSuccessStatusCode)
-                            await res.Error(response);
+                            throw new SystemException(await res.Error(response));
                         var results = await response.GetResult<IEnumerable<Customer>>();
                         CustomerCollection.Clear();
                         foreach (var item in results)
@@ -109,7 +109,7 @@ namespace ElishAppMobile
                         using var res = new RestService();
                         var response = await res.GetAsync($"{controller}/BySales/{id}");
                         if (!response.IsSuccessStatusCode)
-                            await res.Error(response);
+                            throw new SystemException(await res.Error(response));
                         var results = await response.GetResult<IEnumerable<Customer>>();
                         CustomerCollection.Clear();
                         foreach (var item in results)
@@ -146,7 +146,7 @@ namespace ElishAppMobile
                 using var res = new RestService();
                 var response = await res.PostAsync($"{controller}", res.GenerateHttpContent(value));
                 if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
+                    throw new SystemException(await res.Error(response));
                 var data= await response.GetResult<Customer>();
                 if (data != null)
                 {
@@ -167,7 +167,7 @@ namespace ElishAppMobile
                 using var res = new RestService();
                 var response = await res.PutAsync($"{controller}/{id}", res.GenerateHttpContent(value));
                 if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
+                    throw new SystemException(await res.Error(response));
                 return await response.GetResult<bool>();
             }
             catch (Exception ex)
@@ -183,7 +183,7 @@ namespace ElishAppMobile
                 using var res = new RestService();
                 var response = await res.PutAsync($"{controller}/location/{cust.Id}", res.GenerateHttpContent(cust));
                 if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
+                    throw new SystemException(await res.Error(response));
                 return await response.GetResult<bool>();
             }
             catch (Exception ex)

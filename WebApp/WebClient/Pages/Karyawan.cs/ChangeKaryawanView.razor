@@ -2,12 +2,13 @@
 
 @inject NavigationManager nav;
 @inject IKaryawanService karyawanService;
+@inject ICustomerService customerService;
 @attribute [Authorize]
 
 <Radzen.Blazor.RadzenFieldset Text="@title">
     <div class="row">
         <div class="col-xl-12">
-            <RadzenTabs  style="height: 750px">
+            <RadzenTabs style="height: 750px">
                 <Tabs>
                     <RadzenTabsItem Text="Data Karaywan">
                         <RadzenTemplateForm Data="model" Submit="@(async(Karyawan arg)=>await Save(arg))">
@@ -49,7 +50,7 @@
                                                 <RadzenLabel Text="Address" />
                                             </div>
                                             <div class="col-md-8">
-                                                <RadzenTextArea @bind-Value="model.Address"  Name="Address"/>
+                                                <RadzenTextArea @bind-Value="model.Address" Name="Address" />
                                                 <RadzenRequiredValidator Component="Address" Text="Address is required" Popup=true Style="position: absolute" />
                                             </div>
                                         </div>
@@ -61,11 +62,25 @@
                                 <div class="row text-center" style="margin:10px">
 
                                     <Radzen.Blazor.RadzenButton Icon="undo" ButtonType="ButtonType.Button" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" Style="margin:5px" />
-                                    <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Button" Click="@(()=>Save(null))"  ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
+                                    <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Button" Click="@(()=>Save(null))" ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
                                 </div>
 
                             </Radzen.Blazor.RadzenFieldset>
                         </RadzenTemplateForm>
+                    </RadzenTabsItem>
+                    <RadzenTabsItem Text="Data Customer">
+                        <RadzenGrid Data="customers" AllowFiltering="true" AllowPaging="true" AllowSorting="true">
+                            <Columns>
+                                <RadzenGridColumn TItem="Customer" Title="Name" Property="Name" />
+                                <RadzenGridColumn TItem="Customer" Title="Contact Person" Property="ContactName" Width="250px" />
+                                <RadzenGridColumn TItem="Customer" Title="Telepon" Property="Telepon" Width="200px" />
+                                <RadzenGridColumn TItem="Customer" Context="item" Width="65px">
+                                    <Template>
+                                        <RadzenButton Icon="info" ButtonStyle="ButtonStyle.Warning" Click="@(()=> nav.NavigateTo($"/customer/change/{item.Id}"))"></RadzenButton>
+                                    </Template>
+                                </RadzenGridColumn>
+                            </Columns>
+                        </RadzenGrid>
                     </RadzenTabsItem>
                 </Tabs>
             </RadzenTabs>
@@ -73,73 +88,75 @@
     </div>
 </Radzen.Blazor.RadzenFieldset>
 
-    @code {
-        [Parameter]
-        public string id { get; set; }
+@code {
+    [Parameter]
+    public string id { get; set; }
 
-        public string title = "Add Karyawan";
+    public string title = "Add Karyawan";
 
-        public Karyawan model { get; set; } = new  Karyawan();
+    public Karyawan model { get; set; } = new Karyawan();
+    IEnumerable<Customer> customers;
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        try
         {
-            try
+            if (string.IsNullOrEmpty(id))
             {
-                if (string.IsNullOrEmpty(id))
-                {
-                    model = new  Karyawan();
-                }
-                else
-                {
-                    title = "Edit Karyawan";
-                    model = await karyawanService.Get(Convert.ToInt32(id));
-                }
+                model = new Karyawan();
             }
-            catch
+            else
             {
-                //ex.Message;
+                title = "Edit Karyawan";
+                model = await karyawanService.Get(Convert.ToInt32(id));
+                customers = await customerService.GetBySales(Convert.ToInt32(id));
             }
         }
-
-
-        private async Task Save(Karyawan kar)
+        catch
         {
-            try
+            //ex.Message;
+        }
+    }
+
+
+    private async Task Save(Karyawan kar)
+    {
+        try
+        {
+            var Id = Convert.ToInt32(id);
+            if (Id <= 0)
             {
-                var Id = Convert.ToInt32(id);
-                if (Id <= 0)
+                var data = await karyawanService.Post(model);
+                if (data != null)
                 {
-                    var data = await karyawanService.Post(model);
-                    if (data != null)
-                    {
-                        nav.NavigateTo("/karyawan");
-                    }
+                    nav.NavigateTo("/karyawan");
                 }
-                else
-                {
-                    var updated = await karyawanService.Update(Convert.ToInt32(id), model);
-                    if (updated)
-                    {
-                        nav.NavigateTo("/karyawan");
-                    }
-                }
-
-
             }
-            catch
+            else
             {
-                //ex.Message;
+                var updated = await karyawanService.Update(Convert.ToInt32(id), model);
+                if (updated)
+                {
+                    nav.NavigateTo("/karyawan");
+                }
             }
 
 
         }
-
-
-        private void GoBack()
+        catch
         {
-            nav.NavigateTo("/karyawan");
+            //ex.Message;
         }
-
 
 
     }
+
+
+    private void GoBack()
+    {
+        nav.NavigateTo("/karyawan");
+    }
+
+
+
+}
