@@ -24,7 +24,7 @@ namespace ElishAppMobile.Services
                 using var res = new RestService();
                 var response = await res.GetAsync($"{controller}/{pembelianid}");
                 if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
+                    throw new SystemException(await res.Error(response));
                 list = await response.GetResult<PembelianModel>();
                 return list;
 
@@ -50,7 +50,7 @@ namespace ElishAppMobile.Services
                     using var res = new RestService();
                     var response = await res.GetAsync($"{controller}");
                     if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
+                        throw new SystemException(await res.Error(response));
                     return await response.GetResult<PembelianModel>();
                 }
                 catch (Exception ex)

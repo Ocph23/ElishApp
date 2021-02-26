@@ -17,7 +17,12 @@
         <RadzenGridColumn TItem="Customer" Title="Name" Property="Name" />
         <RadzenGridColumn TItem="Customer" Title="Contact Person" Property="ContactName" Width="250px" />
         <RadzenGridColumn TItem="Customer" Title="Telepon" Property="Telepon" Width="200px" />
-      
+        <RadzenGridColumn TItem="Customer" Title="Salesman" Width="200px" >
+            <Template Context="item">
+                @(item.Karyawan==null ? "None": item.Karyawan.Name);
+            </Template>
+        </RadzenGridColumn>
+
         <RadzenGridColumn TItem="Customer" Context="item" Width="65px">
             <Template>
                 <RadzenButton Icon="info" ButtonStyle="ButtonStyle.Warning" Click="@(()=> nav.NavigateTo($"/customer/change/{item.Id}"))"></RadzenButton>

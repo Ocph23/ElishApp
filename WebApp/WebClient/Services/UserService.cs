@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using WebClient.Models;
 using System.Security.Cryptography;
 using ShareModels;
-using WebClient;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -122,13 +121,19 @@ namespace WebClient.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var roles = "";
+            foreach (var item in user.Roles)
+            {
+                    roles += $"{item.Name}, ";
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("id", user.Id.ToString()),
                     new Claim("name", user.UserName),
-                    new Claim("roles", user.Roles.Select(x=>x.Name).ToArray().ToString())
+                    new Claim("roles", roles)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

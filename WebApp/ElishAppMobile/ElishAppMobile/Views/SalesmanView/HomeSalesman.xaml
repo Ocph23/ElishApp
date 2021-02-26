@@ -25,7 +25,7 @@
                 </Label.FormattedText>
             </Label>
           
-            <StackLayout Grid.Row="1" >
+            <StackLayout Grid.Row="1" Margin="5" >
                     <CarouselView x:Name="ItemsListView" ItemsSource="{Binding PeriodePenjualan}" >
                         <CarouselView.ItemTemplate>
                             <DataTemplate>

@@ -83,5 +83,25 @@ namespace WebClient
                 return null;
             }
         }
+
+        public static bool InRole(this ClaimsPrincipal principal, string roleName)
+        {
+            try
+            {
+                var cl = principal.Claims.Where(x => x.Type == ClaimTypes.Role).FirstOrDefault();
+
+                if (cl != null && !string.IsNullOrEmpty(cl.Value))
+                {
+                    var roles = cl.Value.Split(',').ToList();
+                    if(roles.Where(x=>x.ToLower() == roleName.ToLower()).Count()>0)
+                        return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

@@ -42,13 +42,30 @@ namespace WebClient.Services
 
         public Task<Customer> Get(int id)
         {
-            var customer = dbContext.Customer.Where(x => x.Id == id).Include(x=>x.Karyawan).FirstOrDefault();
+            try
+            {
+                var customer = dbContext.Customer.SingleOrDefault(x => x.Id == id);
+                if (customer == null)
+                    throw new SystemException("Data Tidak Ditemukan !");
+                if (customer.KaryawanId > 0)
+                    customer.Karyawan = dbContext.Karyawan.SingleOrDefault(x => x.Id == customer.KaryawanId);
             return Task.FromResult(customer);
+
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         public Task<IEnumerable<Customer>> Get()
         {
-            var customer = dbContext.Customer;
+            var customer = from a in  dbContext.Customer 
+                           join b in dbContext.Karyawan on a.KaryawanId equals b.Id into c
+                           from b in c.DefaultIfEmpty()
+                           select new Customer { Address=a.Address, ContactName=a.ContactName, Email=a.Email, Id=a.Id, Karyawan=b, KaryawanId=a.KaryawanId,
+                            Location=a.Location, Name=a.Name, NPWP=a.NPWP,  Telepon=a.Telepon , UserId=a.UserId} ;
+
             return Task.FromResult(customer.AsEnumerable());
         }
 

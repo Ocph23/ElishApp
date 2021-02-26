@@ -1,17 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShareModels;
-using ShareModels.ModelViews;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using WebClient.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebClient.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class PenjualanController : ControllerBase
@@ -25,12 +21,13 @@ namespace WebClient.Controllers
             service = _service;
         }
 
+        [ApiAuthorize]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
-                if (User.IsInRole("Administrator"))
+                if (User.InRole("Administrator"))
                 {
                     return Ok(await service.GetPenjualans());
                 }
@@ -39,21 +36,20 @@ namespace WebClient.Controllers
                     var profile = await _userService.Profile();
                     if (profile != null)
                     {
-                        if (profile.GetType() == typeof(Karyawan))
+                        if (User.InRole("Sales"))
                         {
                             Karyawan karyawan = profile as Karyawan;
                             return Ok(await service.GetPenjualansBySalesId(karyawan.Id));
                         }
-                        else
+
+                        if (User.InRole("Customer"))
                         {
                             Customer karyawan = profile as Customer;
                             return Ok(await service.GetPenjualansByCustomerId(karyawan.Id));
                         }
                     }
                 }
-
                 throw new SystemException("Not Found !");
-
             }
             catch (Exception ex)
             {
@@ -61,7 +57,7 @@ namespace WebClient.Controllers
             }
         }
 
-
+        [ApiAuthorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -75,33 +71,6 @@ namespace WebClient.Controllers
                 return BadRequest(new ErrorMessage(ex.Message));
             }
         }
-
-
-        //[HttpGet("ByCustomerId/{id}")]
-        //public async Task<IActionResult> GetPenjualanByCustomerId(int id)
-        //{
-        //    try
-        //    {
-        //        return Ok(await service.GetPenjualansByCustomerId(id));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new ErrorMessage(ex.Message));
-        //    }
-        //}
-
-        //[HttpGet("BySalesId/{id}")]
-        //public async Task<IActionResult> GetPenjualanBySalesId(int id)
-        //{
-        //    try
-        //    {
-        //        return Ok(await service.GetPenjualansBySalesId(id));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new ErrorMessage(ex.Message));
-        //    }
-        //}
 
 
         [ApiAuthorize]
@@ -118,7 +87,7 @@ namespace WebClient.Controllers
             }
         }
 
-
+        [ApiAuthorize]
         [HttpPost("order")]
         public async Task<IActionResult> PostOrder(Orderpenjualan order)
         {
@@ -135,12 +104,13 @@ namespace WebClient.Controllers
             }
         }
 
+        [ApiAuthorize]
         [HttpGet("order")]
         public async Task<IActionResult> GetOrders()
         {
             try
             {
-                if (User.IsInRole("Administrator"))
+                if (User.InRole("Administrator"))
                 {
                    return Ok(await service.GetOrders());
                 }
@@ -149,12 +119,14 @@ namespace WebClient.Controllers
                     var profile = await _userService.Profile();
                     if (profile != null)
                     {
-                        if (profile.GetType() == typeof(Karyawan))
+
+                        if (User.InRole("Sales"))
                         {
                             Karyawan karyawan = profile as Karyawan;
                             return Ok( await service.GetOrdersBySalesId(karyawan.Id));
                         }
-                        else
+
+                        if(User.InRole("Customer"))
                         {
                             Customer karyawan = profile as Customer;
                             return Ok(await service.GetOrdersByCustomerId(karyawan.Id));
@@ -171,38 +143,7 @@ namespace WebClient.Controllers
             }
         }
 
-        //[HttpGet("OrderBySales/{id}")]
-        //public async Task<IActionResult> GetOrderBySales(int id)
-        //{
-        //    try
-        //    {
-        //        var result = await service.GetOrdersBySalesId(id);
-        //        if (result != null)
-        //            return Ok(result);
-        //        throw new SystemException("Order Not Created !");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new ErrorMessage(ex.Message));
-        //    }
-        //}
-
-        //[HttpGet("OrderByCustomer/{id}")]
-        //public async Task<IActionResult> OrderByCustomer(int id)
-        //{
-        //    try
-        //    {
-        //        var result = await service.GetOrdersByCustomerId(id);
-        //        if (result != null)
-        //            return Ok(result);
-        //        throw new SystemException("Order Not Created !");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new ErrorMessage(ex.Message));
-        //    }
-        //}
-
+        [ApiAuthorize]
         [HttpGet("order/{id}")]
         public async Task<IActionResult> GetOrder(int id)
         {
@@ -219,6 +160,8 @@ namespace WebClient.Controllers
             }
         }
 
+
+        [ApiAuthorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Penjualan penjualan)
         {
@@ -232,7 +175,7 @@ namespace WebClient.Controllers
             }
         }
 
-
+        [ApiAuthorize]
         [HttpPut("order/{id}")]
         public async Task<IActionResult> UpdateOrder(int id, Orderpenjualan penjualan)
         {
@@ -246,9 +189,8 @@ namespace WebClient.Controllers
             }
         }
 
-
+        [ApiAuthorize]
         [HttpDelete("{id}")]
-
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -264,8 +206,6 @@ namespace WebClient.Controllers
                 return BadRequest(new ErrorMessage(ex.Message));
             }
         }
-
-
 
 
     }

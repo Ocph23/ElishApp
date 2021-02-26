@@ -26,8 +26,9 @@
                 <Button Margin="0,20" VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
             </StackLayout>
             <StackLayout Grid.Row="2" Margin="5">
-                <Entry HorizontalOptions="Center" FontSize="Small" WidthRequest="200" 
-                  HorizontalTextAlignment="Center"     Text="{Binding Url}"/>
+                <Entry HorizontalOptions="Center" FontSize="Small" WidthRequest="200" IsVisible="false" HorizontalTextAlignment="Center" Text="{Binding Url}"/>
+                <Label x:Name="cr" HorizontalOptions="CenterAndExpand" FontAttributes="Bold" TextColor="OrangeRed" Margin="0,0,0,0" FontSize="10"/>
+                <Label x:Name="version" HorizontalOptions="CenterAndExpand" FontSize="Micro" ></Label>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

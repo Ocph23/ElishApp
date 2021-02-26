@@ -99,6 +99,8 @@
     <FlyoutItem Title="Pembelian" Icon="icon_feed.png">
         <ShellContent Route="PenjualanView" ContentTemplate="{DataTemplate penjualan:PenjualanView}" />
     </FlyoutItem>
+    
+    
 
     <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>

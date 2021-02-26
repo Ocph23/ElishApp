@@ -21,7 +21,7 @@ namespace ElishAppMobile
                 {
                    var response= await res.DeleteAsync($"{controller}/{id}");
                     if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
+                        throw new SystemException(await res.Error(response));
                     return  await response.GetResult<bool>();
                 }
             }
@@ -39,7 +39,7 @@ namespace ElishAppMobile
                 {
                     var response = await res.GetAsync($"{controller}/{id}");
                     if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
+                        throw new SystemException(await res.Error(response));
                     return await response.GetResult<Category>();
                 }
             }
@@ -62,7 +62,7 @@ namespace ElishAppMobile
                         using var res = new RestService();
                         var response = await res.GetAsync($"{controller}");
                         if (!response.IsSuccessStatusCode)
-                            await res.Error(response);
+                            throw new SystemException(await res.Error(response));
                         var datas = await response.GetResult<IEnumerable<Category>>();
                         _ = db.Save<SqlDataModelCategory, Category>(datas);
                         categories = datas;
@@ -91,7 +91,7 @@ namespace ElishAppMobile
                 {
                     var response = await res.PostAsync($"{controller}", res.GenerateHttpContent(value));
                     if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
+                        throw new SystemException(await res.Error(response));
                     return await response.GetResult<Category>();
                 }
             }
@@ -109,7 +109,7 @@ namespace ElishAppMobile
                 {
                     var response = await res.PutAsync($"{controller}/{id}", res.GenerateHttpContent(value));
                     if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
+                        throw new SystemException(await res.Error(response));
                     return await response.GetResult<bool>();
                 }
             }

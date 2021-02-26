@@ -99,7 +99,7 @@ namespace ElishAppMobile.Views.PenjualanViews
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+               await MessageHelper.ErrorAsync(ex.Message);
             }
             finally
             {

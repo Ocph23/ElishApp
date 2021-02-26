@@ -8,7 +8,7 @@
             <maps:Map  x:Name="map" Margin="0,10" IsShowingUser="True"  />
             <StackLayout Margin="10"  Padding="10" VerticalOptions="Start" HorizontalOptions="Start">
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
-                    <Switch x:Name="isMyMap" VerticalOptions="Center" Margin="0"/>
+                    <Switch x:Name="isMyMap" VerticalOptions="Center" Margin="0" Toggled="isMyMap_Toggled"/>
                     <Label Text="My Map" VerticalOptions="Center" TextColor="OrangeRed" Margin="0"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" HorizontalOptions="Start">

@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace ElishAppMobile.Views
 {
@@ -15,6 +16,8 @@ namespace ElishAppMobile.Views
         {
             InitializeComponent();
             BindingContext = new ViewModels.AboutViewModel();
+            cr.Text = $"Copyright @Ocph23 2020 - {DateTime.Now.Year}";
+            version.Text = $"Version : {VersionTracking.CurrentVersion} - Build:{VersionTracking.CurrentBuild}";
         }
 
         private async void Button_Clicked(object sender, EventArgs e)

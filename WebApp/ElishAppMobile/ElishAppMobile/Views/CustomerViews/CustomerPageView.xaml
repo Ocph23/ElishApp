@@ -5,9 +5,6 @@
              xmlns:local="clr-namespace:ElishAppMobile.Views.CustomerViews"
              xmlns:model="clr-namespace:ShareModels;assembly=ShareModels"
              x:Class="ElishAppMobile.Views.CustomerViews.CustomerPageView">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="plus.png"   Command="{Binding AddNewCommand}"/>
-    </ContentPage.ToolbarItems>
     <Shell.SearchHandler>
         <control:TextSearchHandler x:Name="search" Placeholder="Cari"></control:TextSearchHandler>
     </Shell.SearchHandler>

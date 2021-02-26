@@ -2,6 +2,7 @@
 using ShareModels;
 using System;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,6 +15,8 @@ namespace ElishAppMobile.Views
         {
             InitializeComponent();
             BindingContext = new LoginViewModel();
+            cr.Text = $"Copyright @Ocph23 2020 - {DateTime.Now.Year}";
+            version.Text = $"Version : {VersionTracking.CurrentVersion} - Build:{VersionTracking.CurrentBuild}";
         }
     }
     public class LoginViewModel:BaseViewModel

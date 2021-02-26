@@ -26,7 +26,7 @@ namespace ElishAppMobile.Services
                     using var res = new RestService();
                     var response = await res.PostAsync($"{controller}/order", res.GenerateHttpContent(order));
                     if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
+                        throw new SystemException(await res.Error(response));
                     return await response.GetResult<Orderpenjualan>();
                 }
                 else
@@ -72,7 +72,7 @@ namespace ElishAppMobile.Services
                 using var res = new RestService();
                 var response = await res.GetAsync($"{controller}/order/{id}");
                 if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
+                    throw new SystemException(await res.Error(response));
                 return await response.GetResult<Orderpenjualan>();
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace ElishAppMobile.Services
                     using var res = new RestService();
                     var response = await res.GetAsync($"{controller}/order");
                     if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
+                        throw new SystemException(await res.Error(response));
                     return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
                 }
                 else
@@ -120,7 +120,7 @@ namespace ElishAppMobile.Services
         //            using var res = new RestService();
         //            var response = await res.GetAsync($"{controller}/OrderByCustomer/{customerId}");
         //            if (!response.IsSuccessStatusCode)
-        //                await res.Error(response);
+        //                throw new SystemException(await res.Error(response));
         //            return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
         //        }
         //        else
@@ -148,7 +148,7 @@ namespace ElishAppMobile.Services
         //            using var res = new RestService();
         //            var response = await res.GetAsync($"{controller}/OrderBySales/{id}");
         //            if (!response.IsSuccessStatusCode)
-        //                await res.Error(response);
+        //                throw new SystemException(await res.Error(response));
         //            return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
         //        }
         //        else
@@ -210,7 +210,7 @@ namespace ElishAppMobile.Services
                     using var res = new RestService();
                     var response = await res.GetAsync($"{controller}/{id}");
                     if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
+                        throw new SystemException(await res.Error(response));
                     return await response.GetResult<Penjualan>();
                 }
                 else
@@ -235,7 +235,7 @@ namespace ElishAppMobile.Services
                     using var res = new RestService();
                     var response = await res.GetAsync($"{controller}");
                     if (!response.IsSuccessStatusCode)
-                        await res.Error(response);
+                        throw new SystemException(await res.Error(response));
                     return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
                 }
                 else
@@ -287,7 +287,7 @@ namespace ElishAppMobile.Services
         //            using var res = new RestService();
         //            var response = await res.GetAsync($"{controller}/ByCustomerId/{id}");
         //            if (!response.IsSuccessStatusCode)
-        //                await res.Error(response);
+        //                throw new SystemException(await res.Error(response));
         //            return await response.GetResult<IEnumerable<PenjualanAndOrderModel>>();
         //        }
         //        else
@@ -335,7 +335,7 @@ namespace ElishAppMobile.Services
                 using var res = new RestService();
                 var response = await res.PutAsync($"{controller}/order/{orderId}", res.GenerateHttpContent(order));
                 if (!response.IsSuccessStatusCode)
-                    await res.Error(response);
+                    throw new SystemException(await res.Error(response));
                 return await response.GetResult<Orderpenjualan>();
             }
             catch (Exception ex)

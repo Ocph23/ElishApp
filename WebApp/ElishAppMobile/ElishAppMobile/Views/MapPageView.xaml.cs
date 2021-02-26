@@ -1,10 +1,8 @@
 ﻿using ElishAppMobile.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
@@ -14,23 +12,25 @@ namespace ElishAppMobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MapPageView : ContentPage
     {
+        private MapPageViewModel vm;
+
         public MapPageView()
         {
             InitializeComponent();
-            BindingContext = new MapPageViewModel(map);
-
-
+            BindingContext =vm= new MapPageViewModel(map);
         }
 
-
-
-      
+        private async void isMyMap_Toggled(object sender, ToggledEventArgs e)
+        {
+            await  vm.Load(e.Value);
+        }
     }
 
 
     public class MapPageViewModel : BaseViewModel
     {
         private MapType _mapType;
+        private CancellationTokenSource cts;
 
         public MapPageViewModel(Map map)
         {
@@ -40,14 +40,43 @@ namespace ElishAppMobile.Views
             MapSelected = MapType.Satellite;
         }
 
-        private async Task Load()
+        public async Task Load(bool isMyMap=false)
         {
-            var customers =  await Customers.Get();
-            foreach (var item in customers)
+            _=  MyCenterPosition();
+            Map.Pins.Clear();
+            if (!isMyMap)
             {
-                var location = Helper.GetLocationView(item.Location);
-                var position = new Position(location.Item1, location.Item2);
-                SetPin(item.Name, PinType.Place, position);
+                var customers = await Customers.Get();
+                foreach (var item in customers)
+                {
+                    var location = Helper.GetLocationView(item.Location);
+                    var position = new Position(location.Item1, location.Item2);
+                    SetPin(item.Name, PinType.Place, position);
+                }
+            }
+            else
+            {
+                var profile = await Account.GetProfile();
+                var customers = await Customers.Get();
+                foreach (var item in customers.Where(x=>x.KaryawanId==profile.Id))
+                {
+                    var location = Helper.GetLocationView(item.Location);
+                    var position = new Position(location.Item1, location.Item2);
+                    SetPin(item.Name, PinType.Place, position);
+                }
+            }
+
+        }
+
+        private async Task MyCenterPosition()
+        {
+            var request = new Xamarin.Essentials.GeolocationRequest(Xamarin.Essentials.GeolocationAccuracy.High, TimeSpan.FromSeconds(10));
+            cts = new CancellationTokenSource();
+            var location = await Xamarin.Essentials.Geolocation.GetLocationAsync(request, cts.Token);
+            if (location != null)
+            {
+                var newMap = new MapSpan(new Position(location.Latitude, location.Longitude), 0.01, 0.01);
+                Map.MoveToRegion(newMap);
             }
         }
 

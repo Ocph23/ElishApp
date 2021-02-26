@@ -29,7 +29,7 @@
                     <StackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Label WidthRequest="100" Text="Customer" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
-                            <Picker IsEnabled="{Binding AddCustomerVisible}"  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding Customers.CustomerCollection}" 
+                            <Picker IsEnabled="{Binding AddCustomerVisible}"  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding CustomerSource}" 
                             VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="220"
                              FontSize="Small" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" />
                             <ImageButton IsVisible="{Binding AddCustomerVisible}" Clicked="ImageButton_Clicked_1" Source="customer.png"  BackgroundColor="Transparent"

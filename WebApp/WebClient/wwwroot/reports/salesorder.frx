@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="12/16/2020 03:42:33" ReportInfo.Modified="02/15/2021 08:21:39" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="12/16/2020 03:42:33" ReportInfo.Modified="02/25/2021 19:04:00" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
     <XmlDataConnection Name="Nota">
       <TableDataSource Name="Table1" DataType="System.Int32" Enabled="true" TableName="Table1">
@@ -51,7 +51,7 @@
           <TableCell Name="Cell14" Border.Lines="Top, Bottom" Border.Style="Dot" Text="Total" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <BarcodeObject Name="Barcode1" Left="308.6" Width="104.4" Height="104.4" EvenStylePriority="UseAll" AutoSize="false" Text="No SO     : [NomorSO]/[Salesman]&#13;&#10;Customer : [Customer]" ShowText="false" Zoom="0.9" AllowExpressions="true" AsBitmap="true" Barcode="QR Code" Barcode.ErrorCorrection="L" Barcode.Encoding="UTF8" Barcode.QuietZone="true"/>
+      <BarcodeObject Name="Barcode1" Left="308.6" Width="104.4" Height="104.4" EvenStylePriority="UseAll" AutoSize="false" Text="SO : [NomorSO]" ShowText="false" Zoom="0.9" AllowExpressions="true" AsBitmap="true" Barcode="QR Code" Barcode.ErrorCorrection="L" Barcode.Encoding="UTF8" Barcode.QuietZone="true"/>
       <TextObject Name="Text16" Left="11.11" Top="22.91" Width="217.35" Height="28.35" Text="Perum Permata Indah No 216&#13;&#10;Abepura, Jayapura , [OfficeTelp]" Font="Arial, 7pt"/>
       <TextObject Name="Text10" Left="122.85" Top="56.7" Width="198.45" Height="18.9" Text=": [Tanggal]" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
       <TextObject Name="Text11" Left="9.45" Top="56.7" Width="94.5" Height="18.9" Text="Create Date" Font="Arial, 9pt"/>

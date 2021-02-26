@@ -55,11 +55,13 @@ namespace WebClient
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 int id = Convert.ToInt32(jwtToken.Claims.First(x => x.Type == "id").Value);
+                string roles = jwtToken.Claims.First(x => x.Type == "roles").Value;
                 var name = jwtToken.Claims.First(x => x.Type == "name").Value;
                 var claims = new[]
                 {
                                new Claim(ClaimTypes.NameIdentifier, id.ToString()),
                                new Claim(ClaimTypes.Name, name),
+                               new Claim(ClaimTypes.Role, roles)
                 };
                 var identity = new ClaimsIdentity(claims, "Bearer");
                 var user = await userService.FindUserById(id);

@@ -50,6 +50,8 @@ namespace ElishAppMobile.Views
         {
             try
             {
+                var profile = await Account.GetProfile();
+                Model.KaryawanId = profile.Id;
                 var result = await Customers.Post(Model);
                 if (result != null)
                 {

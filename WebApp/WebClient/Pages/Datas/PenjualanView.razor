@@ -65,8 +65,9 @@
                 source = dbContext.Penjualan.Where(x => x.CreateDate >= start.Value && x.CreateDate <= endDate.Value)
                     .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
                     .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
-                    .Include(x => x.Items).ThenInclude(x=>x.Unit)
-                .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x=>x.Units);
+                    .Include(x => x.Items).ThenInclude(x => x.Unit)
+                    .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier)
+                    .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);
             }
 
             grid.ColumnsCollection.Clear();

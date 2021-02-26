@@ -106,7 +106,8 @@ namespace ElishAppMobile.Views
         private double total;
         private Command _saveCommand;
         private ProductStock productSelect;
-        private IEnumerable<Customer> customers;
+       
+        private IEnumerable<Customer> customersource;
         private IEnumerable<ProductStock> products;
         #endregion
         
@@ -135,7 +136,7 @@ namespace ElishAppMobile.Views
 
         public bool AddCustomerVisible => !Account.UserInRole("Customer").Result;
 
-
+        public ObservableCollection<Customer> CustomerSource { get; set; } = new ObservableCollection<Customer>();
         public ObservableCollection<ItemPenjualanModel> Datas { get; set; } = new ObservableCollection<ItemPenjualanModel>();
       //  public ObservableCollection<Customer> DataCustomers { get; set; } = new ObservableCollection<Customer>();
         public ObservableCollection<Supplier> DataSupplier { get; set; } = new ObservableCollection<Supplier>();
@@ -179,7 +180,7 @@ namespace ElishAppMobile.Views
             {
                 if (value >= 0)
                 {
-                    Order.Customer = customers.ToList()[value];
+                    Order.Customer = CustomerSource.ToList()[value];
                     if (Order.Customer != null)
                     {
                         Order.CustomerId = Order.Customer.Id;
@@ -235,8 +236,8 @@ namespace ElishAppMobile.Views
             try
             {
                 IsBusy = true;
-              
-                customers = await Customers.Get();
+                customersource = await Customers.Get();
+
                
                 products = await Products.GetProductStock();
 
@@ -257,8 +258,13 @@ namespace ElishAppMobile.Views
 
                 if (order != null)
                 {
-                    var customer = customers.Where(x=>x.Id == order.CustomerId).FirstOrDefault();
-                    SelectedIndex = customers.ToList().IndexOf(customer);
+                    foreach (var item in customersource)
+                    {
+                        CustomerSource.Add(item);
+                    }
+
+                    var customer = CustomerSource.Where(x=>x.Id == order.CustomerId).FirstOrDefault();
+                    SelectedIndex = CustomerSource.ToList().IndexOf(customer);
                     var ll = order.Items.FirstOrDefault();
                     SupplierIndex = DataSupplier.IndexOf(DataSupplier.SingleOrDefault(x=>x.Id==ll.Product.SupplierId));
                     foreach (var item in order.Items)
@@ -280,6 +286,14 @@ namespace ElishAppMobile.Views
                             Datas.Add(newData);
                         }
 
+                    }
+                }
+                else
+                {
+                    var profile = await Account.GetProfile();
+                    foreach (var item in customersource.Where(x=>x.KaryawanId==profile.Id))
+                    {
+                        CustomerSource.Add(item);
                     }
                 }
 
@@ -318,7 +332,7 @@ namespace ElishAppMobile.Views
                         ProductId=item.ProductId, Product=item.Product });
                 }
 
-                var profile = Account.GetProfile();
+                var profile = await Account.GetProfile();
                 if (profile != null)
                     Order.SalesId = profile.Id;
 

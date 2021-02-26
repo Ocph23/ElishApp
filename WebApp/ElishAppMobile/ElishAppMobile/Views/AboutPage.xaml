@@ -38,11 +38,9 @@
                 <Image  Source="iamge2.png" Aspect="AspectFit" WidthRequest="40"  HeightRequest="40"  />
                 <Image  Source="playboy.png" Aspect="AspectFit" WidthRequest="40"  HeightRequest="40"/>
             </StackLayout>
-            <Label Text="Copyright @Ocph23 - 2021"  HorizontalOptions="CenterAndExpand" 
-               FontAttributes="Bold" TextColor="OrangeRed"
-               Margin="0,0,0,20" FontSize="10"/>
-            
-            
+            <Label x:Name="cr" HorizontalOptions="CenterAndExpand" FontAttributes="Bold" TextColor="OrangeRed" Margin="0,0,0,0" FontSize="10"/>
+            <Label x:Name="version" HorizontalOptions="CenterAndExpand" FontSize="Micro" ></Label>
+
         </StackLayout>
     </Grid>
 

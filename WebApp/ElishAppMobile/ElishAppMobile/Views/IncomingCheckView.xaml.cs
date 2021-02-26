@@ -72,14 +72,22 @@ namespace ElishAppMobile.Views
 
         public async void CreateAction(Pembelian obj)
         {
-            await Task.Delay(1);
-            Items.Clear();
-            Source = await IncomingService.CreateNew(obj.Id);
-            Model = Source.Model;
-            foreach (var item in Source.Datas)
+            try
             {
-                item.UpdateEvent += Item_UpdateEvent;
-                Items.Add(item);
+                await Task.Delay(1);
+                Items.Clear();
+                Source = await IncomingService.CreateNew(obj.Id);
+                Model = Source.Model;
+                foreach (var item in Source.Datas)
+                {
+                    item.UpdateEvent += Item_UpdateEvent;
+                    Items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                await MessageHelper.ErrorAsync(ex.Message);
             }
         }
 
@@ -124,7 +132,7 @@ namespace ElishAppMobile.Views
             }
         }
 
-        async Task ExecuteLoadItemsCommand()
+        async  Task ExecuteLoadItemsCommand()
         {
             try
             {
@@ -150,7 +158,7 @@ namespace ElishAppMobile.Views
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                await Toas.ShowLong($"Error : {ex.Message}");
             }
             finally
             {

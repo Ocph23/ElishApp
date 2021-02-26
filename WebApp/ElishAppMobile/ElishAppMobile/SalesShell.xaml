@@ -76,27 +76,30 @@
         </StackLayout>
     </Shell.FlyoutHeader>
     
-    <FlyoutItem Title="Home" Icon="icon_about.png">
+    <FlyoutItem Title="Home" Icon="home.png">
         <ShellContent Route="HomeCustomerView" ContentTemplate="{DataTemplate salesView:HomeSalesman}" />
     </FlyoutItem>
-    <FlyoutItem Title="Customer" Icon="customer.png">
+    <FlyoutItem Title="Customer" Icon="customers.png">
         <ShellContent Route="CustomerPageView" ContentTemplate="{DataTemplate custView:CustomerPageView}" />
     </FlyoutItem>
-    <FlyoutItem Title="Products" Icon="qr.png">
+    <FlyoutItem Title="Products" Icon="product.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ProductView}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Orders" Icon="icon_feed.png">
+    <FlyoutItem Title="Orders" Icon="order.png">
         <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:OrdesrView}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Penjualan" Icon="icon_feed.png">
+    <FlyoutItem Title="Penjualan" Icon="penjualan.png">
         <ShellContent Route="PenjualanView" ContentTemplate="{DataTemplate penjualan:PenjualanView}" />
     </FlyoutItem>
-    <FlyoutItem Title="Map" Icon="icon_feed.png">
+    <FlyoutItem Title="Map" Icon="map2.png">
         <ShellContent Route="MapPageView" ContentTemplate="{DataTemplate local:MapPageView}" />
     </FlyoutItem>
-    <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
+    <FlyoutItem Title="Info" Icon="icon_about.png">
+        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
+    </FlyoutItem>
+    <MenuItem Text="Logout" IconImageSource="logout.png" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">
     </MenuItem>
 
     <TabBar>
