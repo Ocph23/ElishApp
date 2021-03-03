@@ -39,7 +39,7 @@ using System.Threading.Tasks;
 
 
         [NotMapped]
-        public PaymentType Payment{ get => PayDeadLine <= 0 ? PaymentType.PayOff : PaymentType.Credit; }
+        public PaymentType Payment{ get => PayDeadLine <= 0 ? PaymentType.Tunai : PaymentType.Kredit; }
         private double _total;
 
         [NotMapped]

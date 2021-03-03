@@ -180,12 +180,12 @@
                     <Radzen.Blazor.RadzenFieldset>
                         <div class="text-right">
                             <RadzenButton Click=@(args => Cancel()) Icon="undo" ButtonStyle="ButtonStyle.Warning" />
-                            <RadzenButton Visible=@(model.Status== PaymentStatus.None?true:false) Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
+                            <RadzenButton Visible=@(model.Status== PaymentStatus.Belum?true:false) Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
                             <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" href="@($"/report/printpenjualan/{model.Id}")"><i class="ui-button-icon-left pi">print</i></a>
                         </div>
                     </Radzen.Blazor.RadzenFieldset>
                     <RadzenFieldset Text="Pembayaran">
-                        <RadzenButton Visible=@(model.Status!=PaymentStatus.PaidOff?true:false)
+                        <RadzenButton Visible=@(model.Status!=PaymentStatus.Lunas?true:false)
                                       Click=@(args => DialogService.OpenAsync<EditPenjualanPembayaran>($"Pembayaran",
                         new Dictionary<string, object>() { { "IdPenjualan", model.Id },{ "Total", (model.Total-(model.Total * (model.Discount / 100)))- pembayarans.Sum(x=>x.PayValue) } },
                         new DialogOptions())) Icon="payment" ButtonStyle="ButtonStyle.Warning" Style="margin-bottom:5px" />
@@ -340,7 +340,7 @@
     string OnErrorStock(Penjualanitem data)
     {
         var prod = products.Where(x => x.Id == data.ProductId).FirstOrDefault();
-        if (model.Status == PaymentStatus.None && prod != null && (prod.Stock - (data.Amount * data.Unit.Amount)) < 0)
+        if (model.Status == PaymentStatus.Belum && prod != null && (prod.Stock - (data.Amount * data.Unit.Amount)) < 0)
         {
             return "red";
         }
@@ -501,9 +501,9 @@
                     pembayarans.Add(result);
 
                     if (pembayarans.Sum(x=>x.PayValue) >= model.Total - (model.Total * (model.Discount / 100)))
-                        model.Status = PaymentStatus.PaidOff;
+                        model.Status = PaymentStatus.Lunas;
                     else
-                        model.Status = PaymentStatus.DownPayment;
+                        model.Status = PaymentStatus.Panjar;
 
                     NotificationService.Notify(new NotificationMessage
                     {

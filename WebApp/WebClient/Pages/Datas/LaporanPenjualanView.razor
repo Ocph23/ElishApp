@@ -1,0 +1,116 @@
+﻿@page "/data/penjualan"
+
+
+@using ShareModels.ModelViews;
+@using Microsoft.EntityFrameworkCore
+
+@inject ApplicationDbContext dbContext
+@inject NavigationManager nav
+
+<h3>Laporan Penjualan </h3>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Dari</label>
+            <div class="col-sm-10">
+                <RadzenDatePicker Change="@(()=> Task.Run(()=>GetData()))" @bind-Value="start" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Sampai</label>
+            <div class="col-sm-9">
+                <RadzenDatePicker Change="@(()=> Task.Run(()=>GetData()))" @bind-Value="endDate" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <RadzenButton Visible="@(penjualans.Count()>0)" Text="Print" Click="Print" Icon="print"></RadzenButton>
+    </div>
+</div>
+<div class="row">
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <span style="margin:10px">@message</span>
+    }
+    <RadzenGrid Data="penjualans" AllowFiltering="true" AllowSorting="true">
+        <Columns>
+            <RadzenGridColumn Title="Tgl" TItem="PenjualanAndOrderModel" Property="Created" Width="95px">
+                <Template Context="item">
+                    @item.Created.ToString("dd/MM/yyyy")
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn Title="Invoice" TItem="PenjualanAndOrderModel" Property="Invoice" Width="160px"></RadzenGridColumn>
+            <RadzenGridColumn Title="SO" TItem="PenjualanAndOrderModel" Property="NomorSO" Width="160px"></RadzenGridColumn>
+            <RadzenGridColumn Title="Tipe Bayar" TItem="PenjualanAndOrderModel" Property="PaymentType" Width="100px"></RadzenGridColumn>
+            <RadzenGridColumn Title="Pelanggan" TItem="PenjualanAndOrderModel" Property="Customer"></RadzenGridColumn>
+            <RadzenGridColumn Title="Salesman" TItem="PenjualanAndOrderModel" Property="Sales"></RadzenGridColumn>
+            <RadzenGridColumn Title="Status" TItem="PenjualanAndOrderModel" Property="PaymentStatus" Width="100px"></RadzenGridColumn>
+            <RadzenGridColumn Title="Disc" TItem="PenjualanAndOrderModel" Property="Discount" TextAlign="TextAlign.Right" Width="70px">
+                <Template Context="item">
+                    @item.Discount.ToString("N0") %
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn Title="Total" TItem="PenjualanAndOrderModel" Property="TotalAfterDiscount" TextAlign="TextAlign.Right" Width="170px">
+                <Template Context="item">
+                    @item.TotalAfterDiscount.ToString("N2")
+                </Template>
+                <FooterTemplate>
+                    @penjualans.Sum(x => x.TotalAfterDiscount).ToString("N2");
+                </FooterTemplate>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+</div>
+
+
+@code {
+
+    private DateTime? start;
+    private DateTime? endDate;
+
+    private string message;
+
+    IEnumerable<PenjualanAndOrderModel> penjualans = new List<PenjualanAndOrderModel>();
+
+    public async Task GetData()
+    {
+        if (start != null && endDate != null && start <= endDate)
+        {
+            message = "Tunggu .... !";
+            var source = dbContext.Penjualan.Where(x => x.CreateDate >= start.Value && x.CreateDate <= endDate.Value)
+            .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
+            .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
+            .Include(x => x.Items).ThenInclude(x => x.Unit)
+            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier)
+            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);
+
+            penjualans = source.Select(item => new PenjualanAndOrderModel
+            {
+                Created = item.CreateDate,
+                Customer = item.OrderPenjualan.Customer.Name,
+                Sales = item.OrderPenjualan.Sales.Name,
+                DeadLine = item.PayDeadLine,
+                Discount = item.Discount,
+                Invoice = item.Nomor,
+                NomorSO = item.OrderPenjualan.Nomor,
+                OrderId = item.OrderPenjualanId,
+                OrderStatus = item.OrderPenjualan.Status,
+                PaymentType = item.OrderPenjualan.PaymentType,
+                PaymentStatus = item.Status,
+                PenjualanId = item.Id,
+                Total = item.Total,
+                FeeSales = item.FeeSalesman
+            });
+            message = "";
+            await this.InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+
+   private void Print()
+    {
+        var dstart = $"{start.Value.Year}-{start.Value.Month}-{start.Value.Day}";
+        var dend = $"{endDate.Value.Year}-{endDate.Value.Month}-{endDate.Value.Day}";
+        nav.NavigateTo($"report/PrintLaporanPenjualan?dstart={dstart}?dend={dend}",true);
+    }
+}

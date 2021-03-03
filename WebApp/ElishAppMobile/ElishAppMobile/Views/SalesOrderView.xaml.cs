@@ -220,7 +220,7 @@ namespace ElishAppMobile.Views
         #region Methods
         private bool CanSaved(object arg)
         {
-            if(Order!=null && Datas.Count>0 && Order.CustomerId>0 && Order.Status== OrderStatus.New)
+            if(Order!=null && Datas.Count>0 && Order.CustomerId>0 && Order.Status== OrderStatus.Baru)
                 return true;
             return false;
         }

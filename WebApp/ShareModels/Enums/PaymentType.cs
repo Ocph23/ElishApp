@@ -8,21 +8,21 @@ namespace ShareModels
 {
     public enum  PaymentType
     {
-          Credit, PayOff
+          Kredit, Tunai
     }
 
     public enum PayType
     {
-        Chash, Transfer, Giro, Etc
+        Tunai, Transfer, Giro, Etc
     }
 
      public enum PaymentStatus
     {
-        None, DownPayment, PaidOff  , All = -1
+        Belum, Panjar, Lunas, All = -1
     }
 
     public enum OrderStatus{
-          New, Proccess, Complete, Cancel=-1, All=-2
+          Baru, Diproses, Selesai, Batal=-1, Semua=-2
     }
 
     public enum ActivityStatus

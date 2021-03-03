@@ -6,10 +6,16 @@
 
 .main {
     flex: 1;
+    min-height:100vh;
 }
 
 .sidebar {
     background-image: linear-gradient(180deg, rgb(58 71 77) 0%, #28363c 70%);
+}
+
+.sidebar-half {
+    background-image: linear-gradient(180deg, rgb(58 71 77) 0%, #28363c 70%);
+    width:90px;
 }
 
 .top-row {

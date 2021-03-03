@@ -56,7 +56,7 @@ namespace WebClient.Services
                 }
 
                 dbContext.Penjualan.Add(penjualan);
-                lastOrder.Status = OrderStatus.Proccess;
+                lastOrder.Status = OrderStatus.Diproses;
                 await dbContext.SaveChangesAsync();
                 trans.Commit();
                 return penjualan;
@@ -464,10 +464,10 @@ namespace WebClient.Services
                     throw new SystemException($"Pembayaran Melebihi Tagihan Invoice ! sisa {sisa}");
 
 
-                var status = sisa > 0 ? PaymentStatus.DownPayment : PaymentStatus.PaidOff;
+                var status = sisa > 0 ? PaymentStatus.Panjar : PaymentStatus.Lunas;
                 penjualan.Status = status;
                 dbContext.Pembayaranpenjualan.Add(pembayaran);
-                penjualan.OrderPenjualan.Status = OrderStatus.Complete;
+                penjualan.OrderPenjualan.Status = OrderStatus.Selesai;
                 await dbContext.SaveChangesAsync();
                 trans.Commit();
                 return pembayaran;

@@ -356,10 +356,10 @@ namespace WebClient.Services
                     throw new SystemException("Pembayaran Anda Melebihi Tagihan Invoice !");
 
 
-                var status = sisa > 0 ? PaymentStatus.DownPayment:  PaymentStatus.PaidOff;
+                var status = sisa > 0 ? PaymentStatus.Panjar:  PaymentStatus.Lunas;
 
                 pembelian.Status = status;
-                pembelian.OrderPembelian.Status = OrderStatus.Complete;
+                pembelian.OrderPembelian.Status = OrderStatus.Selesai;
                
                 pembelian.Pembayaranpembelian.Add(pembayaran);
 

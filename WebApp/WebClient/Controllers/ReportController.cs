@@ -19,6 +19,8 @@ using FastReport.Export.Html;
 using System.Data;
 using System.ComponentModel;
 using FastReport.Web;
+using Microsoft.EntityFrameworkCore;
+using ShareModels.ModelViews;
 
 namespace WebClient.Controllers
 {
@@ -29,17 +31,20 @@ namespace WebClient.Controllers
         private readonly IProductService _productService;
         private readonly IPenjualanService _penjualanService;
         private readonly IPembelianService _pembelianService;
+        private readonly ApplicationDbContext _dbContext;
+
         //private readonly IOptions<AppSettings> _appSettings;
 
-        public ReportController(IWebHostEnvironment iwebhost, IReportService reportService, IProductService productService,  IPembelianService pembelianService, IPenjualanService penjualanService)
+        public ReportController(ApplicationDbContext dbContext, IWebHostEnvironment iwebhost, IReportService reportService, IProductService productService,  IPembelianService pembelianService, IPenjualanService penjualanService)
         {
             _iwebhost = iwebhost;
             _reportService = reportService;
             _productService = productService;
             _penjualanService = penjualanService;
             _pembelianService = pembelianService;
-          //  _appSettings = appSettings;
+            _dbContext = dbContext;
         }
+
 
         public async Task<ActionResult> PrintPenjualan(int id)
         {
@@ -85,6 +90,104 @@ namespace WebClient.Controllers
                 return NotFound();
         }
 
+
+        public async Task<ActionResult> PrintLaporanPenjualan(DateTime dstart, DateTime dend)
+        {
+            await Task.Delay(1);
+            var reportItem = "laporanpenjualan.frx";
+            if (reportItem != null)
+            {
+                var path = $"{_iwebhost.WebRootPath}/reports/frxs/{reportItem}";
+
+                try
+                {
+                    var source = _dbContext.Penjualan.Where(x => x.CreateDate >= dstart && x.CreateDate <= dend)
+                           .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
+                           .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
+                           .Include(x => x.Items).ThenInclude(x => x.Unit)
+                           .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier)
+                           .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);
+
+                   var datas = source.Select(item => new PenjualanAndOrderModel
+                    {
+                        Created = item.CreateDate,
+                        Customer = item.OrderPenjualan.Customer.Name,
+                        Sales = item.OrderPenjualan.Sales.Name,
+                        DeadLine = item.PayDeadLine,
+                        Discount = item.Discount,
+                        Invoice = item.Nomor,
+                        NomorSO = item.OrderPenjualan.Nomor,
+                        OrderId = item.OrderPenjualanId,
+                        OrderStatus = item.OrderPenjualan.Status,
+                        PaymentType = item.OrderPenjualan.PaymentType,
+                        PaymentStatus = item.Status,
+                        PenjualanId = item.Id,
+                        Total = item.Total,
+                        FeeSales = item.FeeSalesman
+                    });
+
+                    var datasets = datas.ToList().ToDataTable();
+                    return PrintLaporanPenjualanAction(datasets, dstart, dend, path);
+
+                }
+                catch (Exception)
+                {
+                    return new NoContentResult();
+                }
+            }
+            else
+                return NotFound();
+        }
+
+        private ActionResult PrintLaporanPenjualanAction(DataTable datasets, DateTime dstart, DateTime dend, string path)
+        {
+            using MemoryStream stream = new MemoryStream();
+            try
+            {
+                var mime = "text/" + "html"; //redefine mime for html
+                datasets.TableName = "Table1";
+                DataSet ds = new DataSet();
+                ds.DataSetName = "LaporanPenjualan";
+                ds.Tables.Add(datasets);
+                ds.WriteXml($"{_iwebhost.WebRootPath}/reports/datas/laporanpenjualan.xml");
+
+                Config.WebMode = true;
+                using (Report report = new Report())
+                {
+                    report.Load(path); //Load the report
+                    report.RegisterData(ds.Tables["Table1"], "Table1"); //Register data in the report
+
+                    report.SetParameterValue("DateStart", dstart);
+                    report.SetParameterValue("DateEnd", dend);
+
+                    report.Prepare();
+                    HTMLExport html = new HTMLExport
+                    {
+                        SinglePage = true, //report on the one page
+                        Navigator = true, //navigation panel on top
+                        EmbedPictures = true,
+                        Print = true,
+                        Preview = true,
+                        PageBreaks = true
+                    };
+                    report.Export(html, stream);
+
+                    report.GetDataSource("Table1").Enabled = true;
+                }
+                //Get the name of resulting report file with needed extension
+                var file = String.Concat(Path.GetFileNameWithoutExtension(path), ".", "html");
+                return File(stream.ToArray(), mime);
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+            finally
+            {
+                stream.Dispose();
+            }
+        }
+
         public async Task<ActionResult> PrintPiutang()
         {
             var reportItem = "piutang.frx";
@@ -95,19 +198,11 @@ namespace WebClient.Controllers
                 try
                 {
                     var param1 = DateTime.Now.ToString("dd-MM-yyyy");
-                    IEnumerable<Penjualan> data = (await _reportService.GetPiutang());
+                    IEnumerable<ShareModels.Reports.PiutangData> data = (await _reportService.GetPiutang());
                     var datas = new List<ShareModels.Reports.PiutangData>();
                     foreach (var item in data)
                     {
-                        datas.Add(new ShareModels.Reports.PiutangData
-                        {
-                            Nomor = item.Nomor,
-                            Customer = item.OrderPenjualan.Customer.Name,
-                            JatuhTempo = item.CreateDate.AddDays(item.PayDeadLine),
-                            Tagihan = item.Total,
-                            Panjar = item.Pembayaranpenjualan.Sum(x=>x.PayValue),
-                            Sisa = item.Total - item.Pembayaranpenjualan.Sum(x => x.PayValue),
-                        });
+                        datas.Add(item);
                     }
 
                     var datasets = datas.ToDataTable();
@@ -397,7 +492,7 @@ namespace WebClient.Controllers
                         Sales = data.OrderPenjualan.Sales.Name,
                         NomorInvoice = data.Nomor,
                         InvoiceDeadLine =data.CreateDate.AddDays(data.PayDeadLine),
-                        PaymentType = data.Payment == PaymentType.Credit ? "Credit" : "Tunai",
+                        PaymentType = data.Payment == PaymentType.Kredit ? "Credit" : "Tunai",
                         Address = data.OrderPenjualan.Customer.Address
 
                     };

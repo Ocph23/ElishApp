@@ -40,11 +40,11 @@
                     <Radzen.Blazor.RadzenGridColumn TItem="Orderpembelian" Width="100px">
                         <Template Context="item">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list" Click=@(args => Nav.NavigateTo($"pembelian/order/detail/{item.Id}")) />
-                            @if (item.Status == OrderStatus.New)
+                            @if (item.Status == OrderStatus.Baru)
                             {
                                 <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => CreatePembelian(item.Id)) />
                             }
-                            else if (item.Status == OrderStatus.Proccess)
+                            else if (item.Status == OrderStatus.Diproses)
                             {
 
                             }
@@ -71,7 +71,7 @@
     {
         var query = dbContext.Orderpembelian.Include(x => x.Supplier).AsQueryable();
 
-        if (currentTOC !=  OrderStatus.All)
+        if (currentTOC !=  OrderStatus.Semua)
             query = query.Where(x => x.Status == currentTOC);
 
         if (!string.IsNullOrEmpty(args.Filter))

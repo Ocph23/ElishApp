@@ -52,7 +52,7 @@
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list"
                                           Size="ButtonSize.Medium"
                                           Click="@(()=> nav.NavigateTo($"/penjualan/orderdetail/{item.Id}"))" />
-                            <RadzenButton Visible=@(item.Status==OrderStatus.New?true:false) ButtonStyle="ButtonStyle.Warning" Icon="edit"
+                            <RadzenButton Visible=@(item.Status==OrderStatus.Baru?true:false) ButtonStyle="ButtonStyle.Warning" Icon="edit"
                                           Size="ButtonSize.Medium" Click="@(()=> CreatePenjualan(item))" />
                         </Template>
                     </RadzenGridColumn>
@@ -83,7 +83,7 @@
             .Include(x => x.Items)
             .Include(x => x.Customer).AsQueryable();
 
-            if (currentTOC != OrderStatus.All)
+            if (currentTOC != OrderStatus.Semua)
                 query = query.Where(x => x.Status == currentTOC);
 
             if (!string.IsNullOrEmpty(args.Filter))

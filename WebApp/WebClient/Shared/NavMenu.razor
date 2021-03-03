@@ -1,6 +1,9 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">WebClient</a>
+    <a class="navbar-brand" href="">@title</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <button class="sidetoggle" @onclick="ToggleWidth">
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
@@ -8,45 +11,129 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
 
     <RadzenPanelMenu>
-        <RadzenPanelMenuItem Text="General" Icon="home" Path="/">
-            <RadzenPanelMenuItem Text="Kategory" Path="category" Icon="category"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="Suplier" Path="supplier" Icon="supervised_user_circle"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="Pelanggan" Path="customer" Icon="emoji_people"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="Karyawan" Path="karyawan" Icon="group"></RadzenPanelMenuItem>
-        </RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Pelanggan" Icon="emoji_people" >
-            <RadzenPanelMenuItem Style="margin-left:10px" Text="Data Pelanggan" Path="customer" Icon="emoji_people"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Style="margin-left:10px" Text="Map Pelanggan" Path="customermap" Icon="map"></RadzenPanelMenuItem>
-        </RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Data Barang" Icon="inventory" Path="product">
-        </RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Pembelian" Icon="shopping_cart">
-            <RadzenPanelMenuItem Style="margin-left:10px" Text="Order" Path="pembelian/order" Icon="shopping_cart"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Style="margin-left:10px" Text="Realisasi" Path="pembelian/realisasi" Icon="shopping_cart"></RadzenPanelMenuItem>
-        </RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Penjualan" Icon="storefront">
-            <RadzenPanelMenuItem Style="margin-left:10px" Text="Order" Path="penjualan/order" Icon="storefront"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Style="margin-left:10px" Text="Realisasi" Path="penjualan/realisasi" Icon="storefront"></RadzenPanelMenuItem>
 
-        </RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Laporan" Icon="save">
-            <RadzenPanelMenuItem Text="Stock" Path="data/stock" Icon="receipt_log"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="Sales" Path="data/penjualan" Icon="receipt_log"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="Piutang" Path="data/piutang" Icon="receipt_log"></RadzenPanelMenuItem>
-        </RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Incomming Check" Path="incomming" Icon="receipt_log"></RadzenPanelMenuItem>
+        @foreach (var menu in Menus)
+        {
+            <RadzenPanelMenuItem Text="@(!isWidth?"":menu.Text)" Icon="@menu.Icon" Path="@menu.Path">
+                @if (menu.Children != null)
+                {
+                    @foreach (var menu1 in menu.Children)
+                    {
+                        <RadzenPanelMenuItem Style="margin-left:15px" Text="@(!isWidth?"":menu1.Text)" Icon="@menu1.Icon" Path="@menu1.Path"></RadzenPanelMenuItem>
+                    }
+                }
+            </RadzenPanelMenuItem>
+        }
+
+
+
+
+
+
 
     </RadzenPanelMenu>
-   
+
 </div>
 
 @code {
+
+    [ParameterAttribute]
+    public EventCallback<int> OnChange { get; set; }
     private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    public bool isWidth = true;
+
+    string title => collapseNavMenu && !isWidth ? "" : "APS";
+
+    private string NavMenuCssClass => GetMenuClass();
+
+    string color = "red";
+    List<MenuItem> Menus = new List<MenuItem>();
+
+
+    public NavMenu()
+    {
+        Menus = new List<MenuItem>(){
+        new MenuItem(){ Icon="home", Path="/", Text="Master" , Children =
+                new List<MenuItem>{
+                    new MenuItem(){ Icon="category", Path="category", Text="Kategori" },
+                    new MenuItem(){ Icon="supervised_user_circle", Path="supplier", Text="Suplier" },
+                    new MenuItem(){ Icon="emoji_people", Path="customer", Text="Pelanggan" },
+                    new MenuItem(){ Icon="group", Path="karyawan", Text="Karyawan" },
+                }
+            },
+
+        new MenuItem(){ Icon="emoji_people", Text="Pelanggan" , Children =
+                new List<MenuItem>{
+                    new MenuItem(){ Icon="emoji_people", Path="customer", Text="Data Pelanggan" },
+                    new MenuItem(){ Icon="map", Path="customermap", Text="Map Pelanggan" },
+                }
+            },
+
+        new MenuItem(){ Icon="inventory", Text="Data Barang" , Path="product" },
+        new MenuItem(){ Icon="shopping_cart", Text="Pembelian" , Children =
+                new List<MenuItem>{
+                    new MenuItem(){ Icon="shopping_cart", Path="pembelian/order", Text="Order" },
+                    new MenuItem(){ Icon="shopping_cart", Path="pembelian/realisasi", Text="Reaslisasi" },
+                }
+        },
+        new MenuItem(){ Icon="storefront", Text="Penjualan" , Children =
+                new List<MenuItem>{
+                    new MenuItem(){ Icon="storefront", Path="penjualan/order", Text="Order" },
+                    new MenuItem(){ Icon="storefront", Path="penjualan/realisasi", Text="Reaslisasi" },
+                }
+        },
+        new MenuItem(){ Icon="save", Text="Laporan" , Children =
+                new List<MenuItem>{
+                    new MenuItem(){ Icon="receipt_log", Path="data/stock", Text="Stock" },
+                    new MenuItem(){ Icon="receipt_log", Path="data/penjualan", Text="Penjualan" },
+                    new MenuItem(){ Icon="receipt_log", Path="data/piutang", Text="Piutang" },
+                    new MenuItem(){ Icon="receipt_log", Path="data/feesalesman", Text="Fee Salesman" },
+                    new MenuItem(){ Icon="receipt_log", Path="data/summary", Text="Sumarry" },
+                }
+            },
+        new MenuItem(){ Icon="receipt_log", Text="Incomming Check" , Path="incomming" },
+    };
+    }
+
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    private void ToggleWidth()
+    {
+        isWidth = !isWidth;
+        OnChange.InvokeAsync(1);
+    }
+
+
+    private string GetMenuClass()
+    {
+        if (collapseNavMenu && isWidth)
+            return "collapse";
+
+        if (collapseNavMenu && !isWidth)
+            return "collapse-half";
+
+        return null;
+    }
+
+
+    class MenuItem
+    {
+        public string Text { get; set; }
+        public string Icon { get; set; }
+        public string Path { get; set; }
+
+        public List<MenuItem> Children { get; set; }
+    }
+
+
 }
+
+
+
+
+

@@ -1,12 +1,14 @@
 ﻿@page "/data/piutang"
 
 @using ShareModels.ModelViews;
+@using ShareModels.Reports;
 @using Newtonsoft.Json;
 
 @attribute [Authorize]
 
 
 @inject IReportService reportService
+@inject NavigationManager nav
 
 
 <RadzenFieldset Text="Laporan Piutang">
@@ -19,38 +21,42 @@
                 <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" href="@($"/report/printpiutang/0")"><i class="ui-button-icon-left pi">print</i></a>
 
                 <RadzenGrid @ref="grid" Data="@(datas)" FilterCaseSensitivity="FilterCaseSensitivity.Default"
-                            AllowFiltering="true" AllowSorting="true" TItem="Penjualan">
+                            AllowFiltering="true" AllowSorting="true" TItem="PiutangData">
                     <Columns>
-                        <RadzenGridColumn TItem="Penjualan" Property="Nomor" Title="Nomor" Width="180px" />
-                        <RadzenGridColumn TItem="Penjualan" Property="OrderPenjualan.Customer.Name" Title="Customer" />
-                        <RadzenGridColumn TItem="Penjualan" Title="Jatuh Tempo" Width="100px">
+                        <RadzenGridColumn TItem="PiutangData"  Title="Nomor" Width="180px"  >
                             <Template Context="item">
-                                @if (item.CreateDate.AddDays(item.PayDeadLine) < DateTime.Now)
+                                <RadzenLabel @onclick="@(()=>Detail(item))" Text="@item.Nomor" />
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="PiutangData" Property="OrderPenjualan.Customer.Name" Title="Customer" />
+                        <RadzenGridColumn TItem="PiutangData" Title="Jatuh Tempo" Width="100px">
+                            <Template Context="item">
+                                @if (item.JatuhTempo < DateTime.Now)
                                 {
-                                    <span style="color:red"> @item.CreateDate.AddDays(item.PayDeadLine).ToString("dd-MM-yyyy")</span>
+                                    <span style="color:red">@item.JatuhTempo.ToString("dd-MM-yyyy")</span>
                                 }
                                 else
                                 {
-                                    <span> @item.CreateDate.AddDays(item.PayDeadLine).ToString("dd-MM-yyyy")</span>
+                                    <span> @item.JatuhTempo.ToString("dd-MM-yyyy")</span>
                                 }
                             </Template>
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="Penjualan" Property="Total" Title="Tagihan" TextAlign="TextAlign.Right" Width="160px">
+                        <RadzenGridColumn TItem="PiutangData" TextAlign="TextAlign.Right" Width="110px">
                             <Template Context="item">
-                                @item.Total.ToString("N2")
+                                @item.TagihanAfterDiscount.ToString("N0")
                             </Template>
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="Penjualan" Title="Panjar" TextAlign="TextAlign.Right" Width="160px">
+                        <RadzenGridColumn TItem="PiutangData" Title="Panjar" TextAlign="TextAlign.Right" Width="110px">
                             <Template Context="item">
-                                @item.Pembayaranpenjualan.Sum(x => x.PayValue).ToString("N2")
+                                @item.Panjar.ToString("N0")
                             </Template>
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="Penjualan" Title="Sisa" TextAlign="TextAlign.Right" Width="160px">
+                        <RadzenGridColumn TItem="PiutangData" Title="Sisa" TextAlign="TextAlign.Right" Width="110px">
                             <Template Context="item">
-                                @((item.Total- item.Pembayaranpenjualan.Sum(x => x.PayValue)).ToString("N2"))
+                                @(item.Sisa.ToString("N0"))
                             </Template>
                             <FooterTemplate>
-                                @datas.Sum(x => x.Total - x.Pembayaranpenjualan.Sum(x => x.PayValue)).ToString("N2");
+                                @datas.Sum(x => x.Sisa).ToString("N0");
                             </FooterTemplate>
                         </RadzenGridColumn>
                     </Columns>
@@ -65,18 +71,32 @@
 
 @code {
 
-    RadzenGrid<Penjualan> grid;
+    RadzenGrid<PiutangData> grid;
 
     DateTime date = DateTime.Now;
 
-    IEnumerable<Penjualan> datas;
+    IEnumerable<PiutangData> datas;
 
     protected override async Task OnInitializedAsync()
     {
-        datas = await reportService.GetPiutang();
+        try
+        {
+            datas = await reportService.GetPiutang();
+        }
+        catch
+        {
+
+        }
 
     }
 
+
+
+    public void Detail(PiutangData data)
+    {
+        var item = (PiutangData)data;
+        nav.NavigateTo($"penjualan/realisasidetail/{item.PenjualanId}");
+    }
 
 
 }

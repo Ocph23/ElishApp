@@ -1,11 +1,8 @@
 ﻿using ElishAppMobile.Models;
 using ElishAppMobile.ViewModels;
-using ShareModels;
 using ShareModels.ModelViews;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 

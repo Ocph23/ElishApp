@@ -17,7 +17,11 @@ namespace ShareModels.ModelViews
         public double DeadLine { get; set; }
         public OrderStatus OrderStatus { get; set; }
         public PaymentStatus PaymentStatus{ get; set; }
+        public PaymentType PaymentType { get; set; }
         public double Discount { get; set; }
+        public double FeeSales{ get; set; }
         public double Total { get; set; }
+        public double TotalAfterDiscount => Total - (Total * Discount / 100);
+        public double TotalFeeSales => TotalAfterDiscount * (FeeSales / 100);
     }
 }

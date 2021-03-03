@@ -104,7 +104,7 @@ namespace ElishAppMobile.Views
                         _SourceItems = new ObservableCollection<PenjualanAndOrderModel>(orders);
                     }
 
-                    foreach (var item in _SourceItems.Where(x=>x.OrderStatus == OrderStatus.New).OrderByDescending(x => x.OrderId))
+                    foreach (var item in _SourceItems.Where(x=>x.OrderStatus == OrderStatus.Baru).OrderByDescending(x => x.OrderId))
                     {
                         Items.Add(item);
                     }

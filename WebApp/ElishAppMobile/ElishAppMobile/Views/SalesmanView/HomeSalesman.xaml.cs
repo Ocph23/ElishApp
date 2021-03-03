@@ -55,7 +55,7 @@ namespace ElishAppMobile.Views.SalesmanView
                     if (data != null)
                     {
                         _penjualanSource.Add(data);
-                        if(data.PaymentStatus != ShareModels.PaymentStatus.PaidOff &&  data.Created.AddDays(data.DeadLine) < now)
+                        if(data.PaymentStatus != ShareModels.PaymentStatus.Lunas &&  data.Created.AddDays(data.DeadLine) < now)
                         {
                             JatuhTempo.Add(data);
                         }
@@ -68,7 +68,7 @@ namespace ElishAppMobile.Views.SalesmanView
 
                 var orders = await PenjualanService.GetOrders();
 
-                foreach (var item in orders.Where(x=>x.OrderStatus == ShareModels.OrderStatus.New))
+                foreach (var item in orders.Where(x=>x.OrderStatus == ShareModels.OrderStatus.Baru))
                 {
                     Orders.Add(item);
                 }

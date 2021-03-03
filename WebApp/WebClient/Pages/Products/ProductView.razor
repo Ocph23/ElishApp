@@ -46,15 +46,26 @@
         <RadzenGridColumn TItem="Product" Width="150px" Property="CodeName" Title="Code Name">
 
         </RadzenGridColumn>
-        <RadzenGridColumn TItem="Product" Width="150px" Property="CodeArticle" Title="CodeA rticle">
+        <RadzenGridColumn TItem="Product"  Property="CodeArticle" Title="CodeA rticle">
 
         </RadzenGridColumn>
 
-        <RadzenGridColumn TItem="Product" Width="150px" Property="Merk" Title="Merk">
+        <RadzenGridColumn TItem="Product" Property="Merk" Title="Merk">
 
         </RadzenGridColumn>
-        <RadzenGridColumn TItem="Product" Width="80px" Property="Size" Title="Size">
-
+        <RadzenGridColumn TItem="Product" Width="80px" Property="Size" Title="Size"></RadzenGridColumn>
+        <RadzenGridColumn TItem="Product" Width="100px" Property="UnitSelected.Name" Title="Name">
+           
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="Product" Width="110px" Property="UnitSelected.Buy" Title="Beli">
+            <Template Context="item">
+                @item.UnitSelected.Buy.ToString("N0")
+            </Template>
+        </RadzenGridColumn>
+        <RadzenGridColumn TItem="Product" Width="110px" Property="UnitSelected.Sell" Title="Jual">
+            <Template Context="item">
+                @item.UnitSelected.Sell.ToString("N0")
+            </Template>
         </RadzenGridColumn>
 
         <RadzenGridColumn TItem="Product" Context="sampleBlazorModelsSampleOrder"
@@ -123,7 +134,9 @@
 
     async Task LoadData(LoadDataArgs args)
     {
-        var query = dbContext.Product.Include(x=>x.Category).Include(x=>x.Supplier).AsQueryable();
+        var query = dbContext.Product.Include(x=>x.Category)
+            .Include(x=>x.Units)
+            .Include(x=>x.Supplier).AsQueryable();
 
         if (categoryId > 0)
             query = query.Where(x => x.CategoryId == categoryId);

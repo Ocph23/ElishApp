@@ -2,59 +2,15 @@
 <Piutang>
   <Table1>
     <Nomor>11/INV-ELISH/1/2021</Nomor>
-    <Customer>Toko ASIMA</Customer>
+    <Customer>ASIMA, Toko </Customer>
     <JatuhTempo>2021-02-01T07:21:45+09:00</JatuhTempo>
     <Tagihan>954150</Tagihan>
-    <Panjar>0</Panjar>
-    <Sisa>954150</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>13/INV-ELISH/12/2020</Nomor>
-    <Customer>Toko HOKKY</Customer>
-    <JatuhTempo>2020-12-22T16:17:19+09:00</JatuhTempo>
-    <Tagihan>2459000</Tagihan>
-    <Panjar>500000</Panjar>
-    <Sisa>1959000</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>17/INV-ELISH/12/2020</Nomor>
-    <Customer>Toko  ADINDA</Customer>
-    <JatuhTempo>2020-12-30T12:08:40+09:00</JatuhTempo>
-    <Tagihan>2979000</Tagihan>
-    <Panjar>1979000</Panjar>
-    <Sisa>1000000</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>18/INV-ELISH/12/2020</Nomor>
-    <Customer>kios sayur nofi</Customer>
-    <JatuhTempo>2020-12-30T12:09:21+09:00</JatuhTempo>
-    <Tagihan>1879100</Tagihan>
-    <Panjar>0</Panjar>
-    <Sisa>1879100</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>23/INV-ELISH/12/2020</Nomor>
-    <Customer>hj sappe</Customer>
-    <JatuhTempo>2021-01-04T09:00:54+09:00</JatuhTempo>
-    <Tagihan>1238350</Tagihan>
-    <Panjar>0</Panjar>
-    <Sisa>1238350</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>26/INV-ELISH/1/2021</Nomor>
-    <Customer>Toko AMOR</Customer>
-    <JatuhTempo>2021-01-14T13:33:27+09:00</JatuhTempo>
-    <Tagihan>807800</Tagihan>
-    <Panjar>0</Panjar>
-    <Sisa>807800</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>27/INV-ELISH/1/2021</Nomor>
-    <Customer>APS</Customer>
-    <JatuhTempo>2021-02-01T21:58:29+09:00</JatuhTempo>
-    <Tagihan>1394724.6</Tagihan>
-    <Panjar>0</Panjar>
-    <Sisa>1394724.6</Sisa>
+    <Panjar>707000</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>11</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>954150</TagihanAfterDiscount>
+    <Sisa>247150</Sisa>
   </Table1>
   <Table1>
     <Nomor>28/INV-ELISH/1/2021</Nomor>
@@ -62,6 +18,10 @@
     <JatuhTempo>2021-01-14T13:34:06+09:00</JatuhTempo>
     <Tagihan>2554900</Tagihan>
     <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>28</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2554900</TagihanAfterDiscount>
     <Sisa>2554900</Sisa>
   </Table1>
   <Table1>
@@ -70,6 +30,10 @@
     <JatuhTempo>2021-01-14T13:36:05+09:00</JatuhTempo>
     <Tagihan>3333200</Tagihan>
     <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>30</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>3333200</TagihanAfterDiscount>
     <Sisa>3333200</Sisa>
   </Table1>
   <Table1>
@@ -78,15 +42,11 @@
     <JatuhTempo>2021-01-19T19:14:01+09:00</JatuhTempo>
     <Tagihan>1875100</Tagihan>
     <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>31</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1875100</TagihanAfterDiscount>
     <Sisa>1875100</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>32/INV-ELISH/1/2021</Nomor>
-    <Customer>Toko AKJ</Customer>
-    <JatuhTempo>2021-01-20T00:00:00+09:00</JatuhTempo>
-    <Tagihan>813600</Tagihan>
-    <Panjar>813600</Panjar>
-    <Sisa>0</Sisa>
   </Table1>
   <Table1>
     <Nomor>33/INV-ELISH/1/2021</Nomor>
@@ -94,15 +54,11 @@
     <JatuhTempo>2021-01-23T17:50:06+09:00</JatuhTempo>
     <Tagihan>2176400</Tagihan>
     <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>33</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2176400</TagihanAfterDiscount>
     <Sisa>2176400</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>51/INV-ELISH/2/2021</Nomor>
-    <Customer>Toko MALA</Customer>
-    <JatuhTempo>2021-02-13T00:00:00+09:00</JatuhTempo>
-    <Tagihan>543600</Tagihan>
-    <Panjar>0</Panjar>
-    <Sisa>543600</Sisa>
   </Table1>
   <Table1>
     <Nomor>52/INV-ELISH/2/2021</Nomor>
@@ -110,14 +66,238 @@
     <JatuhTempo>2021-02-21T09:29:07+09:00</JatuhTempo>
     <Tagihan>635550</Tagihan>
     <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>52</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>635550</TagihanAfterDiscount>
     <Sisa>635550</Sisa>
   </Table1>
   <Table1>
     <Nomor>54/INV-ELISH/2/2021</Nomor>
     <Customer>Phulcos</Customer>
-    <JatuhTempo>2021-02-21T19:21:19+09:00</JatuhTempo>
+    <JatuhTempo>2021-03-11T19:21:19+09:00</JatuhTempo>
     <Tagihan>8953200</Tagihan>
     <Panjar>0</Panjar>
-    <Sisa>8953200</Sisa>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>54</PenjualanId>
+    <Discount>25</Discount>
+    <TagihanAfterDiscount>6714900</TagihanAfterDiscount>
+    <Sisa>6714900</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>55/INV-ELISH/2/2021</Nomor>
+    <Customer>APS</Customer>
+    <JatuhTempo>2021-02-26T06:16:50+09:00</JatuhTempo>
+    <Tagihan>18948600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>55</PenjualanId>
+    <Discount>25</Discount>
+    <TagihanAfterDiscount>14211450</TagihanAfterDiscount>
+    <Sisa>14211450</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>56/INV-ELISH/2/2021</Nomor>
+    <Customer>APS</Customer>
+    <JatuhTempo>2021-02-26T06:21:44+09:00</JatuhTempo>
+    <Tagihan>3940900</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>56</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>3940900</TagihanAfterDiscount>
+    <Sisa>3940900</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>57/INV-ELISH/2/2021</Nomor>
+    <Customer>hj sappe</Customer>
+    <JatuhTempo>2021-02-26T07:30:57+09:00</JatuhTempo>
+    <Tagihan>2114600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>57</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2114600</TagihanAfterDiscount>
+    <Sisa>2114600</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>58/INV-ELISH/2/2021</Nomor>
+    <Customer>kios sayur nofi</Customer>
+    <JatuhTempo>2021-02-28T07:31:36+09:00</JatuhTempo>
+    <Tagihan>1408150</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>58</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1408150</TagihanAfterDiscount>
+    <Sisa>1408150</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>59/INV-ELISH/2/2021</Nomor>
+    <Customer>Menara Jaya, Tk </Customer>
+    <JatuhTempo>2021-04-15T10:08:05+09:00</JatuhTempo>
+    <Tagihan>11804400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman</Sales>
+    <PenjualanId>59</PenjualanId>
+    <Discount>25</Discount>
+    <TagihanAfterDiscount>8853300</TagihanAfterDiscount>
+    <Sisa>8853300</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>61/INV-ELISH/2/2021</Nomor>
+    <Customer>Toko HOKKY</Customer>
+    <JatuhTempo>2021-03-01T07:52:43+09:00</JatuhTempo>
+    <Tagihan>2340100</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>61</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2340100</TagihanAfterDiscount>
+    <Sisa>2340100</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>62/INV-ELISH/2/2021</Nomor>
+    <Customer>kios Bisnis </Customer>
+    <JatuhTempo>2021-03-01T07:53:20+09:00</JatuhTempo>
+    <Tagihan>573900</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>62</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>573900</TagihanAfterDiscount>
+    <Sisa>573900</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>63/INV-ELISH/2/2021</Nomor>
+    <Customer>wj mart</Customer>
+    <JatuhTempo>2021-03-01T07:53:56+09:00</JatuhTempo>
+    <Tagihan>545800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>63</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>545800</TagihanAfterDiscount>
+    <Sisa>545800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>65/INV-ELISH/2/2021</Nomor>
+    <Customer>ASIMA, Toko </Customer>
+    <JatuhTempo>2021-03-02T13:44:31+09:00</JatuhTempo>
+    <Tagihan>639700</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>65</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>639700</TagihanAfterDiscount>
+    <Sisa>639700</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>66/INV-ELISH/2/2021</Nomor>
+    <Customer>TK. Ulva</Customer>
+    <JatuhTempo>2021-03-03T08:40:55+09:00</JatuhTempo>
+    <Tagihan>1690072</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>66</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1690072</TagihanAfterDiscount>
+    <Sisa>1690072</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>67/INV-ELISH/2/2021</Nomor>
+    <Customer>Tk. Soffie</Customer>
+    <JatuhTempo>2021-03-03T08:41:39+09:00</JatuhTempo>
+    <Tagihan>822650</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>67</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>822650</TagihanAfterDiscount>
+    <Sisa>822650</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>68/INV-ELISH/2/2021</Nomor>
+    <Customer>Papua Grosir</Customer>
+    <JatuhTempo>2021-04-04T04:28:11+09:00</JatuhTempo>
+    <Tagihan>2372400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>68</PenjualanId>
+    <Discount>25</Discount>
+    <TagihanAfterDiscount>1779300</TagihanAfterDiscount>
+    <Sisa>1779300</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>69/INV-ELISH/2/2021</Nomor>
+    <Customer>Toko Bilgis Jaya</Customer>
+    <JatuhTempo>2021-03-04T07:54:24+09:00</JatuhTempo>
+    <Tagihan>1141900</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>69</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1141900</TagihanAfterDiscount>
+    <Sisa>1141900</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>70/INV-ELISH/2/2021</Nomor>
+    <Customer>Toko Salsa</Customer>
+    <JatuhTempo>2021-03-04T07:54:46+09:00</JatuhTempo>
+    <Tagihan>1142900</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>70</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1142900</TagihanAfterDiscount>
+    <Sisa>1142900</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>71/INV-ELISH/2/2021</Nomor>
+    <Customer>Baya Galon, Toko</Customer>
+    <JatuhTempo>2021-03-03T07:07:24+09:00</JatuhTempo>
+    <Tagihan>573023.9999999999</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>71</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>573023.9999999999</TagihanAfterDiscount>
+    <Sisa>573023.9999999999</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>72/INV-ELISH/2/2021</Nomor>
+    <Customer>Toko Salsa</Customer>
+    <JatuhTempo>2021-03-05T07:08:29+09:00</JatuhTempo>
+    <Tagihan>1250400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>72</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1250400</TagihanAfterDiscount>
+    <Sisa>1250400</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>73/INV-ELISH/2/2021</Nomor>
+    <Customer>Toko Flourish</Customer>
+    <JatuhTempo>2021-03-07T14:37:00+09:00</JatuhTempo>
+    <Tagihan>2170850</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr. Tino</Sales>
+    <PenjualanId>73</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2170850</TagihanAfterDiscount>
+    <Sisa>2170850</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>74/INV-ELISH/2/2021</Nomor>
+    <Customer>UD.SEJAHTERA</Customer>
+    <JatuhTempo>2021-03-10T05:56:01+09:00</JatuhTempo>
+    <Tagihan>1189872</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Mr.Aji Kuswantara</Sales>
+    <PenjualanId>74</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1189872</TagihanAfterDiscount>
+    <Sisa>1189872</Sisa>
   </Table1>
 </Piutang>

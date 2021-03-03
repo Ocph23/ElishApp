@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 {
     public class Product  :BaseNotify,IEntity
     {
-
         public Product()
         {
             Incomingitem = new HashSet<IncomingItem>();
@@ -16,7 +15,6 @@ using System.Threading.Tasks;
             Orderpenjualanitem = new HashSet<OrderPenjualanItem>();
             PembelianItem = new HashSet<PembelianItem>();
             PenjualanItem = new HashSet<Penjualanitem>();
-            Units = new HashSet<Unit>();
         }
 
         private string _codeArticle;
@@ -49,6 +47,8 @@ using System.Threading.Tasks;
         public virtual ICollection<PembelianItem> PembelianItem { get; set; }
         public virtual ICollection<Penjualanitem> PenjualanItem { get; set; }
         public virtual ICollection<ProductImage> ProductImage { get; set; }
+        public Unit UnitSelected => Units.FirstOrDefault();
+        
     }
 }
 

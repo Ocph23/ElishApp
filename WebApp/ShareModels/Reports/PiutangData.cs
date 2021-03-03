@@ -11,6 +11,10 @@ namespace ShareModels.Reports
         public DateTime JatuhTempo { get; set; }
         public double Tagihan { get; set; }
         public double Panjar { get; set; }
-        public double Sisa { get; set; }
+        public string Sales { get; set; }
+        public int PenjualanId { get; set; }
+        public double Discount { get; set; }
+        public double TagihanAfterDiscount => Tagihan - (Tagihan * Discount / 100);
+        public double Sisa => TagihanAfterDiscount - Panjar;
     }
 }

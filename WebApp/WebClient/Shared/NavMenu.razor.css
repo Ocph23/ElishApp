@@ -1,3 +1,15 @@
+ .sidetoggle{
+    
+    background-color:transparent
+ }
+
+
+@media (max-width: 641px) {
+    .sidetoggle {
+        display: none;
+    }
+}
+
 .navbar-toggler {
     background-color: rgba(255, 255, 255, 0.1);
 }
@@ -59,4 +71,10 @@
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+    .collapse-half {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+        width:90px
+    }
+  
 }

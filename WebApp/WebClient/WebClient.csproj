@@ -50,9 +50,11 @@
    <Watch Remove="Pages\Customers\CustomerMapView.razor" />
    <Watch Remove="Pages\Customers\CustomerView.razor" />
    <Watch Remove="Pages\Datas\IncommingCheckListView.razor" />
-   <Watch Remove="Pages\Datas\PenjualanView.razor" />
+   <Watch Remove="Pages\Datas\LaporanFeeSalesmanView.razor" />
+   <Watch Remove="Pages\Datas\LaporanPenjualanView.razor" />
    <Watch Remove="Pages\Datas\PiutangView.razor" />
    <Watch Remove="Pages\Datas\ProductStockView.razor" />
+   <Watch Remove="Pages\Datas\SummaryView.razor" />
    <Watch Remove="Pages\Karyawan.cs\ChangeKaryawanView.razor" />
    <Watch Remove="Pages\Karyawan.cs\KaryawanView.razor" />
    <Watch Remove="Pages\Pembelians\EditPembelianPembayaran.razor" />
@@ -70,8 +72,10 @@
    <None Include="Pages\Category\EditCategory.razor" />
    <None Include="Pages\Customers\CustomerMapView.razor" />
    <None Include="Pages\Datas\IncommingCheckListView.razor" />
+   <None Include="Pages\Datas\LaporanFeeSalesmanView.razor" />
+   <None Include="Pages\Datas\LaporanPenjualanView.razor" />
    <None Include="Pages\Datas\PiutangView.razor" />
-   <None Include="Pages\Datas\PenjualanView.razor" />
+   <None Include="Pages\Datas\SummaryView.razor" />
    <None Include="Pages\Datas\ProductStockView.razor" />
    <None Include="Pages\Karyawan.cs\KaryawanView.razor" />
    <None Include="Pages\Pembelians\EditPembelianPembayaran.razor" />
@@ -103,6 +107,7 @@
    <Folder Include="wwwroot\fonts\" />
    <Folder Include="wwwroot\images\thumbs\" />
    <Folder Include="wwwroot\images\products\" />
+   <Folder Include="wwwroot\reports\datas\" />
  </ItemGroup>
  <ItemGroup>
    <ProjectReference Include="..\ShareModels\ShareModels.csproj" />

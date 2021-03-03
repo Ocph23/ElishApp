@@ -199,7 +199,7 @@
         </RadzenFieldset>
 
         <RadzenFieldset Text="Pembayaran">
-            <RadzenButton Visible=@(model.Status != PaymentStatus.PaidOff) 
+            <RadzenButton Visible=@(model.Status != PaymentStatus.Lunas) 
                           Style="margin-bottom:10px"
                           Click=@(args => DialogService.OpenAsync<EditPembelianPembayaran>($"Pembayaran",
                         new Dictionary<string, object>() { { "IdPembelian", model.Id }, },
@@ -437,9 +437,9 @@
                     pembayarans.Add(result);
 
                     if (pembayarans.Sum(x => x.PayValue) >= model.Total - (model.Total * (model.Discount / 100)))
-                        model.Status = PaymentStatus.PaidOff;
+                        model.Status = PaymentStatus.Lunas;
                     else
-                        model.Status = PaymentStatus.DownPayment;
+                        model.Status = PaymentStatus.Panjar;
 
                     NotificationService.Notify(new NotificationMessage
                     {
@@ -535,7 +535,7 @@
     string OnErrorStock(PembelianItem data)
     {
         var prod = products.Where(x => x.Id == data.ProductId).FirstOrDefault();
-        if (model.Status == PaymentStatus.None && prod != null && (prod.Stock - (data.Amount * data.Unit.Amount)) < 0)
+        if (model.Status == PaymentStatus.Belum && prod != null && (prod.Stock - (data.Amount * data.Unit.Amount)) < 0)
         {
             return "red";
         }

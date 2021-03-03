@@ -30,7 +30,7 @@ namespace ShareModels
         public virtual ICollection<OrderPenjualanItem> Items { get; set; }
 
         [NotMapped]
-        public PaymentType PaymentType { get => DeadLine<=0? PaymentType.PayOff: PaymentType.Credit; }
+        public PaymentType PaymentType { get => DeadLine<=0? PaymentType.Tunai: PaymentType.Kredit; }
 
         [NotMapped]
         public virtual double Total

@@ -1,4 +1,5 @@
 ﻿using ShareModels.ModelViews;
+using ShareModels.Reports;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -128,7 +129,7 @@ namespace ShareModels
 
     public interface IReportService
     {
-        Task<IEnumerable<Penjualan>> GetPiutang();
+        Task<IEnumerable<PiutangData>> GetPiutang();
     }
 
 

@@ -205,7 +205,7 @@ namespace WebClient.Services
                     }).ToList();
 
 
-                var orders = dbContext.Orderpenjualan.Where(x => x.Status == OrderStatus.New).Include(x => x.Items).SelectMany(x=>x.Items).ToList();
+                var orders = dbContext.Orderpenjualan.Where(x => x.Status == OrderStatus.Baru).Include(x => x.Items).SelectMany(x=>x.Items).ToList();
 
                 foreach (var item in result)
                 {

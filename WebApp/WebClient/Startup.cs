@@ -33,7 +33,7 @@ namespace WebClient
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.KnownProxies.Add(IPAddress.Parse("194.59.165.198"));
+                options.KnownProxies.Add(IPAddress.Parse("151.106.112.219"));
             });
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
