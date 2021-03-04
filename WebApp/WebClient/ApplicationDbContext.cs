@@ -42,9 +42,8 @@ namespace WebClient
         {
             if (!optionsBuilder.IsConfigured)
             {
-                
-                optionsBuilder.UseMySQL("server=194.59.165.198;port=3306;database=ElishAppDb;user=ocph23;password=Sonyalpha77");
-               // optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=Sony@7777;database=elishappdb");
+                var constring = "server=151.106.112.219;port=3306;database=ApsDb;user=ocph23;password=Alpharian@77";
+                optionsBuilder.UseMySql(constring,ServerVersion.AutoDetect(constring));
             }
         }
 
@@ -265,15 +264,10 @@ namespace WebClient
 
             modelBuilder.Entity<Pembelian>(entity =>
             {
-                //entity.ToTable("pembelian");
 
                 entity.HasIndex(e => e.OrderPembelianId)
                     .HasName("index3")
                     .IsUnique();
-
-                entity.Property(e => e.Discount).HasMaxLength(45);
-
-                entity.Property(e => e.InvoiceNumber).HasMaxLength(45);
 
                 entity.HasOne(d => d.OrderPembelian)
                     .WithOne(p => p.Pembelian)

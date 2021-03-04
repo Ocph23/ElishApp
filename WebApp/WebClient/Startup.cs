@@ -42,7 +42,8 @@ namespace WebClient
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
+                var constring = Configuration.GetConnectionString("DefaultConnection");
+                options.UseMySql(constring,ServerVersion.AutoDetect(constring));
                 options.EnableDetailedErrors();
             });
 

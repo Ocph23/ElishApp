@@ -280,7 +280,43 @@
     bool checkall;
     int supplierId = 0;
 
+    protected override async Task OnInitializedAsync()
+    {
+        DialogService.OnOpen += Open;
+        DialogService.OnClose += CreatePembayaran;
+        customers = await customerService.Get();
+        sales = await karyawanService.Get();
+        products = (await productService.GetProductStock()).ToList();
+        if (!string.IsNullOrEmpty(id))
+        {
 
+            int paramId = Convert.ToInt32(id);
+            if (paramId > 0)
+            {
+                this.model = await penjualanService.GetPenjualan(paramId);
+                this.pembayarans = (await penjualanService.GetPembayaran(paramId)).ToList();
+            }
+
+
+            if (model.Items.Count > 0)
+            {
+                var prod = model.Items.FirstOrDefault();
+                if (prod != null)
+                    supplierId = prod.Product.SupplierId;
+            }
+
+
+            foreach (var itemData in model.Items)
+            {
+                var dataStock = products.Where(x => x.Id == itemData.ProductId).FirstOrDefault();
+                if (dataStock != null)
+                {
+                    dataStock.Pembelian += (itemData.Amount * itemData.Unit.Amount);
+                }
+            }
+
+        }
+    }
     void OnCheckChange(bool data)
     {
         checkall = !checkall;
@@ -437,43 +473,7 @@
     }
 
 
-    protected override async Task OnInitializedAsync()
-    {
-        DialogService.OnOpen += Open;
-        DialogService.OnClose += CreatePembayaran;
-        customers = await customerService.Get();
-        sales = await karyawanService.Get();
-        if (!string.IsNullOrEmpty(id))
-        {
-            products = (await productService.GetProductStock()).ToList();
-            int paramId = Convert.ToInt32(id);
-            if (paramId > 0)
-            {
 
-                this.model = await penjualanService.GetPenjualan(paramId);
-                this.pembayarans = (await penjualanService.GetPembayaran(paramId)).ToList();
-            }
-
-
-            if(model.Items.Count>0)
-            {
-                var prod = model.Items.FirstOrDefault();
-                if (prod != null)
-                    supplierId = prod.Product.SupplierId;
-            }
-
-
-            foreach (var itemData in model.Items)
-            {
-                var dataStock = products.Where(x => x.Id == itemData.ProductId).FirstOrDefault();
-                if (dataStock != null)
-                {
-                    dataStock.Pembelian += (itemData.Amount * itemData.Unit.Amount);
-                }
-            }
-
-        }
-    }
 
     void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
     {

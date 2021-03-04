@@ -12,11 +12,7 @@ namespace ShareModels.ModelViews
 
         public double Pembelian { get; set; }
         public double Penjualan { get; set; }
-
-
         public virtual double Stock => Pembelian - Penjualan;
-
-
 
         public virtual double StockView
         {

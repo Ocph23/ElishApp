@@ -39,6 +39,8 @@ namespace ElishAppMobile.Views
         #region Constructor
         public SalesOrderViewModel(PenjualanAndOrderModel order)
         {
+
+            _orderParameter = order;
            
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             SaveCommand = new Command(SaveAction, CanSaved);
@@ -65,21 +67,7 @@ namespace ElishAppMobile.Views
 
             this.PropertyChanged += SalesOrderViewModel_PropertyChanged;
 
-            if (order == null)
-            {
-                Order = new Orderpenjualan { SalesId = 1, OrderDate = DateTime.Now, Items = new List<OrderPenjualanItem>() };
-                Order.DeadLine = 12;
-                Title = "Create Order";
-                InitAsync(null);
-            }
-            else
-            {
-                Order = PenjualanService.GetOrder(order.OrderId).Result;
-                Title = "View/Edit Order";
-                InitAsync(Order);
-              
-            }
-
+            InitAsync(order);
 
           
             
@@ -113,14 +101,14 @@ namespace ElishAppMobile.Views
         
 
         #region Properties
-        private Orderpenjualan order;
+        private Orderpenjualan _order;
         private int _selectedIndex=-1;
         private int _supplierIndex;
 
         public Orderpenjualan Order
         {
-            get => order;
-            set => SetProperty(ref order, value);
+            get => _order;
+            set => SetProperty(ref _order, value);
         }
 
         private string paymentType;
@@ -141,6 +129,9 @@ namespace ElishAppMobile.Views
       //  public ObservableCollection<Customer> DataCustomers { get; set; } = new ObservableCollection<Customer>();
         public ObservableCollection<Supplier> DataSupplier { get; set; } = new ObservableCollection<Supplier>();
         public ObservableCollection<ProductStock> ProductStocks { get; set; } = new ObservableCollection<ProductStock>();
+
+        private PenjualanAndOrderModel _orderParameter;
+
         public Command LoadItemsCommand { get; }
         public Command SaveCommand { get => _saveCommand; set => SetProperty(ref _saveCommand, value); }
         public Command ClearCommand { get; }
@@ -231,23 +222,29 @@ namespace ElishAppMobile.Views
             Total = Datas.Sum(x => x.Total);
         }
 
-        private async void InitAsync(Orderpenjualan order)
+        private async void InitAsync(PenjualanAndOrderModel vParam)
         {
             try
             {
+                if (vParam == null)
+                {
+                    Order = new Orderpenjualan { SalesId = 1, OrderDate = DateTime.Now, Items = new List<OrderPenjualanItem>() };
+                    Order.DeadLine = 12;
+                    Title = "Create Order";
+                }
+                else
+                {
+                    Order = await PenjualanService.GetOrder(vParam.OrderId);
+                    Title = "View/Edit Order";
+                }
+
                 IsBusy = true;
                 customersource = await Customers.Get();
 
-               
                 products = await Products.GetProductStock();
 
                 if (products != null)
                 {
-                    foreach (var item in products.Where(x => x.Stock > 0))
-                    {
-                        ProductStocks.Add(item);
-                    }
-
                     foreach (var p in products.GroupBy(x => x.SupplierId))
                     {
                         var prod = p.FirstOrDefault();
@@ -256,33 +253,34 @@ namespace ElishAppMobile.Views
                     
                 }
 
-                if (order != null)
+                if (Order != null && vParam!=null)
                 {
                     foreach (var item in customersource)
                     {
                         CustomerSource.Add(item);
                     }
 
-                    var customer = CustomerSource.Where(x=>x.Id == order.CustomerId).FirstOrDefault();
+                    var customer = CustomerSource.Where(x=>x.Id == Order.CustomerId).FirstOrDefault();
                     SelectedIndex = CustomerSource.ToList().IndexOf(customer);
-                    var ll = order.Items.FirstOrDefault();
+                    var ll = Order.Items.FirstOrDefault();
                     SupplierIndex = DataSupplier.IndexOf(DataSupplier.SingleOrDefault(x=>x.Id==ll.Product.SupplierId));
-                    foreach (var item in order.Items)
+                    foreach (var item in Order.Items)
                     {
-                        var stock = ProductStocks.ToList().Where(x => x.Id == item.ProductId).FirstOrDefault();
+                        var stock = products.ToList().Where(x => x.Id == item.ProductId).FirstOrDefault();
                         if (stock != null)
                         {
-
+                            stock.Pembelian += item.Amount;
                             var newData = new ItemPenjualanModel()
                             {
+                                Id = item.Id,
                                 Amount = stock == null ? 0 : stock.StockView,
                                 Units = new ObservableCollection<Unit>(stock.Units),
                                 Product = stock,
                                 ProductId = item.ProductId,
-                                Unit = stock.Units.Where(x => x.Id == item.UnitId).FirstOrDefault(),
+                                Unit = item.Unit,
                                 UnitId = item.UnitId,
-                                Real = item.Amount
                             };
+                            newData.Real = item.Amount;
                             Datas.Add(newData);
                         }
 
@@ -297,6 +295,10 @@ namespace ElishAppMobile.Views
                     }
                 }
 
+                foreach (var item in products.Where(x => x.Stock > 0))
+                {
+                    ProductStocks.Add(item);
+                }
 
                 Datas.Reverse();
             }
@@ -328,7 +330,7 @@ namespace ElishAppMobile.Views
                 Order.Items.Clear();
                 foreach (var item in Datas)
                 {
-                    Order.Items.Add(new OrderPenjualanItem {  Amount=item.Real, Price= item.Unit.Sell, UnitId=item.UnitId, Unit=item.Unit, 
+                    Order.Items.Add(new OrderPenjualanItem { Id=item.Id, OrderPenjualanId=Order.Id,  Amount=item.Real, Price= item.Unit.Sell, UnitId=item.UnitId, Unit=item.Unit, 
                         ProductId=item.ProductId, Product=item.Product });
                 }
 
@@ -351,7 +353,13 @@ namespace ElishAppMobile.Views
                 if(result!=null)
                 {
                     await Toas.ShowLong($"Success : !");
+                    if(_orderParameter!=null)
+                    {
+                        _orderParameter.Total = Datas.Sum(x => x.Total);
+                    }
+
                     Datas.Clear();
+                    await Shell.Current.Navigation.PopAsync();
                 }
 
             }
@@ -422,7 +430,8 @@ namespace ElishAppMobile.Views
 
             var unit = value.Units.First();
             var newData = new ItemPenjualanModel()
-            {
+            { 
+                
                 Amount = value.StockView,
                 Units = new ObservableCollection<Unit>(value.Units),
                 Product = value,

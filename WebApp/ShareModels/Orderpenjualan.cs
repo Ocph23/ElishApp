@@ -9,7 +9,7 @@ namespace ShareModels
     {
         public Orderpenjualan()
         {
-            Items = new HashSet<OrderPenjualanItem>();
+            //Items = new HashSet<OrderPenjualanItem>();
         }
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }

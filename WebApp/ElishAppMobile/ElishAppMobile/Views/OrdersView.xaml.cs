@@ -75,13 +75,14 @@ namespace ElishAppMobile.Views
             await   Shell.Current.Navigation.PushAsync(form);
         }
 
-        private void SelectCommandAction(object obj)
+        private async void SelectCommandAction(object obj)
         {
             fromdetail = true;
             var order = (PenjualanAndOrderModel)obj;
+            var form = new Views.SalesOrderView();
             var vm = new SalesOrderViewModel(order);
-            var form = new Views.SalesOrderView() { BindingContext = vm };
-            Shell.Current.Navigation.PushAsync(form);
+            form.BindingContext = vm;
+           await Shell.Current.Navigation.PushAsync(form);
         }
 
         private void AddNewCommandAction(object obj)

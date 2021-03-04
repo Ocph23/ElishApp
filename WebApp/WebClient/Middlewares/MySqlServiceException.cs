@@ -1,6 +1,6 @@
+using MySqlConnector;
 using System;
 using System.Runtime.Serialization;
-using MySql.Data.MySqlClient;
 
 namespace WebClient
 {

@@ -35,7 +35,7 @@ namespace WebClient.Services
                 if (lastOrder == null)
                     throw new SystemException("Order Tidak Ditemukan !");
 
-                var pembelian = new Pembelian { Discount=lastOrder.Discount, OrderPembelianId = orderid, PayDeadLine = DateTime.Now,     
+                var pembelian = new Pembelian { Discount=lastOrder.Discount, OrderPembelianId = orderid, OrderPembelian=lastOrder, PayDeadLine = DateTime.Now,     
                     CreatedDate = DateTime.Now, Items = new List<PembelianItem>() };
 
                 foreach (var item in lastOrder.Items)
@@ -55,8 +55,8 @@ namespace WebClient.Services
 
                 }
 
-                dbContext.Pembelian.Add(pembelian);
 
+                dbContext.Pembelian.Add(pembelian);
                 await dbContext.SaveChangesAsync();
 
 

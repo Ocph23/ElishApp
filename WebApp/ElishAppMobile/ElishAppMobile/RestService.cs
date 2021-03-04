@@ -26,6 +26,7 @@ namespace ElishAppMobile
         {
             string _server = Helper.Url;
             this.BaseAddress = new Uri(_server);
+            this.MaxResponseContentBufferSize = 2000000000;
             this.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json; charset=utf-8");
             if (Account.UserIsLogin)
             {

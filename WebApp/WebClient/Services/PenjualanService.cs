@@ -390,11 +390,25 @@ namespace WebClient.Services
 
             try
             {
-                var lastOrder = await GetOrder(id);
+                var lastOrder = dbContext.Orderpenjualan.Where(x => x.Id == id).Include(x => x.Items).FirstOrDefault();
                 if (lastOrder == null)
                     throw new SystemException("Order Not Found  !");
 
-                dbContext.Entry(lastOrder).CurrentValues.SetValues(order);
+                if (order.CustomerId != lastOrder.CustomerId)
+                {
+                    dbContext.Entry(lastOrder.Customer).State = EntityState.Unchanged;
+                    lastOrder.CustomerId = order.CustomerId;
+                }
+                else
+                {
+
+                }
+
+                lastOrder.DeadLine = order.DeadLine;
+                lastOrder.Discount = order.Discount;
+                lastOrder.OrderDate = lastOrder.OrderDate;
+                lastOrder.SalesId = lastOrder.SalesId;
+                lastOrder.Status = lastOrder.Status;
 
                 foreach (var item in order.Items)
                 {
@@ -406,8 +420,11 @@ namespace WebClient.Services
                     }
                     else
                     {
-                        var olditem = lastOrder.Items.SingleOrDefault(x => x.Id == item.Id);
-                        dbContext.Entry(olditem).CurrentValues.SetValues(item);
+                        var olditem = lastOrder.Items.Where(x => x.Id == item.Id).FirstOrDefault();
+                        olditem.Amount = item.Amount;
+                        olditem.Price = item.Price;
+                        olditem.ProductId = item.ProductId;
+                        olditem.UnitId = item.UnitId;
                     }
                 }
 
@@ -415,7 +432,7 @@ namespace WebClient.Services
 
                 foreach (var item in lastOrder.Items)
                 {
-                    var existsDb = order.Items.SingleOrDefault(x => x.Id == item.Id);
+                    var existsDb = order.Items.Where(x => x.Id == item.Id).FirstOrDefault();
                     if (existsDb == null)
                     {
                         dbContext.OrderPenjualanItem.Remove(existsDb);
