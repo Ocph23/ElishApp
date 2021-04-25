@@ -48,10 +48,10 @@ namespace WebClient.Controllers
 
         public async Task<ActionResult> PrintPenjualan(int id)
         {
-            var reportItem = "nota1.frx";
+            var reportItem = "nota.frx";
             if (reportItem != null)
             {
-                var path = $"{_iwebhost.WebRootPath}/reports/{reportItem}";
+                var path = $"{_iwebhost.WebRootPath}/reports/frxs/{reportItem}";
                 
                 try
                 {
@@ -70,8 +70,7 @@ namespace WebClient.Controllers
                             ProductName = $"{item.Product.Name} {item.Product.Size}",
                             Unit = item.Unit.Name,
                             Price = item.Price,
-                            Total = item.Total,    
-
+                            Total = item.Total,      
                         });
 
                         nomor++;
@@ -81,7 +80,7 @@ namespace WebClient.Controllers
                     return Print(datasets, nota, path);
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return new NoContentResult();
                 }
@@ -368,7 +367,6 @@ namespace WebClient.Controllers
         }
         private ActionResult Print(DataTable datasets, ShareModels.Reports.NotaPenjualan nota, string path)
         {
-
             using MemoryStream stream = new MemoryStream();
             try
             {
@@ -377,7 +375,7 @@ namespace WebClient.Controllers
                 DataSet ds = new DataSet();
                 ds.DataSetName = "Nota";
                 ds.Tables.Add(datasets);
-                ds.WriteXml($"{_iwebhost.WebRootPath}/reports/nota1.xml");
+                ds.WriteXml($"{_iwebhost.WebRootPath}/reports/datas/nota.xml");
 
                 Config.WebMode = true;
                 using (Report report = new Report())
@@ -394,7 +392,7 @@ namespace WebClient.Controllers
                         Navigator = true, //navigation panel on top
                         EmbedPictures = true,
                         Print=true,  Preview=true, 
-                        PageBreaks=false
+                        PageBreaks=true , EnableMargins=true  
                     };
                     report.Export(html, stream);
 
@@ -473,7 +471,8 @@ namespace WebClient.Controllers
             report.SetParameterValue("AppName", Helper.ApplicationName);
             report.SetParameterValue("DirectorName", Helper.DirectorName);
             report.SetParameterValue("OfficeTelp", Helper.OfficeTelp);
-        }
+            report.SetParameterValue("Ekspedisi", nota.Ekspedisi);
+            }
 
         private static ShareModels.Reports.NotaPenjualan GetNotaParameters(object dataParam, Type type)
         {
@@ -493,7 +492,7 @@ namespace WebClient.Controllers
                         NomorInvoice = data.Nomor,
                         InvoiceDeadLine =data.CreateDate.AddDays(data.PayDeadLine),
                         PaymentType = data.Payment == PaymentType.Kredit ? "Credit" : "Tunai",
-                        Address = data.OrderPenjualan.Customer.Address
+                        Address = data.OrderPenjualan.Customer.Address     , Ekspedisi= data.Expedisi
 
                     };
                 }

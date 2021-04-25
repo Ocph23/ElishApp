@@ -417,7 +417,7 @@
     }
 
 
-    private async void CreatePembayaran(dynamic parameter)
+    private void CreatePembayaran(dynamic parameter)
     {
         try
         {
@@ -429,7 +429,7 @@
 
                 if (data != null)
                 {
-                    var result = await pembelianService.CreatePembayaran(data.PembelianId, data, false);
+                    var result = pembelianService.CreatePembayaran(data.PembelianId, data, false).Result;
                     if (result == null)
                         throw new SystemException("Not Saved !");
 
@@ -478,23 +478,6 @@
             }
             await Task.Delay(100);
         }
-
-
-      //  var productStok = products.Where(x => x.Id == item.ProductId).FirstOrDefault();
-        @*if (productStok != null)
-        {
-            var readyStok = productStok.Stock / item.Unit.Amount;
-            if (item.Amount > readyStok)
-            {
-                NotificationService.Notify(new NotificationMessage
-                {
-                    Detail = $"Stock {productStok.CodeName} Tidak Cukup \r Sisa Stock = {readyStok} {item.Unit.Name}",
-                    Severity = NotificationSeverity.Error
-                });
-                item.Amount = readyStok;
-            }
-        }*@
-
 
         StateHasChanged();
     }

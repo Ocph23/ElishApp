@@ -47,6 +47,8 @@
         {
 
             service.Datas.CollectionChanged += onChangeDataCollection;
+
+            service.LoadPembelian();
             return Task.CompletedTask;
         }
 

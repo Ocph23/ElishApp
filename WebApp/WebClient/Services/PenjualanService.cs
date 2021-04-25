@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ShareModels;
 using ShareModels.ModelViews;
@@ -11,12 +12,14 @@ namespace WebClient.Services
 {
     public class PenjualanService : IPenjualanService
     {
+        private readonly IServiceProvider provider;
         private readonly ApplicationDbContext dbContext;
      //   private readonly IHttpContextAccessor auth;
         private readonly ILogger<PenjualanService> _logger;
 
-        public PenjualanService(ApplicationDbContext db, ILogger<PenjualanService> log)
+        public PenjualanService(ApplicationDbContext db, IServiceProvider _provider,  ILogger<PenjualanService> log)
         {
+            provider = _provider;
             dbContext = db;
        //     auth = httpContextAccessor;
             _logger = log;
@@ -29,7 +32,9 @@ namespace WebClient.Services
             var trans = dbContext.Database.BeginTransaction();
             try
             {
-                var lastOrder = await GetOrder(orderid);
+                var lastOrder = dbContext.Orderpenjualan.Where(x => x.Id == orderid)
+                    .Include(x => x.Items)
+                    .FirstOrDefault();
 
                 if (lastOrder == null)
                     throw new SystemException("Order Tidak Ditemukan !");
@@ -57,7 +62,7 @@ namespace WebClient.Services
 
                 dbContext.Penjualan.Add(penjualan);
                 lastOrder.Status = OrderStatus.Diproses;
-                await dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
                 trans.Commit();
                 return penjualan;
             }
@@ -68,7 +73,7 @@ namespace WebClient.Services
                 throw new SystemException(ex.Message);
             }
         }
-        public async Task<Penjualan> UpdatePenjualan(int penjualanId, Penjualan order)
+        public Task<Penjualan> UpdatePenjualan(int penjualanId, Penjualan order)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
@@ -81,6 +86,7 @@ namespace WebClient.Services
                     throw new SystemException("Penjualan Not Found  !");
 
                 order.Activity = order.Activity == ActivityStatus.None ? ActivityStatus.Created :order.Activity;
+                order.OrderPenjualan.Status = OrderStatus.Diproses;
                 dbContext.Entry(lastPenjualan).CurrentValues.SetValues(order);
 
                 foreach (var item in order.Items)
@@ -113,9 +119,9 @@ namespace WebClient.Services
                     }
                 }
 
-                await dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
                 trans.Commit();
-                return order;
+                return Task.FromResult(order);
             }
             catch (Exception ex)
             {
@@ -204,7 +210,7 @@ namespace WebClient.Services
         }
 
 
-        public async Task<bool> DeletePenjualan(int id)
+        public  Task<bool> DeletePenjualan(int id)
         {
             try
             {
@@ -212,8 +218,8 @@ namespace WebClient.Services
                 if (penjualan==null)
                     throw new SystemException("Penjualan Tidak Ditemukan !");
                 dbContext.Penjualan.Remove(penjualan);
-                await dbContext.SaveChangesAsync();
-                return true;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -261,20 +267,27 @@ namespace WebClient.Services
 
 
         #region Order
-        public async Task<Orderpenjualan> CreateOrder(Orderpenjualan order)
+        public Task<Orderpenjualan> CreateOrder(Orderpenjualan order)
         {
             try
             {
+                using var scope = provider.CreateScope();
+                var _dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
                 if (order.Customer != null)
-                    dbContext.Entry(order.Customer).State = EntityState.Unchanged;
+                    _dbContext.Entry(order.Customer).State = EntityState.Unchanged;
+
+                if (order.Sales!= null)
+                    _dbContext.Entry(order.Sales).State = EntityState.Unchanged;
+
                 foreach (var item in order.Items)
                 {
-                    dbContext.Entry(item.Product).State = EntityState.Unchanged;
-                    dbContext.Entry(item.Unit).State = EntityState.Unchanged;
-                }   
-                dbContext.Orderpenjualan.Add(order);
-                await dbContext.SaveChangesAsync();
-                return order;
+                    _dbContext.Entry(item.Product).State = EntityState.Unchanged;
+                    _dbContext.Entry(item.Unit).State = EntityState.Unchanged;
+                }
+                _dbContext.Orderpenjualan.Add(order);
+                _dbContext.SaveChanges();
+                return Task.FromResult(order);
             }
             catch (Exception ex)
             {
@@ -282,7 +295,7 @@ namespace WebClient.Services
             }
         }
 
-        public async Task<bool> DeleteOrder(int id)
+        public Task<bool> DeleteOrder(int id)
         {
             try
             {
@@ -293,12 +306,12 @@ namespace WebClient.Services
                 if (oldData==null)
                     throw new SystemException("Order Not Found !");
 
-                if(oldData!=null && oldData.Penjualan.Pembayaranpenjualan.Count>0)
+                if(oldData!=null &&  oldData.Penjualan !=null && oldData.Penjualan.Pembayaranpenjualan.Count>0)
                     throw new SystemException("Data Tidak Dihapus Karena Telah Ada Pembayaran !");
 
                 dbContext.Orderpenjualan.Remove(oldData);
-                await dbContext.SaveChangesAsync();
-                return true;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -312,8 +325,9 @@ namespace WebClient.Services
             var orders = dbContext.Orderpenjualan.Where(x => x.Id == id)
             .Include(x => x.Customer)
             .Include(x => x.Sales)
-            .Include(x => x.Items)
-            .ThenInclude(x => x.Product).ThenInclude(x => x.Units);
+            .Include(x => x.Items).ThenInclude(x => x.Unit).AsNoTracking()
+            .Include(x => x.Items).ThenInclude(x => x.Product)
+            .ThenInclude(x => x.Units);
 
             return Task.FromResult(orders.FirstOrDefault());
         }
@@ -384,31 +398,19 @@ namespace WebClient.Services
             return Task.FromResult(orders.AsEnumerable());
         }
 
-        public async Task<Orderpenjualan> UpdateOrder(int id, Orderpenjualan order)
+        public Task<Orderpenjualan> UpdateOrder(int id, Orderpenjualan order)
         {
-            Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction trans=dbContext.Database.BeginTransaction();
+           // Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction trans=dbContext.Database.BeginTransaction();
 
             try
             {
-                var lastOrder = dbContext.Orderpenjualan.Where(x => x.Id == id).Include(x => x.Items).FirstOrDefault();
+                var lastOrder = dbContext.Orderpenjualan.Where(x => x.Id == id)
+                                .Include(x => x.Customer)
+                                .Include(x => x.Sales)
+                                .Include(x => x.Items).FirstOrDefault();
                 if (lastOrder == null)
                     throw new SystemException("Order Not Found  !");
 
-                if (order.CustomerId != lastOrder.CustomerId)
-                {
-                    dbContext.Entry(lastOrder.Customer).State = EntityState.Unchanged;
-                    lastOrder.CustomerId = order.CustomerId;
-                }
-                else
-                {
-
-                }
-
-                lastOrder.DeadLine = order.DeadLine;
-                lastOrder.Discount = order.Discount;
-                lastOrder.OrderDate = lastOrder.OrderDate;
-                lastOrder.SalesId = lastOrder.SalesId;
-                lastOrder.Status = lastOrder.Status;
 
                 foreach (var item in order.Items)
                 {
@@ -421,38 +423,37 @@ namespace WebClient.Services
                     else
                     {
                         var olditem = lastOrder.Items.Where(x => x.Id == item.Id).FirstOrDefault();
-                        olditem.Amount = item.Amount;
-                        olditem.Price = item.Price;
-                        olditem.ProductId = item.ProductId;
-                        olditem.UnitId = item.UnitId;
+                        if (olditem != null)
+                        {
+                            dbContext.Entry<OrderPenjualanItem>(olditem).CurrentValues.SetValues(item);
+                        }
                     }
                 }
 
-                //remove
-
+                dbContext.Entry<Orderpenjualan>(lastOrder).CurrentValues.SetValues(order);
                 foreach (var item in lastOrder.Items)
                 {
                     var existsDb = order.Items.Where(x => x.Id == item.Id).FirstOrDefault();
                     if (existsDb == null)
                     {
-                        dbContext.OrderPenjualanItem.Remove(existsDb);
+                        lastOrder.Items.Remove(item);
                     }
                 }
 
-                await dbContext.SaveChangesAsync();
-                trans.Commit();
-                return order;
+                var result=  dbContext.SaveChanges();
+            //    trans.Commit();
+                return Task.FromResult(order);
             }
             catch (Exception ex)
             {
-                trans.Rollback();
+              //  trans.Rollback();
                 throw new SystemException(ex.Message);
             }
         }
         #endregion
 
         #region Pembayaran
-        public async Task<Pembayaranpenjualan> CreatePembayaran(int penjualanId, Pembayaranpenjualan pembayaran, bool forced)
+        public  Task<Pembayaranpenjualan> CreatePembayaran(int penjualanId, Pembayaranpenjualan pembayaran, bool forced)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
@@ -485,9 +486,9 @@ namespace WebClient.Services
                 penjualan.Status = status;
                 dbContext.Pembayaranpenjualan.Add(pembayaran);
                 penjualan.OrderPenjualan.Status = OrderStatus.Selesai;
-                await dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
                 trans.Commit();
-                return pembayaran;
+                return Task.FromResult(pembayaran);
             }
             catch (Exception ex)
             {
@@ -503,7 +504,52 @@ namespace WebClient.Services
             return Task.FromResult(pembayarans.AsEnumerable());
         }
 
-      
+
+        public Task<bool> UpdatePembayaran(Pembayaranpenjualan model)
+        {
+            try
+            {
+                var penjualan = dbContext.Penjualan.Where(x => x.Id == model.PenjualanId)
+                    .Include(x=>x.Items)
+                    .Include(x=>x.OrderPenjualan)
+                    .Include(x=>x.Pembayaranpenjualan).FirstOrDefault();
+
+                if (penjualan == null || !penjualan.Pembayaranpenjualan.Any())
+                    throw new SystemException("Data Penjualan atau Pembayaran Tidak Ditemukan");
+
+
+                var totalInvoice = penjualan.Items.Sum(x => x.Total) - (penjualan.Items.Sum(x => x.Total) * (penjualan.Discount / 100));
+                var totalWithoutCurrentPayment = penjualan.Pembayaranpenjualan.Where(x => x.Id != model.Id).Sum(x => x.PayValue);
+              
+                if (totalWithoutCurrentPayment + model.PayValue > totalInvoice)
+                    throw new SystemException("Maaf, Nilai Bayar Terlalu Besar !");
+
+                var oldPembayaran = penjualan.Pembayaranpenjualan.Where(x => x.Id == model.Id).FirstOrDefault();
+                if (oldPembayaran == null)
+                    throw new SystemException("Pembayaran Tidak Ditemukan");
+
+                if (totalWithoutCurrentPayment + model.PayValue < totalInvoice)
+                {
+                    penjualan.OrderPenjualan.Status = OrderStatus.Diproses;
+                    penjualan.Status =  PaymentStatus.Panjar;
+                }
+                else
+                {
+                    penjualan.OrderPenjualan.Status = OrderStatus.Selesai;
+                    penjualan.Status = PaymentStatus.Lunas;
+                }
+
+                dbContext.Entry(oldPembayaran).CurrentValues.SetValues(model);
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
+
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
         #endregion
 
     }

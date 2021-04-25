@@ -78,10 +78,9 @@
             query = query.OrderBy(args.OrderBy);
         }
 
-        pembelians = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
-
-        count = dbContext.Pembelian.Count();
-
+        var result = query.ToList();
+        count = result.Count();
+        pembelians = result.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
         await InvokeAsync(StateHasChanged);
     }
 }

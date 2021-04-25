@@ -96,9 +96,10 @@
                 query = query.OrderBy(args.OrderBy);
             }
 
-            orders = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
 
-            count = dbContext.Orderpenjualan.Count();
+            var result = query.ToList();
+            count = result.Count();
+            orders = result.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
 
             await InvokeAsync(StateHasChanged);
         }
@@ -108,11 +109,11 @@
         }
     }
 
-    public async void onComplete(Task<IEnumerable<Orderpenjualan>> task)
+    public async Task onComplete(Task<IEnumerable<Orderpenjualan>> task)
     {
         var datas = await task;
         orders = datas.OrderByDescending(x => x.OrderDate).ToList();
-        await InvokeAsync(() => StateHasChanged());
+       await InvokeAsync(() => StateHasChanged());
     }
 
 

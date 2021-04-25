@@ -1,7 +1,6 @@
 ﻿@page "/penjualan/orderdetail/{id?}"
 
 @using ShareModels.ModelViews;
-@using WebClient.Pages.ShareComponent;
 
 @attribute [Authorize]
 
@@ -11,6 +10,7 @@
 @inject IProductService productService;
 @inject IKaryawanService karyawanService;
 @inject NotificationService NotificationService;
+@inject ApplicationDbContext dbContext;
 @inject NavigationManager nav;
 @inject DialogService dialog;
 
@@ -111,7 +111,7 @@
                                 <RadzenLabel Text="Cari Product" />
                             </div>
                             <div class="col-md-8">
-                                @if (supplierid>0)
+                                @if (supplierid > 0)
                                 {
                                     <RadzenDropDown AllowClear="true" AllowFiltering="true"
                                                     FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
@@ -224,11 +224,11 @@
     {
         customers = await customerService.Get();
         suppliers = await supplierService.GetSuppliers();
-        var productSource= (await productService.GetProductStock()).ToList();
+        var productSource = (await productService.GetProductStock()).ToList();
 
-        productSource.Add(new ProductStock { Id = -1, CodeName="All", Name = "All"});
+        productSource.Add(new ProductStock { Id = -1, CodeName = "All", Name = "All" });
 
-        products = productSource.Where(x => x.Id<0?true:x.Stock > 0).OrderBy(x=>x.Name);
+        products = productSource.Where(x => x.Id < 0 ? true : x.Stock > 0).OrderBy(x => x.Name);
         sales = await karyawanService.Get();
         if (!string.IsNullOrEmpty(id))
         {
@@ -239,6 +239,14 @@
                 if (this.model != null && this.model.Items.Count > 0)
                 {
                     supplierid = this.model.Items.FirstOrDefault().Product.SupplierId;
+                    foreach (var dataitem in model.Items)
+                    {
+                        var product = products.Where(x => x.Id == dataitem.ProductId).FirstOrDefault();
+                        if (product != null)
+                        {
+                            product.Pembelian += dataitem.Amount;
+                        }
+                    }
                 }
             }
 
@@ -399,10 +407,10 @@
 
 
         }
-        else if(prodId < 0)
+        else if (prodId < 0)
         {
             model.Items = new List<OrderPenjualanItem>();
-            foreach (var _product in products.Where(x=>x.Id>0 && x.SupplierId==supplierid && x.Stock>0))
+            foreach (var _product in products.Where(x => x.Id > 0 && x.SupplierId == supplierid && x.Stock > 0))
             {
                 var item = new OrderPenjualanItem { Product = _product, ProductId = _product.Id, Amount = 1 };
                 item.Unit = _product.Units.FirstOrDefault();
@@ -426,7 +434,7 @@
             if (unit != null)
             {
                 item.Unit = unit;
-                item.Price = unit.Buy;
+                item.Price = unit.Sell;
             }
             await Task.Delay(100);
         }

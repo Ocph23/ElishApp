@@ -154,9 +154,9 @@
             query = query.OrderBy(args.OrderBy);
         }
 
+        count = query.Count();
         products = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
 
-        count = dbContext.Product.Count();
 
         await InvokeAsync(StateHasChanged);
     }

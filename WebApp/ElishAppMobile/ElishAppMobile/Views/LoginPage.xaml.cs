@@ -25,8 +25,21 @@ namespace ElishAppMobile.Views
         public LoginViewModel()
         {
             LoginCommand = new Command(LoginAction, CanLogin);
+            ShowPasswordCommand = new Command(ShowPasswordAction);
             this.PropertyChanged +=
              (_, __) => LoginCommand.ChangeCanExecute();
+            EyeIcon = ImageSource.FromFile("openeye.png");
+            ShowPassword = true;
+        }
+
+        private void ShowPasswordAction(object obj)
+        {
+            ShowPassword = !ShowPassword;
+            if (!ShowPassword)
+                EyeIcon = ImageSource.FromFile("openeye.png");
+            else
+                EyeIcon = ImageSource.FromFile("closeeye.png");
+
         }
         #endregion
 
@@ -38,6 +51,16 @@ namespace ElishAppMobile.Views
         #endregion
 
         #region Properties
+
+
+        private ImageSource eyeIcon;
+
+        public ImageSource EyeIcon
+        {
+            get { return eyeIcon; }
+            set { SetProperty(ref eyeIcon , value); }
+        }
+
         public string Url
         {
             get {
@@ -49,6 +72,16 @@ namespace ElishAppMobile.Views
               
             }
         }
+
+
+        private bool showPassword;
+
+        public bool ShowPassword
+        {
+            get { return showPassword; }
+            set {SetProperty(ref showPassword , value); }
+        }
+
 
         public string UserName
         {
@@ -71,6 +104,7 @@ namespace ElishAppMobile.Views
             get => _loginCommand;
             set => SetProperty(ref _loginCommand, value);
         }
+        public Command ShowPasswordCommand { get; }
         #endregion
 
         #region Methods

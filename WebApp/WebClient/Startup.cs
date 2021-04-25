@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using ShareModels;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace WebClient
 {
     public class Startup

@@ -5,7 +5,9 @@
 * @version         1.0
 * @lastmodified    16.06.2016
 */
-
+.minwidth {
+    min-width: 200px !important;
+}
 .justPrint{
     display:none;
 }

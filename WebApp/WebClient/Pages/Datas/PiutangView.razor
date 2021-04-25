@@ -23,12 +23,12 @@
                 <RadzenGrid @ref="grid" Data="@(datas)" FilterCaseSensitivity="FilterCaseSensitivity.Default"
                             AllowFiltering="true" AllowSorting="true" TItem="PiutangData">
                     <Columns>
-                        <RadzenGridColumn TItem="PiutangData"  Title="Nomor" Width="180px"  >
+                        <RadzenGridColumn TItem="PiutangData" Title="Nomor" Width="160px">
                             <Template Context="item">
                                 <RadzenLabel @onclick="@(()=>Detail(item))" Text="@item.Nomor" />
                             </Template>
                         </RadzenGridColumn>
-                        <RadzenGridColumn TItem="PiutangData" Property="OrderPenjualan.Customer.Name" Title="Customer" />
+                        <RadzenGridColumn TItem="PiutangData" Property="Customer" Title="Customer" />
                         <RadzenGridColumn TItem="PiutangData" Title="Jatuh Tempo" Width="100px">
                             <Template Context="item">
                                 @if (item.JatuhTempo < DateTime.Now)
@@ -41,6 +41,7 @@
                                 }
                             </Template>
                         </RadzenGridColumn>
+                        <RadzenGridColumn TItem="PiutangData" Property="Sales" Title="Sales" />
                         <RadzenGridColumn TItem="PiutangData" TextAlign="TextAlign.Right" Width="110px">
                             <Template Context="item">
                                 @item.TagihanAfterDiscount.ToString("N0")

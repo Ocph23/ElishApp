@@ -17,6 +17,7 @@ namespace ShareModels.Reports
         public string Sales { get; set; }
         public string OrderStatus { get; set; }
         public string Address { get; set; }
+        public double Ekspedisi{ get; set; }
     }
 
 

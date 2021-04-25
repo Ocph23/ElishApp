@@ -11,6 +11,8 @@
 
 @inject NavigationManager nav;
 
+
+
 <RadzenTabs>
     <Tabs>
         <RadzenTabsItem Text="Data Realisasi Penjualan">
@@ -23,20 +25,20 @@
                         </Template>
                     </RadzenGridColumn>
                     <RadzenGridColumn Width="160px" TItem="Penjualan" Property="Nomor" Title="Sale Number" />
-                    <RadzenGridColumn TItem="Penjualan" Property="OrderPenjualan.Customer.Name" Title="Customer" />
+                    <RadzenGridColumn  CssClass="" TItem="Penjualan" Property="OrderPenjualan.Customer.Name" Title="Customer" />
                     <RadzenGridColumn TItem="Penjualan" Property="OrderPenjualan.Sales.Name" Title="Sales" />
                     <RadzenGridColumn TItem="Penjualan" Property="Payment" Width="100px" Title="Payment" />
-                    <RadzenGridColumn TItem="Penjualan" Property="Discount" Width="75px" Title="Discount">
+                    <RadzenGridColumn TItem="Penjualan" Property="Discount" Width="65px" Title="Disc">
                         <Template Context="item">
                             @(item.Discount + "%")
                         </Template>
                     </RadzenGridColumn>
                     <RadzenGridColumn Width="150px" TItem="Penjualan" TextAlign="TextAlign.Right" Property="Total" Title="Total">
                         <Template Context="item">
-                            @(item.Total.ToString("N"))
+                            @item.Total.ToString("N")
                         </Template>
                     </RadzenGridColumn>
-                    <RadzenGridColumn Width="130px" TItem="Penjualan" Property="Status" Title="Status">
+                    <RadzenGridColumn Width="100px" TItem="Penjualan" Property="Status" Title="Status">
                         <FilterTemplate>
                             <RadzenDropDown @bind-Value="@currentPeyment" TextProperty="Text"
                                             ValueProperty="Value" Style="width:100%" Change="@(()=>grid.Reload())"
@@ -71,10 +73,12 @@
     async Task LoadData(LoadDataArgs args)
     {
         var query = dbContext.Penjualan
+            .Include(x=>x.Items)
             .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
             .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
-
             .AsQueryable();
+
+        query = query.OrderByDescending(x => x.Id);
 
         if (currentPeyment != PaymentStatus.All)
             query = query.Where(x => x.Status == currentPeyment);
@@ -89,15 +93,16 @@
             query = query.OrderBy(args.OrderBy);
         }
 
-        penjualans = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+        var cc = query.Select(x=>x);
+        count = cc.Count();
+        penjualans = cc.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
 
-        count = dbContext.Penjualan.Count();
 
         await InvokeAsync(StateHasChanged);
     }
 
 
-    public async void onComplete(Task<IEnumerable<Penjualan>> task)
+    public async Task onComplete(Task<IEnumerable<Penjualan>> task)
     {
         var datas = await task;
         penjualans = datas.OrderByDescending(x => x.Id).ToList();

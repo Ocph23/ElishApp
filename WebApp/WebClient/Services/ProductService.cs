@@ -25,13 +25,16 @@ namespace WebClient.Services
             var trans = dbContext.Database.BeginTransaction();
             try
             {
-                var exsitsProduct = dbContext.Product.Where(x => x.Id == product.Id || x.CodeArticle == product.CodeArticle || x.CodeName == product.CodeName).FirstOrDefault();
-                if (exsitsProduct == null)
+                var exsitsProduct = dbContext.Product.Where(x => x.Id == product.Id);
+                if (!string.IsNullOrEmpty(product.CodeArticle))
+                    exsitsProduct = exsitsProduct.Where(x => x.CodeArticle == product.CodeArticle);
+
+                if (!string.IsNullOrEmpty(product.CodeName))
+                    exsitsProduct = exsitsProduct.Where(x => x.CodeName== product.CodeName);
+
+                if (exsitsProduct.FirstOrDefault() == null)
                 {
                     dbContext.Product.Add(product);
-                    if (product.Id <= 0)
-                        throw new SystemException("Product Not Created !");
-
                 }  else
                     throw new SystemException($"Product '{product.CodeName} / {product.CodeArticle}' Exists !");
 

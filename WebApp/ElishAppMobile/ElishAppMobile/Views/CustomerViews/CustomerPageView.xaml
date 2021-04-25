@@ -67,7 +67,7 @@
                                                             </FormattedString>
                                                         </Label.FormattedText>
                                                     </Label>
-                                                    <Label Text="{Binding Karyawan.Name}" TextColor="CadetBlue"  FontAttributes="Bold">
+                                                    <Label Text="{Binding Karyawan.Name}" >
                                                     </Label>
                                                 </StackLayout>
                                             </StackLayout>

@@ -18,9 +18,9 @@
 
     <RadzenGrid Data="@categories" AllowFiltering="true" AllowPaging="true" AllowSorting="true" >
         <Columns>
-            <Radzen.Blazor.RadzenGridColumn Property="Name" Title="Name" TItem="Category" />
+            <Radzen.Blazor.RadzenGridColumn Width="300" Property="Name" Title="Name" TItem="Category" />
             <Radzen.Blazor.RadzenGridColumn Property="Description" Title="Description" TItem="Category" />
-            <Radzen.Blazor.RadzenGridColumn Width="150px"   TItem="Category">
+            <Radzen.Blazor.RadzenGridColumn Width="60px"   TItem="Category">
                 <Template Context="item">
                     <RadzenButton Click=@(args => DialogService.OpenAsync<EditCategory>($"Edit Category",
                         new Dictionary<string, object>() { { "model", item}, },
@@ -44,14 +44,13 @@
 
 
 
-    public void OnCloseDialog(dynamic result)
+    public async void OnCloseDialog(dynamic result)
     {
-
         if (result != null)
         {
             Category model = (Category)result;
-
             categories.Add(model);
+            await  InvokeAsync(() => StateHasChanged());
         }
 
     }

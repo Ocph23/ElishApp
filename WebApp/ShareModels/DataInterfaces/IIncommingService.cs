@@ -11,6 +11,7 @@ namespace ShareModels
     {                                                      
         Task<PembelianModel> CreateNew(int pembelianid);
         Task<PembelianModel> Load(bool force = false);
+        void LoadPembelian();
         Task Invoike(IncomingItem data);
         Task Save();
         ObservableCollection<Pembelian> Pembelians { get; }

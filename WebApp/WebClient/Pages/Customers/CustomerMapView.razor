@@ -18,7 +18,7 @@
     <Radzen.Blazor.RadzenAutoComplete @bind-Value="searchtext"/> <button class="btn">Cari</button>
 </div>
 <div class="row">
-    <div class="col-xl-3" style="background-color: white; height: 90vh; overflow-y: auto;">
+    <div class="col-xl-3" style="background-color: white; height: 85vh; overflow-y: auto;">
 
         @foreach (var item in customers.Where(x => x.Name.ToLower().Contains(searchtext.ToLower()) || x.ContactName.ToLower().Contains(searchtext.ToLower())))
         {
@@ -31,7 +31,7 @@
         }
     </div>
     <div class="col-xl-9">
-        <RadzenGoogleMap @ref="map" style="height: 90vh" ApiKey="AIzaSyBVoxKIqCOGybbDmgLYrTGiFSfDjeMC5DA" Zoom=@zoom
+        <RadzenGoogleMap @ref="map" style="height: 85vh" ApiKey="AIzaSyBVoxKIqCOGybbDmgLYrTGiFSfDjeMC5DA" Zoom=@zoom
                          Center=@mapcenter MapClick=@OnMapClick MarkerClick=@OnMarkerClick>
             <Markers>
                 @if (customers.Count() > 0)
@@ -76,7 +76,7 @@
         return new GoogleMapPosition() { Lat = Convert.ToDouble(args[0]), Lng = Convert.ToDouble(args[1]) };
     }
 
-    async void OnMapClick(GoogleMapClickEventArgs args)
+    async Task OnMapClick(GoogleMapClickEventArgs args)
     {
         if (CustomerSelected != null)
         {

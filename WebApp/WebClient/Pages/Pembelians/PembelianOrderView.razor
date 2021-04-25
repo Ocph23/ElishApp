@@ -84,9 +84,11 @@
             query = query.OrderBy(args.OrderBy);
         }
 
-        orders = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+        var result = query.ToList();
+        count = result.Count();
 
-        count = dbContext.Orderpembelian.Count();
+        orders = result.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+
 
         await InvokeAsync(StateHasChanged);
     }

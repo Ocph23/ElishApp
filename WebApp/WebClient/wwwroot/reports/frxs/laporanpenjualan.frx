@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="02/12/2021 00:01:40" ReportInfo.Modified="02/12/2021 11:14:58" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/12/2021 00:01:40" ReportInfo.Modified="03/09/2021 18:00:50" ReportInfo.CreatorVersion="2021.1.0.0">
   <Styles Name="Standard">
     <Style Name="Title" Font="Arial, 12pt, style=Bold"/>
     <Style Name="Header" Font="Arial, 10pt, style=Bold"/>
@@ -9,14 +9,24 @@
     <Style Name="EvenRows" Fill.Color="WhiteSmoke" Font="Arial, 10pt"/>
   </Styles>
   <Dictionary>
-    <XmlDataConnection Name="Piutang" ConnectionString="rijcmlqgsY9uIG8zf4cJoD1cREbfNXIEarcjozDYkL5qYtp/PnXfKKK92D98+yZ/8EinX0a7INKgOYSoRHruk/wDDMoMiM6W1k4pkZCsE2KChvBUiJLBYk6kWdLea+MtomZG5HZar1KVoOYUEtqOlqlrdZcLLcuMFuwZG1guiY6rhpmB5Qfq2Vampcsh+KBb8zDLLzgAhcbMGEqcN03N6EPEZ6vPQ==">
+    <XmlDataConnection Name="Connection" ConnectionString="rijcmlqmmfdjkQxfe1iwShBNGpud+vlHjACgImU7UIzr/qduAzOaGSOTCniRDv0DusGamivaXj8uop25tqHTLBLUcIypjieL2SvA3Q08eqdWfYynFLUyJpB9mVDnvZgSxRjHywW1dRKICrREoFAKjGGd0qxdg==">
       <TableDataSource Name="Table1" DataType="System.Int32" Enabled="true" TableName="Table1">
-        <Column Name="Nomor" DataType="System.String"/>
+        <Column Name="Created" DataType="System.String"/>
+        <Column Name="Invoice" DataType="System.String"/>
+        <Column Name="NomorSO" DataType="System.String"/>
+        <Column Name="PaymentType" DataType="System.String"/>
         <Column Name="Customer" DataType="System.String"/>
-        <Column Name="JatuhTempo" DataType="System.DateTime"/>
-        <Column Name="Tagihan" DataType="System.Double"/>
-        <Column Name="Panjar" DataType="System.Double"/>
-        <Column Name="Sisa" DataType="System.Double"/>
+        <Column Name="Sales" DataType="System.String"/>
+        <Column Name="PaymentStatus" DataType="System.String"/>
+        <Column Name="Discount" DataType="System.String"/>
+        <Column Name="TotalAfterDiscount" DataType="System.String"/>
+        <Column Name="PenjualanId" DataType="System.String"/>
+        <Column Name="OrderId" DataType="System.String"/>
+        <Column Name="DeadLine" DataType="System.String"/>
+        <Column Name="OrderStatus" DataType="System.String"/>
+        <Column Name="FeeSales" DataType="System.String"/>
+        <Column Name="Total" DataType="System.String"/>
+        <Column Name="TotalFeeSales" DataType="System.String"/>
       </TableDataSource>
     </XmlDataConnection>
     <Parameter Name="Periode" DataType="System.String"/>
@@ -43,7 +53,7 @@
       <TextObject Name="Text16" Top="19.2" Width="201.6" Height="19.2" Text="Periode : [Periode]" Font="Arial, 9pt, style=Bold"/>
       <TextObject Name="Text15" Width="201.6" Height="19.2" Text="LAPORAN PIUTANG" Font="Arial, 10pt, style=Bold"/>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="79.17" Width="836.51" Height="18.9" EvenStyle="EvenRows" DataSource="Table1">
+    <DataBand Name="Data1" Top="79.17" Width="836.51" Height="18.9" EvenStyle="EvenRows">
       <TableObject Name="Table2" Width="833.52" Height="18.9">
         <TableColumn Name="Column1" Width="156.52"/>
         <TableColumn Name="Column2" Width="223.72"/>

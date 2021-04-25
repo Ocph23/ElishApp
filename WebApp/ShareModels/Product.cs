@@ -47,7 +47,7 @@ using System.Threading.Tasks;
         public virtual ICollection<PembelianItem> PembelianItem { get; set; }
         public virtual ICollection<Penjualanitem> PenjualanItem { get; set; }
         public virtual ICollection<ProductImage> ProductImage { get; set; }
-        public Unit UnitSelected => Units.FirstOrDefault();
+        public Unit UnitSelected => Units!=null&& Units.Count>0?Units.FirstOrDefault():new Unit();
         
     }
 }

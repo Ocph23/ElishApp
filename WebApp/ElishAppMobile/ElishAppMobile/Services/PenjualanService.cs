@@ -315,5 +315,10 @@ namespace ElishAppMobile.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> UpdatePembayaran(Pembayaranpenjualan model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

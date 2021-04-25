@@ -1,13 +1,8 @@
-using System; 
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
- 
- namespace ShareModels 
-{ 
-     public class Penjualanitem  
-   {
+
+namespace ShareModels
+{
+    public class Penjualanitem
+    {
         public int Id { get; set; }
 
         public int PenjualanId { get; set; }
@@ -46,10 +41,10 @@ using System.Threading.Tasks;
         }
 
 
-       
+
 
         public virtual Penjualan Penjualan { get; set; }
-     
+
     }
 }
 

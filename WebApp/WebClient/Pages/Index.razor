@@ -11,10 +11,15 @@
                 <img src="/images/apslogowithtext.png" />
             </Authorized>
             <NotAuthorized>
-                <p><em>@loading</em></p>
-                <h1>Authentication Failure!</h1>
-                <p>You're not signed in.</p>
-                <button class="btn btn-success" @onclick="@dologin">Login</button>
+                <div style="display:block; text-align:center">
+                    <img src="/images/apslogowithtext.png" />
+                    <p><em>@loading</em></p>
+                    <h1>Authentication Failure!</h1>
+                    <div><p>You're not signed in.</p></div>
+                    <div>
+                        <button class="btn btn-success" @onclick="@dologin">Login</button>
+                    </div>
+                </div>
             </NotAuthorized>
         </AuthorizeView>
 </div>

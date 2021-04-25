@@ -24,7 +24,7 @@ namespace ShareModels
         {
             get
             {
-                return $"{Id}/SO-ELISH/{OrderDate.Month}/{OrderDate.Year}";
+                return $"{Id}/SO-APS/{OrderDate.Month}/{OrderDate.Year}";
             }
         }
         public virtual ICollection<OrderPenjualanItem> Items { get; set; }

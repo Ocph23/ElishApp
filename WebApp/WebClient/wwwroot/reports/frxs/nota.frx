@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="12/16/2020 03:42:33" ReportInfo.Modified="02/25/2021 19:03:26" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="12/16/2020 03:42:33" ReportInfo.Modified="03/13/2021 10:32:31" ReportInfo.CreatorVersion="2021.1.0.0">
   <Dictionary>
-    <XmlDataConnection Name="Nota">
+    <XmlDataConnection Name="Nota" ConnectionString="rijcmlqmmfdjkQxfe1iwShBNGpud+vlHjACgImU7UIzr/qduAzOaGSOTCniRDv0DusGamivaXj8uop25tqHTLBLUcIypjieL2SvA3Q08eqdWfYynFKJB86/dLTO3gaiLxdhoULJ">
       <TableDataSource Name="Table1" DataType="System.Int32" Enabled="true" TableName="Table1">
         <Column Name="No" DataType="System.String"/>
         <Column Name="CodeArticle" DataType="System.String"/>
@@ -25,14 +25,15 @@
     <Parameter Name="AppName" DataType="System.String"/>
     <Parameter Name="DirectorName" DataType="System.String"/>
     <Parameter Name="OfficeTelp" DataType="System.String"/>
+    <Parameter Name="Ekspedisi" DataType="System.Double"/>
     <Total Name="Total" Expression="[Table1.Total]" Evaluator="Data1"/>
     <Total Name="DiscountView" Expression="[Table1.Total]*[Discount]/100" Evaluator="Data1"/>
-    <Total Name="GrandTotal" Expression="[Table1.Total]-[Table1.Total]*[Discount]/100" Evaluator="Data1"/>
+    <Total Name="GrandTotal" Expression="[Total]+[Ekspedisi]-[DiscountView]" Evaluator="Data1"/>
   </Dictionary>
-  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" FirstPageSource="15" OtherPagesSource="15" LastPageSource="15" Watermark.Font="Arial, 60pt">
-    <PageHeaderBand Name="PageHeader1" Width="740.5" Height="157.2">
-      <TextObject Name="Text5" Left="0.85" Top="2" Width="284.4" Height="28.35" Text="[AppName]" Font="Arial, 11pt, style=Bold, Underline"/>
-      <TextObject Name="Text6" Left="586.2" Top="72.7" Width="151.2" Height="18.9" Text=": [NomorSO]" Font="Arial, 9pt"/>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="276.86" LeftMargin="10.16" TopMargin="10.16" RightMargin="10.16" BottomMargin="10.16" FirstPageSource="15" OtherPagesSource="15" LastPageSource="15" Watermark.Font="Arial, 60pt">
+    <PageHeaderBand Name="PageHeader1" Width="739.29" Height="157.2">
+      <TextObject Name="Text5" Left="0.85" Top="2" Width="217.2" Height="28.35" Text="[AppName]" Font="Arial, 11pt, style=Bold, Underline"/>
+      <TextObject Name="Text6" Left="595.56" Top="72.7" Width="141.84" Height="18.9" Text=": [NomorSO]" Font="Arial, 9pt"/>
       <TextObject Name="Text7" Left="482.25" Top="72.7" Width="113.4" Height="18.9" Text="SO Number" Font="Arial, 9pt"/>
       <TableObject Name="Table3" Left="-0.15" Top="128.85" Width="737.56" Height="28.35">
         <TableColumn Name="Column8" Width="38.86"/>
@@ -52,21 +53,21 @@
           <TableCell Name="Cell14" Border.Lines="Top, Bottom" Border.Style="Dot" Text="Total" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
         </TableRow>
       </TableObject>
-      <BarcodeObject Name="Barcode1" Left="289.4" Top="-0.45" Width="104.4" Height="104.4" AutoSize="false" Text="Inv : [NomorInvoice]" ShowText="false" Zoom="0.9" AllowExpressions="true" AsBitmap="true" Barcode="QR Code" Barcode.ErrorCorrection="L" Barcode.Encoding="UTF8" Barcode.QuietZone="true"/>
-      <TextObject Name="Text16" Left="2.85" Top="23.58" Width="217.35" Height="28.35" Text="Perum Permata Indah No 216&#13;&#10;Abepura, Jayapura , [OfficeTelp]" Font="Arial, 7pt"/>
-      <TextObject Name="Text10" Left="74.85" Top="59.7" Width="198.45" Height="18.9" Text=": [Tanggal]" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
+      <BarcodeObject Name="Barcode1" Left="327.8" Top="-10.05" Width="94.8" Height="94.8" AutoSize="false" Text="[NomorInvoice]" ShowText="false" Zoom="0.9" AllowExpressions="true" AsBitmap="true" Barcode="QR Code" Barcode.ErrorCorrection="L" Barcode.Encoding="UTF8" Barcode.QuietZone="true"/>
+      <TextObject Name="Text16" Left="2.85" Top="20.58" Width="217.35" Height="28.35" Text="Perum Permata Indah No 216&#13;&#10;Abepura, Jayapura , [OfficeTelp]" Font="Arial, 7pt, style=Italic"/>
+      <TextObject Name="Text10" Left="74.85" Top="59.7" Width="160.05" Height="18.9" Text=": [Tanggal]" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
       <TextObject Name="Text11" Left="-0.15" Top="59.7" Width="75.3" Height="18.9" Text="Tanggal" Font="Arial, 9pt"/>
-      <TextObject Name="Text12" Left="586.2" Top="104.95" Width="151.2" Height="18.9" Text=": [JatuhTempo]" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
+      <TextObject Name="Text12" Left="595.56" Top="104.95" Width="141.84" Height="18.9" Text=": [JatuhTempo]" Format="Date" Format.Format="d" Font="Arial, 9pt"/>
       <TextObject Name="Text13" Left="482.25" Top="104.95" Width="113.4" Height="18.9" Text="Jatuh Tempo" Font="Arial, 9pt"/>
-      <TextObject Name="Text1" Left="238.85" Top="101" Width="213.95" Height="28.35" Text="FAKTUR PENJUALAN" HorzAlign="Center" Font="Arial, 14pt, style=Bold, Underline"/>
+      <TextObject Name="Text1" Left="277.25" Top="91.4" Width="185.15" Height="18.75" Text="FAKTUR PENJUALAN" HorzAlign="Center" Font="Arial, 12pt, style=Bold, Underline"/>
       <TextObject Name="Text8" Left="74.85" Top="75.6" Width="160.65" Height="47.25" Text=": [Customer]&#13;&#10;  [Address]" Font="Arial, 9pt"/>
       <TextObject Name="Text9" Left="-0.15" Top="75.6" Width="75.15" Height="18.9" Text="Customer" Font="Arial, 9pt"/>
-      <TextObject Name="Text17" Left="586.2" Top="56.7" Width="151.2" Height="18.9" Text=": [NomorInvoice]" Font="Arial, 9pt"/>
+      <TextObject Name="Text17" Left="595.56" Top="56.7" Width="141.84" Height="18.9" Text=": [NomorInvoice]" Font="Arial, 9pt"/>
       <TextObject Name="Text18" Left="482.25" Top="56.7" Width="113.4" Height="18.9" Text="Invoice Number" Font="Arial, 9pt"/>
-      <TextObject Name="Text19" Left="586.2" Top="88.05" Width="151.2" Height="18.9" Text=": [Payment]" Font="Arial, 9pt"/>
+      <TextObject Name="Text19" Left="595.56" Top="88.05" Width="141.84" Height="18.9" Text=": [Payment]" Font="Arial, 9pt"/>
       <TextObject Name="Text20" Left="482.25" Top="88.05" Width="113.4" Height="18.9" Text="Jenis Pembayaran" Font="Arial, 9pt"/>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="159.87" Width="740.5" Height="20.79" DataSource="Table1">
+    <DataBand Name="Data1" Top="160.4" Width="739.29" Height="20.79" DataSource="Table1">
       <TableObject Name="Table2" Left="-0.15" Width="737.56" Height="20.79">
         <TableColumn Name="Column1" Width="38.86"/>
         <TableColumn Name="Column2" Width="114.46"/>
@@ -86,45 +87,52 @@
         </TableRow>
       </TableObject>
     </DataBand>
-    <ReportSummaryBand Name="ReportSummary1" Top="183.32" Width="740.5" Height="104.4">
-      <TableObject Name="Table4" Left="-1.6" Top="0.45" Width="738.9" Height="103.95">
+    <ReportSummaryBand Name="ReportSummary1" Top="184.39" Width="739.29" Height="70.04">
+      <TableObject Name="Table4" Left="-1.6" Top="0.45" Width="738.9" Height="69.59">
         <TableColumn Name="Column15" Width="282.33"/>
         <TableColumn Name="Column16" Width="111.78"/>
         <TableColumn Name="Column17" Width="130.68"/>
-        <TableColumn Name="Column18" Width="102.33"/>
-        <TableColumn Name="Column19" Width="111.78"/>
-        <TableRow Name="Row3" Height="28.35">
-          <TableCell Name="Cell15" Text="Barang2 telah diterima dengan baik dan cukup Barang2 telah dibeli tidak dapat ditukar/ dikembalian Pembayaran dapat ditransfer Ke : &#13;&#10;Nama : Ajenkris Yanto Kungkung&#13;&#10;Ac : (Bank Mandiri) 154-00-1395694-5" Font="Arial, 9pt" RowSpan="4"/>
+        <TableColumn Name="Column18" Width="83.13"/>
+        <TableColumn Name="Column19" Width="130.98"/>
+        <TableRow Name="Row3" Height="16.65">
+          <TableCell Name="Cell15" Text="Barang2 telah diterima dengan baik dan cukup Barang2 telah dibeli tidak dapat ditukar/ dikembalian Pembayaran dapat ditransfer Ke : &#13;&#10;Nama : Ajenkris Yanto Kungkung&#13;&#10;Ac : (Bank Mandiri) 154-00-1395694-5" Font="Arial, 8pt" RowSpan="5"/>
           <TableCell Name="Cell16" Text="Hormat Kami" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt"/>
           <TableCell Name="Cell17" Text="Customer" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell18" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="Total" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell19" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Total]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell18" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="Total" VertAlign="Center" Font="Arial, 8pt"/>
+          <TableCell Name="Cell19" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Total]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
         </TableRow>
-        <TableRow Name="Row4" Height="28.35">
+        <TableRow Name="Row4" Height="15.99">
           <TableCell Name="Cell22" Font="Arial, 10pt"/>
           <TableCell Name="Cell23" Font="Arial, 10pt"/>
           <TableCell Name="Cell24" Font="Arial, 10pt"/>
-          <TableCell Name="Cell25" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Discount( [Discount] %)" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell26" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="[DiscountView]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell25" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Discount( [Discount] %)" VertAlign="Center" Font="Arial, 8pt"/>
+          <TableCell Name="Cell26" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="[DiscountView]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
         </TableRow>
-        <TableRow Name="Row5" Height="28.35">
+        <TableRow Name="Row5" Height="18">
           <TableCell Name="Cell29" Font="Arial, 10pt"/>
-          <TableCell Name="Cell48" Font="Arial, 10pt"/>
-          <TableCell Name="Cell49" Font="Arial, 10pt"/>
-          <TableCell Name="Cell32" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Grand Total" VertAlign="Center" Font="Arial, 9pt"/>
-          <TableCell Name="Cell33" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="[GrandTotal]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell48" Font="Arial, 9pt"/>
+          <TableCell Name="Cell49" Font="Arial, 9pt"/>
+          <TableCell Name="Cell61" Text="Biaya Expedisi" VertAlign="Center" Font="Arial, 8pt"/>
+          <TableCell Name="Cell62" Text="[Ekspedisi]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
         </TableRow>
-        <TableRow Name="Row6">
+        <TableRow Name="Row6" Height="16.14">
           <TableCell Name="Cell36" Font="Arial, 10pt"/>
-          <TableCell Name="Cell50" Text="[DirectorName]" HorzAlign="Center" VertAlign="Bottom" Font="Arial, 8pt, style=Underline"/>
-          <TableCell Name="Cell51" Text="[Customer]" HorzAlign="Center" VertAlign="Bottom" Font="Arial, 8pt, style=Underline"/>
-          <TableCell Name="Cell39" Font="Arial, 10pt"/>
-          <TableCell Name="Cell40" Font="Arial, 10pt"/>
+          <TableCell Name="Cell67" Text="[DirectorName]" HorzAlign="Center" VertAlign="Bottom" Font="Arial, 10pt"/>
+          <TableCell Name="Cell68" Text="[Customer]" HorzAlign="Center" VertAlign="Bottom" Font="Arial, 10pt"/>
+          <TableCell Name="Cell63" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Grand Total" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TableCell Name="Cell64" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="[[Total]-[DiscountView]+[Ekspedisi]]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+        </TableRow>
+        <TableRow Name="Row7" Height="2.81">
+          <TableCell Name="Cell52" Font="Arial, 10pt"/>
+          <TableCell Name="Cell65" Font="Arial, 10pt"/>
+          <TableCell Name="Cell66" Font="Arial, 10pt"/>
+          <TableCell Name="Cell55" Font="Arial, 10pt"/>
+          <TableCell Name="Cell56" Font="Arial, 10pt"/>
         </TableRow>
       </TableObject>
     </ReportSummaryBand>
-    <PageFooterBand Name="PageFooter1" Top="290.39" Width="740.5" Height="22.55">
-      <TextObject Name="Text21" Left="528" Width="211.2" Height="19.2" Text="Halaman : [Page#]/[TotalPages#]" HorzAlign="Right" Font="Arial, 9pt"/>
+    <PageFooterBand Name="PageFooter1" Top="257.63" Width="739.29" Height="19.2">
+      <TextObject Name="Text21" Width="739.2" Height="19.2" Text="Halaman : [Page#]/[TotalPages#]" HorzAlign="Right" Font="Arial, 9pt"/>
     </PageFooterBand>
   </ReportPage>
 </Report>

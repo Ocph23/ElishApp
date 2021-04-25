@@ -5,7 +5,7 @@
 @inject Radzen.DialogService dialogService;
 <div class="row">
     <div class="col-md-12">
-        <RadzenFieldset >
+        <RadzenFieldset>
             <div class="row">
                 <div class="col-md-4 align-items-center d-flex">
                     <RadzenLabel Text="Payment Method" />
@@ -55,7 +55,7 @@
                     <RadzenLabel Text="Total" />
                 </div>
                 <div class="col-md-8">
-                    <RadzenNumeric Step="0.5" TValue="double"  style="width: 100%;" @bind-Value="Model.PayValue" />
+                    <RadzenNumeric Step="0.5" TValue="double" style="width: 100%;" @bind-Value="Model.PayValue" />
                 </div>
             </div>
 
@@ -72,7 +72,7 @@
 </div>
 <div class="row">
     <div class="col-md-12 text-right" style="margin-top:20px">
-        <RadzenButton Click="@((args) => dialogService.Close(Model))" Text="OK" Style="margin-bottom: 10px; width: 150px" />
+        <RadzenButton Click="SavePembayaran" Text="OK" Style="margin-bottom: 10px; width: 150px" />
         <RadzenButton Click="@((args) => dialogService.Close(false))" ButtonStyle="ButtonStyle.Secondary" Text="Cancel"
                       Style="margin-bottom: 10px; width: 150px" />
     </div>
@@ -95,9 +95,16 @@
     protected override Task OnInitializedAsync()
     {
         var Id = Convert.ToInt32(IdPenjualan);
-        Model = new Pembayaranpenjualan() { PenjualanId = Id, PayValue= Total, PayDate=DateTime.Now};
+        Model = new Pembayaranpenjualan() { PenjualanId = Id, PayValue = Total, PayDate = DateTime.Now };
         StateHasChanged();
         return Task.CompletedTask;
+    }
+
+
+    public async Task SavePembayaran()
+    {
+        await Task.Delay(1000);
+        dialogService.Close(Model);
     }
 
 

@@ -69,11 +69,11 @@
                         </RadzenTemplateForm>
                     </RadzenTabsItem>
                     <RadzenTabsItem Text="Data Customer">
-                        <RadzenGrid Data="customers" AllowFiltering="true" AllowPaging="true" AllowSorting="true">
+                        <RadzenGrid Data="customers" AllowFiltering="true" AllowPaging="false" AllowSorting="true">
                             <Columns>
                                 <RadzenGridColumn TItem="Customer" Title="Name" Property="Name" />
                                 <RadzenGridColumn TItem="Customer" Title="Contact Person" Property="ContactName" Width="250px" />
-                                <RadzenGridColumn TItem="Customer" Title="Telepon" Property="Telepon" Width="200px" />
+                                <RadzenGridColumn TItem="Customer" Title="Telepon" Property="Telepon" Width="250px" />
                                 <RadzenGridColumn TItem="Customer" Context="item" Width="65px">
                                     <Template>
                                         <RadzenButton Icon="info" ButtonStyle="ButtonStyle.Warning" Click="@(()=> nav.NavigateTo($"/customer/change/{item.Id}"))"></RadzenButton>

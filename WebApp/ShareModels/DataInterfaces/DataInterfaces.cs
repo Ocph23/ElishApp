@@ -69,6 +69,8 @@ namespace ShareModels
         #region Pembayaran
         Task<IEnumerable<Pembayaranpembelian>> GetPembayaran(int pembayaranId);
         Task<Pembayaranpembelian> CreatePembayaran(int pembelianId, Pembayaranpembelian model, bool forced);
+
+       
         #endregion
     }
     public interface IPenjualanService
@@ -93,6 +95,7 @@ namespace ShareModels
         #region Pembayaran
         Task<IEnumerable<Pembayaranpenjualan>> GetPembayaran(int pembelianId);
         Task<Pembayaranpenjualan> CreatePembayaran(int pembelianId, Pembayaranpenjualan model, bool forced);
+        Task<bool> UpdatePembayaran(Pembayaranpenjualan model);
         #endregion
     }
 

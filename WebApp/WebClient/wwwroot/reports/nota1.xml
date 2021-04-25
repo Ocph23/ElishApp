@@ -2,192 +2,219 @@
 <Nota>
   <Table1>
     <No>1</No>
-    <CodeArticle>8993559391564</CodeArticle>
-    <CodeProduct>SSWL06L.9.5</CodeProduct>
-    <ProductName>Sun Swallow 06 Ladies 9.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>215000</Price>
-    <Total>107500</Total>
+    <CodeProduct>Black Boy Drift.XL</CodeProduct>
+    <ProductName>Black Boy Drift XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>63900</Price>
+    <Total>383400</Total>
   </Table1>
   <Table1>
     <No>2</No>
-    <CodeArticle>8993559391571</CodeArticle>
-    <CodeProduct>SSWL06L.10</CodeProduct>
-    <ProductName>Sun Swallow 06 Ladies 10</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>215000</Price>
-    <Total>107500</Total>
+    <CodeProduct>Black Boy Drift.M</CodeProduct>
+    <ProductName>Black Boy Drift M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>63900</Price>
+    <Total>383400</Total>
   </Table1>
   <Table1>
     <No>3</No>
-    <CodeArticle>8993559391588</CodeArticle>
-    <CodeProduct>SSWL06L-10.5</CodeProduct>
-    <ProductName>Sun Swallow 06 Ladies 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>215000</Price>
-    <Total>107500</Total>
+    <CodeProduct>Black Boy Drift.L</CodeProduct>
+    <ProductName>Black Boy Drift L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>63900</Price>
+    <Total>383400</Total>
   </Table1>
   <Table1>
     <No>4</No>
-    <CodeArticle>8993559389370</CodeArticle>
-    <CodeProduct>SSWL06D.10.5</CodeProduct>
-    <ProductName>Sun Swallow 06D 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>225000</Price>
-    <Total>112500</Total>
+    <CodeProduct>Black Boy Skyline.M</CodeProduct>
+    <ProductName>Black Boy Skyline M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>63900</Price>
+    <Total>383400</Total>
   </Table1>
   <Table1>
     <No>5</No>
-    <CodeArticle>8993559389387</CodeArticle>
-    <CodeProduct>SSWL06D.11</CodeProduct>
-    <ProductName>Sun Swallow 06D 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>250000</Price>
-    <Total>125000</Total>
+    <CodeProduct>Black Boy Skyline.L</CodeProduct>
+    <ProductName>Black Boy Skyline L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>63900</Price>
+    <Total>383400</Total>
   </Table1>
   <Table1>
     <No>6</No>
-    <CodeArticle>8993559389400</CodeArticle>
-    <CodeProduct>SSWL06D.12</CodeProduct>
-    <ProductName>Sun Swallow 06D 12</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>250000</Price>
-    <Total>125000</Total>
+    <CodeProduct>Black Boy Skyline.XL</CodeProduct>
+    <ProductName>Black Boy Skyline XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>63900</Price>
+    <Total>383400</Total>
   </Table1>
   <Table1>
     <No>7</No>
-    <CodeArticle>8993559389394</CodeArticle>
-    <CodeProduct>SSWL06D.11.5</CodeProduct>
-    <ProductName>Sun Swallow 06D 11.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>250000</Price>
-    <Total>125000</Total>
+    <CodeProduct>BXR.03-004.M</CodeProduct>
+    <ProductName>Boxer 03-004 M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>129900</Price>
+    <Total>779400</Total>
   </Table1>
   <Table1>
     <No>8</No>
-    <CodeArticle>8993559388571</CodeArticle>
-    <CodeProduct>SSWL938-12</CodeProduct>
-    <ProductName>Sun Swallow 938 12</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>235000</Price>
-    <Total>117500</Total>
+    <CodeProduct>BXR.03-004.L</CodeProduct>
+    <ProductName>Boxer 03-004 L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>129900</Price>
+    <Total>779400</Total>
   </Table1>
   <Table1>
     <No>9</No>
-    <CodeArticle>8993559393674</CodeArticle>
-    <CodeProduct>SUNDESIGN 9,5 - 10,5</CodeProduct>
-    <ProductName>Sun Swallow Designer 9,5 - 10,5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>418000</Price>
-    <Total>209000</Total>
+    <CodeProduct>BXR.03-004.XL</CodeProduct>
+    <ProductName>Boxer 03-004 XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>129900</Price>
+    <Total>779400</Total>
   </Table1>
   <Table1>
     <No>10</No>
-    <CodeArticle>8993559393681</CodeArticle>
-    <CodeProduct>SUNEVOLVE 10,5 - 11,5</CodeProduct>
-    <ProductName>Sun Swallow Evolve 10,5 - 11,5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>321600</Price>
-    <Total>160800</Total>
+    <CodeProduct>BXR.03-005.M</CodeProduct>
+    <ProductName>Boxer 03-005 M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>129900</Price>
+    <Total>779400</Total>
   </Table1>
   <Table1>
     <No>11</No>
-    <CodeArticle>8993559388885</CodeArticle>
-    <CodeProduct>SSWLLDSBTY-9.5</CodeProduct>
-    <ProductName>Sun Swallow Ladies Beauty 9.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>274000</Price>
-    <Total>137000</Total>
+    <CodeArticle>856889055552</CodeArticle>
+    <CodeProduct>BXR.03-005.L</CodeProduct>
+    <ProductName>Boxer 03-005 L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>129900</Price>
+    <Total>779400</Total>
   </Table1>
   <Table1>
     <No>12</No>
-    <CodeArticle>8993559388892</CodeArticle>
-    <CodeProduct>SSWLLDSBTY-10</CodeProduct>
-    <ProductName>Sun Swallow Ladies Beauty 10</ProductName>
-    <Unit>Lusn</Unit>
-    <Amount>0.5</Amount>
-    <Price>274000</Price>
-    <Total>137000</Total>
+    <CodeProduct>BXR.03-005.XL</CodeProduct>
+    <ProductName>Boxer 03-005 XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>129900</Price>
+    <Total>779400</Total>
   </Table1>
   <Table1>
     <No>13</No>
-    <CodeArticle>8993559388908</CodeArticle>
-    <CodeProduct>SSWLLDSBTY - 10,5</CodeProduct>
-    <ProductName>Sun Swallow Ladies Beauty 10,5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>274000</Price>
-    <Total>137000</Total>
+    <CodeProduct>PB.03-086.XL</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-086 XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>69900</Price>
+    <Total>419400</Total>
   </Table1>
   <Table1>
     <No>14</No>
-    <CodeArticle>8993559388854</CodeArticle>
-    <CodeProduct>SSWLELGNT-10.5</CodeProduct>
-    <ProductName>Sun Swallow Man Elegant 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>270000</Price>
-    <Total>135000</Total>
+    <CodeProduct>PB.03-086.L</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-086 L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>69900</Price>
+    <Total>419400</Total>
   </Table1>
   <Table1>
     <No>15</No>
-    <CodeArticle>8993559388861</CodeArticle>
-    <CodeProduct>SSWLELGNT-11</CodeProduct>
-    <ProductName>Sun Swallow Man Elegant 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>270000</Price>
-    <Total>135000</Total>
+    <CodeProduct>PB.03-086.M</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-086 M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>69900</Price>
+    <Total>419400</Total>
   </Table1>
   <Table1>
     <No>16</No>
-    <CodeArticle>8993559391533</CodeArticle>
-    <CodeProduct>SSWLTREK - 10,5</CodeProduct>
-    <ProductName>Sun Swallow Trek 10,5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>270000</Price>
-    <Total>135000</Total>
+    <CodeProduct>PB.03-087.M</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-087 M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>69900</Price>
+    <Total>419400</Total>
   </Table1>
   <Table1>
     <No>17</No>
-    <CodeArticle>8993559391540</CodeArticle>
-    <CodeProduct>SSWLTREK - 11</CodeProduct>
-    <ProductName>Sun Swallow Trek 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>273600</Price>
-    <Total>136800</Total>
+    <CodeProduct>PB.03-087.L</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-087 L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>69900</Price>
+    <Total>419400</Total>
   </Table1>
   <Table1>
     <No>18</No>
-    <CodeArticle>8993559391557</CodeArticle>
-    <CodeProduct>SSWLTREK - 11,5</CodeProduct>
-    <ProductName>Sun Swallow Trek 11,5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>273600</Price>
-    <Total>136800</Total>
+    <CodeProduct>PB.03-087.XL</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-087 XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>69900</Price>
+    <Total>419400</Total>
   </Table1>
   <Table1>
     <No>19</No>
-    <CodeArticle>8993559393698</CodeArticle>
-    <CodeProduct>SUNURBAN 10 - 11</CodeProduct>
-    <ProductName>Sun Swallow Urban 10 - 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>336000</Price>
-    <Total>168000</Total>
+    <CodeProduct>PB.03-088.M</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-088 M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>69900</Price>
+    <Total>419400</Total>
+  </Table1>
+  <Table1>
+    <No>20</No>
+    <CodeProduct>BP.03-088.L</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-088 L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>69900</Price>
+    <Total>419400</Total>
+  </Table1>
+  <Table1>
+    <No>21</No>
+    <CodeProduct>PB.03-088.XL</CodeProduct>
+    <ProductName>Mens U. Sporty 3/1 PB.03-088 XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>69900</Price>
+    <Total>419400</Total>
+  </Table1>
+  <Table1>
+    <No>22</No>
+    <CodeProduct>CD Kids Warna.M</CodeProduct>
+    <ProductName>OHSEE KIDS M </ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>58500</Price>
+    <Total>351000</Total>
+  </Table1>
+  <Table1>
+    <No>23</No>
+    <CodeProduct>CD Kids Warna.L</CodeProduct>
+    <ProductName>OHSEE KIDS L</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>58500</Price>
+    <Total>351000</Total>
+  </Table1>
+  <Table1>
+    <No>24</No>
+    <CodeProduct>CD Kids Warna.XL</CodeProduct>
+    <ProductName>OHSEE KIDS XL</ProductName>
+    <Unit>Box</Unit>
+    <Amount>6</Amount>
+    <Price>58500</Price>
+    <Total>351000</Total>
   </Table1>
 </Nota>

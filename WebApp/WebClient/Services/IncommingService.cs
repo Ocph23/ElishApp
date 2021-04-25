@@ -14,8 +14,6 @@ namespace WebClient.Services
     {
         private readonly IHubContext<ElishAppHub> _hub;
         private readonly IServiceProvider _serviceProvider;
-        private readonly ApplicationDbContext dbContext;
-        private readonly IPembelianService pembelianService;
         private Pembelian pembelianSelected;
 
         public IncommingService(IHubContext<ElishAppHub> hubContext, IServiceProvider provider)
@@ -25,16 +23,21 @@ namespace WebClient.Services
 
             using var scope = provider.CreateScope();
             Pembelians = new ObservableCollection<Pembelian>();
-            dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            pembelianService = scope.ServiceProvider.GetRequiredService<IPembelianService>();
-            Task.Run(async () =>
+            
+            
+        }
+
+
+
+        public void LoadPembelian()
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var pembelians = dbContext.Pembelian.ToList();
+            foreach (var item in pembelians)
             {
-                var pembelians = await pembelianService.GetPembelians();
-                foreach (var item in pembelians)
-                {
-                    Pembelians.Add(item);
-                }
-            });
+                Pembelians.Add(item);
+            }
         }
 
         public ObservableCollection<Pembelian> Pembelians { get; set; }
@@ -70,7 +73,8 @@ namespace WebClient.Services
 
         private void SetDataSource(Pembelian value)
         {
-
+            using var scope = _serviceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             var result = (from a in value.Items
                          join b in dbContext.IncomingItem.Where(x => x.PembelianId == value.Id)  
@@ -102,7 +106,8 @@ namespace WebClient.Services
 
         public async Task<PembelianModel> CreateNew(int pembelianid)
         {
-
+            using var scope = _serviceProvider.CreateScope();
+            var pembelianService = scope.ServiceProvider.GetRequiredService<IPembelianService>();
             var pembelian = await pembelianService.GetPembelian(pembelianid);
 
             var datas = pembelian.Items.Select(x => x);
@@ -133,7 +138,8 @@ namespace WebClient.Services
 
         public async Task Save()
         {
-
+            using var scope = _serviceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var trans = dbContext.Database.BeginTransaction();
             try
             {

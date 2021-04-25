@@ -25,7 +25,7 @@ namespace WebClient.Services
         }
 
         #region Pembelian
-        public async Task<Pembelian> CreatePembelian(int orderid)
+        public Task<Pembelian> CreatePembelian(int orderid)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
@@ -57,12 +57,9 @@ namespace WebClient.Services
 
 
                 dbContext.Pembelian.Add(pembelian);
-                await dbContext.SaveChangesAsync();
-
-
+                dbContext.SaveChanges();
                 trans.Commit();
-
-                return pembelian;
+                return Task.FromResult(pembelian);
             }
             catch (Exception ex)
             {
@@ -79,13 +76,13 @@ namespace WebClient.Services
             }
         }
       
-        public async Task<Pembelian> UpdatePembelian(int pembelianId, Pembelian order)
+        public Task<Pembelian> UpdatePembelian(int pembelianId, Pembelian order)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
             {
 
-                var lastOrder = await GetPembelian(pembelianId);
+                var lastOrder = dbContext.Pembelian.Where(x=>x.Id==pembelianId).FirstOrDefault();
 
                 if (lastOrder == null)
                     throw new SystemException("Pembelian Not Found  !");
@@ -120,9 +117,9 @@ namespace WebClient.Services
                     }
                 }
 
-                await dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
                 trans.Commit();
-                return order;
+                return Task.FromResult(order);
             }
             catch (Exception ex)
             {
@@ -136,7 +133,7 @@ namespace WebClient.Services
         {
             try
             {
-                var pembelians =dbContext.Pembelian.Where(x => x.Id == id)
+                var pembelians = dbContext.Pembelian.Where(x => x.Id == id)
                                    .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
                                    .Include(x => x.OrderPembelian).ThenInclude(x => x.Supplier);
                 return Task.FromResult(pembelians.FirstOrDefault());
@@ -159,8 +156,12 @@ namespace WebClient.Services
             }
             catch (System.Exception ex)
             {
+               
                 _logger.LogError(ex.Message);
                 throw new SystemException(ex.Message);
+            }  finally
+            {
+                dbContext.Dispose();
             }
         }
 
@@ -173,7 +174,7 @@ namespace WebClient.Services
         }
 
 
-        public async Task<bool> DeletePembelian(int id)
+        public Task<bool> DeletePembelian(int id)
         {
             try
             {
@@ -183,9 +184,9 @@ namespace WebClient.Services
 
                 dbContext.Pembelian.Remove(oldData);
 
-                await dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
 
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -196,7 +197,7 @@ namespace WebClient.Services
         #endregion
 
         #region Orders
-        public async Task<Orderpembelian> CreateOrder(Orderpembelian order)
+        public Task<Orderpembelian> CreateOrder(Orderpembelian order)
         {
             try
             {
@@ -206,11 +207,12 @@ namespace WebClient.Services
                 foreach (var item in order.Items)
                 {
                     dbContext.Entry(item.Product).State = EntityState.Unchanged;
+                    dbContext.Entry(item.Product.Category).State = EntityState.Unchanged;
                     dbContext.Entry(item.Unit).State = EntityState.Unchanged;
                 }
                 dbContext.Orderpembelian.Add(order);
-                await dbContext.SaveChangesAsync();
-                return order;
+               dbContext.SaveChanges();
+                return Task.FromResult(order);
             }
             catch (Exception ex)
             {
@@ -219,7 +221,7 @@ namespace WebClient.Services
             }
         }
 
-        public async Task<bool> DeleteOrder(int id)
+        public Task<bool> DeleteOrder(int id)
         {
             try
             {
@@ -227,8 +229,8 @@ namespace WebClient.Services
                 if (deleted==null)
                     throw new SystemException("Order Not Found !");
                 dbContext.Orderpembelian.Remove(deleted);
-                await dbContext.SaveChangesAsync();
-                return true;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -263,7 +265,7 @@ namespace WebClient.Services
 
 
 
-        public async Task<Orderpembelian> UpdateOrder(int id, Orderpembelian order)
+        public Task<Orderpembelian> UpdateOrder(int id, Orderpembelian order)
         {
             try
             {
@@ -313,8 +315,8 @@ namespace WebClient.Services
 
                 
 
-                await dbContext.SaveChangesAsync();
-                return order;
+                dbContext.SaveChanges();
+                return Task.FromResult(order);
             }
             catch (Exception ex)
             {
@@ -328,7 +330,7 @@ namespace WebClient.Services
 
 
         #region Pembayaran
-        public async Task<Pembayaranpembelian> CreatePembayaran(int pembelianId, Pembayaranpembelian pembayaran, bool forced)
+        public Task<Pembayaranpembelian> CreatePembayaran(int pembelianId, Pembayaranpembelian pembayaran, bool forced)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
@@ -363,13 +365,13 @@ namespace WebClient.Services
                
                 pembelian.Pembayaranpembelian.Add(pembayaran);
 
-                var result = await dbContext.SaveChangesAsync();
+                var result = dbContext.SaveChanges();
                 
                 if (result <=0)
                     throw new SystemException("Pembayaran Gagal !");
                 
                 trans.Commit();
-                return pembayaran;
+                return Task.FromResult(pembayaran);
             }
             catch (Exception ex)
             {

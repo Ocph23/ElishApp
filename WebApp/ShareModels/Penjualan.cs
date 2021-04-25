@@ -1,45 +1,42 @@
-using System; 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
- 
- namespace ShareModels 
-{ 
-     public class Penjualan  
-   {
-          public int Id {  get; set;}
 
-          public virtual string Nomor
+namespace ShareModels
+{
+    public class Penjualan
+    {
+        public int Id { get; set; }
+
+        public virtual string Nomor
+        {
+            get
             {
-                get
-                {
-                    return $"{Id}/INV-ELISH/{CreateDate.Month}/{CreateDate.Year}";
-                }
+                return $"{Id}/INV-APS/{CreateDate.Month}/{CreateDate.Year}";
             }
+        }
 
-          public int OrderPenjualanId {  get; set;} 
+        public int OrderPenjualanId { get; set; }
 
-          public DateTime CreateDate {  get; set;} 
+        public DateTime CreateDate { get; set; }
 
-          public double PayDeadLine {  get; set;} 
+        public double PayDeadLine { get; set; }
 
 
-          public double Discount {  get; set;}
+        public double Discount { get; set; }
 
-     
-         public PaymentStatus Status { get; set; }
+        public PaymentStatus Status { get; set; }
 
-         public ActivityStatus Activity { get; set; }
+        public ActivityStatus Activity { get; set; }
 
 
         public double FeeSalesman { get; set; }
-
+        public double Expedisi { get; set; }
 
 
         [NotMapped]
-        public PaymentType Payment{ get => PayDeadLine <= 0 ? PaymentType.Tunai : PaymentType.Kredit; }
+        public PaymentType Payment { get => PayDeadLine <= 0 ? PaymentType.Tunai : PaymentType.Kredit; }
         private double _total;
 
         [NotMapped]
@@ -59,9 +56,7 @@ using System.Threading.Tasks;
         }
 
 
-        public virtual Orderpenjualan OrderPenjualan{ get; set; }
-    
-
+        public virtual Orderpenjualan OrderPenjualan { get; set; }
 
         public Penjualan()
         {
