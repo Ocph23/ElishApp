@@ -71,12 +71,12 @@
                                 <RadzenGridColumn Width="120px" TItem="OrderpembelianItem" Property="Product.CodeArticle" Title="Article" />
                                 <RadzenGridColumn Width="180px" TItem="OrderpembelianItem" Property="Product.CodeName" Title="Code" />
                                 <RadzenGridColumn TItem="OrderpembelianItem" Property="Product.Name" Title="Product" />
-                                <RadzenGridColumn Width="75px" TItem="OrderpembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
+                                <RadzenGridColumn Width="100px" TItem="OrderpembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
                                     <EditTemplate Context="item">
                                         <RadzenNumeric TValue="double" @bind-Value="item.Amount" Step="1" Change=@(args => OnChangeOrderItem(args, item)) />
                                     </EditTemplate>
                                 </RadzenGridColumn>
-                                <RadzenGridColumn Width="100px" TItem="OrderpembelianItem" Property="Unit.Name" Title="Unit">
+                                <RadzenGridColumn Width="130px" TItem="OrderpembelianItem" Property="Unit.Name" Title="Unit">
                                     <EditTemplate Context="item">
                                         <RadzenDropDown @bind-Value="item.UnitId" Data="@item.Product.Units"
                                                         Change=@(args => OnChangeOrderItem(args, item))

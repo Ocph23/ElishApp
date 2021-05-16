@@ -40,5 +40,28 @@ namespace WebClient.Services
             });
             return Task.FromResult(result.AsEnumerable());
         }
+
+
+        public Task<IEnumerable<ShareModels.Reports.PiutangData>> GetUtang()
+        {
+            var penjualans = _dbContext.Pembelian
+                 .Where(x => x.Status == PaymentStatus.Belum || x.Status == PaymentStatus.Panjar)
+                 .Include(x => x.Items)
+                 .Include(x => x.OrderPembelian).ThenInclude(x => x.Supplier)
+                 .Include(x => x.Pembayaranpembelian).ToList();
+
+
+            var result = penjualans.Select(x => new ShareModels.Reports.PiutangData
+            {
+                PenjualanId = x.Id,
+                Nomor = x.Nomor,
+                Customer = x.OrderPembelian.Supplier.Nama,
+                JatuhTempo = x.PayDeadLine,
+                Discount = x.Discount,
+                Panjar = x.Pembayaranpembelian== null ? 0 : x.Pembayaranpembelian.Sum(x => x.PayValue),
+                Tagihan = x.Total,
+            });
+            return Task.FromResult(result.AsEnumerable());
+        }
     }
 }

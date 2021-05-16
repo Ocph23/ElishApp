@@ -10,7 +10,7 @@
 <div class="col-md-12">
     <RadzenFieldset Text="Data Real Stok">
         <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" href="@($"/report/printstock/{supplierid}")"><i class="ui-button-icon-left pi">print</i></a>
-        <RadzenGrid @ref="gridStock" Data="@(Stocks.Where(x=>x.SupplierId==supplierid))" AllowFiltering="true" AllowSorting="true" TItem="ProductStock">
+        <RadzenGrid @ref="gridStock" Data="@(Stocks.Where(x=> supplierid==0?true: x.SupplierId==supplierid))" AllowFiltering="true" AllowSorting="true" TItem="ProductStock">
             <Columns>
                 <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeArticle" Title="Article" />
                 <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeName" Title="Code" />
@@ -30,6 +30,14 @@
                         </Radzen.Blazor.RadzenDropDown>
                     </Template>
                 </RadzenGridColumn>
+                <RadzenGridColumn Width="150px" Title="Nilai" TItem="ProductStock" TextAlign="TextAlign.Right">
+                    <Template Context="data">
+                        @((data.SelectedUnit.Sell * data.StockView).ToString("N2"))
+                    </Template>
+                    <FooterTemplate>
+                        @Stocks.Where(x => supplierid == 0 ? true : x.SupplierId == supplierid).Sum(x => x.SelectedUnit.Sell* x.StockView).ToString("N2");
+                    </FooterTemplate>
+                </RadzenGridColumn>
             </Columns>
         </RadzenGrid>
     </RadzenFieldset>
@@ -39,11 +47,18 @@
 
     RadzenGrid<ProductStock> gridStock;
     public List<ProductStock> Stocks { get; set; }
-    public IEnumerable<Supplier> suppliers{ get; set; }
+    public List<Supplier> suppliers { get; set; } = new List<Supplier>();
     int supplierid = 0;
     protected override async Task OnInitializedAsync()
     {
-        suppliers = await supplierService.GetSuppliers();
+        suppliers.Add(new Supplier { Id=0, Nama="All" });
+        var sups= await supplierService.GetSuppliers();
+
+        foreach (var item in sups)
+        {
+            suppliers.Add(item);
+        }
+
         var stocks = await productService.GetProductStock();
         Stocks = stocks.ToList();
         foreach (var item in Stocks)

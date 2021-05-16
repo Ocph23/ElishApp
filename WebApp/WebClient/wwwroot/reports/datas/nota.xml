@@ -2,220 +2,31 @@
 <Nota>
   <Table1>
     <No>1</No>
-    <CodeArticle>8993559391564</CodeArticle>
-    <CodeProduct>SSWL06L.9.5</CodeProduct>
-    <ProductName>Sun Swallow 06 Ladies 9.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>215000</Price>
-    <Total>107500</Total>
+    <CodeProduct>SUN05</CodeProduct>
+    <ProductName>Seri Grosir 05 --</ProductName>
+    <Unit>Psg</Unit>
+    <Amount>6</Amount>
+    <Price>14500</Price>
+    <Total>87000</Total>
   </Table1>
   <Table1>
     <No>2</No>
-    <CodeArticle>8993559391588</CodeArticle>
-    <CodeProduct>SSWL06L-10.5</CodeProduct>
-    <ProductName>Sun Swallow 06 Ladies 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>215000</Price>
-    <Total>107500</Total>
-  </Table1>
-  <Table1>
-    <No>3</No>
-    <CodeArticle>8993559391571</CodeArticle>
-    <CodeProduct>SSWL06L.10</CodeProduct>
-    <ProductName>Sun Swallow 06 Ladies 10</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>215000</Price>
-    <Total>107500</Total>
-  </Table1>
-  <Table1>
-    <No>4</No>
-    <CodeArticle>8993559389400</CodeArticle>
-    <CodeProduct>SSWL06D.12</CodeProduct>
-    <ProductName>Sun Swallow 06D 12</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>250000</Price>
-    <Total>125000</Total>
-  </Table1>
-  <Table1>
-    <No>5</No>
-    <CodeArticle>8993559389394</CodeArticle>
-    <CodeProduct>SSWL06D.11.5</CodeProduct>
-    <ProductName>Sun Swallow 06D 11.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>250000</Price>
-    <Total>125000</Total>
-  </Table1>
-  <Table1>
-    <No>6</No>
-    <CodeArticle>8993559389387</CodeArticle>
-    <CodeProduct>SSWL06D.11</CodeProduct>
-    <ProductName>Sun Swallow 06D 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>250000</Price>
-    <Total>125000</Total>
-  </Table1>
-  <Table1>
-    <No>7</No>
-    <CodeArticle>8993559389370</CodeArticle>
-    <CodeProduct>SSWL06D.10.5</CodeProduct>
-    <ProductName>Sun Swallow 06D 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>225000</Price>
-    <Total>112500</Total>
-  </Table1>
-  <Table1>
-    <No>8</No>
-    <CodeArticle>8993559388441</CodeArticle>
-    <CodeProduct>SSWL938-11</CodeProduct>
-    <ProductName>Sun Swallow 938 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>230000</Price>
-    <Total>115000</Total>
-  </Table1>
-  <Table1>
-    <No>9</No>
-    <CodeArticle>8993559388571</CodeArticle>
-    <CodeProduct>SSWL938-12</CodeProduct>
-    <ProductName>Sun Swallow 938 12</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>235000</Price>
-    <Total>117500</Total>
-  </Table1>
-  <Table1>
-    <No>10</No>
     <CodeArticle>8993559388458</CodeArticle>
     <CodeProduct>SSWL938-11.5</CodeProduct>
     <ProductName>Sun Swallow 938 11.5</ProductName>
     <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
+    <Amount>0.25</Amount>
     <Price>230000</Price>
-    <Total>115000</Total>
+    <Total>57500</Total>
   </Table1>
   <Table1>
-    <No>11</No>
-    <CodeProduct>SSWL938-10.5</CodeProduct>
-    <ProductName>Sun Swallow 938 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>225000</Price>
-    <Total>112500</Total>
-  </Table1>
-  <Table1>
-    <No>12</No>
-    <CodeProduct>SSWL938L-10.5</CodeProduct>
-    <ProductName>Sun Swallow 938 Ladies 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>274000</Price>
-    <Total>137000</Total>
-  </Table1>
-  <Table1>
-    <No>13</No>
-    <CodeArticle>8993559389080</CodeArticle>
-    <CodeProduct>SSWLHTMEXC-12</CodeProduct>
-    <ProductName>Sun swallow Htm Exclusive 12</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>270000</Price>
-    <Total>135000</Total>
-  </Table1>
-  <Table1>
-    <No>14</No>
-    <CodeArticle>8993559388953</CodeArticle>
-    <CodeProduct>SSWLHTMEXC-11.5</CodeProduct>
-    <ProductName>Sun Swallow Htm Exclusive 11.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>270000</Price>
-    <Total>135000</Total>
-  </Table1>
-  <Table1>
-    <No>15</No>
-    <CodeArticle>8993559388946</CodeArticle>
-    <CodeProduct>SSWLHTMEXC-11</CodeProduct>
-    <ProductName>Sun Swallow Htm Exclusive 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>270000</Price>
-    <Total>135000</Total>
-  </Table1>
-  <Table1>
-    <No>16</No>
-    <CodeArticle>8993559388939</CodeArticle>
-    <CodeProduct>SSWLHTMEXC-10.5</CodeProduct>
-    <ProductName>Sun Swallow Htm Exclusive 10.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>248000</Price>
-    <Total>124000</Total>
-  </Table1>
-  <Table1>
-    <No>17</No>
-    <CodeArticle>8993559388908</CodeArticle>
-    <CodeProduct>SSWLLDSBTY - 10,5</CodeProduct>
-    <ProductName>Sun Swallow Ladies Beauty 10,5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>274000</Price>
-    <Total>137000</Total>
-  </Table1>
-  <Table1>
-    <No>18</No>
-    <CodeArticle>8993559388892</CodeArticle>
-    <CodeProduct>SSWLLDSBTY-10</CodeProduct>
-    <ProductName>Sun Swallow Ladies Beauty 10</ProductName>
-    <Unit>Lusn</Unit>
-    <Amount>0.5</Amount>
-    <Price>274000</Price>
-    <Total>137000</Total>
-  </Table1>
-  <Table1>
-    <No>19</No>
-    <CodeArticle>8993559388885</CodeArticle>
-    <CodeProduct>SSWLLDSBTY-9.5</CodeProduct>
-    <ProductName>Sun Swallow Ladies Beauty 9.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>274000</Price>
-    <Total>137000</Total>
-  </Table1>
-  <Table1>
-    <No>20</No>
-    <CodeArticle>8993559391526</CodeArticle>
-    <CodeProduct>SSWLTREK - 10</CodeProduct>
-    <ProductName>Sun Swallow Trek 10</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>270000</Price>
-    <Total>135000</Total>
-  </Table1>
-  <Table1>
-    <No>21</No>
-    <CodeArticle>8993559391533</CodeArticle>
-    <CodeProduct>SSWLTREK - 10,5</CodeProduct>
-    <ProductName>Sun Swallow Trek 10,5</ProductName>
+    <No>3</No>
+    <CodeArticle>8993559388861</CodeArticle>
+    <CodeProduct>SSWLELGNT-11</CodeProduct>
+    <ProductName>Sun Swallow Man Elegant 11</ProductName>
     <Unit>Lusin</Unit>
     <Amount>0.25</Amount>
     <Price>270000</Price>
     <Total>67500</Total>
-  </Table1>
-  <Table1>
-    <No>22</No>
-    <CodeArticle>8993559391557</CodeArticle>
-    <CodeProduct>SSWLTREK - 11,5</CodeProduct>
-    <ProductName>Sun Swallow Trek 11,5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.5</Amount>
-    <Price>273600</Price>
-    <Total>136800</Total>
   </Table1>
 </Nota>

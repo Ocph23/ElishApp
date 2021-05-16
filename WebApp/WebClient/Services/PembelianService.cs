@@ -57,6 +57,7 @@ namespace WebClient.Services
 
 
                 dbContext.Pembelian.Add(pembelian);
+                lastOrder.Status = OrderStatus.Diproses;
                 dbContext.SaveChanges();
                 trans.Commit();
                 return Task.FromResult(pembelian);
@@ -82,11 +83,12 @@ namespace WebClient.Services
             try
             {
 
-                var lastOrder = dbContext.Pembelian.Where(x=>x.Id==pembelianId).FirstOrDefault();
+                var lastOrder = dbContext.Pembelian.Where(x=>x.Id==pembelianId).Include(x=>x.OrderPembelian).FirstOrDefault();
 
                 if (lastOrder == null)
                     throw new SystemException("Pembelian Not Found  !");
 
+                lastOrder.OrderPembelian.Status = OrderStatus.Diproses;
                 dbContext.Entry(lastOrder).CurrentValues.SetValues(order);
 
                 foreach (var item in order.Items)
@@ -116,6 +118,7 @@ namespace WebClient.Services
                         dbContext.PembelianItem.Remove(existsDb);
                     }
                 }
+
 
                 dbContext.SaveChanges();
                 trans.Commit();
@@ -340,8 +343,6 @@ namespace WebClient.Services
                     .Include(x => x.OrderPembelian)
                     .Include(x => x.Pembayaranpembelian).AsNoTracking().FirstOrDefault();
 
-
-
                 if (pembelian == null)
                     throw new SystemException("Pembelian Tidak Ditemukan");
 
@@ -362,9 +363,7 @@ namespace WebClient.Services
 
                 pembelian.Status = status;
                 pembelian.OrderPembelian.Status = OrderStatus.Selesai;
-               
-                pembelian.Pembayaranpembelian.Add(pembayaran);
-
+                dbContext.Pembayaranpembelian.Add(pembayaran);
                 var result = dbContext.SaveChanges();
                 
                 if (result <=0)
@@ -385,6 +384,52 @@ namespace WebClient.Services
         {
             var pembayarans = dbContext.Pembayaranpembelian.Where(x => x.PembelianId == pembelianId).AsNoTracking();
             return Task.FromResult(pembayarans.AsEnumerable());
+        }
+
+
+        public Task<bool> UpdatePembayaran(Pembayaranpembelian model)
+        {
+            try
+            {
+                var pembelian = dbContext.Pembelian.Where(x => x.Id == model.PembelianId)
+                    .Include(x => x.Items)
+                    .Include(x => x.OrderPembelian)
+                    .Include(x => x.Pembayaranpembelian).FirstOrDefault();
+
+                if (pembelian == null || !pembelian.Pembayaranpembelian.Any())
+                    throw new SystemException("Data Pembelian atau Pembayaran Tidak Ditemukan");
+
+
+                var totalInvoice = pembelian.Items.Sum(x => x.Total) - (pembelian.Items.Sum(x => x.Total) * (pembelian.Discount / 100));
+                var totalWithoutCurrentPayment = pembelian.Pembayaranpembelian.Where(x => x.Id != model.Id).Sum(x => x.PayValue);
+
+                if (totalWithoutCurrentPayment + model.PayValue > totalInvoice)
+                    throw new SystemException("Maaf, Nilai Bayar Terlalu Besar !");
+
+                var oldPembayaran = pembelian.Pembayaranpembelian.Where(x => x.Id == model.Id).FirstOrDefault();
+                if (oldPembayaran == null)
+                    throw new SystemException("Pembayaran Tidak Ditemukan");
+
+                if (totalWithoutCurrentPayment + model.PayValue < totalInvoice)
+                {
+                    pembelian.OrderPembelian.Status = OrderStatus.Diproses;
+                    pembelian.Status = PaymentStatus.Panjar;
+                }
+                else
+                {
+                    pembelian.OrderPembelian.Status = OrderStatus.Selesai;
+                    pembelian.Status = PaymentStatus.Lunas;
+                }
+
+                dbContext.Entry(oldPembayaran).CurrentValues.SetValues(model);
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
+
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
         #endregion
 

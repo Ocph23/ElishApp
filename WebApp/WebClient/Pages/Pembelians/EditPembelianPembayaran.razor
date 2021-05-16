@@ -83,6 +83,9 @@
 
     [Parameter]
     public int IdPembelian { get; set; }
+   
+    [Parameter]
+    public double Total { get; set; }
 
 
     public Pembayaranpembelian Model { get; set; }
@@ -91,7 +94,7 @@
     protected override Task OnInitializedAsync()
     {
         var Id = Convert.ToInt32(IdPembelian);
-        Model = new Pembayaranpembelian() { PembelianId = Id };
+        Model = new Pembayaranpembelian() { PembelianId = Id, PayDate=DateTime.Now, PayValue=Total  };
         StateHasChanged();
         return Task.CompletedTask;
     }

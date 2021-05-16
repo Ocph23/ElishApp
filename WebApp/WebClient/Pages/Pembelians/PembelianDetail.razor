@@ -23,7 +23,7 @@
                 <div class="col-md-6">
                     <div class="row" style="margin-top:10px">
                         <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Payment Status" />
+                            <RadzenLabel Text="Payment Number" />
                         </div>
                         <div class="col-md-8">
                             <RadzenTextBox Value="@model.Nomor" />
@@ -126,7 +126,7 @@
             </div>
 
 
-            <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="PembelianItem">
+            <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" AllowPaging="false" AllowSorting="true" TItem="PembelianItem">
                 <Columns>
                     <RadzenGridColumn Width="120px" TItem="PembelianItem" Property="Product.CodeArticle" Title="Article" />
                     <RadzenGridColumn Width="180px" TItem="PembelianItem" Property="Product.CodeName" Title="Code" />
@@ -202,7 +202,7 @@
             <RadzenButton Visible=@(model.Status != PaymentStatus.Lunas) 
                           Style="margin-bottom:10px"
                           Click=@(args => DialogService.OpenAsync<EditPembelianPembayaran>($"Pembayaran",
-                        new Dictionary<string, object>() { { "IdPembelian", model.Id }, },
+                        new Dictionary<string, object>() { { "IdPembelian", model.Id },{ "Total", (model.Total-(model.Total * (model.Discount / 100)))- pembayarans.Sum(x=>x.PayValue) } },
                         new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Warning" />
 
             <RadzenGrid @ref="pembayaranGrid" Data="@(pembayarans)" AllowFiltering="true"
@@ -503,9 +503,31 @@
         pembayaranGrid.EditRow(item);
     }
 
-    void SavePembayaranRow(Pembayaranpembelian item)
+   async Task SavePembayaranRow(Pembayaranpembelian item)
     {
-        pembayaranGrid.UpdateRow(item);
+        await Task.Delay(1000);
+        if (await pembelianService.UpdatePembayaran(item))
+        {
+            await pembayaranGrid.UpdateRow(item);
+            NotificationService.Notify(new NotificationMessage
+            {
+                Detail = "Pembayaran Berhasil Diubah !",
+                Duration = 3000,
+                Severity = NotificationSeverity.Success,
+                Summary = "Success"
+            });
+        }
+        else
+        {
+            pembayaranGrid.CancelEditRow(item);
+            NotificationService.Notify(new NotificationMessage
+            {
+                Detail = "Pembayaran Gagal Diubah !",
+                Duration = 3000,
+                Severity = NotificationSeverity.Error,
+                Summary = "Error"
+            });
+        }
     }
 
     void CancelPembayaranEdit(Pembayaranpembelian item)
