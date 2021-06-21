@@ -127,9 +127,12 @@ namespace WebClient.Services
         {
             try
             {
-                User user = new User { Email = model.Email, UserName = model.UserName, PasswordHash = GeneratePasswordHash(model.Password) };
-                var roles = from a in model.Roles select new UserRole { Role=a, User=user };
-                user.Roles = roles.ToList();
+                User user = new User { Email = model.Email, Activated=true, UserName = model.UserName, PasswordHash = GeneratePasswordHash(model.Password) };
+                if(user.Roles !=null && user.Roles.Count > 0)
+                {
+                    var roles = from a in model.Roles select new UserRole { Role=a, User=user };
+                    user.Roles = roles.ToList();
+                }
                 _context.User.Add(user);
                 await _context.SaveChangesAsync();
                 return await Task.FromResult(user);
