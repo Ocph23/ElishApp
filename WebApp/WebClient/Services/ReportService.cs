@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShareModels;
-using ShareModels.ModelViews;
-using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +10,6 @@ namespace WebClient.Services
     public class ReportService : IReportService
     {
         private ApplicationDbContext _dbContext;
-
         public ReportService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -22,20 +20,19 @@ namespace WebClient.Services
             var penjualans = _dbContext.Penjualan
                  .Where(x => x.Status == PaymentStatus.Belum || x.Status == PaymentStatus.Panjar)
                  .Include(x => x.Items)
-                 .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
-                 .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
-                 .Include(x => x.Pembayaranpenjualan).ToList();
+                 .Include(x => x.Customer)
+                 .Include(x => x.Salesman)
+                 .Include(x => x.PembayaranPenjualan).ToList();
 
 
             var result = penjualans.Select(x => new ShareModels.Reports.PiutangData
             {
                 PenjualanId = x.Id,
                 Nomor = x.Nomor,
-                Customer = x.OrderPenjualan.Customer.Name,
-                Sales = x.OrderPenjualan.Sales.Name,
-                JatuhTempo = x.CreateDate.AddDays(x.PayDeadLine),
-                Discount = x.Discount,
-                Panjar = x.Pembayaranpenjualan == null ? 0 : x.Pembayaranpenjualan.Sum(x => x.PayValue),
+                Customer = x.Customer.Name,
+                Sales = x.Salesman.Name,
+                JatuhTempo = x.CreateDate.AddDays(x.DeadLine),
+                Panjar = x.PembayaranPenjualan == null ? 0 : x.PembayaranPenjualan.Sum(x => x.PayValue),
                 Tagihan = x.Total,
             });
             return Task.FromResult(result.AsEnumerable());
@@ -48,7 +45,7 @@ namespace WebClient.Services
                  .Where(x => x.Status == PaymentStatus.Belum || x.Status == PaymentStatus.Panjar)
                  .Include(x => x.Items)
                  .Include(x => x.OrderPembelian).ThenInclude(x => x.Supplier)
-                 .Include(x => x.Pembayaranpembelian).ToList();
+                 .Include(x => x.PembayaranPembelian).ToList();
 
 
             var result = penjualans.Select(x => new ShareModels.Reports.PiutangData
@@ -57,11 +54,11 @@ namespace WebClient.Services
                 Nomor = x.Nomor,
                 Customer = x.OrderPembelian.Supplier.Nama,
                 JatuhTempo = x.PayDeadLine,
-                Discount = x.Discount,
-                Panjar = x.Pembayaranpembelian== null ? 0 : x.Pembayaranpembelian.Sum(x => x.PayValue),
+                Panjar = x.PembayaranPembelian== null ? 0 : x.PembayaranPembelian.Sum(x => x.PayValue),
                 Tagihan = x.Total,
             });
             return Task.FromResult(result.AsEnumerable());
         }
+
     }
 }

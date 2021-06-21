@@ -7,9 +7,10 @@
 @inject NavigationManager nav;
 @inject ISupplierService supplierService;
 
-<h3>Data Supplier</h3>
-<RadzenButton Icon="add" Style="margin-bottom: 5px;" ButtonStyle="ButtonStyle.Success" Click="@(()=> nav.NavigateTo($"/supplier/change"))"/>
-    <RadzenGrid Data="suppliers" AllowFiltering="true" AllowPaging="true" AllowSorting="true"  >
+<Radzen.Blazor.RadzenFieldset>
+    <FieldSetHeader Title="Data Supplier"></FieldSetHeader>
+    <RadzenButton Icon="add" Style="margin-bottom: 5px;" ButtonStyle="ButtonStyle.Success" Click="@(()=> nav.NavigateTo($"/supplier/change"))" />
+    <RadzenGrid Data="suppliers" AllowFiltering="true" AllowPaging="true" AllowSorting="true">
         <Columns>
             <RadzenGridColumn TItem="Supplier" Title="Name" Property="Nama" />
             <RadzenGridColumn TItem="Supplier" Title="Contact Person" Property="ContactPersonName" Width="250px" />
@@ -22,31 +23,34 @@
             </RadzenGridColumn>
         </Columns>
     </RadzenGrid>
+</Radzen.Blazor.RadzenFieldset>
+
+       
 
 
 
-    @code {
-        private IEnumerable<Supplier> suppliers;
+        @code {
+            private IEnumerable<Supplier> suppliers;
 
-        protected override async Task OnInitializedAsync()
-        {
-            try
+            protected override async Task OnInitializedAsync()
             {
-                suppliers = await supplierService.GetSuppliers();
+                try
+                {
+                    suppliers = await supplierService.GetSuppliers();
+                }
+                catch (Exception)
+                {
+
+
+                }
+
+
             }
-            catch (Exception)
+
+
+            private void AddAction()
             {
-
-
+                nav.NavigateTo("/supplier/change/1");
             }
-
 
         }
-
-
-        private void AddAction()
-        {
-            nav.NavigateTo("/supplier/change/1");
-        }
-
-    }

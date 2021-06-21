@@ -3,6 +3,9 @@
 @attribute [Authorize]
 
 @inject Radzen.DialogService dialogService;
+@inject IPenjualanService penjualanService;
+
+
 <div class="row">
     <div class="col-md-12">
         <RadzenFieldset>
@@ -89,17 +92,20 @@
     public double Total { get; set; }
 
 
-    public Pembayaranpenjualan Model { get; set; }
+    public PembayaranPenjualan Model { get; set; }
 
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         var Id = Convert.ToInt32(IdPenjualan);
-        Model = new Pembayaranpenjualan() { PenjualanId = Id, PayValue = Total, PayDate = DateTime.Now };
+        var penjualan = await penjualanService.GetPenjualan(Id);
+        if(penjualan!=null)
+            {
+        Model = new PembayaranPenjualan() { Penjualan = penjualan, PayValue = Total, PayDate = DateTime.Now };
         StateHasChanged();
-        return Task.CompletedTask;
-    }
+            }
 
+    }
 
     public async Task SavePembayaran()
     {

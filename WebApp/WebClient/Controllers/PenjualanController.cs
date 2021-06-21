@@ -75,11 +75,11 @@ namespace WebClient.Controllers
 
         [ApiAuthorize]
         [HttpPost("{orderid}")]
-        public async Task<IActionResult> Post(int orderid)
+        public async Task<IActionResult> Post(int orderid, Penjualan model)
         {
             try
             {
-                return Ok(await service.CreatePenjualan(orderid));
+                return Ok(await service.CreatePenjualan(orderid, model));
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace WebClient.Controllers
 
         [ApiAuthorize]
         [HttpPost("order")]
-        public async Task<IActionResult> PostOrder(Orderpenjualan order)
+        public async Task<IActionResult> PostOrder(OrderPenjualan order)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace WebClient.Controllers
 
         [ApiAuthorize]
         [HttpPut("order/{id}")]
-        public async Task<IActionResult> UpdateOrder(int id, Orderpenjualan penjualan)
+        public async Task<IActionResult> UpdateOrder(int id, OrderPenjualan penjualan)
         {
             try
             {

@@ -20,7 +20,7 @@ namespace ShareModels
         public bool Activated { get; set; }
 
         [NotMapped]
-        public virtual ICollection<Role> Roles { get; set; }
+        public virtual ICollection<UserRole> Roles { get; set; }
         public ICollection<Customer> Customers { get; set; }
         public ICollection<Karyawan> Sales { get; set; }
     }

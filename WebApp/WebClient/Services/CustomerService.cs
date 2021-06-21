@@ -22,7 +22,7 @@ namespace WebClient.Services
            // CustomerCollection = new ObservableCollection<Customer>();
         }
 
-        public async Task<bool> Delete(int id)
+        public  Task<bool> Delete(int id)
         {
             try
             {
@@ -31,8 +31,8 @@ namespace WebClient.Services
                     throw new SystemException("Data Not Found !");
 
                 dbContext.Customer.Remove(existsModel);
-               await dbContext.SaveChangesAsync();
-                return true;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -44,11 +44,9 @@ namespace WebClient.Services
         {
             try
             {
-                var customer = dbContext.Customer.SingleOrDefault(x => x.Id == id);
+                var customer = dbContext.Customer.Include(x=>x.Karyawan).SingleOrDefault(x => x.Id == id);
                 if (customer == null)
                     throw new SystemException("Data Tidak Ditemukan !");
-                if (customer.KaryawanId > 0)
-                    customer.Karyawan = dbContext.Karyawan.SingleOrDefault(x => x.Id == customer.KaryawanId);
             return Task.FromResult(customer);
 
             }
@@ -60,17 +58,12 @@ namespace WebClient.Services
 
         public Task<IEnumerable<Customer>> Get()
         {
-            var customer = from a in  dbContext.Customer 
-                           join b in dbContext.Karyawan on a.KaryawanId equals b.Id into c
-                           from b in c.DefaultIfEmpty()
-                           select new Customer { Address=a.Address, ContactName=a.ContactName, Email=a.Email, Id=a.Id, Karyawan=b, KaryawanId=a.KaryawanId,
-                            Location=a.Location, Name=a.Name, NPWP=a.NPWP,  Telepon=a.Telepon , UserId=a.UserId} ;
-
+            var customer = dbContext.Customer.Include(x => x.Karyawan); 
             return Task.FromResult(customer.AsEnumerable());
         }
 
 
-        public async Task<Customer> Post(Customer value)
+        public async  Task<Customer> Post(Customer value)
         {
             try
             {
@@ -85,7 +78,7 @@ namespace WebClient.Services
             }
         }
 
-        public async Task<bool> Update(int id, Customer value)
+        public  Task<bool> Update(int id, Customer value)
         {
             try
             {
@@ -93,8 +86,8 @@ namespace WebClient.Services
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");
                 dbContext.Entry(existsModel).CurrentValues.SetValues(value);
-                await dbContext.SaveChangesAsync();
-              return true;
+                 dbContext.SaveChanges();
+              return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -107,11 +100,11 @@ namespace WebClient.Services
 
         public Task<IEnumerable<Customer>> GetBySales(int id)
         {
-            var customers = dbContext.Customer.Where(x => x.KaryawanId== id);
+            var customers = dbContext.Customer.Where(x => x.Karyawan.Id== id);
             return Task.FromResult(customers.AsEnumerable());
         }
 
-        public async Task<bool> UpdateLocation(Customer cust)
+        public  Task<bool> UpdateLocation(Customer cust)
         {
             try
             {
@@ -120,8 +113,8 @@ namespace WebClient.Services
                     throw new SystemException("Data Not Found !");
 
                 existsModel.Location = cust.Location;
-                await dbContext.SaveChangesAsync();
-                return true;
+                 dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {

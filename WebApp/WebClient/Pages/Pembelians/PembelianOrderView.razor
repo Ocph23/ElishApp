@@ -9,7 +9,7 @@
 @inject NavigationManager nav;
 @inject NotificationService NotificationService;
 @inject NavigationManager Nav;
-@inject DialogService dialog;
+@inject DialogService DialogService;
 
 @attribute [Authorize]
 
@@ -19,30 +19,37 @@
             <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => Nav.NavigateTo("/pembelian/order/detail")) Style="margin-bottom:10px" />
 
             <RadzenGrid Data="@orders"
-                        @ref="grid"  LoadData="@LoadData" Count="@count" PageSize="10"
-                        AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Orderpembelian">
+                        @ref="grid"  LoadData="@LoadData" Count="@count" PageSize="20"
+                        AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPembelian">
                 <Columns>
-                    <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="Orderpembelian" Title="Order Date" Property="OrderDate" />
-                    <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="Orderpembelian" Title="PO Number" Property="Nomor" />
-                    <Radzen.Blazor.RadzenGridColumn TItem="Orderpembelian" Title="Supplier" Property="Supplier.Nama" />
-                    <Radzen.Blazor.RadzenGridColumn Width="100px" TItem="Orderpembelian" TextAlign="TextAlign.Center" Context="item" Title="Discount" Property="Discount">
+                    <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="OrderPembelian" Title="Order Date" Property="OrderDate" />
+                    <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="OrderPembelian" Title="PO Number" Property="Nomor" />
+                    <Radzen.Blazor.RadzenGridColumn TItem="OrderPembelian" Title="Supplier" Property="Supplier.Nama" />
+                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Disc" >
                         <Template>
-                            @(item.Discount + "%")
+                            @(orders.Sum(x=>x.Discount).ToString("N2"))
                         </Template>
                     </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn Width="120px" TItem="Orderpembelian" Title="Status" Property="Status">
+                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Total" >
+                        <Template>
+                            @((orders.Sum(x=>x.Total)- orders.Sum(x=>x.Discount)).ToString("N2"))
+                        </Template>
+                    </Radzen.Blazor.RadzenGridColumn>
+                    <Radzen.Blazor.RadzenGridColumn Width="120px" TItem="OrderPembelian" Title="Status" Property="Status">
                         <FilterTemplate>
                             <RadzenDropDown @bind-Value="@currentTOC" TextProperty="Text"
                                             ValueProperty="Value" Style="width:100%" Change="@(()=>grid.Reload())"
                                             Data="@(Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().Select(t => new { Text = $"{t}", Value = t }))" />
                         </FilterTemplate>
                     </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn TItem="Orderpembelian" Width="100px">
+                    <Radzen.Blazor.RadzenGridColumn TItem="OrderPembelian" Width="110px">
                         <Template Context="item">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list" Click=@(args => Nav.NavigateTo($"pembelian/order/detail/{item.Id}")) />
                             @if (item.Status == OrderStatus.Baru)
                             {
-                                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => CreatePembelian(item.Id)) />
+                                <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<DialogCreatePembelian>($"Create Pembelian",
+                                new Dictionary<string, object>() { { "model", item}, },
+                                new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
                             }
                             else if (item.Status == OrderStatus.Diproses)
                             {
@@ -61,15 +68,49 @@
 
 
     OrderStatus currentTOC;
-    RadzenGrid<Orderpembelian> grid;
+    RadzenGrid<OrderPembelian> grid;
     int count;
 
 
-    private IEnumerable<Orderpembelian> orders;
+    protected override Task OnInitializedAsync()
+    {
+        DialogService.OnClose += OnCloseDialog;
+        return base.OnInitializedAsync();
+    }
+
+
+
+    public void OnCloseDialog(dynamic data)
+    {
+        if (data.GetType() != typeof(bool))
+        {
+            try
+            {
+                var result = pembelianService.CreatePembelian((Int32)data.OrderId, (Int32)data.Gudang.Id).Result;
+                if (result != null)
+                {
+                    Nav.NavigateTo($"/pembelian/realisasi/detail/{result.Id}", true);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail = ex.Message,
+                    Duration = 3000
+                });
+            }
+        }
+    }
+
+
+    private IEnumerable<OrderPembelian> orders;
 
     async Task LoadData(LoadDataArgs args)
     {
-        var query = dbContext.Orderpembelian.Include(x => x.Supplier).AsQueryable();
+        var query = dbContext.OrderPembelian.Include(x => x.Supplier).Include(x=>x.Items).ThenInclude(x=>x.Unit).AsQueryable();
 
         if (currentTOC !=  OrderStatus.Semua)
             query = query.Where(x => x.Status == currentTOC);
@@ -92,32 +133,4 @@
 
         await InvokeAsync(StateHasChanged);
     }
-
-    private async Task CreatePembelian(int orderId)
-    {
-        try
-        {
-            var resultDialog = await dialog.Confirm("Yakin Buat Pembelian ? ", "Buat Pembelian", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
-            if (resultDialog != null && resultDialog == true)
-            {
-                var result = await pembelianService.CreatePembelian(orderId);
-                if (result != null)
-                {
-                    Nav.NavigateTo($"/pembelian/realisasi/detail/{result.Id}");
-                }
-            }
-        }
-        catch (System.Exception ex)
-        {
-            NotificationService.Notify(new NotificationMessage
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Error",
-                Detail = ex.Message,
-                Duration = 3000
-            });
-        }
-
-    }
-
 }

@@ -3,11 +3,11 @@
 
 namespace ShareModels
 {
-    public class Pembayaranpembelian 
+    public class PembayaranPembelian 
     {
         public int Id { get; set; }
 
-        public int PembelianId { get; set; }
+      //  public int PembelianId { get; set; }
 
         public DateTime PayDate { get; set; }
 

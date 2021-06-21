@@ -3,26 +3,48 @@
 @using ShareModels.ModelViews;
 @attribute [Authorize]
 
-@inject IProductService productService;
-@inject ISupplierService supplierService
+@using Microsoft.EntityFrameworkCore
+@using Newtonsoft.Json
+@using System.Text;
+
+@inject IProductService productService
+@inject IMerkService merkService
+@inject IGudangService gudangService
+@inject ApplicationDbContext _dbContext
+@inject NavigationManager navManager
+
+
 
 
 <div class="col-md-12">
     <RadzenFieldset Text="Data Real Stok">
-        <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" href="@($"/report/printstock/{supplierid}")"><i class="ui-button-icon-left pi">print</i></a>
-        <RadzenGrid @ref="gridStock" Data="@(Stocks.Where(x=> supplierid==0?true: x.SupplierId==supplierid))" AllowFiltering="true" AllowSorting="true" TItem="ProductStock">
+        <div style="display:flex; justify-content:space-between">
+            <div>
+                <div class="form-group" style="display:flex; flex-direction:column; margin-right:20px">
+                    <label>Gudang</label>
+                    <RadzenDropDown TextProperty="Name" TValue="Gudang"
+                                    Style="width:300px"
+                                    ValueChanged="@((arg)=>SelectGudang(arg))"
+                                    Data=@gudangs />
+                </div>
+                <div class="form-group" style="display:flex; flex-direction:column">
+                    <label>Merk</label>
+                    <RadzenDropDown TextProperty="Name" TValue="Merk"
+                                    Style="width:300px"
+                                    ValueChanged="@((arg)=>SelectMerk(arg))"
+                                    Data=@merks />
+                </div>
+            </div>
+            <RadzenButton Icon="print" Click="@(()=> { navManager.NavigateTo($"/report/PrintStockBarang/{gudangId}?merkid={merkId}", true); })" />
+        </div>
+        <RadzenGrid Data="@Stocks" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="ProductStock"
+                    @ref="gridStock" LoadData="@LoadData" Count="@count" PageSize="12">
             <Columns>
-                <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeArticle" Title="Article" />
                 <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeName" Title="Code" />
                 <RadzenGridColumn TItem="ProductStock" Property="Name" Title="Product" />
                 <RadzenGridColumn Width="75px" TItem="ProductStock" Property="Size" Title="Size" />
                 <RadzenGridColumn Width="75px" TItem="ProductStock" Property="StockView" Title="Stock" />
                 <RadzenGridColumn Width="150px" TItem="ProductStock" Title="Unit">
-                    <FilterTemplate>
-                        <RadzenDropDown @bind-Value="@supplierid" TextProperty="Nama"
-                                        ValueProperty="Id" Style="width:100%"
-                                        Data=@suppliers />
-                    </FilterTemplate>
                     <Template Context="data">
                         <Radzen.Blazor.RadzenDropDown Data="data.Units"
                                                       TextProperty="Name" @bind-Value="data.SelectedUnit">
@@ -35,7 +57,7 @@
                         @((data.SelectedUnit.Sell * data.StockView).ToString("N2"))
                     </Template>
                     <FooterTemplate>
-                        @Stocks.Where(x => supplierid == 0 ? true : x.SupplierId == supplierid).Sum(x => x.SelectedUnit.Sell* x.StockView).ToString("N2");
+                        @Stocks.Where(x => merkId == 0 ? true : x.Merk.Id == merkId).Sum(x => x.SelectedUnit == null ? 0 : x.SelectedUnit.Sell * x.StockView).ToString("N2");
                     </FooterTemplate>
                 </RadzenGridColumn>
             </Columns>
@@ -46,26 +68,72 @@
 @code {
 
     RadzenGrid<ProductStock> gridStock;
-    public List<ProductStock> Stocks { get; set; }
-    public List<Supplier> suppliers { get; set; } = new List<Supplier>();
-    int supplierid = 0;
+    public IEnumerable<ProductStock> Stocks { get; set; } = new List<ProductStock>();
+    public List<Merk> merks { get; set; } = new List<Merk>();
+    public List<Gudang> gudangs { get; set; } = new List<Gudang>();
+    int merkId = 0;
+    int gudangId = 0;
+    int count;
+    bool withOrder;
+
     protected override async Task OnInitializedAsync()
     {
-        suppliers.Add(new Supplier { Id=0, Nama="All" });
-        var sups= await supplierService.GetSuppliers();
+        gudangs.Add(new Gudang { Id = 0, Name = "All" });
+        var guds = await gudangService.Get();
 
-        foreach (var item in sups)
+        foreach (var item in guds)
         {
-            suppliers.Add(item);
+            gudangs.Add(item);
         }
 
-        var stocks = await productService.GetProductStock();
-        Stocks = stocks.ToList();
-        foreach (var item in Stocks)
+        merks.Add(new Merk { Id = 0, Name = "All" });
+        var mer = await merkService.Get();
+
+        foreach (var item in mer)
         {
-            item.SelectedUnit = item.Units.Where(x => x.Level == 0).FirstOrDefault();
+            merks.Add(item);
         }
+
+
 
     }
 
+
+    void SelectMerk(Merk data)
+    {
+        merkId = data.Id;
+        gridStock.Reload();
+
+    }
+
+
+    void SelectGudang(Gudang data)
+    {
+        gudangId = data.Id;
+        gridStock.Reload();
+    }
+
+
+    public StringContent GenerateHttpContent(object data)
+    {
+        var json = JsonConvert.SerializeObject(data);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        return content;
+    }
+
+    async Task LoadData(LoadDataArgs args)
+    {
+
+        try
+        {
+            Stocks = await productService.GetProductStockByGudangId(merkId, gudangId, withOrder);
+            count = Stocks.Count();
+         //   await InvokeAsync(() => StateHasChanged());
+        }
+        catch (Exception ex)
+        {
+            throw new SystemException(ex.Message);
+        }
+
+    }
 }

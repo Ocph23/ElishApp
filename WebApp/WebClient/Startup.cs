@@ -37,9 +37,8 @@ namespace WebClient
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
 
-           
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContextPool<ApplicationDbContext>(options =>
             {
                 var constring = Configuration.GetConnectionString("DefaultConnection");
                 options.UseMySql(constring,ServerVersion.AutoDetect(constring));
@@ -65,9 +64,15 @@ namespace WebClient
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IPembelianService, PembelianService>();
             services.AddScoped<IPenjualanService, PenjualanService>();
+            services.AddScoped<IGudangService, GudangService>();                        
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IKaryawanService, KaryawanService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IMerkService, MerkService>();
+            
+
+            services.AddScoped<IPengembalianPenjualanService, PengembalianPenjualanService>();
+            services.AddScoped<IPemindahanService, PemindahanService>();
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();

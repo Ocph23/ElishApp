@@ -22,23 +22,18 @@
                           Click="@(()=> nav.NavigateTo($"/penjualan/orderdetail"))" />
             <RadzenGrid Data="@orders"
                         @ref="grid" LoadData="@LoadData" Count="@count" PageSize="12"
-                        AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Orderpenjualan">
+                        AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPenjualan">
                 <Columns>
-                    <RadzenGridColumn Width="120px" TItem="Orderpenjualan" Property="OrderDate" Title="Order" />
-                    <RadzenGridColumn Width="180px" TItem="Orderpenjualan" Property="Nomor" Title="Nomor" />
-                    <RadzenGridColumn Width="280px" TItem="Orderpenjualan" Property="Customer.Name" Title="Customer" />
-                    <RadzenGridColumn TItem="Orderpenjualan" Property="Sales.Name" Title="Sales" />
-                    <RadzenGridColumn TextAlign="TextAlign.Center" Width="80px" TItem="Orderpenjualan" Property="Discount" Title="Discount">
-                        <Template Context="item">
-                            @(item.Discount + "%")
-                        </Template>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn Width="150px" TextAlign=TextAlign.Right TItem="Orderpenjualan" Property="Total" Title="Total">
+                    <RadzenGridColumn Width="120px" TItem="OrderPenjualan" Property="OrderDate" Title="Order" />
+                    <RadzenGridColumn Width="180px" TItem="OrderPenjualan" Property="Nomor" Title="Nomor" />
+                    <RadzenGridColumn Width="280px" TItem="OrderPenjualan" Property="Customer.Name" Title="Customer" />
+                    <RadzenGridColumn TItem="OrderPenjualan" Property="Sales.Name" Title="Sales" />
+                    <RadzenGridColumn Width="150px" TextAlign=TextAlign.Right TItem="OrderPenjualan" Property="Total" Title="Total">
                         <Template Context="item">
                             @(item.Total.ToString("N"))
                         </Template>
                     </RadzenGridColumn>
-                    <RadzenGridColumn Width="120px" TItem="Orderpenjualan" Property="Status" Title="Status">
+                    <RadzenGridColumn Width="120px" TItem="OrderPenjualan" Property="Status" Title="Status">
                         <FilterTemplate>
                             <RadzenDropDown @bind-Value="@currentTOC" TextProperty="Text"
                                             ValueProperty="Value" Style="width:100%"
@@ -46,13 +41,14 @@
                                             Data="@(Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().Select(t => new { Text = $"{t}", Value = t }))" />
                         </FilterTemplate>
                     </RadzenGridColumn>
-                    <RadzenGridColumn TItem="Orderpenjualan" Context="item" Bubble="false"
+                    <RadzenGridColumn TItem="OrderPenjualan" Context="item" Bubble="false"
                                       Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                         <Template Context="item">
-                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list"
+                            <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="edit"
                                           Size="ButtonSize.Medium"
                                           Click="@(()=> nav.NavigateTo($"/penjualan/orderdetail/{item.Id}"))" />
-                            <RadzenButton Visible=@(item.Status==OrderStatus.Baru?true:false) ButtonStyle="ButtonStyle.Warning" Icon="edit"
+
+                            <RadzenButton Visible=@(item.Status==OrderStatus.Baru?true:false) ButtonStyle="ButtonStyle.Warning" Icon="add"
                                           Size="ButtonSize.Medium" Click="@(()=> CreatePenjualan(item))" />
                         </Template>
                     </RadzenGridColumn>
@@ -66,10 +62,10 @@
 @code {
 
 
-    IEnumerable<Orderpenjualan> orders;
+    IEnumerable<OrderPenjualan> orders;
 
     OrderStatus currentTOC;
-    RadzenGrid<Orderpenjualan> grid;
+    RadzenGrid<OrderPenjualan> grid;
     int count;
 
     async Task LoadData(LoadDataArgs args)
@@ -78,7 +74,7 @@
 
         try
         {
-            var query = dbContext.Orderpenjualan
+            var query = dbContext.OrderPenjualan
             .Include(x => x.Sales)
             .Include(x => x.Items)
             .Include(x => x.Customer).AsQueryable();
@@ -109,7 +105,7 @@
         }
     }
 
-    public async Task onComplete(Task<IEnumerable<Orderpenjualan>> task)
+    public async Task onComplete(Task<IEnumerable<OrderPenjualan>> task)
     {
         var datas = await task;
         orders = datas.OrderByDescending(x => x.OrderDate).ToList();
@@ -118,18 +114,13 @@
 
 
 
-    async Task CreatePenjualan(Orderpenjualan item)
+    async Task CreatePenjualan(OrderPenjualan item)
     {
 
         var resultDialog = await dialog.Confirm("Yakin Buat Penjualan ? ", "Buat Penjualan", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
         if (resultDialog != null && resultDialog == true)
         {
-            var result = await penjualanService.CreatePenjualan(item.Id);
-
-            if (result != null)
-            {
-                nav.NavigateTo($"/penjualan/realisasidetail/{result.Id}");
-            }
+                nav.NavigateTo($"/penjualan/realisasiorder/{item.Id}");
         }
     }
 }

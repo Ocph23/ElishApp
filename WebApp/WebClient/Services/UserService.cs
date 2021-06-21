@@ -60,42 +60,18 @@ namespace WebClient.Services
 
         public async Task<User> FindUserById(int id)
         {
-            var user = _context.User.Where(x => x.Id == id).FirstOrDefault();
-            if (user != null)
-            {
-                var roles = _context.Userrole.Where(x => x.UserId == user.Id)
-                    .Include(x => x.Role).Select(x => x.Role);
-
-                user.Roles = roles.ToList();
-            }
-
+            var user = _context.User.Where(x => x.Id == id).Include(x=>x.Roles).FirstOrDefault();
             return await Task.FromResult(user);
         }
         public async Task<User> FindUserByUserName(string username)
         {
-            var user = _context.User.Where(x => x.UserName == username).FirstOrDefault();
-            if (user != null)
-            {
-                var roles = _context.Userrole.Where(x => x.UserId == user.Id)
-                    .Include(x => x.Role).Select(x => x.Role);
-
-                user.Roles = roles.ToList();
-            }
-
+            var user = _context.User.Where(x => x.UserName == username).Include(x=>x.Roles).FirstOrDefault();
             return await Task.FromResult(user);
         }
 
         public async Task<User> FindUserByEmail(string email)
         {
-            var user = _context.User.Where(x => x.Email == email).FirstOrDefault();
-            if (user != null)
-            {
-                var roles = _context.Userrole.Where(x => x.UserId == user.Id)
-                   .Include(x => x.Role).Select(x => x.Role);
-
-                user.Roles = roles.ToList();
-            }
-
+            var user = _context.User.Where(x => x.Email == email).Include(x => x.Roles).FirstOrDefault();
             return await Task.FromResult(user);
         }
 
@@ -124,7 +100,7 @@ namespace WebClient.Services
             var roles = "";
             foreach (var item in user.Roles)
             {
-                    roles += $"{item.Name}, ";
+                    roles += $"{item.Role.Name}, ";
             }
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -151,7 +127,9 @@ namespace WebClient.Services
         {
             try
             {
-                User user = new User { Roles = model.Roles, Email = model.Email, UserName = model.UserName, PasswordHash = GeneratePasswordHash(model.Password) };
+                User user = new User { Email = model.Email, UserName = model.UserName, PasswordHash = GeneratePasswordHash(model.Password) };
+                var roles = from a in model.Roles select new UserRole { Role=a, User=user };
+                user.Roles = roles.ToList();
                 _context.User.Add(user);
                 await _context.SaveChangesAsync();
                 return await Task.FromResult(user);
@@ -178,8 +156,8 @@ namespace WebClient.Services
                 _context.User.Add(user);
                 await _context.SaveChangesAsync();
                 var role = _context.Role.Where(x => x.Name == "customer").FirstOrDefault();
-                _context.Userrole.Add(new Userrole { RoleId = role.Id, UserId = user.Id });
-                model.UserId = user.Id;
+                _context.Userrole.Add(new UserRole { Role = role, User = user});
+                model.User= user;
                 _context.Customer.Add(model);
                 await _context.SaveChangesAsync();
                 trans.Commit();
@@ -206,9 +184,9 @@ namespace WebClient.Services
                 User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email), Activated=true };
                 _context.User.Add(user);
                 await _context.SaveChangesAsync();
-                model.UserId = user.Id;
+                model.User= user;
                 var role = _context.Role.Where(x => x.Name == "Sales").AsNoTracking().FirstOrDefault();
-                _context.Userrole.Add(new Userrole { RoleId = role.Id, UserId = user.Id });
+                _context.Userrole.Add(new UserRole { Role= role, User= user});
                 _context.Karyawan.Add(model);
                 await _context.SaveChangesAsync();
                 trans.Commit();
@@ -251,7 +229,7 @@ namespace WebClient.Services
                 var role = _context.Role.Where(x => x.Name == roleName).FirstOrDefault();
                 if (role != null)
                 {
-                    _context.Userrole.Add(new Userrole { RoleId = role.Id, UserId = user.Id });
+                    _context.Userrole.Add(new UserRole { Role= role, User= user});
                 }
                 return Task.FromResult(0);
             }
@@ -267,15 +245,7 @@ namespace WebClient.Services
         {
             try
             {
-                var users = from user in _context.User
-                            join ur in _context.Userrole on user.Id equals ur.UserId
-                            join c in _context.Role on ur.RoleId equals c.Id into rGroup
-                            from c in rGroup.DefaultIfEmpty()
-                                select new User { 
-                                 Activated=user.Activated, Email=user.Email, UserName=user.UserName,  Id=user.Id,
-                                   Roles = rGroup.ToList()
-                                };
-               
+                var users = _context.User.Include(x => x.Roles);
                 return await Task.FromResult(users.AsEnumerable());
             }
             catch (Exception ex)
@@ -294,14 +264,14 @@ namespace WebClient.Services
                 {
                     var role = user.Roles.FirstOrDefault();
 
-                    if (role.Name == "Administrator" || role.Name == "Sales")
+                    if (role.Role.Name == "Administrator" || role.Role.Name == "Sales")
                     {
-                        return _context.Karyawan.Where(x => x.UserId == user.Id).FirstOrDefault();
+                        return _context.Karyawan.Where(x => x.User.Id == user.Id).FirstOrDefault();
                     }
 
-                    if (role.Name == "Customer")
+                    if (role.Role.Name == "Customer")
                     {
-                        return _context.Customer.Where(x => x.UserId == user.Id).Include(x=>x.Karyawan).FirstOrDefault();
+                        return _context.Customer.Where(x => x.User.Id == user.Id).Include(x=>x.Karyawan).FirstOrDefault();
                     }
                 }
             }

@@ -24,7 +24,7 @@ namespace WebClient
 
         public Task UpdateIncomingItem(IncomingItem model)
         {
-            var item = _incomingService.Datas.Where(x => x.ProductId == model.ProductId).FirstOrDefault();
+            var item = _incomingService.Datas.Where(x => x.Product.Id == model.Product.Id).FirstOrDefault();
             if (item != null && item.ActualValue != model.ActualValue)
             {
                 item.ActualValue= model.ActualValue;

@@ -6,25 +6,25 @@
 
 @attribute [Authorize]
 
-<h3>@title</h3>
+<Radzen.Blazor.RadzenFieldset >
 
-<Radzen.Blazor.RadzenFieldset Text="Data">
+    <FieldSetHeader Title="@title"/>
     <div class="row">
         <div class="col-xl-12">
             <RadzenTabs style="height: 750px">
                 <Tabs>
-                    <RadzenTabsItem Text="Customer">
+                    <RadzenTabsItem Text="Data">
                         <RadzenTemplateForm Data="model" Submit="@(async(Customer arg)=>await Save(arg))">
                             <Radzen.Blazor.RadzenFieldset Text="Customer">
                                 <div class="form-row">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top:10px">
                                             <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Customer Name" />
+                                                <RadzenLabel Text="Nama" />
                                             </div>
                                             <div class="col-md-8">
                                                 <RadzenTextBox @bind-Value="model.Name" Name="Name" />
-                                                <RadzenRequiredValidator Component="Name" Text="Customer Name is required" Popup=true Style="position: absolute" />
+                                                <RadzenRequiredValidator Component="Name" Text="Customer Name is required" Popup=true Style="width:90%;" />
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:10px">
@@ -33,16 +33,16 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <RadzenTextBox @bind-Value="model.Email" Name="Email" />
-                                                <RadzenRequiredValidator Component="Email" Text="Email is required" Popup=true Style="position: absolute" />
+                                                <RadzenRequiredValidator Component="Email" Text="Email is required" Popup=true Style="width:90%;" />
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:10px">
                                             <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Contact Name" />
+                                                <RadzenLabel Text="Nama Kontak" />
                                             </div>
                                             <div class="col-md-8">
                                                 <RadzenTextBox @bind-Value="model.ContactName" Name="ContactName" />
-                                                <RadzenRequiredValidator Component="ContactName" Text="Contact Name is required" Popup=true Style="position: absolute" />
+                                                <RadzenRequiredValidator Component="ContactName" Text="Contact Name is required" Popup=true Style="width:90%;" />
 
                                             </div>
                                         </div>
@@ -52,7 +52,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <RadzenTextBox @bind-Value="model.Telepon" Name="Telepon" />
-                                                <RadzenRequiredValidator Component="Telepon" Text="Telepon is required" Popup=true Style="position: absolute" />
+                                                <RadzenRequiredValidator Component="Telepon" Text="Telepon is required" Popup=true Style="width:90%;" />
                                             </div>
                                         </div>
 
@@ -64,29 +64,29 @@
                                                 <RadzenLabel Text="NPWP" />
                                             </div>
                                             <div class="col-md-8">
-                                                <RadzenTextBox @bind-Value="model.NPWP" />
+                                                <RadzenTextBox @bind-Value="model.NPWP" Style="width:90%;" />
                                             </div>
                                         </div>
 
                                         <div class="row" style="margin-top:10px">
                                             <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Address" />
+                                                <RadzenLabel Text="Alamat"  />
                                             </div>
                                             <div class="col-md-8">
-                                                <RadzenTextArea @bind-Value="model.Address" Name="Address" />
-                                                <RadzenRequiredValidator Component="Address" Text="Address is required" Popup=true Style="position: absolute" />
+                                                <RadzenTextArea @bind-Value="model.Address" Name="Address" Style="width:90%;" />
+                                                <RadzenRequiredValidator Component="Address" Text="Address is required" Popup=true  />
                                             </div>
                                         </div>
 
                                         <div class="row" style="margin-top:10px">
                                             <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Salesman" />
+                                                <RadzenLabel Text="Seles" />
                                             </div>
                                             <div class="col-md-8">
                                                 <RadzenDropDown AllowClear="true" AllowFiltering="true"
                                                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                                Data=@salesmans @bind-Value=@model.KaryawanId SelectedItemChanged="@((arg)=> SelectSalesman(arg))"
-                                                                TextProperty="Name" ValueProperty="Id" />
+                                                                Data=@salesmans @bind-Value=@model.Karyawan SelectedItemChanged="@((arg)=> SelectSalesman(arg))"
+                                                                TextProperty="Name" Style="width:90%;" />
                                             </div>
                                         </div>
                                       
@@ -121,7 +121,7 @@
     [Parameter]
     public string id { get; set; }
 
-    public string title = "Add Customer";
+    public string title = "Pelanggan Baru";
 
     public Customer model { get; set; } = new Customer();
     public IEnumerable<Karyawan> salesmans = new List<Karyawan>();
@@ -138,7 +138,7 @@
             }
             else
             {
-                title = "Edit Customer";
+                title = "Edit Pelanggan";
                 model = await customerService.Get(Convert.ToInt32(id));
             }
         }

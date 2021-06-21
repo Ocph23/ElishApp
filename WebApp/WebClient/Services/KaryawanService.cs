@@ -19,7 +19,7 @@ namespace WebClient.Services
             dbContext = db;
             userService = _userService;
         }
-        public async Task<bool> Delete(int id)
+        public Task<bool> Delete(int id)
         {
             try
             {
@@ -28,8 +28,8 @@ namespace WebClient.Services
                     throw new SystemException("Data Not Found !");
 
                 dbContext.Karyawan.Remove(existsModel);
-                await dbContext.SaveChangesAsync();
-                return true;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace WebClient.Services
             }
         }
 
-        public async Task<bool> Update(int id, Karyawan value)
+        public Task<bool> Update(int id, Karyawan value)
         {
             try
             {
@@ -75,8 +75,8 @@ namespace WebClient.Services
                     throw new SystemException("Data Not Found !");
 
                 dbContext.Entry(existsModel).CurrentValues.SetValues(value);
-                await dbContext.SaveChangesAsync();
-                return true;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -86,11 +86,19 @@ namespace WebClient.Services
 
 
 
-        public async  Task<bool> UpdateUser(User user) {
-            var result = dbContext.User.Where(x => x.Id == user.Id).FirstOrDefault();
-            result.UserName = user.UserName;
-           await dbContext.SaveChangesAsync();
-            return true;
+        public  Task<bool> UpdateUser(User user) {
+            try
+            {
+                var result = dbContext.User.Where(x => x.Id == user.Id).FirstOrDefault();
+                result.UserName = user.UserName;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+
+                throw new SystemException(ex.Message);
+            }
         }
 
     }

@@ -14,7 +14,7 @@ namespace ElishAppMobile.Services
         readonly string controller = "/api/penjualan";
         private IEnumerable<PenjualanAndOrderModel> orders;
 
-        public async Task<Orderpenjualan> CreateOrder(Orderpenjualan order)
+        public async Task<OrderPenjualan> CreateOrder(OrderPenjualan order)
         {
             try
             {
@@ -27,15 +27,15 @@ namespace ElishAppMobile.Services
                     var response = await res.PostAsync($"{controller}/order", res.GenerateHttpContent(order));
                     if (!response.IsSuccessStatusCode)
                         throw new SystemException(await res.Error(response));
-                    return await response.GetResult<Orderpenjualan>();
+                    return await response.GetResult<OrderPenjualan>();
                 }
                 else
                 {
-                    var datas = (await db.Get<SqlDataModelOrder, Orderpenjualan>()).ToList();
+                    var datas = (await db.Get<SqlDataModelOrder, OrderPenjualan>()).ToList();
                     if (datas == null)
-                        datas = new List<Orderpenjualan>();
+                        datas = new List<OrderPenjualan>();
                     datas.Add(order);
-                    _ = db.Save<SqlDataModelOrder, Orderpenjualan>(datas.AsEnumerable());
+                    _ = db.Save<SqlDataModelOrder, OrderPenjualan>(datas.AsEnumerable());
                     return order;
                 }
             }
@@ -65,7 +65,7 @@ namespace ElishAppMobile.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Orderpenjualan> GetOrder(int id)
+        public async Task<OrderPenjualan> GetOrder(int id)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace ElishAppMobile.Services
                 var response = await res.GetAsync(url);
                 if (!response.IsSuccessStatusCode)
                     throw new SystemException(await res.Error(response));
-                return await response.GetResult<Orderpenjualan>();
+                return await response.GetResult<OrderPenjualan>();
             }
             catch (Exception ex)
             {
@@ -115,23 +115,23 @@ namespace ElishAppMobile.Services
             try
             {
                 var db = Xamarin.Forms.DependencyService.Get<ElishDbStore>();
-                var datas = (await db.Get<SqlDataModelOrder, Orderpenjualan>()).ToList();
+                var datas = (await db.Get<SqlDataModelOrder, OrderPenjualan>()).ToList();
                 if (datas != null && datas.Count>0)
                 {
                     using var res = new RestService();
-                    foreach (Orderpenjualan item in datas.ToList())
+                    foreach (OrderPenjualan item in datas.ToList())
                     {
                         var response = await res.PostAsync($"{controller}/order", res.GenerateHttpContent(item));
                         if (!response.IsSuccessStatusCode)
                             throw new SystemException(await res.Error(response));
-                        var model= await response.GetResult<Orderpenjualan>();
+                        var model= await response.GetResult<OrderPenjualan>();
                         if (model != null)
                         {
                             datas.Remove(item);
                         }
                     }
 
-                   _= db.Save<SqlDataModelOrder, Orderpenjualan>(datas.AsEnumerable());
+                   _= db.Save<SqlDataModelOrder, OrderPenjualan>(datas.AsEnumerable());
                 }
             }
             catch (Exception ex)
@@ -274,7 +274,7 @@ namespace ElishAppMobile.Services
         //    }
         //}
 
-        public async Task<Orderpenjualan> UpdateOrder(int orderId, Orderpenjualan order)
+        public async Task<OrderPenjualan> UpdateOrder(int orderId, OrderPenjualan order)
         {
             try
             {
@@ -282,7 +282,7 @@ namespace ElishAppMobile.Services
                 var response = await res.PutAsync($"{controller}/order/{orderId}", res.GenerateHttpContent(order));
                 if (!response.IsSuccessStatusCode)
                     throw new SystemException(await res.Error(response));
-                return await response.GetResult<Orderpenjualan>();
+                return await response.GetResult<OrderPenjualan>();
             }
             catch (Exception ex)
             {

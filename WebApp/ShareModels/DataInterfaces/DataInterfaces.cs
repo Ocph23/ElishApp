@@ -48,17 +48,17 @@ namespace ShareModels
     public interface IPembelianService
     {
         #region 
-        Task<Orderpembelian> CreateOrder(Orderpembelian order);
-        Task<IEnumerable<Orderpembelian>> GetOrdersBySupplierId(int supplierId);
-        Task<IEnumerable<Orderpembelian>> GetOrders();
-        Task<Orderpembelian> GetOrder(int id);
-        Task<Orderpembelian> UpdateOrder(int orderId, Orderpembelian order);
+        Task<OrderPembelian> CreateOrder(OrderPembelian order);
+        Task<IEnumerable<OrderPembelian>> GetOrdersBySupplierId(int supplierId);
+        Task<IEnumerable<OrderPembelian>> GetOrders();
+        Task<OrderPembelian> GetOrder(int id);
+        Task<OrderPembelian> UpdateOrder(int orderId, OrderPembelian order);
         Task<bool> DeleteOrder(int id);
         #endregion
 
 
         #region Pembelian
-        Task<Pembelian> CreatePembelian(int orderid);
+        Task<Pembelian> CreatePembelian(int orderid, int gudangId);
         Task<Pembelian> UpdatePembelian(int pembelianId, Pembelian order);
         Task<Pembelian> GetPembelian(int id);
         Task<IEnumerable<Pembelian>> GetPembelians();
@@ -67,23 +67,23 @@ namespace ShareModels
         #endregion
 
         #region Pembayaran
-        Task<IEnumerable<Pembayaranpembelian>> GetPembayaran(int pembayaranId);
-        Task<Pembayaranpembelian> CreatePembayaran(int pembelianId, Pembayaranpembelian model, bool forced);
-        Task<bool> UpdatePembayaran(Pembayaranpembelian model);
+        Task<IEnumerable<PembayaranPembelian>> GetPembayaran(int pembayaranId);
+        Task<PembayaranPembelian> CreatePembayaran(int pembelianId, PembayaranPembelian model, bool forced);
+        Task<bool> UpdatePembayaran(PembayaranPembelian model);
 
         #endregion
     }
     public interface IPenjualanService
     {
-        Task<Orderpenjualan> CreateOrder(Orderpenjualan order);
+        Task<OrderPenjualan> CreateOrder(OrderPenjualan order);
         Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersBySalesId(int supplierId);
         Task<IEnumerable<PenjualanAndOrderModel>> GetOrdersByCustomerId(int supplierId);
         Task<IEnumerable<PenjualanAndOrderModel>> GetOrders();
-        Task<Orderpenjualan> GetOrder(int id);
-        Task<Orderpenjualan> UpdateOrder(int orderId, Orderpenjualan order);
+        Task<OrderPenjualan> GetOrder(int id);
+        Task<OrderPenjualan> UpdateOrder(int orderId, OrderPenjualan order);
         Task<bool> DeleteOrder(int id);
 
-        Task<Penjualan> CreatePenjualan(int orderid);
+        Task<Penjualan> CreatePenjualan(int orderid, Penjualan model);
         Task<Penjualan> UpdatePenjualan(int penjualanId, Penjualan order);
         Task<Penjualan> GetPenjualan(int id);
         Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualans();
@@ -93,11 +93,23 @@ namespace ShareModels
         Task<bool> DeletePenjualan(int id);
 
         #region Pembayaran
-        Task<IEnumerable<Pembayaranpenjualan>> GetPembayaran(int pembelianId);
-        Task<Pembayaranpenjualan> CreatePembayaran(int pembelianId, Pembayaranpenjualan model, bool forced);
-        Task<bool> UpdatePembayaran(Pembayaranpenjualan model);
+        Task<IEnumerable<PembayaranPenjualan>> GetPembayaran(int pembelianId);
+        Task<PembayaranPenjualan> CreatePembayaran(int pembelianId, PembayaranPenjualan model, bool forced);
+        Task<bool> UpdatePembayaran(PembayaranPenjualan model);
         #endregion
     }
+
+
+
+    public interface IPemindahanService
+    {
+        Task<IEnumerable<Pemindahan>> Get();
+        Task<Pemindahan> Get(int id);
+        Task<Pemindahan> Post(Pemindahan model);
+        Task<bool> Put(int id, Pemindahan model);
+        Task<bool> Delete(int id);
+    }
+
 
     public interface IProductService : IService<Product>
     {
@@ -105,11 +117,13 @@ namespace ShareModels
         Task<Product> AddProduct(int supplierId, Product product);
         Task<Unit> AddUnit(int productId, Unit unit);
         Task<Unit> UpdateUnit(int unitId, Unit unit);
-        Task<IEnumerable<ProductStock>> GetProductStock();
         Task<ProductImage> AddPhoto(ProductImage image);
         Task<bool> RemovePhoto(int id);
+        Task<bool> RemoveUnit(int id);
+        Task<IEnumerable<ProductStock>> GetProductStock();
+        Task<IEnumerable<ProductStock>> GetProductStockByGudangId(int merkId, int gudangid, bool withOrder);
+        
     }
-
     public interface ISupplierService
     {
         Task<IEnumerable<Supplier>> GetSuppliers();
@@ -119,7 +133,8 @@ namespace ShareModels
         Task<bool> Update(int id, Supplier value);
         Task<bool> Delete(int id);
     }
-
+    public interface IMerkService : IService<Merk>{}
+    public interface IGudangService : IService<Gudang>{}
     public interface ICategoryService : IService<Category>{}
     public interface ICustomerService : IService<Customer>{
         //ObservableCollection<Customer> CustomerCollection { get; set; }
@@ -139,7 +154,12 @@ namespace ShareModels
 
 
 
+    public interface IPengembalianPenjualanService
+    {
+        Task<IEnumerable<Penjualanitem>> GetPenjualanByCustomerId(int customerId);
+        Task<PengembalianPenjualan> Post(PengembalianPenjualan model);
 
+    }
 
 
 

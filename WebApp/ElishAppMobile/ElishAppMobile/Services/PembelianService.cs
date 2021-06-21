@@ -12,7 +12,7 @@ namespace ElishAppMobile.Services
         readonly string controller = "/api/pembelian";
         private IEnumerable<Pembelian> pembelians;
 
-        public Task<Orderpembelian> CreateOrder(Orderpembelian order)
+        public Task<OrderPembelian> CreateOrder(OrderPembelian order)
         {
             throw new NotImplementedException();
         }
@@ -37,17 +37,17 @@ namespace ElishAppMobile.Services
             throw new NotImplementedException();
         }
 
-        public Task<Orderpembelian> GetOrder(int id)
+        public Task<OrderPembelian> GetOrder(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Orderpembelian>> GetOrders()
+        public Task<IEnumerable<OrderPembelian>> GetOrders()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Orderpembelian>> GetOrdersBySupplierId(int supplierId)
+        public Task<IEnumerable<OrderPembelian>> GetOrdersBySupplierId(int supplierId)
         {
             throw new NotImplementedException();
         }
@@ -87,7 +87,7 @@ namespace ElishAppMobile.Services
             throw new NotImplementedException();
         }
 
-        public Task<Orderpembelian> UpdateOrder(int orderId, Orderpembelian order)
+        public Task<OrderPembelian> UpdateOrder(int orderId, OrderPembelian order)
         {
             throw new NotImplementedException();
         }

@@ -3,16 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ShareModels
 {
-    public class OrderpembelianItem
+    public class OrderPembelianItem
     {
         [Key]
         public int Id { get; set; }
 
-        public int OrderPembelianId { get; set; }
-
-        public int ProductId { get; set; }
-
-        public double Amount { get; set; }
+        public double Quntity { get; set; }
+        
 
         private double price;
 
@@ -29,12 +26,20 @@ namespace ShareModels
             set { price = value; }
         }
 
-        public int UnitId { get; set; }
         public virtual double Total
         {
             get
             {
-                return Price * Amount;
+                return Price * Quntity;
+            }
+        }
+
+        public double Discount { get; set; }
+        public virtual double DiscountView
+        {
+            get
+            {
+                return Total * Discount/100;
             }
         }
 
@@ -42,7 +47,7 @@ namespace ShareModels
 
         public virtual Product Product { get; set; }
 
-        public virtual Orderpembelian OrderPembelian { get; set; }
+        public virtual OrderPembelian OrderPembelian { get; set; }
 
     }
 }

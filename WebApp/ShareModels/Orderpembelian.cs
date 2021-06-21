@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace ShareModels
 {
-    public class Orderpembelian
+    public class OrderPembelian
     {
-
-        public Orderpembelian()
+        public OrderPembelian()
         {
-            Items = new HashSet<OrderpembelianItem>();
+           // Items = new HashSet<OrderpembelianItem>();
         }
         public int Id { get; set; }
 
@@ -20,22 +19,28 @@ namespace ShareModels
         {
             get
             {
-                return $"{Id}/PO-ELISH/{OrderDate.Month}/{OrderDate.Year}";
+                return $"{Id}/PO-APS/{OrderDate.Month}/{OrderDate.Year}";
             }
         }
 
-        public int SupplierId { get; set; }
+        //public int SupplierId { get; set; }
 
         public DateTime OrderDate { get; set; }
 
-        public double Discount { get; set; }
-
         public OrderStatus Status { get; set; }
+        public string Discription { get; set; }
 
         public virtual Supplier Supplier { get; set; }
 
 
-        public virtual ICollection<OrderpembelianItem> Items { get; set; }
+        public virtual ICollection<OrderPembelianItem> Items { get; set; }
+
+
+        public double Discount
+        {
+            get { return Items==null || Items.Count<=0 ?0: Items.Sum(x=>x.DiscountView); }
+        }
+
 
         private double _total;
 

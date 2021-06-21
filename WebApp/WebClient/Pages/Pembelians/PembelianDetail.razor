@@ -5,6 +5,7 @@
 
 @attribute [Authorize]
 
+@inject IGudangService gudangService;
 @inject ISupplierService supplierService;
 @inject IPembelianService pembelianService;
 @inject IProductService productService;
@@ -18,260 +19,277 @@
 </nav>
 <div class="row">
     <div class="col-md-12">
-        <RadzenFieldset Text="Data Pembelian">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Payment Number" />
+        <RadzenTabs>
+            <Tabs>
+                <RadzenTabsItem Text="Data Pembelian" >
+                    <div class="row" style="padding:10px">
+                        <div class="col-md-6">
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Nomor" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenTextBox Value="@model.Nomor" />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Suplier" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenTextBox @bind-Value="model.OrderPembelian.Supplier.Nama" />
+                                </div>
+                            </div>
+
+
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="PO" />
+                                </div>
+
+                                <div class="col-md-8">
+                                    <RadzenTextBox Value="@model.OrderPembelian.Nomor" />
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top:10px">
+
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Gudang" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                    Data=@gudangs
+                                                    @bind-Value=@model.Gudang
+                                                    TextProperty="Name" />
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <RadzenTextBox Value="@model.Nomor" />
+                        <div class="col-md-6">
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Nomor Inv" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenTextBox @bind-Value="model.InvoiceNumber" />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Jatuh Tempo" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenNumeric @bind-Value="model.DeadLine" />
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Tanggal" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenDatePicker @bind-Value="model.CreatedDate" />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-4 align-items-center d-flex">
+                                    <RadzenLabel Text="Status Pembayaran" />
+                                </div>
+                                <div class="col-md-8">
+                                    <RadzenTextBox Value="@model.Status.ToString()" />
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Suplier" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenTextBox @bind-Value="model.OrderPembelian.Supplier.Nama" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <RadzenFieldset Text="Data Orders">
+                                <div class="row col-md-6">
+                                    <div class="col-md-4 align-items-center d-flex">
+                                        <RadzenLabel Text="Cari Product" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                        Data=@products.Where(item=> !model.Items.Any(data=> data.Product.Id.Equals(item.Id)))
+                                                        @bind-Value=@product.Id
+                                                        TextProperty="CodeName" ValueProperty="Id"
+                                                        Change=@(args => SelectProduct(args, "Supplier")) />
+                                    </div>
+                                </div>
+
+
+                                <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" AllowPaging="false" AllowSorting="true" TItem="PembelianItem">
+                                    <Columns>
+                                        <RadzenGridColumn Width="180px" TItem="PembelianItem" Property="Product.CodeName" Title="Code" />
+                                        <RadzenGridColumn TItem="PembelianItem" Property="Product.Name" Title="Product" />
+                                        <RadzenGridColumn Width="85px" TItem="PembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
+                                            <Template Context="data">
+                                                @data.Amount
+                                            </Template>
+                                            <EditTemplate Context="item">
+                                                <RadzenNumeric TValue="double" @bind-Value="item.Amount" Step="0.25" Change=@(args => OnChangeOrderItem(args, item)) />
+                                            </EditTemplate>
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn Width="80px" TItem="PembelianItem" Property="Unit.Name" Title="Unit">
+                                            <EditTemplate Context="item">
+                                                <RadzenDropDown @bind-Value="item.Unit.Id" Data="@item.Product.Units"
+                                                                Change=@(args => OnChangeOrderItem(args, item))
+                                                                TextProperty="Name" ValueProperty="Id" Style="width:100%" />
+                                            </EditTemplate>
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn Width="120px" TextAlign="TextAlign.Right" TItem="PembelianItem" Property="Price" Title="Price">
+                                            <Template Context="item">
+                                                @(item.Price.ToString("N"))
+                                            </Template>
+                                            <EditTemplate Context="item">
+                                                <RadzenNumeric @bind-Value="item.Price" Step="0.25" />
+                                            </EditTemplate>
+                                            <FooterTemplate>
+                                                <div>Total</div>
+                                                <div>Discount</div>
+                                                <div>Total Payment </div>
+                                            </FooterTemplate>
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn Width="120px" TextAlign="TextAlign.Right" TItem="PembelianItem" Title="Disc">
+                                            <Template Context="item">
+                                                @(item.DiscountView.ToString("N"))
+                                            </Template>
+                                            <EditTemplate Context="item">
+                                                <RadzenNumeric @bind-Value="item.Discount" Step="0.25" />
+                                            </EditTemplate>
+                                            <FooterTemplate>
+                                                <div>Total</div>
+                                                <div>Discount</div>
+                                                <div>Total Payment </div>
+                                            </FooterTemplate>
+                                        </RadzenGridColumn>
+                                        <RadzenGridColumn Width="150px" TItem="PembelianItem" Property="Total" Title="Total" TextAlign="TextAlign.Right">
+                                            <Template Context="item">
+                                                @(item.Total.ToString("N"))
+                                            </Template>
+                                            <FooterTemplate>
+                                                @{
+                                                    <div>@model.Total.ToString("N")</div>
+                                                    <div>@model.Items.Sum(x => x.DiscountView).ToString("N")</div>
+                                                    <div>@((model.Total- model.Items.Sum(x => x.DiscountView)).ToString("N"))</div>
+                                                }
+                                            </FooterTemplate>
+                                        </RadzenGridColumn>
+
+                                        <RadzenGridColumn TItem="PembelianItem" Context="sampleBlazorModelsSampleOrder"
+                                                          Visible=@((Int32)model.Status < 1)
+                                                          Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                                            <HeaderTemplate>
+                                                <RadzenCheckBox Value="@(checkall)" TValue="bool" ValueChanged="@((x)=>OnCheckChange(x))" />
+                                            </HeaderTemplate>
+                                            <Template Context="order">
+                                                <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(order))">
+                                                </RadzenButton>
+                                            </Template>
+                                            <EditTemplate Context="order">
+                                                <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(order))">
+                                                </RadzenButton>
+                                                <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary"
+                                                              Click="@((args) => CancelEdit(order))">
+                                                </RadzenButton>
+                                            </EditTemplate>
+                                            <FooterTemplate>
+                                                <RadzenButton Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
+                                            </FooterTemplate>
+                                        </RadzenGridColumn>
+                                    </Columns>
+                                </RadzenGrid>
+                            </RadzenFieldset>
+
+
                         </div>
                     </div>
-
-
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="PO Number" />
-                        </div>
-
-                        <div class="col-md-8">
-                            <RadzenTextBox Value="@model.OrderPembelian.Nomor" />
-                        </div>
-                    </div>
-
-                    <div class="row" style="margin-top:10px">
-
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Discount (%)" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenNumeric @bind-Value="model.Discount" TValue="double" Placeholder="0.0" Step="0.1" />
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Invoice Number" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenTextBox @bind-Value="model.InvoiceNumber" />
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Invoice DeadLine" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenDatePicker @bind-Value="model.PayDeadLine" />
-                        </div>
-                    </div>
-
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="CreateDate" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenDatePicker @bind-Value="model.CreatedDate" />
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-4 align-items-center d-flex">
-                            <RadzenLabel Text="Payment Status" />
-                        </div>
-                        <div class="col-md-8">
-                            <RadzenTextBox Value="@model.Status.ToString()" />
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-
-
-
-
-        </RadzenFieldset>
-    </div>
-</div>
-
-
-<div class="row">
-
-    <div class="col-md-12">
-        <RadzenFieldset Text="Data Orders">
-            <div class="row col-md-6">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Cari Product" />
-                </div>
-                <div class="col-md-8">
-                    <RadzenDropDown AllowClear="true" AllowFiltering="true"
-                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
-                                     Data=@products.Where(item=> !model.Items.Any(data=> data.ProductId.Equals(item.Id)))
-                                    @bind-Value=@product.Id
-                                    TextProperty="CodeName" ValueProperty="Id" 
-                                    Change=@(args => SelectProduct(args, "Supplier")) />
-                </div>
-            </div>
-
-
-            <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" AllowPaging="false" AllowSorting="true" TItem="PembelianItem">
-                <Columns>
-                    <RadzenGridColumn Width="120px" TItem="PembelianItem" Property="Product.CodeArticle" Title="Article" />
-                    <RadzenGridColumn Width="180px" TItem="PembelianItem" Property="Product.CodeName" Title="Code" />
-                    <RadzenGridColumn  TItem="PembelianItem" Property="Product.Name" Title="Product" />
-                    <RadzenGridColumn Width="85px" TItem="PembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
-                        <Template Context="data">
-                            @data.Amount
-                        </Template>
-                        <EditTemplate Context="item">
-                            <RadzenNumeric TValue="double" @bind-Value="item.Amount" Step="0.25" Change=@(args => OnChangeOrderItem(args, item)) />
-                        </EditTemplate>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn Width="80px" TItem="PembelianItem" Property="Unit.Name" Title="Unit">
-                        <EditTemplate Context="item">
-                            <RadzenDropDown @bind-Value="item.UnitId" Data="@item.Product.Units"
-                                            Change=@(args => OnChangeOrderItem(args, item))
-                                            TextProperty="Name" ValueProperty="Id" Style="width:100%" />
-                        </EditTemplate>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn Width="120px" TextAlign="TextAlign.Right" TItem="PembelianItem" Property="Price" Title="Price">
-                        <Template Context="item">
-                            @(item.Price.ToString("N"))
-                        </Template>
-                        <EditTemplate Context="item">
-                            <RadzenNumeric @bind-Value="item.Price" Step="0.25" />
-                        </EditTemplate>
-                        <FooterTemplate>
-                            <div>Total</div> 
-                            <div>Discount</div>
-                            <div>Total Payment </div>
-                        </FooterTemplate>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn Width="150px" TItem="PembelianItem" Property="Total" Title="Total" TextAlign="TextAlign.Right">
-                        <Template Context="item">
-                            @(item.Total.ToString("N"))
-                        </Template>
-                        <FooterTemplate>
-                            @{
-                                <div>@model.Total.ToString("N")</div>
-                                var total = model.Total * (model.Discount / 100);
-                                <div>@total.ToString("N")</div>
-                                <div>@((model.Total-total).ToString("N"))</div>
-                            }
-                        </FooterTemplate>
-                    </RadzenGridColumn>
-
-                    <RadzenGridColumn TItem="PembelianItem" Context="sampleBlazorModelsSampleOrder"
-                                      Visible=@((Int32)model.Status < 1)
-                                      Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
-                        <HeaderTemplate>
-                            <RadzenCheckBox Value="@(checkall)" TValue="bool" ValueChanged="@((x)=>OnCheckChange(x))" />
-                        </HeaderTemplate>
-                        <Template Context="order">
-                            <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(order))">
-                            </RadzenButton>
-                        </Template>
-                        <EditTemplate Context="order">
-                            <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(order))">
-                            </RadzenButton>
-                            <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary"
-                                          Click="@((args) => CancelEdit(order))">
-                            </RadzenButton>
-                        </EditTemplate>
-                        <FooterTemplate>
-                            <RadzenButton Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
-                        </FooterTemplate>
-                    </RadzenGridColumn>
-                </Columns>
-            </RadzenGrid>
-        </RadzenFieldset>
-
-        <RadzenFieldset Text="Pembayaran">
-            <RadzenButton Visible=@(model.Status != PaymentStatus.Lunas) 
-                          Style="margin-bottom:10px"
-                          Click=@(args => DialogService.OpenAsync<EditPembelianPembayaran>($"Pembayaran",
-                        new Dictionary<string, object>() { { "IdPembelian", model.Id },{ "Total", (model.Total-(model.Total * (model.Discount / 100)))- pembayarans.Sum(x=>x.PayValue) } },
+                </RadzenTabsItem>
+                <RadzenTabsItem Text="Pembayaran">
+                    <RadzenFieldset Text="Pembayaran">
+                        <RadzenButton Visible=@(model.Status != PaymentStatus.Lunas)
+                                      Style="margin-bottom:10px"
+                                      Click=@(args => DialogService.OpenAsync<EditPembelianPembayaran>($"Pembayaran",
+                        new Dictionary<string, object>() { { "IdPembelian", model.Id },{ "Total", (model.Total-model.TotalDiscount)- pembayarans.Sum(x=>x.PayValue) } },
                         new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Warning" />
 
-            <RadzenGrid @ref="pembayaranGrid" Data="@(pembayarans)" AllowFiltering="true"
-                        AllowPaging="true" AllowSorting="true" TItem="Pembayaranpembelian">
-                <Columns>
-                    <RadzenGridColumn TItem="Pembayaranpembelian" Property="PayDate" Title="Date">
-                        <EditTemplate Context="item">
-                            <RadzenDatePicker @bind-Value="item.PayDate" />
-                        </EditTemplate>
-                    </RadzenGridColumn>
+                        <RadzenGrid @ref="pembayaranGrid" Data="@(pembayarans)" AllowFiltering="true"
+                                    AllowPaging="true" AllowSorting="true" TItem="PembayaranPembelian">
+                            <Columns>
+                                <RadzenGridColumn TItem="PembayaranPembelian" Property="PayDate" Title="Date">
+                                    <EditTemplate Context="item">
+                                        <RadzenDatePicker @bind-Value="item.PayDate" />
+                                    </EditTemplate>
+                                </RadzenGridColumn>
 
-                    <RadzenGridColumn TItem="Pembayaranpembelian" Property="PayTo" Title="Name">
-                        <EditTemplate Context="item">
-                            <RadzenTextBox @bind-Value="item.PayTo" />
-                        </EditTemplate>
-                    </RadzenGridColumn>
+                                <RadzenGridColumn TItem="PembayaranPembelian" Property="PayTo" Title="Name">
+                                    <EditTemplate Context="item">
+                                        <RadzenTextBox @bind-Value="item.PayTo" />
+                                    </EditTemplate>
+                                </RadzenGridColumn>
 
-                    <RadzenGridColumn TItem="Pembayaranpembelian" Property="BankName" Title="Bank">
-                        <EditTemplate Context="item">
-                            <RadzenTextBox @bind-Value="item.BankName" />
-                        </EditTemplate>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn TItem="Pembayaranpembelian" Property="RekNumber" Title="Rekening">
-                        <EditTemplate Context="item">
-                            <RadzenTextBox @bind-Value="item.RekNumber" />
-                        </EditTemplate>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn TItem="Pembayaranpembelian" Property="Description" Title="Description" TextAlign="TextAlign.Right">
-                        <EditTemplate Context="item">
-                            <RadzenTextArea @bind-Value="item.Description" />
-                        </EditTemplate>
-                        <FooterTemplate>
-                            <div>Total</div>
-                            <div>Sisa</div>
-                        </FooterTemplate>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn TItem="Pembayaranpembelian" Property="PayValue" Title="Total" TextAlign="TextAlign.Right">
-                        <EditTemplate  Context="item">
-                            <RadzenNumeric @bind-Value="item.PayValue" Step="0.25" />
-                        </EditTemplate>
-                        <FooterTemplate>
-                            <div>@pembayarans.Sum(x => x.PayValue).ToString("N")</div>
-                            <div>
-                                @{
-                                    var sisa = (model.Total - (model.Total * (model.Discount / 100))) - pembayarans.Sum(x => x.PayValue);
-                                    @sisa.ToString("N");
-                                }
-                            </div>
-                        </FooterTemplate>
-                    </RadzenGridColumn>
-                    <RadzenGridColumn Visible=@((Int32)model.Status < 1) TItem="Pembayaranpembelian" Context="sampleBlazorModelsSampleOrder"
-                                      Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
-                        <Template Context="pembayaran">
-                            <RadzenButton Icon="edit" Size="ButtonSize.Medium" Click="@(args => EditPembayaranRow(pembayaran))">
-                            </RadzenButton>
-                        </Template>
-                        <EditTemplate Context="pembayaran">
-                            <RadzenButton Icon="save" Size="ButtonSize.Medium" Click="@((args) => SavePembayaranRow(pembayaran))">
-                            </RadzenButton>
-                            <RadzenButton Icon="cancel" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Secondary"
-                                          Click="@((args) => CancelPembayaranEdit(pembayaran))">
-                            </RadzenButton>
-                        </EditTemplate>
-                    </RadzenGridColumn>
-                </Columns>
-            </RadzenGrid>
-        </RadzenFieldset>
+                                <RadzenGridColumn TItem="PembayaranPembelian" Property="BankName" Title="Bank">
+                                    <EditTemplate Context="item">
+                                        <RadzenTextBox @bind-Value="item.BankName" />
+                                    </EditTemplate>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="PembayaranPembelian" Property="RekNumber" Title="Rekening">
+                                    <EditTemplate Context="item">
+                                        <RadzenTextBox @bind-Value="item.RekNumber" />
+                                    </EditTemplate>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="PembayaranPembelian" Property="Description" Title="Description" TextAlign="TextAlign.Right">
+                                    <EditTemplate Context="item">
+                                        <RadzenTextArea @bind-Value="item.Description" />
+                                    </EditTemplate>
+                                    <FooterTemplate>
+                                        <div>Total</div>
+                                        <div>Sisa</div>
+                                    </FooterTemplate>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="PembayaranPembelian" Property="PayValue" Title="Total" TextAlign="TextAlign.Right">
+                                    <EditTemplate Context="item">
+                                        <RadzenNumeric @bind-Value="item.PayValue" Step="0.25" />
+                                    </EditTemplate>
+                                    <FooterTemplate>
+                                        <div>@pembayarans.Sum(x => x.PayValue).ToString("N")</div>
+                                        <div>
+                                            @{
+                                                var sisa = (model.Total - model.TotalDiscount) - pembayarans.Sum(x => x.PayValue);
+                                                @sisa.ToString("N");
+                                            }
+                                        </div>
+                                    </FooterTemplate>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn Visible=@((Int32)model.Status < 1) TItem="PembayaranPembelian" Context="sampleBlazorModelsSampleOrder"
+                                                  Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                                    <Template Context="pembayaran">
+                                        <RadzenButton Icon="edit" Size="ButtonSize.Medium" Click="@(args => EditPembayaranRow(pembayaran))">
+                                        </RadzenButton>
+                                    </Template>
+                                    <EditTemplate Context="pembayaran">
+                                        <RadzenButton Icon="save" Size="ButtonSize.Medium" Click="@((args) => SavePembayaranRow(pembayaran))">
+                                        </RadzenButton>
+                                        <RadzenButton Icon="cancel" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Secondary"
+                                                      Click="@((args) => CancelPembayaranEdit(pembayaran))">
+                                        </RadzenButton>
+                                    </EditTemplate>
+                                </RadzenGridColumn>
+                            </Columns>
+                        </RadzenGrid>
+                    </RadzenFieldset>
+                </RadzenTabsItem>
+            </Tabs>
+        </RadzenTabs>
+
+
+      
     </div>
 </div>
+
 
 
 @code{
@@ -279,14 +297,48 @@
     [Parameter]
     public string id { get; set; }
     private Product product = new Product();
+    private IEnumerable<Gudang> gudangs;
     private IEnumerable<Supplier> suppliers;
     private IEnumerable<ProductStock> products = new List<ProductStock>();
-    private List<Pembayaranpembelian> pembayarans = new List<Pembayaranpembelian>();
+    private List<PembayaranPembelian> pembayarans = new List<PembayaranPembelian>();
     private Pembelian model = new Pembelian() { Items = new List<PembelianItem>() };
     RadzenGrid<PembelianItem> ordersGrid;
-    RadzenGrid<Pembayaranpembelian> pembayaranGrid;
+    RadzenGrid<PembayaranPembelian> pembayaranGrid;
 
     bool checkall;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DialogService.OnOpen += Open;
+        DialogService.OnClose += CreatePembayaran;
+        gudangs = await gudangService.Get();
+        suppliers = await supplierService.GetSuppliers();
+        if (!string.IsNullOrEmpty(id))
+        {
+            int paramId = Convert.ToInt32(id);
+            if (paramId > 0)
+            {
+                this.model = await pembelianService.GetPembelian(paramId);
+
+                if (model != null)
+                {
+                    pembayarans = (await pembelianService.GetPembayaran(model.Id)).ToList();
+                }
+                else
+                {
+                    NotificationService.Notify(new NotificationMessage
+                    {
+                        Detail = "Pembelian Tidak Ditemikan!",
+                        Duration = 3000,
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Error"
+                    });
+                }
+            }
+
+        }
+        products = (await productService.GetProductStock()).ToList();
+    }
 
     void OnCheckChange(bool data)
     {
@@ -304,19 +356,17 @@
         }
     }
 
-
-
     private void RemoveItem(PembelianItem item)
     {
         model.Items.Remove(item);
 
     }
+
     private void Cancel()
     {
         model = new Pembelian();
         products = new List<ProductStock>();
     }
-
 
     private async Task Save(Pembelian model)
     {
@@ -349,18 +399,14 @@
 
     }
 
-
-
-
     async Task SelectProduct(object value, string name)
     {
         var prodId = (int)value;
         var _product = products.Where(x => x.Id == prodId).FirstOrDefault();
-        if (_product != null && model.Items.Where(x => x.ProductId == _product.Id).FirstOrDefault() == null)
+        if (_product != null && model.Items.Where(x => x.Product.Id == _product.Id).FirstOrDefault() == null)
         {
-            var item = new PembelianItem { Product = _product, ProductId = prodId, Amount = 1 };
+            var item = new PembelianItem { Product = _product, Amount = 1, Discount= _product.Discount };
             item.Unit = _product.Units.FirstOrDefault();
-            item.UnitId = item.Unit.Id;
             if (model.Items == null)
                 model.Items = new List<PembelianItem>();
             model.Items.Add(item);
@@ -368,10 +414,8 @@
 
 
         product = new Product();
-        await  ordersGrid.Reload();
+        await ordersGrid.Reload();
     }
-
-
 
     private async Task SelectUnit(object arg, PembelianItem product)
     {
@@ -388,34 +432,11 @@
         StateHasChanged();
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        DialogService.OnOpen += Open;
-        DialogService.OnClose += CreatePembayaran;
-        suppliers = await supplierService.GetSuppliers();
-        if (!string.IsNullOrEmpty(id))
-        {
-            int paramId = Convert.ToInt32(id);
-            if (paramId > 0)
-            {
-                this.model = await pembelianService.GetPembelian(paramId);
-
-                if (model != null)
-                {
-                    pembayarans = (await pembelianService.GetPembayaran(model.Id)).ToList();
-                }
-            }
-
-        }
-        products = (await productService.GetProductStock()).ToList();
-    }
-
     void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
     {
         Console.WriteLine("Dialog opened");
         StateHasChanged();
     }
-
 
     private void CreatePembayaran(dynamic parameter)
     {
@@ -425,18 +446,18 @@
             if (((object)parameter).GetType() != typeof(bool))
             {
 
-                Pembayaranpembelian data = (Pembayaranpembelian)parameter;
+                PembayaranPembelian data = (PembayaranPembelian)parameter;
 
                 if (data != null)
                 {
-                    var result = pembelianService.CreatePembayaran(data.PembelianId, data, false).Result;
+                    var result = pembelianService.CreatePembayaran(data.Pembelian.Id, data, false).Result;
                     if (result == null)
                         throw new SystemException("Not Saved !");
 
 
                     pembayarans.Add(result);
 
-                    if (pembayarans.Sum(x => x.PayValue) >= model.Total - (model.Total * (model.Discount / 100)))
+                    if (pembayarans.Sum(x => x.PayValue) >= model.Total - model.TotalDiscount)
                         model.Status = PaymentStatus.Lunas;
                     else
                         model.Status = PaymentStatus.Panjar;
@@ -462,7 +483,6 @@
             });
         }
     }
-
 
     private async Task OnChangeOrderItem(object arg, PembelianItem item)
     {
@@ -498,12 +518,12 @@
         await ordersGrid.Reload();
     }
 
-    void EditPembayaranRow(Pembayaranpembelian item)
+    void EditPembayaranRow(PembayaranPembelian item)
     {
         pembayaranGrid.EditRow(item);
     }
 
-   async Task SavePembayaranRow(Pembayaranpembelian item)
+    async Task SavePembayaranRow(PembayaranPembelian item)
     {
         await Task.Delay(1000);
         if (await pembelianService.UpdatePembayaran(item))
@@ -530,17 +550,15 @@
         }
     }
 
-    void CancelPembayaranEdit(Pembayaranpembelian item)
+    void CancelPembayaranEdit(PembayaranPembelian item)
     {
         pembayaranGrid.CancelEditRow(item);
     }
 
-
-
     string OnErrorStock(PembelianItem data)
     {
-        var prod = products.Where(x => x.Id == data.ProductId).FirstOrDefault();
-        if (model.Status == PaymentStatus.Belum && prod != null && (prod.Stock - (data.Amount * data.Unit.Amount)) < 0)
+        var prod = products.Where(x => x.Id == data.Product.Id).FirstOrDefault();
+        if (model.Status == PaymentStatus.Belum && prod != null && (prod.Stock - (data.Amount * data.Unit.Quantity)) < 0)
         {
             return "red";
         }

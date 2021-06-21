@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 {
     public class Supplier:IEntity
     {
-        public Supplier()
-        {
-            Orderpembelian = new HashSet<Orderpembelian>();
-            Product = new HashSet<Product>();
-        }
+        //public Supplier()
+        //{
+        //    Orderpembelian = new HashSet<OrderPembelian>();
+        //}
         public int Id { get; set; }
 
         public string Nama { get; set; }
@@ -28,8 +27,7 @@ using System.Threading.Tasks;
 
         public string NPWP { get; set; }
 
-        public virtual ICollection<Orderpembelian> Orderpembelian { get; set; }
-        public virtual ICollection<Product> Product { get; set; }
+        public virtual ICollection<OrderPembelian> Orderpembelian { get; set; }
     }
 }
 

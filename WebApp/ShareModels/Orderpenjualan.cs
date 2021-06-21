@@ -5,19 +5,17 @@ using System.Linq;
 
 namespace ShareModels
 {
-    public class Orderpenjualan   :BaseNotify, IEntity
+    public class OrderPenjualan:BaseNotify, IEntity
     {
-        public Orderpenjualan()
+        public OrderPenjualan()
         {
-            //Items = new HashSet<OrderPenjualanItem>();
         }
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
         public double DeadLine { get => _deadLIne; set => SetProperty(ref _deadLIne, value); }
-        public int CustomerId { get => _customerId; set => SetProperty(ref _customerId, value); }
-        public double Discount { get; set; }
-        public int? SalesId { get; set; }
         public OrderStatus Status { get => status; set => SetProperty(ref status, value); }
+        public string Discription { get; set; }
+        public Gudang Gudang { get; set; }
 
         #region virtual 
         public virtual string Nomor
@@ -32,20 +30,23 @@ namespace ShareModels
         [NotMapped]
         public PaymentType PaymentType { get => DeadLine<=0? PaymentType.Tunai: PaymentType.Kredit; }
 
-        [NotMapped]
         public virtual double Total
         {
             get
             {
                 if (Items == null)
-                   _total= 0;
-                _total= Items.Sum(x => x.Total);
-                return _total;
+                    return 0;
+                return Items.Sum(x => x.Total);
             }
+        }
 
-            set
+        public virtual double TotalDiscount
+        {
+            get
             {
-                _total = value;
+                if (Items == null)
+                    return 0;
+                return Items.Sum(x => x.DiscountView);
             }
         }
 
@@ -56,13 +57,10 @@ namespace ShareModels
 
 
         #region fields 
-        private double _total;
-        private int _customerId;
         private OrderStatus status;
         private double _deadLIne;
         #endregion
 
-        public virtual Penjualan Penjualan { get; set; }
     }
 }
 

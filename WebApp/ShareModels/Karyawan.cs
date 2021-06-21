@@ -11,7 +11,6 @@ using System.Threading.Tasks;
    {
         public Karyawan()
         {
-            Orderpenjualan = new HashSet<Orderpenjualan>();
         }
 
         public int Id { get; set; }
@@ -19,12 +18,10 @@ using System.Threading.Tasks;
         public string Telepon { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
-        public int UserId { get; set; }
-
         public virtual User User { get; set; }
-        public virtual ICollection<Orderpenjualan> Orderpenjualan { get; set; }
 
     }
+
 }
 
 

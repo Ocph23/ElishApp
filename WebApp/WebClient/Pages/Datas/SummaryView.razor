@@ -63,8 +63,8 @@
             if (source.Count() <= 0 || forced)
             {
                 source = dbContext.Penjualan.Where(x => x.CreateDate >= start.Value && x.CreateDate <= endDate.Value)
-                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
-                    .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
+                    .Include(x => x.Salesman)
+                    .Include(x => x.Customer)
                     .Include(x => x.Items).ThenInclude(x => x.Unit)
                     .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier)
                     .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);
@@ -75,24 +75,22 @@
             datas.Clear();
             switch (grouping)
             {
-#pragma warning disable BL0005
+                    #pragma warning disable BL0005
                 case 1:
 
                     var items = source.SelectMany(x => x.Items, (x, a) => new PenjualanViewModel
                     {
                         Activity = x.Activity,
-                        Amount = a.Amount,
-                        OrderPenjualanId = x.OrderPenjualanId,
+                        Amount = a.Quantity,
                         CodeArticle = a.Product.CodeArticle,
                         CodeName = a.Product.CodeName,
                         CreateDate = x.CreateDate,
-                        CustomerName = x.OrderPenjualan.Customer.Name,
+                        CustomerName = x.Customer.Name,
                         SupplierName = a.Product.Supplier.Nama,
-                        SalesName = x.OrderPenjualan.Sales.Name,
-                        Discount = x.Discount,
-                        Merk = a.Product.Merk,
+                        SalesName = x.Salesman.Name,
+                        Merk = a.Product.Merk.Name,
                         Name = a.Product.Name,
-                        PayDeadLine = x.PayDeadLine,
+                        PayDeadLine = x.DeadLine,
                         Payment = x.Payment,
                         Price = a.Price,
                         Size = a.Product.Size,
@@ -125,14 +123,12 @@
                     items = source.Select(a => new PenjualanViewModel()
                     {
                         Activity = a.Activity,
-                        OrderPenjualanId = a.OrderPenjualanId,
                         CreateDate = a.CreateDate,
-                        CustomerName = a.OrderPenjualan.Customer.Name,
-                        SalesName = a.OrderPenjualan.Sales.Name,
-                        Discount = a.Discount,
-                        TotalDiscountView = (a.Total * (a.Discount / 100)).ToString("N2"),
-                        GrandTotal = (a.Total - (a.Total * (a.Discount / 100))).ToString("N2"),
-                        PayDeadLine = a.PayDeadLine,
+                        CustomerName = a.Customer.Name,
+                        SalesName = a.Salesman.Name,
+                        TotalDiscountView = a.TotalDiscount.ToString("N2"),
+                        GrandTotal = (a.Total - a.TotalDiscount).ToString("N2"),
+                        PayDeadLine = a.DeadLine,
                         Payment = a.Payment,
                         Status = a.Status,
                         Id = a.Id
@@ -154,12 +150,11 @@
 
                 case 3:
 
-                    var customers = source.GroupBy(x => x.OrderPenjualan.CustomerId).Select(a => new PenjualanViewModel()
+                    var customers = source.GroupBy(x => x.Customer.Id).Select(a => new PenjualanViewModel()
                     {
-                        CustomerName = a.First().OrderPenjualan.Customer.Name,
-                        TotalDiscountView = (a.Sum(n => n.Items.Sum(m => m.Total * n.Discount / 100))).ToString("N2"),
-                        GrandTotal = ((a.Sum(n => n.Items.Sum(m => m.Total))) - (a.Sum(n => n.Items.Sum(m => m.Total * n.Discount / 100)))).ToString("N2"),
-
+                        CustomerName = a.First().Customer.Name,
+                        TotalDiscountView = (a.Sum(n =>n.TotalDiscount)).ToString("N2"),
+                        GrandTotal = a.Sum(n => n.Total - n.TotalDiscount).ToString("N2")
                     });
 
                     foreach (var item in customers)
@@ -172,12 +167,12 @@
 
 
                 case 4:
-                    var sales = source.GroupBy(x => x.OrderPenjualan.SalesId).Select(a => new PenjualanViewModel()
+                    var sales = source.GroupBy(x => x.Salesman.Id).Select(a => new PenjualanViewModel()
                     {
-                        SalesName = a.First().OrderPenjualan.Sales.Name,
-                        TotalDiscountView = (a.Sum(n => n.Items.Sum(m => m.Total * n.Discount / 100))).ToString("N2"),
-                        GrandTotal = ((a.Sum(n => n.Items.Sum(m => m.Total))) - (a.Sum(n => n.Items.Sum(m => m.Total * n.Discount / 100)))).ToString("N2"),
-                        TotalFeeSalesman = (((a.Sum(n => n.Items.Sum(m => m.Total))) - (a.Sum(n => n.Items.Sum(m => m.Total * n.Discount / 100)))) * (a.First().FeeSalesman / 100)).ToString("N2")
+                        SalesName = a.First().Salesman.Name,
+                        TotalDiscountView = (a.Sum(n => n.TotalDiscount)).ToString("N2"),
+                        GrandTotal = (a.Sum(n =>n.Total- n.TotalDiscount)).ToString("N2"),
+                        TotalFeeSalesman = (a.Sum(n => n.Total - n.TotalDiscount) * (a.First().FeeSalesman / 100)).ToString("N2")
 
                     });
 

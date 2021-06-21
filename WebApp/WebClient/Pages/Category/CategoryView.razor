@@ -1,26 +1,28 @@
 ﻿@page "/category"
 
-
-
 @using WebClient.Pages.Category;
+@using WebClient.Pages.ShareComponent
 
 @inject NavigationManager nav;
 @inject ICategoryService categoryService;
 @inject DialogService DialogService;
-
 @attribute [Authorize]
 
 
-<Radzen.Blazor.RadzenFieldset Text="Data Category">
-    <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditCategory>($"Add Category",
+
+<Radzen.Blazor.RadzenFieldset>
+
+    <FieldSetHeader Title="Data Kategori"></FieldSetHeader>
+
+    <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditCategory>($"Tambah",
                         new Dictionary<string, object>() { { "model", new Category()}, },
                         new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
 
-    <RadzenGrid Data="@categories" AllowFiltering="true" AllowPaging="true" AllowSorting="true" >
+    <RadzenGrid @ref="grid" Data="@categories" AllowFiltering="true" AllowPaging="true" AllowSorting="true">
         <Columns>
-            <Radzen.Blazor.RadzenGridColumn Width="300" Property="Name" Title="Name" TItem="Category" />
-            <Radzen.Blazor.RadzenGridColumn Property="Description" Title="Description" TItem="Category" />
-            <Radzen.Blazor.RadzenGridColumn Width="60px"   TItem="Category">
+            <Radzen.Blazor.RadzenGridColumn Width="300" Property="Name" Title="Nama" TItem="Category" />
+            <Radzen.Blazor.RadzenGridColumn Property="Description" Title="Keterangan" TItem="Category" />
+            <Radzen.Blazor.RadzenGridColumn Width="60px" TItem="Category">
                 <Template Context="item">
                     <RadzenButton Click=@(args => DialogService.OpenAsync<EditCategory>($"Edit Category",
                         new Dictionary<string, object>() { { "model", item}, },
@@ -33,29 +35,26 @@
 </Radzen.Blazor.RadzenFieldset>
 
 @code {
+
     private ICollection<Category> categories;
+    RadzenGrid<Category> grid;
+
+    RenderFragment fragment;
 
     protected override async Task OnInitializedAsync()
     {
         DialogService.OnClose += OnCloseDialog;
-        categories =( await categoryService.Get()).ToList();
-
+        categories = (await categoryService.Get()).ToList();
     }
 
-
-
-    public async void OnCloseDialog(dynamic result)
+    public void OnCloseDialog(dynamic result)
     {
-        if (result != null)
+        if (result != null && ((object)result).GetType() == typeof(Category))
         {
             Category model = (Category)result;
             categories.Add(model);
-            await  InvokeAsync(() => StateHasChanged());
+            grid.Reload();
+            StateHasChanged();
         }
-
     }
-
-
-
-
 }

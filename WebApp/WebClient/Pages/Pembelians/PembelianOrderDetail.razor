@@ -4,6 +4,7 @@
 
 @attribute [Authorize]
 
+@inject IMerkService merkService;
 @inject ISupplierService supplierService;
 @inject IPembelianService pembelianService;
 @inject IProductService productService;
@@ -11,131 +12,159 @@
 @inject NavigationManager nav;
 
 
-    <RadzenTabs>
-        <Tabs>
-            <RadzenTabsItem Text="@(@title +"Order Pembelian")">
+<RadzenTabs>
+    <Tabs>
+        <RadzenTabsItem Text="@(@title +"Order Pembelian")">
+            <RadzenFieldset Text="Data Supplier">
+                <div class="col-md-12  align-items-center d-flex">
+                    <div class="col-md-6">
 
-                    <RadzenFieldset Text="Data Supplier">
-                        <div class="col-md-12  align-items-center d-flex">
-                            <div class="col-md-8">
-                                <div class="col-md-4 align-items-center d-flex">
-                                    <RadzenLabel Text="Suplier" />
-                                </div>
-                                <div class="col-md-8">
-                                    <RadzenDropDown AllowClear="true" AllowFiltering="true"
-                                                    FilterCaseSensitivity="FilterCaseSensitivity.Default" Data=@suppliers @bind-Value=@model.SupplierId
-                                                    TextProperty="Nama" ValueProperty="Id"
-                                                    Change=@(args => SelectSupplier(args, "Supplier")) />
-                                </div>
-
-                                <div class="col-md-4 align-items-center d-flex">
-                                    <RadzenLabel Text="Discount (%)" />
-                                </div>
-                                <div class="col-md-8">
-                                    <RadzenNumeric @bind-Value="model.Discount" TValue="double" Placeholder="0.0" Step="0.5" />
-                                </div>
-
-                                <div class="col-md-4 align-items-center d-flex">
-                                    <RadzenLabel Text="Status" Style="margin-top:10px" />
-                                </div>
-                                <div class="col-md-8">
-                                    <RadzenTextBox Disabled=true Value="@model.Status.ToString()" Style="margin-top:10px" />
-                                </div>
-                            </div>
-                            <div class="col-md-4" style="text-align:right">
-                                <a class="btn btn-info" href="/report/OrderPembelianExcel/@model.Id">
-                                <i style="font-size:24px" class="material-icons">cloud_download</i> Download</a>
-                            </div>
-                        </div>
-                    </RadzenFieldset>
-
-                <div class="col-md-12">
-                    <RadzenFieldset Text="Data Orders">
-                        <div class="row col-md-8">
+                        <div class="row" style="margin-top:5px">
                             <div class="col-md-4 align-items-center d-flex">
-                                <RadzenLabel Text="Cari Product" />
+                                <RadzenLabel Text="Suplier" />
                             </div>
                             <div class="col-md-8">
-                                <RadzenDropDown AllowClear="true" AllowFiltering="true"
-                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                Data=@products.Where(item=> !model.Items.Any(data=> data.ProductId.Equals(item.Id)))
-                                                @bind-Value=@product.Id
-                                                TextProperty="CodeName" ValueProperty="Id"
-                                                Change=@(args => SelectProduct(args, "Supplier")) />
+                                <RadzenDropDown AllowClear="true" AllowFiltering="true" Style="width:90%"
+                                                FilterCaseSensitivity="FilterCaseSensitivity.Default" Data=@suppliers @bind-Value=@model.Supplier
+                                                TextProperty="Nama"
+                                                Change=@(args => SelectSupplier(args, "Supplier")) />
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:5px">
+                            <div class="col-md-4 align-items-center d-flex">
+                                <RadzenLabel Text="Status" Style="margin-top:5px" />
+                            </div>
+                            <div class="col-md-8">
+                                <RadzenTextBox Disabled=true Value="@model.Status.ToString()" Style="margin-top:5px" />
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:5px">
+                            <div class="col-md-4 align-items-center d-flex">
+                                <RadzenLabel Text="Keterangan" Style="margin-top:5px" />
+                            </div>
+                            <div class="col-md-8">
+                                <RadzenTextArea @bind-Value="@model.Discription" Style="width:90%" />
                             </div>
                         </div>
 
-                        <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" 
-                                    AllowSorting="true" TItem="OrderpembelianItem">
-                            <Columns>
-                                <RadzenGridColumn Width="120px" TItem="OrderpembelianItem" Property="Product.CodeArticle" Title="Article" />
-                                <RadzenGridColumn Width="180px" TItem="OrderpembelianItem" Property="Product.CodeName" Title="Code" />
-                                <RadzenGridColumn TItem="OrderpembelianItem" Property="Product.Name" Title="Product" />
-                                <RadzenGridColumn Width="100px" TItem="OrderpembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
-                                    <EditTemplate Context="item">
-                                        <RadzenNumeric TValue="double" @bind-Value="item.Amount" Step="1" Change=@(args => OnChangeOrderItem(args, item)) />
-                                    </EditTemplate>
-                                </RadzenGridColumn>
-                                <RadzenGridColumn Width="130px" TItem="OrderpembelianItem" Property="Unit.Name" Title="Unit">
-                                    <EditTemplate Context="item">
-                                        <RadzenDropDown @bind-Value="item.UnitId" Data="@item.Product.Units"
-                                                        Change=@(args => OnChangeOrderItem(args, item))
-                                                        TextProperty="Name" ValueProperty="Id" Style="width:100%" />
-                                    </EditTemplate>
-                                </RadzenGridColumn>
-                                <RadzenGridColumn Width="100px" TItem="OrderpembelianItem" TextAlign="TextAlign.Right" Property="Price" Title="Price">
-                                    <EditTemplate Context="item">
-                                        <RadzenNumeric @bind-Value="item.Price" Step="0.25" />
-                                    </EditTemplate>
-                                    <FooterTemplate>
-                                        <div>Total</div>
-                                        <div>Discount</div>
-                                        <div>Total Payment </div>
-                                    </FooterTemplate>
-                                </RadzenGridColumn>
-                                <RadzenGridColumn Width="150px" TItem="OrderpembelianItem" Property="Total" TextAlign="TextAlign.Right" Title="Total">
-                                    <FooterTemplate>
-                                        @{
-                                            <div>@model.Total.ToString("N")</div>
-                                            var total = model.Total * (model.Discount / 100);
-                                            <div>@total.ToString("N")</div>
-                                            <div>@((model.Total-total).ToString("N"))</div>
 
-                                        }
-                                    </FooterTemplate>
-                                </RadzenGridColumn>
 
-                                <RadzenGridColumn TItem="OrderpembelianItem" Context="sampleBlazorModelsSampleOrder" Visible="@(model.Items.Count>0  && ((Int32)model.Status < 1))"
-                                                  Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
-                                    <HeaderTemplate>
-                                        <RadzenCheckBox Value="@(checkall)" TValue="bool" ValueChanged="@((x)=>OnCheckChange(x))" />
-                                    </HeaderTemplate>
-                                    <Template Context="order">
-                                        <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(order))">
-                                        </RadzenButton>
-                                    </Template>
-                                    <EditTemplate Context="order">
-                                        <RadzenButton Icon="save" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Warning" Click="@((args) => SaveRow(order))">
-                                        </RadzenButton>
-                                        <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Danger"
-                                                      Click="@((args) => CancelEdit(order))">
-                                        </RadzenButton>
-                                    </EditTemplate>
+                    </div>
+                    <div class="col-md-6" style="text-align:right">
+                        <a class="btn btn-info" href="/report/OrderPembelianExcel/@model.Id">
+                            <i style="font-size:24px" class="material-icons">download</i> Download
+                        </a>
+                    </div>
+                </div>
+            </RadzenFieldset>
 
-                                    <FooterTemplate>
-                                        <RadzenButton Click=@(args => nav.NavigateTo("/pembelian")) Icon="cancel" ButtonStyle="ButtonStyle.Warning" />
-                                        <RadzenButton Visible="@(model.Items.Count>0  && ((Int32)model.Status < 1))" Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
-                                    </FooterTemplate>
-                                </RadzenGridColumn>
-                            </Columns>
-                        </RadzenGrid>
-                    </RadzenFieldset>
+            <RadzenFieldset Text="Data Orders">
+                <div class="row col-md-8">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Merek" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        Data=@merks
+                                        @bind-Value=@merkId
+                                        TextProperty="Name" ValueProperty="Id" Style="width:400px" />
+                    </div>
+                </div>
+                <div class="row col-md-8">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Product" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        Data=@products.Where( item=> merkId<=0?true: item.Merk.Id==merkId && !model.Items.Any(data=> data.Product.Id.Equals(item.Id)))
+                                        @bind-Value=@product
+                                        TextProperty="CodeName"
+                                        Change=@(args => SelectProduct(args, "Supplier"))  Style="width:400px"/>
+                    </div>
                 </div>
 
+                <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true"
+                            AllowSorting="true" TItem="OrderPembelianItem">
+                    <Columns>
+                        <RadzenGridColumn Width="180px" TItem="OrderPembelianItem" Property="Product.CodeName" Title="Code" />
+                        <RadzenGridColumn TItem="OrderPembelianItem" Property="Product.Name" Title="Product" />
+                        <RadzenGridColumn Width="100px" TItem="OrderPembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Quntity" Title="Quntity">
+                            <Template Context="item">
+                                <RadzenNumeric TValue="double" @bind-Value="item.Quntity" Step="1" Change=@(args => OnChangeOrderItem(args, item)) />
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="130px" TItem="OrderPembelianItem" Property="Unit.Name" Title="Unit">
+                            <EditTemplate Context="item">
+                                <RadzenDropDown @bind-Value="item.Unit" Data="@item.Product.Units"
+                                                Change=@(args => OnChangeOrderItem(args, item))
+                                                
+                                                TextProperty="Name" Style="width:100%" />
+                            </EditTemplate>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="100px" TItem="OrderPembelianItem" TextAlign="TextAlign.Right" Property="Price" Title="Price">
+                            <EditTemplate Context="item">
+                                <RadzenNumeric @bind-Value="item.Price" Step="0.25" />
+                            </EditTemplate>
+                            <Template Context="item">
+                                @item.Price.ToString("N2")
+                            </Template>
+                            <FooterTemplate>
+                                <div>Total</div>
+                                <div>Discount</div>
+                                <div>Total Payment </div>
+                            </FooterTemplate>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="130px" TItem="OrderPembelianItem" Property="DiscountView" Title="Disc">
+                            <EditTemplate Context="item">
+                                <RadzenNumeric @bind-Value="item.Discount" Step="0.1" />
+                            </EditTemplate>
+                            <Template Context="item">
+                                @item.DiscountView.ToString("N2")
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn Width="150px" TItem="OrderPembelianItem" Property="Total" TextAlign="TextAlign.Right" Title="Total">
+                            <Template Context="item">
+                                @item.Total.ToString("N2")
+                            </Template>
+                            <FooterTemplate>
+                                @{
+                                    <div>@((model.Total).ToString("N"))</div>
+                                    <div>@((model.Items.Sum(x=>x.DiscountView)).ToString("N"))</div>
+                                    <div>@((model.Total-model.Items.Sum(x=>x.DiscountView)).ToString("N"))</div>
+                                }
+                            </FooterTemplate>
+                        </RadzenGridColumn>
 
-            </RadzenTabsItem>
-        </Tabs>
-    </RadzenTabs>
+                        <RadzenGridColumn TItem="OrderPembelianItem" Context="sampleBlazorModelsSampleOrder" Visible="@(model.Items.Count>0  && ((Int32)model.Status < 1))"
+                                          Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                            <HeaderTemplate>
+                                <RadzenCheckBox TValue="bool" ValueChanged="@((x)=>OnCheckChange(x))" />
+                            </HeaderTemplate>
+                            <Template Context="order">
+                                <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(order))">
+                                </RadzenButton>
+                            </Template>
+                            <EditTemplate Context="order">
+                                <RadzenButton Icon="save" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Warning" Click="@((args) => SaveRow(order))">
+                                </RadzenButton>
+                                <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Danger"
+                                              Click="@((args) => CancelEdit(order))">
+                                </RadzenButton>
+                            </EditTemplate>
+
+                            <FooterTemplate>
+                                <RadzenButton Click=@(args => nav.NavigateTo("/pembelian")) Icon="cancel" ButtonStyle="ButtonStyle.Warning" />
+                                <RadzenButton Visible="@(model.Items.Count>0  && ((Int32)model.Status < 1))" Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
+                            </FooterTemplate>
+                        </RadzenGridColumn>
+                    </Columns>
+                </RadzenGrid>
+            </RadzenFieldset>
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
 
 
 
@@ -147,23 +176,22 @@
     string title;
 
     private Product product = new Product();
+    private int merkId;
     private IEnumerable<Supplier> suppliers;
+    private IEnumerable<Merk> merks;
     private IEnumerable<Product> products = new List<Product>();
 
 
-    private Orderpembelian model = new Orderpembelian() { Items = new List<OrderpembelianItem>() };
+    private OrderPembelian model = new OrderPembelian() { Items = new List<OrderPembelianItem>() };
 
-    private RadzenGrid<OrderpembelianItem> ordersGrid;
+    private RadzenGrid<OrderPembelianItem> ordersGrid;
 
-    bool checkall;
 
-    void OnCheckChange(bool data)
+    void OnCheckChange(bool check)
     {
-        checkall = !checkall;
-
         foreach (var item in model.Items)
         {
-            if (checkall)
+            if (check)
                 ordersGrid.EditRow(item);
 
             else
@@ -174,18 +202,24 @@
     }
 
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+    }
 
     protected override async Task OnInitializedAsync()
     {
         suppliers = await supplierService.GetSuppliers();
+        merks = await merkService.Get();
         if (!string.IsNullOrEmpty(id))
         {
             int paramId = Convert.ToInt32(id);
             if (paramId > 0)
             {
                 this.model = await pembelianService.GetOrder(paramId);
+
                 if (model != null)
-                    products = await productService.GetProductsBySupplier(model.SupplierId);
+                    products = await productService.GetProductsBySupplier(model.Supplier.Id);
             }
 
         }
@@ -198,49 +232,55 @@
 
     async Task SelectSupplier(object value, string name)
     {
-        var suppId = (int)value;
-        model = new Orderpembelian() { SupplierId = suppId, Items = new List<OrderpembelianItem>() };
-        products = await productService.GetProductsBySupplier(suppId);
+        var supplier = (Supplier)value;
+        if (supplier != null)
+        {
+            model = new OrderPembelian() { Supplier = supplier, Items = new List<OrderPembelianItem>() };
+            products = await productService.GetProductsBySupplier(supplier.Id);
+        }
+
+
+
     }
 
 
-   
 
 
-    private void RemoveItem(OrderpembelianItem item)
+
+    private void RemoveItem(OrderPembelianItem item)
     {
         model.Items.Remove(item);
 
     }
     private void Cancel()
     {
-        model = new Orderpembelian();
+        model = new OrderPembelian();
         products = new List<Product>();
     }
 
 
-    void EditRow(OrderpembelianItem item)
+    void EditRow(OrderPembelianItem item)
     {
         ordersGrid.EditRow(item);
     }
-    void SaveRow(OrderpembelianItem item)
+    void SaveRow(OrderPembelianItem item)
     {
         ordersGrid.UpdateRow(item);
     }
 
-    async Task CancelEdit(OrderpembelianItem item)
+    async Task CancelEdit(OrderPembelianItem item)
     {
         model.Items.Remove(item);
         await ordersGrid.Reload();
     }
 
 
-    private async Task Save(Orderpembelian model)
+    private async Task Save(OrderPembelian model)
     {
 
         try
         {
-            Orderpembelian result;
+            OrderPembelian result;
             if (model.Id <= 0)
             {
                 model.OrderDate = DateTime.Now;
@@ -281,48 +321,32 @@
 
     async Task SelectProduct(object value, string name)
     {
-        var prodId = (int)value;
-        var _product = products.Where(x => x.Id == prodId).FirstOrDefault();
-        if (_product != null && model.Items.Where(x => x.ProductId == _product.Id).FirstOrDefault() == null)
+        var product = (Product)value;
+        if (product != null)
         {
-            var item = new OrderpembelianItem { Product = _product, ProductId = prodId, Amount = 1 };
-            item.Unit = _product.Units.FirstOrDefault();
-            item.UnitId = item.Unit.Id;
-            if (model.Items == null)
-                model.Items = new List<OrderpembelianItem>();
-            model.Items.Add(item);
+            var _product = products.Where(x => x.Id == product.Id).FirstOrDefault();
+            if (_product != null && model.Items.Where(x => x.Product.Id == _product.Id).FirstOrDefault() == null)
+            {
+                var item = new OrderPembelianItem { Product = _product, Quntity = 1, Discount = product.Discount };
+                item.Unit = _product.Units.OrderBy(x => x.Level).FirstOrDefault();
+                if (model.Items == null)
+                    model.Items = new List<OrderPembelianItem>();
+                model.Items.Add(item);
+            }
         }
-
-
         product = new Product();
         await ordersGrid.Reload();
+
     }
 
 
 
-    private async Task SelectUnit(object arg, OrderpembelianItem product)
+
+    private async Task OnChangeOrderItem(object arg, OrderPembelianItem item)
     {
-
-        var unitId = (Int32)arg;
-        var unit = product.Product.Units.Where(x => x.Id == unitId).FirstOrDefault();
-        if (unit != null)
+        if (arg.GetType() == typeof(Unit))
         {
-            product.Unit = unit;
-            product.Price = unit.Buy;
-        }
-        await Task.Delay(100);
-
-        StateHasChanged();
-    }
-
-
-
-    private async Task OnChangeOrderItem(object arg, OrderpembelianItem item)
-    {
-        if (arg.GetType() == typeof(Int32))
-        {
-            var unitId = (Int32)arg;
-            var unit = item.Product.Units.Where(x => x.Id == unitId).FirstOrDefault();
+            var unit = (Unit)arg;
             if (unit != null)
             {
                 item.Unit = unit;
@@ -330,23 +354,6 @@
             }
             await Task.Delay(100);
         }
-
-
-        @*var productStok = products.Where(x => x.Id == item.ProductId).FirstOrDefault();
-            if (productStok != null)
-            {
-                var readyStok = productStok.Stock / item.Unit.Amount;
-                if (item.Amount > readyStok)
-                {
-                    NotificationService.Notify(new NotificationMessage
-                    {
-                        Detail = $"Stock {productStok.CodeName} Tidak Cukup \r Sisa Stock = {readyStok} {item.Unit.Name}",
-                        Severity = NotificationSeverity.Error
-                    });
-                    item.Amount = readyStok;
-                }
-            }*@
-
 
         StateHasChanged();
     }

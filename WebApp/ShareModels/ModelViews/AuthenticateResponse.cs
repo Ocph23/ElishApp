@@ -13,7 +13,7 @@ namespace ShareModels
             this.UserName = user.UserName;
             this.Email = user.Email;
             this.Token = token;
-            this.Roles = user.Roles.Select(x => x.Name);
+            this.Roles = user.Roles.Select(x => x.Role.Name);
         }
 
         public string UserName { get; set; }

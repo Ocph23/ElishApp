@@ -12,10 +12,13 @@ namespace WebClient
     {
         public static string ApplicationName => "Alpha Papua Sejahtera";
         public static string DirectorName => "Herman Hamid";
-        public static string OfficeTelp => "081354699393";
+        public static string OfficeTelp => "0967 - 5186704";
+        public static string OfficeAddress=> "Perum Permata Indah No 216";
         public static string Bank=> "Bank Mandiri";
         public static string AccountBank => "Ajenkris Yanto Kungkung";
         public static string Rekening => "154-00-1395694-5";
+
+        public static double DefaultFeeSalesman => 3;
 
         public static DataTable ToDataTable<T>(this List<T> data)
         {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ShareModels
 {
-    public class Pembayaranpenjualan 
+    public class PembayaranPenjualan 
     {
         public int Id { get; set; }
 
@@ -19,7 +19,6 @@ namespace ShareModels
 
         public string Description { get; set; }
 
-        public int PenjualanId { get; set; }
         public int Status { get; set; }
 
         [Required(ErrorMessage = "{0} is required")]

@@ -27,7 +27,7 @@ namespace ElishAppMobile.Views
 
     public class CreatePackingListViewModel :BaseViewModel
     {
-        public CreatePackingListViewModel(ShareModels.Orderpenjualan _order)
+        public CreatePackingListViewModel(ShareModels.OrderPenjualan _order)
         {
             this.Order = _order;
             Datas = new ObservableCollection<ItemPenjualanModel>();
@@ -116,7 +116,7 @@ namespace ElishAppMobile.Views
 
         public ObservableCollection<ItemPenjualanModel> Datas { get; }
 
-        public Orderpenjualan Order { get; set; }
+        public OrderPenjualan Order { get; set; }
         
         public Command QRCommand { get; }
         public Command LoadItemsCommand { get; }

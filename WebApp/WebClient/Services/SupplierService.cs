@@ -16,7 +16,7 @@ namespace WebClient.Services
             dbContext = db;
         }
 
-        public async Task<bool> Delete(int id)
+        public  Task<bool> Delete(int id)
         {
             try
             {
@@ -25,8 +25,8 @@ namespace WebClient.Services
                     throw new SystemException("Data Not Found !");
 
                 dbContext.Supplier.Remove(existsModel);
-                await dbContext.SaveChangesAsync();
-                return true;
+                dbContext.SaveChanges();
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace WebClient.Services
 
         public Task<IEnumerable<Product>> GetProducts(int supplierId)
         {
-            var results = dbContext.Product.Where(x => x.SupplierId == supplierId)
+            var results = dbContext.Product.Where(x => x.Supplier.Id == supplierId)
                         .Include(x => x.Category);
             return Task.FromResult(results.AsEnumerable());
         }
@@ -52,13 +52,13 @@ namespace WebClient.Services
             return Task.FromResult(dbContext.Supplier.AsEnumerable());
         }
 
-        public async Task<Supplier> Post(Supplier value)
+        public  Task<Supplier> Post(Supplier value)
         {
             try
             {
                 dbContext.Supplier.Add(value);
-                await dbContext.SaveChangesAsync();
-                return value;
+                dbContext.SaveChanges();
+                return Task.FromResult(value);
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace WebClient.Services
             }
         }
 
-        public async Task<bool> Update(int id, Supplier value)
+        public  Task<bool> Update(int id, Supplier value)
         {
             try
             {
@@ -75,8 +75,8 @@ namespace WebClient.Services
                     throw new SystemException("Data Not Found !");
 
                 dbContext.Entry(existsModel).CurrentValues.SetValues(value);
-               await dbContext.SaveChangesAsync();
-                return true;
+               dbContext.SaveChanges();
+                return Task.FromResult(true);
 
             }
             catch (Exception ex)

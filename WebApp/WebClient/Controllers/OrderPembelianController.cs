@@ -65,7 +65,7 @@ namespace WebClient.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Post(Orderpembelian order)
+        public async Task<IActionResult> Post(OrderPembelian order)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace WebClient.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Orderpembelian order)
+        public async Task<IActionResult> Put(int id, OrderPembelian order)
         {
             try
             {

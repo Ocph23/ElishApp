@@ -101,8 +101,8 @@
             if (start != null && endDate != null && start <= endDate)
             {
                 source = dbContext.Penjualan.Where(x => x.CreateDate >= start.Value && x.CreateDate <= endDate.Value)
-                       .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
-                       .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
+                       .Include(x => x.Salesman)
+                       .Include(x => x.Customer)
                        .Include(x => x.Items).ThenInclude(x => x.Unit)
                        .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier)
                        .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);
@@ -120,20 +120,18 @@
                 tempt = source.AsEnumerable();
             }
             else
-                tempt = source.Where(x => x.OrderPenjualan.SalesId == SelectedKaryawan.Id);
+                tempt = source.Where(x => x.Salesman.Id == SelectedKaryawan.Id);
 
             penjualans = tempt.Select(item => new PenjualanAndOrderModel
             {
                 Created = item.CreateDate,
-                Customer = item.OrderPenjualan.Customer.Name,
-                Sales = item.OrderPenjualan.Sales.Name,
-                DeadLine = item.PayDeadLine,
-                Discount = item.Discount,
+                Customer = item.Customer.Name,
+                Sales = item.Salesman.Name,
+                DeadLine = item.DeadLine,
                 Invoice = item.Nomor,
-                NomorSO = item.OrderPenjualan.Nomor,
-                OrderId = item.OrderPenjualanId,
-                OrderStatus = item.OrderPenjualan.Status,
-                PaymentType = item.OrderPenjualan.PaymentType, 
+                NomorSO = item.Nomor,
+                OrderId = item.Id,
+                PaymentType = item.Payment, 
                 PaymentStatus = item.Status,
                 PenjualanId = item.Id,
                 Total = item.Total, FeeSales= item.FeeSalesman

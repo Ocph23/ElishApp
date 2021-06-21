@@ -10,14 +10,9 @@ namespace ShareModels
     {
         public int Id { get; set; }
 
-        public int PembelianId { get; set; }
-
-        public int ProductId { get; set; }
-
         public double Amount { get; set; }
 
         private double price;
-
         public double Price
         {
             get
@@ -31,18 +26,25 @@ namespace ShareModels
             set { price = value; }
         }
 
-        public int UnitId { get; set; }
 
         public virtual Unit Unit { get; set; }
 
         public virtual Product Product { get; set; }
-
+        public double Discount { get; set; }
 
         public virtual double Total
         {
             get
             {
                 return Price * Amount;
+            }
+        }
+
+        public virtual double DiscountView
+        {
+            get
+            {
+                return Total * Discount / 100;
             }
         }
 

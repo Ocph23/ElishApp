@@ -9,6 +9,9 @@ namespace ShareModels
     {
         public int Id { get; set; }
 
+        public Customer Customer { get; set; }
+        public Karyawan Salesman { get; set; }
+
         public virtual string Nomor
         {
             get
@@ -17,29 +20,41 @@ namespace ShareModels
             }
         }
 
-        public int OrderPenjualanId { get; set; }
+
+        public virtual string NomorSuratJalan
+        {
+            get
+            {
+                return $"{Id}/SJ-APS/{CreateDate.Month}/{CreateDate.Year}";
+            }
+        }
 
         public DateTime CreateDate { get; set; }
 
-        public double PayDeadLine { get; set; }
+        public double DeadLine { get; set; }
 
-
-        public double Discount { get; set; }
+        [NotMapped]
+        public DateTime PayDeadLine
+        {
+            get
+            {
+                return CreateDate.AddDays(DeadLine);
+            }
+        }
 
         public PaymentStatus Status { get; set; }
 
-        public ActivityStatus Activity { get; set; }
+        public string Description { get; set; }
 
+        public ActivityStatus Activity { get; set; }
 
         public double FeeSalesman { get; set; }
         public double Expedisi { get; set; }
 
 
         [NotMapped]
-        public PaymentType Payment { get => PayDeadLine <= 0 ? PaymentType.Tunai : PaymentType.Kredit; }
-        private double _total;
+        public PaymentType Payment { get => DeadLine <= 0 ? PaymentType.Tunai : PaymentType.Kredit; }
 
-        [NotMapped]
         public virtual double Total
         {
             get
@@ -48,25 +63,27 @@ namespace ShareModels
                     return 0;
                 return Items.Sum(x => x.Total);
             }
+        }
 
-            set
+        public virtual double TotalDiscount
+        {
+            get
             {
-                _total = value;
+                if (Items == null)
+                    return 0;
+                return Items.Sum(x => x.DiscountView);
             }
         }
 
+        public Gudang Gudang { get; set; }
 
-        public virtual Orderpenjualan OrderPenjualan { get; set; }
-
-        public Penjualan()
-        {
-            Pembayaranpenjualan = new HashSet<Pembayaranpenjualan>();
-            Items = new HashSet<Penjualanitem>();
-        }
-
+        public virtual OrderPenjualan OrderPenjualan { get; set; }
 
         public virtual ICollection<Penjualanitem> Items { get; set; }
-        public virtual ICollection<Pembayaranpenjualan> Pembayaranpenjualan { get; set; }
+        public virtual ICollection<PembayaranPenjualan> PembayaranPenjualan { get; set; }
+
+
+       
     }
 }
 

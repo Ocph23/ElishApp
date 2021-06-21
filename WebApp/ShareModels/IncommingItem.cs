@@ -12,9 +12,9 @@ namespace ShareModels
         public IncomingItem(){}
 
         public IncomingItem(PembelianItem pembelianItem){
-            PembelianId = pembelianItem.PembelianId;
+            //PembelianId = pembelianItem.PembelianId;
             Product = pembelianItem.Product;
-            ProductId = Product.Id;
+            //ProductId = Product.Id;
             Unit = pembelianItem.Unit;
             Amount = pembelianItem.Amount;
         }
@@ -33,8 +33,8 @@ namespace ShareModels
             }
         }
 
-        public int PembelianId { get; set; }
-        public int UnitId { get; set; }
+      //  public int PembelianId { get; set; }
+      //  public int UnitId { get; set; }
 
         public virtual double Amount { get; set; }
         public virtual Unit Unit { 
@@ -42,14 +42,14 @@ namespace ShareModels
             set { 
                 if (value != null && value != _unit)
                 {
-                    UnitId = value.Id;
+                   Unit= value;
                     if(_unit!=null && Product!=null && Product.Units != null)
                     {
                         var unit0 = Product.Units.Where(x => x.Level == 0).FirstOrDefault();
                         if (unit0 != null)
                         {
-                           var baseAmount = _unit.Amount * ActualValue;
-                            ActualValue = _unit.Amount <= value.Amount ? baseAmount / value.Amount : value.Amount/baseAmount ;
+                           var baseAmount = _unit.Quantity * ActualValue;
+                            ActualValue = _unit.Quantity <= value.Quantity ? baseAmount / value.Quantity : value.Quantity/baseAmount ;
                         }
                     }
                 }
@@ -57,7 +57,7 @@ namespace ShareModels
             } }
 
 
-        public int ProductId { get; set; }
+       // public int ProductId { get; set; }
         public event Func<IncomingItem, Task> UpdateEvent;
         public virtual string Status
         {

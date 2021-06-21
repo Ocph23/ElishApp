@@ -5,11 +5,8 @@ namespace ShareModels
     {
         public int Id { get; set; }
 
-        public int PenjualanId { get; set; }
-
-        public int ProductId { get; set; }
-
-        public double Amount { get; set; }
+        public double Quantity { get; set; }
+        public double Discount { get; set; }
 
         private double price;
 
@@ -26,7 +23,7 @@ namespace ShareModels
             set { price = value; }
         }
 
-        public int UnitId { get; set; }
+      //  public int UnitId { get; set; }
 
         public virtual Unit Unit { get; set; }
 
@@ -36,15 +33,19 @@ namespace ShareModels
         {
             get
             {
-                return Price * Amount;
+                return Price * Quantity;
+            }
+        }
+                                        
+        public virtual double DiscountView
+        {
+            get
+            {
+                return Total * Discount/100;
             }
         }
 
-
-
-
-        public virtual Penjualan Penjualan { get; set; }
-
+        public virtual Penjualan Penjualan{ get; set; }
     }
 }
 

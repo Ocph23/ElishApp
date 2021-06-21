@@ -52,7 +52,7 @@ namespace WebClient
                 if(user==null)
                     return false;
 
-                if(user.Roles.Where(x=>x.Name.ToLower()==roleName.ToLower()).Count()>0)
+                if(user.Roles.Where(x=>x.Role.Name.ToLower()==roleName.ToLower()).Count()>0)
                     return true;
                 return false;
            }

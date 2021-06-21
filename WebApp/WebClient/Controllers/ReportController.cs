@@ -1,24 +1,17 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using ShareModels;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using WebClient.Models;
 
 using FastReport.Utils;
 using FastReport;
 using FastReport.Export.Html;
 using System.Data;
-using System.ComponentModel;
-using FastReport.Web;
 using Microsoft.EntityFrameworkCore;
 using ShareModels.ModelViews;
 
@@ -64,13 +57,14 @@ namespace WebClient.Controllers
                         datas.Add(new ShareModels.Reports.NotaData
                         {
                             No = nomor,         
-                            Amount = item.Amount,
+                            Amount = item.Quantity,
                             CodeArticle = item.Product.CodeArticle,
                             CodeProduct = item.Product.CodeName,
                             ProductName = $"{item.Product.Name} {item.Product.Size}",
                             Unit = item.Unit.Name,
                             Price = item.Price,
                             Total = item.Total,      
+                            DiscountValue=item.DiscountView
                         });
 
                         nomor++;
@@ -80,7 +74,50 @@ namespace WebClient.Controllers
                     return Print(datasets, nota, path);
 
                 }
-                catch (Exception ex)
+                catch (Exception )
+                {
+                    return new NoContentResult();
+                }
+            }
+            else
+                return NotFound();
+        }
+        public async Task<ActionResult> PrintSuratJalan(int id)
+        {
+            var reportItem = "suratjalan.frx";
+            if (reportItem != null)
+            {
+                var path = $"{_iwebhost.WebRootPath}/reports/frxs/{reportItem}";
+                
+                try
+                {
+                    var data = await _penjualanService.GetPenjualan(id);
+                    var nota = GetNotaParameters(data, data.GetType());
+                    var datas = new List<ShareModels.Reports.NotaData>();
+                    int nomor = 1;
+                    foreach (var item in data.Items.OrderBy(x=>x.Product.Name))
+                    {
+                        datas.Add(new ShareModels.Reports.NotaData
+                        {
+                            No = nomor,         
+                            Amount = item.Quantity,
+                            CodeArticle = item.Product.CodeArticle,
+                            CodeProduct = item.Product.CodeName,
+                            ProductName = $"{item.Product.Name} {item.Product.Size}",
+                            Unit = item.Unit.Name,
+                            Price = item.Price,
+                            Total = item.Total,      
+                            DiscountValue=item.DiscountView
+                        });
+
+                        nomor++;
+                    }
+
+                    var datasets = datas.ToDataTable();
+                    return Print(datasets, nota, path);
+
+                }
+                catch (Exception )
                 {
                     return new NoContentResult();
                 }
@@ -101,8 +138,8 @@ namespace WebClient.Controllers
                 try
                 {
                     var source = _dbContext.Penjualan.Where(x => x.CreateDate >= dstart && x.CreateDate <= dend)
-                           .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
-                           .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
+                           .Include(x => x.Salesman)
+                           .Include(x => x.Customer)
                            .Include(x => x.Items).ThenInclude(x => x.Unit)
                            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier)
                            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);
@@ -110,15 +147,13 @@ namespace WebClient.Controllers
                    var datas = source.Select(item => new PenjualanAndOrderModel
                     {
                         Created = item.CreateDate,
-                        Customer = item.OrderPenjualan.Customer.Name,
-                        Sales = item.OrderPenjualan.Sales.Name,
-                        DeadLine = item.PayDeadLine,
-                        Discount = item.Discount,
+                        Customer = item.Customer.Name,
+                        Sales = item.Salesman.Name,
+                        DeadLine = item.DeadLine,
                         Invoice = item.Nomor,
-                        NomorSO = item.OrderPenjualan.Nomor,
-                        OrderId = item.OrderPenjualanId,
-                        OrderStatus = item.OrderPenjualan.Status,
-                        PaymentType = item.OrderPenjualan.PaymentType,
+                        NomorSO = item.Nomor,
+                        OrderId = item.Id,
+                        PaymentType = item.Payment,
                         PaymentStatus = item.Status,
                         PenjualanId = item.Id,
                         Total = item.Total,
@@ -266,7 +301,8 @@ namespace WebClient.Controllers
             }
         }
 
-        public async Task<ActionResult> PrintStock(int id)
+
+        public async Task<ActionResult> PrintStockBarang(int id, int merkid)
         {
             var reportItem = "stock.frx";
             if (reportItem != null)
@@ -275,15 +311,26 @@ namespace WebClient.Controllers
 
                 try
                 {
-                    var supplier = "ALL";
-                    IEnumerable<ShareModels.ModelViews.ProductStock> data = new List<ShareModels.ModelViews.ProductStock>();
-                    if(id<=0)
-                        data = (await _productService.GetProductStock()).OrderBy(x=>x.Name);
-                    else
+                    var dataParams = new Dictionary<string, string>();
+                    var gudangName = "All";
+                    var merkName= "-";
+                    if (id > 0)
                     {
-                        data = (await _productService.GetProductStock()).Where(x => x.SupplierId == id).OrderBy(x => x.Name);
-                        supplier = data.FirstOrDefault().Supplier.Nama;
+                        var gudang = _dbContext.Gudang.Where(x => x.Id == id).FirstOrDefault();
+                        gudangName = gudang == null ? "" : gudang.Name;
                     }
+                    dataParams.Add("Gudang", gudangName);
+
+                    if (merkid > 0)
+                    {
+                        var merk = _dbContext.Merk.Where(x => x.Id == merkid).FirstOrDefault();
+                        merkName = merk== null ? "" : merk.Name;
+                    }
+                    dataParams.Add("Merk", merkName);
+
+                    IEnumerable<ShareModels.ModelViews.ProductStock> data = new List<ShareModels.ModelViews.ProductStock>();
+                    data = (await _productService.GetProductStockByGudangId(merkid,id,false)).OrderBy(x => x.Name);
+                    
                     var datas = new List<ShareModels.Reports.NotaData>();
                     int nomor = 1;
                     foreach (var item in data)
@@ -306,7 +353,7 @@ namespace WebClient.Controllers
                     }
 
                     var datasets = datas.ToDataTable();
-                    return PrintStockAction(datasets, supplier, path);
+                    return PrintStockAction(datasets, dataParams, path);
 
                 }
                 catch (Exception)
@@ -318,7 +365,60 @@ namespace WebClient.Controllers
                 return NotFound();
         }
 
-        private ActionResult PrintStockAction(DataTable datasets, string param, string path)
+
+        //public async Task<ActionResult> PrintStock(int id)
+        //{
+        //    var reportItem = "stock.frx";
+        //    if (reportItem != null)
+        //    {
+        //        var path = $"{_iwebhost.WebRootPath}/reports/{reportItem}";
+
+        //        try
+        //        {
+        //            var supplier = "ALL";
+        //            IEnumerable<ShareModels.ModelViews.ProductStock> data = new List<ShareModels.ModelViews.ProductStock>();
+        //            if(id<=0)
+        //                data = (await _productService.GetProductStock()).OrderBy(x=>x.Name);
+        //            else
+        //            {
+        //                data = (await _productService.GetProductStock()).Where(x => x.Supplier.Id == id).OrderBy(x => x.Name);
+        //                supplier = data.FirstOrDefault().Supplier.Nama;
+        //            }
+        //            var datas = new List<ShareModels.Reports.NotaData>();
+        //            int nomor = 1;
+        //            foreach (var item in data)
+        //            {
+        //                datas.Add(new ShareModels.Reports.NotaData
+        //                {
+        //                    No = nomor,
+        //                    Amount = item.StockView,
+        //                    CodeArticle = item.CodeArticle,
+        //                    CodeProduct = item.CodeName,
+        //                    ProductName = $"{item.Name} {item.Size}",
+        //                    Unit = item.SelectedUnit.Name,
+        //                    Price = item.SelectedUnit.Sell,
+        //                    Size = item.Size,
+        //                    Total = item.SelectedUnit.Sell * item.StockView,
+
+        //                });
+
+        //                nomor++;
+        //            }
+
+        //            var datasets = datas.ToDataTable();
+        //            return PrintStockAction(datasets, supplier, path);
+
+        //        }
+        //        catch (Exception)
+        //        {
+        //            return new NoContentResult();
+        //        }
+        //    }
+        //    else
+        //        return NotFound();
+        //}
+
+        private ActionResult PrintStockAction(DataTable datasets, Dictionary<string,string> dataParams, string path)
         {
 
             using MemoryStream stream = new MemoryStream();
@@ -337,7 +437,11 @@ namespace WebClient.Controllers
                     report.Load(path); //Load the report
                     report.RegisterData(ds.Tables["Table1"], "Table1"); //Register data in the report
 
-                    report.SetParameterValue("Supplier", param);
+
+                    foreach (var item in dataParams)
+                    {
+                       report.SetParameterValue(item.Key, item.Value);
+                    }
 
                     report.Prepare();
                     HTMLExport html = new HTMLExport
@@ -432,11 +536,12 @@ namespace WebClient.Controllers
                         datas.Add(new ShareModels.Reports.NotaData
                         {
                             No = nomor,
-                            Amount = item.Amount,
+                            Amount = item.Quantity,
                             CodeArticle = item.Product.CodeArticle,
                             CodeProduct = item.Product.CodeName,
                             ProductName = $"{item.Product.Name} {item.Product.Size}",
-                            Unit = item.Unit.Name,
+                            DiscountValue = item.DiscountView,
+                            Unit = item.Unit.Name,     
                             Price = item.Price,
                             Total = item.Total,
 
@@ -448,7 +553,7 @@ namespace WebClient.Controllers
                     return Print(datas.ToDataTable(), nota, path);
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return new NoContentResult();
                 }
@@ -461,9 +566,11 @@ namespace WebClient.Controllers
         {
             report.SetParameterValue("NomorSO", nota.PoNumber);
             report.SetParameterValue("NomorInvoice", nota.NomorInvoice);
+            report.SetParameterValue("NomorSuratJalan", nota.NomorSuratJalan);
             report.SetParameterValue("Customer", nota.Customer);
             report.SetParameterValue("Salesman", nota.Sales);
             report.SetParameterValue("JatuhTempo", nota.InvoiceDeadLine.ToString("dd MMM yyyy"));
+            report.SetParameterValue("DeadLine", nota.DeadLine.ToString()+ " hari");
             report.SetParameterValue("Tanggal", nota.CreateDate.ToString("dd MMM yyyy"));
             report.SetParameterValue("Discount", nota.Discount);
             report.SetParameterValue("Address", nota.Address);
@@ -471,7 +578,10 @@ namespace WebClient.Controllers
             report.SetParameterValue("AppName", Helper.ApplicationName);
             report.SetParameterValue("DirectorName", Helper.DirectorName);
             report.SetParameterValue("OfficeTelp", Helper.OfficeTelp);
+            report.SetParameterValue("OfficeAddress", Helper.OfficeAddress);
             report.SetParameterValue("Ekspedisi", nota.Ekspedisi);
+
+
             }
 
         private static ShareModels.Reports.NotaPenjualan GetNotaParameters(object dataParam, Type type)
@@ -484,34 +594,35 @@ namespace WebClient.Controllers
                     return new ShareModels.Reports.NotaPenjualan
                     {                   
                         CreateDate = data.CreateDate,
-                        Customer = data.OrderPenjualan.Customer.Name,
-                        Discount = data.Discount,
+                        Customer = data.Customer.Name,
                         OrderStatus = data.Status.ToString(),
-                        PoNumber = data.OrderPenjualan.Nomor,
-                        Sales = data.OrderPenjualan.Sales.Name,
-                        NomorInvoice = data.Nomor,
-                        InvoiceDeadLine =data.CreateDate.AddDays(data.PayDeadLine),
-                        PaymentType = data.Payment == PaymentType.Kredit ? "Credit" : "Tunai",
-                        Address = data.OrderPenjualan.Customer.Address     , Ekspedisi= data.Expedisi
-
+                        PoNumber = data.OrderPenjualan==null?"": data.OrderPenjualan.Nomor,
+                        Sales = data.Salesman.Name,
+                        NomorInvoice = data.Nomor,    
+                        NomorSuratJalan = data.NomorSuratJalan,
+                        DeadLine=data.DeadLine,
+                        InvoiceDeadLine =data.CreateDate.AddDays(data.DeadLine),
+                        PaymentType = data.Payment == PaymentType.Kredit ? "Kredit" : "Tunai",
+                        Address = data.Customer.Address, Ekspedisi= data.Expedisi,
+                        Discount= data.Items.Sum(x=>x.DiscountView)
                     };
                 }
                 else
                 {
-                    var data = (Orderpenjualan)dataParam;
+                    var data = (OrderPenjualan)dataParam;
                     return new ShareModels.Reports.NotaPenjualan
                     {
                         CreateDate = data.OrderDate,
                         Customer = data.Customer.Name,
-                        Discount = data.Discount,
                         OrderStatus = data.Status.ToString(),
                         PoNumber = data.Nomor,
                         Sales = data.Sales.Name,
                         NomorInvoice = data.Nomor,  
                         InvoiceDeadLine = data.OrderDate.AddDays(data.DeadLine),
                         PaymentType = data.DeadLine <=0 ? "Tunai" : "Kredit",
-                        Address = data.Customer.Address
-
+                        DeadLine = data.DeadLine,
+                        Address = data.Customer.Address      ,
+                        Discount = data.Items.Sum(x => x.DiscountView)
                     };
                 }
             }
@@ -550,7 +661,7 @@ namespace WebClient.Controllers
                 worksheet.Cell(start, 3).Value = "Nama";
                 worksheet.Cell(start, 4).Value = "Jumlah";
                 worksheet.Cell(start, 5).Value = "Harga";
-                worksheet.Cell(start, 6).Value = $"Discount ({pembelian.Discount})%";
+                worksheet.Cell(start, 6).Value = $"Discount";
                 worksheet.Cell(start, 7).Value = "Total";
 
                 var items = pembelian.Items.ToList();
@@ -561,12 +672,12 @@ namespace WebClient.Controllers
                     worksheet.Cell(index + start, 1).Value = nomor;
                     worksheet.Cell(index + start, 2).Value = items[index - 1].Product.CodeArticle;
                     worksheet.Cell(index + start, 3).Value = items[index - 1].Product.Name + " | " + items[index - 1].Product.Size;
-                    worksheet.Cell(index + start, 4).Value = items[index - 1].Amount;
+                    worksheet.Cell(index + start, 4).Value = items[index - 1].Quntity;
                     worksheet.Cell(index + start, 5).Value = items[index - 1].Price;
 
 
-                    worksheet.Cell(index + start, 6).Value = total * pembelian.Discount / 100;
-                    worksheet.Cell(index + start, 7).Value = total - (total * pembelian.Discount / 100);
+                    worksheet.Cell(index + start, 6).Value = total * 10 / 100;
+                    worksheet.Cell(index + start, 7).Value = total - (total * 10 / 100);
 
                     worksheet.Cell(index + start, 5).Style.NumberFormat.Format = "0,000.00";
                     worksheet.Cell(index + start, 6).Style.NumberFormat.Format = "0,000.00";

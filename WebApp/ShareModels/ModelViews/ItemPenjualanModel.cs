@@ -9,23 +9,17 @@ namespace ShareModels.ModelViews
 {
     public class ItemPenjualanModel : BaseNotify
     {
-
         public ItemPenjualanModel() { }
         public ItemPenjualanModel(Penjualanitem item)
         {
+            PenjualanItem = item;
             Id = item.Id;
-            PenjualanId = item.PenjualanId;
-            ProductId = item.ProductId;
-            Amount = item.Amount;
+            Amount = item.Quantity;
             Real = 0;
-            UnitId = item.UnitId;
-            Unit = item.Unit;
-            Product = item.Product;            
         }
 
+        public Penjualanitem PenjualanItem { get; }
         public int Id { get; set; }
-        public int PenjualanId { get; set; }
-        public int ProductId { get; set; }
         public double Real {
             get
             {

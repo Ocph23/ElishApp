@@ -22,7 +22,11 @@ namespace ShareModels.ModelViews
                 {
                     SelectedUnit = Units.Where(x => x.Level == 0).FirstOrDefault();
                 }
-                return Stock / SelectedUnit.Amount;
+
+                if(SelectedUnit!=null)
+                    return Stock / SelectedUnit.Quantity;
+
+                return 0;
             }
         }
         public virtual Unit SelectedUnit {

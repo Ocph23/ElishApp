@@ -48,7 +48,7 @@ namespace ElishAppMobile.Views
                 Datas.Clear();
                 SelectedIndex = -1;
                 Title = "Create Order";
-                Order = new Orderpenjualan { OrderDate = DateTime.Now };
+                Order = new OrderPenjualan { OrderDate = DateTime.Now };
                 Order.DeadLine = 12;
                 RefreshProductStock();
             });
@@ -101,11 +101,11 @@ namespace ElishAppMobile.Views
         
 
         #region Properties
-        private Orderpenjualan _order;
+        private OrderPenjualan _order;
         private int _selectedIndex=-1;
         private int _supplierIndex;
 
-        public Orderpenjualan Order
+        public OrderPenjualan Order
         {
             get => _order;
             set => SetProperty(ref _order, value);
@@ -228,7 +228,7 @@ namespace ElishAppMobile.Views
             {
                 if (vParam == null)
                 {
-                    Order = new Orderpenjualan { SalesId = 1, OrderDate = DateTime.Now, Items = new List<OrderPenjualanItem>() };
+                    Order = new OrderPenjualan { SalesId = 1, OrderDate = DateTime.Now, Items = new List<OrderPenjualanItem>() };
                     Order.DeadLine = 12;
                     Title = "Create Order";
                 }
@@ -339,7 +339,7 @@ namespace ElishAppMobile.Views
                     Order.SalesId = profile.Id;
 
 
-                Orderpenjualan result;
+                OrderPenjualan result;
 
                 if (Order.Id <= 0)
                 {

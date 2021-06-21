@@ -12,42 +12,44 @@
     }
 </style>
 
-
-<h3>Customer Map View</h3>
-<div style=" align-items: center; display: flex; padding:5px;line-height: 0">
-    <Radzen.Blazor.RadzenAutoComplete @bind-Value="searchtext"/> <button class="btn">Cari</button>
-</div>
-<div class="row">
-    <div class="col-xl-3" style="background-color: white; height: 85vh; overflow-y: auto;">
-
-        @foreach (var item in customers.Where(x => x.Name.ToLower().Contains(searchtext.ToLower()) || x.ContactName.ToLower().Contains(searchtext.ToLower())))
-        {
-            <div @onclick="@(()=> SelectCustomer(item))" class="customer" style="@( CustomerSelected!=null && item.Id==CustomerSelected.Id ? "background-color:goldenrod" : "")">
-                <Radzen.Blazor.RadzenLabel Text="@item.Name"></Radzen.Blazor.RadzenLabel>
-                <div style="">
-                    <Radzen.Blazor.RadzenLabel Style="font-size:small" Text="@item.Location" @onclick="@(()=> SelectCustomer(item))"></Radzen.Blazor.RadzenLabel>
-                </div>
+<Radzen.Blazor.RadzenFieldset>
+    <FieldSetHeader Title="Peta Pelanggan"></FieldSetHeader>
+   
+    <div class="row">
+        <div class="col-xl-3" style="border:1px solid silver; background-color: white; height: 80vh; overflow-y: auto;">
+            <div style=" align-items: center; display: flex; padding:5px;line-height: 0">
+                <Radzen.Blazor.RadzenAutoComplete @bind-Value="searchtext" /> <button class="btn">Cari</button>
             </div>
-        }
-    </div>
-    <div class="col-xl-9">
-        <RadzenGoogleMap @ref="map" style="height: 85vh" ApiKey="AIzaSyBVoxKIqCOGybbDmgLYrTGiFSfDjeMC5DA" Zoom=@zoom
-                         Center=@mapcenter MapClick=@OnMapClick MarkerClick=@OnMarkerClick>
-            <Markers>
-                @if (customers.Count() > 0)
-                {
-                    foreach (var item in customers)
+            @foreach (var item in customers.Where(x => x.Name.ToLower().Contains(searchtext.ToLower()) || x.ContactName.ToLower().Contains(searchtext.ToLower())))
+            {
+                <div @onclick="@(()=> SelectCustomer(item))" class="customer" style="@( CustomerSelected!=null && item.Id==CustomerSelected.Id ? "background-color:goldenrod" : "")">
+                    <Radzen.Blazor.RadzenLabel Text="@item.Name"></Radzen.Blazor.RadzenLabel>
+                    <div style="">
+                        <Radzen.Blazor.RadzenLabel Style="font-size:small" Text="@item.Location" @onclick="@(()=> SelectCustomer(item))"></Radzen.Blazor.RadzenLabel>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-xl-9">
+            <RadzenGoogleMap @ref="map" style="height: 80vh;border:1px solid silver;" ApiKey="AIzaSyBVoxKIqCOGybbDmgLYrTGiFSfDjeMC5DA" Zoom=@zoom
+                             Center=@mapcenter MapClick=@OnMapClick MarkerClick=@OnMarkerClick>
+                <Markers>
+                    @if (customers.Count() > 0)
                     {
-                        if (!string.IsNullOrEmpty(item.Location))
+                        foreach (var item in customers)
                         {
-                            <RadzenGoogleMapMarker Title="@item.Name" Label="@item.Name" Position=@(GetLocationFromString(item.Location)) />
+                            if (!string.IsNullOrEmpty(item.Location))
+                            {
+                                <RadzenGoogleMapMarker Title="@item.Name" Label="@item.Name" Position=@(GetLocationFromString(item.Location)) />
+                            }
                         }
                     }
-                }
-            </Markers>
-        </RadzenGoogleMap>
+                </Markers>
+            </RadzenGoogleMap>
+        </div>
     </div>
-</div>
+
+</Radzen.Blazor.RadzenFieldset>
 
 @code {
 
@@ -64,7 +66,6 @@
     }
 
     int zoom = 18;
-    bool showMadridMarker;
     GoogleMapPosition mapcenter = new GoogleMapPosition() { Lat = -2.612870, Lng = 140.678475 };
 
     Customer CustomerSelected;

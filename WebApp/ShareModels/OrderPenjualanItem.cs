@@ -9,18 +9,11 @@ using System.Threading.Tasks;
     public class OrderPenjualanItem :BaseNotify
     {
         public int Id { get; set; }
-        public int OrderPenjualanId { get; set; }
 
-        public int ProductId { get; set; }
+        public double Quantity { get; set; }
 
+        public double Discount { get; set; }
 
-        private double amount;
-
-        public double Amount
-        {
-            get { return amount; }
-            set {SetProperty(ref amount , value); }
-        }
 
         private double price;
 
@@ -37,7 +30,7 @@ using System.Threading.Tasks;
             set { price = value; }
         }
 
-        public int UnitId { get; set; }
+     //   public int UnitId { get; set; }
 
         public virtual Unit Unit { get; set; }
 
@@ -47,11 +40,19 @@ using System.Threading.Tasks;
         {
             get
             {
-                return Price * Amount;
+                return Price * Quantity;
             }
         }
 
-        public virtual Orderpenjualan OrderPenjualan { get; set; }
+        public virtual double DiscountView
+        {
+            get
+            {
+                return Total * Discount / 100;
+            }
+        }
+
+        public virtual OrderPenjualan OrderPenjualan { get; set; }
     }
 }
 

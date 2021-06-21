@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShareModels
 {
@@ -12,7 +10,7 @@ namespace ShareModels
         public Pembelian()
         {
             Incomingitem = new HashSet<IncomingItem>();
-            Pembayaranpembelian = new HashSet<Pembayaranpembelian>();
+            PembayaranPembelian = new HashSet<PembayaranPembelian>();
             Items = new HashSet<PembelianItem>();
         }
 
@@ -21,17 +19,20 @@ namespace ShareModels
         {
             get
             {
-                return $"{Id}/PEMB-ELISH/{CreatedDate.Month}/{CreatedDate.Year}";
+                return $"{Id}/PEMB-APS/{CreatedDate.Month}/{CreatedDate.Year}";
             }
         }
 
-        public double Discount { get; set; }
         public int OrderPembelianId { get; set; }
-        public DateTime PayDeadLine { get; set; }
+        
+        public int DeadLine { get; set; }
         public DateTime CreatedDate { get; set; }
         public string InvoiceNumber { get; set; }
         public PaymentStatus Status { get; set; }
-        private double _total;
+        [NotMapped]
+        public DateTime PayDeadLine { get {
+                return CreatedDate.AddDays(DeadLine);
+            } }
 
         [NotMapped]
         public virtual double Total
@@ -42,28 +43,24 @@ namespace ShareModels
                     return 0;
                 return Items.Sum(x => x.Total);
             }
+        }
 
-            set
+        [NotMapped]
+        public virtual double TotalDiscount
+        {
+            get
             {
-                _total = value;
+                if (Items == null)
+                    return 0;
+                return Items.Sum(x => x.DiscountView);
             }
         }
 
-
-        public virtual Orderpembelian OrderPembelian { get; set; }
+        public Gudang Gudang { get; set; }
+        public virtual OrderPembelian OrderPembelian { get; set; }
         public virtual ICollection<PembelianItem> Items { get; set; }
         public virtual ICollection<IncomingItem> Incomingitem { get; set; }
-        public virtual ICollection<Pembayaranpembelian> Pembayaranpembelian { get; set; }
-
-
-
-
-      
-      
-
-       
-
-
+        public virtual ICollection<PembayaranPembelian> PembayaranPembelian { get; set; }
     }
 }
 

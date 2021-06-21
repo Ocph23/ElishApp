@@ -38,7 +38,7 @@ namespace ElishAppMobile.Views
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            var order = (Orderpenjualan)ItemsListView.SelectedItem;
+            var order = (OrderPenjualan)ItemsListView.SelectedItem;
             var vm = new CreatePackingListViewModel(order);
             var form = new CreatePackingList() { BindingContext = vm };
             await Shell.Current.Navigation.PushAsync(form);
@@ -69,7 +69,7 @@ namespace ElishAppMobile.Views
 
         private async void PackingListAction(object obj)
         {
-            var order = (Orderpenjualan)obj;
+            var order = (OrderPenjualan)obj;
             var vm = new CreatePackingListViewModel(order);
             var form = new CreatePackingList() { BindingContext = vm };
             await   Shell.Current.Navigation.PushAsync(form);

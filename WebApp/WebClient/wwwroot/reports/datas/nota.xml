@@ -2,31 +2,23 @@
 <Nota>
   <Table1>
     <No>1</No>
-    <CodeProduct>SUN05</CodeProduct>
-    <ProductName>Seri Grosir 05 --</ProductName>
-    <Unit>Psg</Unit>
-    <Amount>6</Amount>
-    <Price>14500</Price>
-    <Total>87000</Total>
+    <CodeArticle />
+    <CodeProduct>SWLELGANT10</CodeProduct>
+    <ProductName>Man Elegant 10 10</ProductName>
+    <Unit>Lusin</Unit>
+    <Amount>1</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>250000</Price>
+    <Total>250000</Total>
   </Table1>
   <Table1>
     <No>2</No>
-    <CodeArticle>8993559388458</CodeArticle>
-    <CodeProduct>SSWL938-11.5</CodeProduct>
-    <ProductName>Sun Swallow 938 11.5</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>230000</Price>
-    <Total>57500</Total>
-  </Table1>
-  <Table1>
-    <No>3</No>
-    <CodeArticle>8993559388861</CodeArticle>
-    <CodeProduct>SSWLELGNT-11</CodeProduct>
-    <ProductName>Sun Swallow Man Elegant 11</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>0.25</Amount>
-    <Price>270000</Price>
-    <Total>67500</Total>
+    <CodeProduct>SWL06D12</CodeProduct>
+    <ProductName>Sun Swallow 06D 12</ProductName>
+    <Unit>Psg</Unit>
+    <Amount>12</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22000</Price>
+    <Total>264000</Total>
   </Table1>
 </Nota>

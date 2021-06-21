@@ -13,159 +13,163 @@
 @inject ApplicationDbContext dbContext
 
 @attribute [Authorize]
-
-<h3>Data Barang</h3>
-<hr />
-
-<Radzen.Blazor.RadzenButton Icon="add" ButtonType="ButtonType.Button"
-                            Style="margin-bottom:10px" Click="@(() => nav.NavigateTo($"/product/add"))" ButtonStyle="ButtonStyle.Success" />
-
-<RadzenGrid @ref="grid" Count="@count" Data="@products" LoadData="@LoadData" AllowSorting="true" AllowFiltering="true" AllowPaging="true" PageSize="12" TItem="Product">
-    <Columns>
-
-        <RadzenGridColumn TItem="Product" Width="125px" Property="Category.Name" Title="Categori">
-            <FilterTemplate>
-                <RadzenDropDown @bind-Value="@categoryId" TextProperty="Name" ValueProperty="Id" Style="width:100%"
-                                Data="@categories" Change="@ChangeFilter" />
-
-            </FilterTemplate>
-        </RadzenGridColumn>
-        <RadzenGridColumn TItem="Product" Property="Supplier.Nama" Title="Supplier">
-            <FilterTemplate>
+<Radzen.Blazor.RadzenFieldset>
+    <FieldSetHeader Title="Data Barang"></FieldSetHeader>
+    <div style="display:flex; justify-content:space-between">
+        <div style="display:flex; justify-content:space-between">
+            <div style="display:flex; flex-direction:column; margin-bottom:15px; margin-right:15px">
+                <label>Supplier</label>
                 <RadzenDropDown AllowClear="true" AllowFiltering="true"
                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                 Data=@suppliers
                                 @bind-Value=@SelectedSupplier
-                                TextProperty="Nama" Style="width:400px" Change="@ChangeFilter" />
-            </FilterTemplate>
-        </RadzenGridColumn>
-        <RadzenGridColumn TItem="Product" Property="Name" Title="Product Name">
+                                TextProperty="Nama" Style="width:250px" Change="@ChangeFilter" />
+            </div>
 
-        </RadzenGridColumn>
-
-        <RadzenGridColumn TItem="Product" Width="150px" Property="CodeName" Title="Code Name">
-
-        </RadzenGridColumn>
-        <RadzenGridColumn TItem="Product"  Property="CodeArticle" Title="CodeA rticle">
-
-        </RadzenGridColumn>
-
-        <RadzenGridColumn TItem="Product" Property="Merk" Title="Merk">
-
-        </RadzenGridColumn>
-        <RadzenGridColumn TItem="Product" Width="80px" Property="Size" Title="Size"></RadzenGridColumn>
-        <RadzenGridColumn TItem="Product" Width="100px" Property="UnitSelected.Name" Title="Name">
-           
-        </RadzenGridColumn>
-        <RadzenGridColumn TItem="Product" Width="110px" Property="UnitSelected.Buy" Title="Beli">
-            <Template Context="item">
-                @item.UnitSelected.Buy.ToString("N0")
-            </Template>
-        </RadzenGridColumn>
-        <RadzenGridColumn TItem="Product" Width="110px" Property="UnitSelected.Sell" Title="Jual">
-            <Template Context="item">
-                @item.UnitSelected.Sell.ToString("N0")
-            </Template>
-        </RadzenGridColumn>
-
-        <RadzenGridColumn TItem="Product" Context="sampleBlazorModelsSampleOrder"
-                          Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="65px">
-            <Template Context="item">
-                <RadzenButton Icon="edit" Size="ButtonSize.Medium" Click="@(() => nav.NavigateTo($"/product/detail/{item.Id}"))">
-                </RadzenButton>
-            </Template>
-        </RadzenGridColumn>
-
-    </Columns>
-</RadzenGrid>
-
-@code{
-
-    [Parameter]
-    public string id { get; set; }
-
-    private IEnumerable<Product> products;
-    private ICollection<Category> categories;
-    private ICollection<Supplier> suppliers;
-
-    private Supplier SelectedSupplier;
-    private Category SelectedCategory;
+            <div style="display:flex; justify-content:space-between">
+                <div style="display: flex; flex-direction: column; margin-bottom: 15px; margin-right: 15px">
+                    <label>Kategori</label>
+                    <RadzenDropDown @bind-Value="@categoryId" TextProperty="Name" ValueProperty="Id" Style="width:250px"
+                                    Data="@categories" Change="@ChangeFilter" />
+                </div>
+            </div>
+        </div>
+        <Radzen.Blazor.RadzenButton Icon="add" ButtonType="ButtonType.Button"
+                                    Style="margin-bottom:10px" Click="@(() => nav.NavigateTo($"/product/add"))" ButtonStyle="ButtonStyle.Success" />
+    </div>
 
 
-    private int categoryId;
+    <RadzenGrid @ref="grid" Count="@count" Data="@products" LoadData="@LoadData" AllowSorting="true" AllowFiltering="true" AllowPaging="true" PageSize="12" TItem="Product">
+        <Columns>
+
+            <RadzenGridColumn TItem="Product" Width="150px" Property="CodeName" Title="Code Name" />
+            <RadzenGridColumn TItem="Product" Property="Name" Title="Product Name">
+
+            </RadzenGridColumn>
 
 
-    RadzenGrid<Product> grid;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var sourceSupplier = await supplierService.GetSuppliers();
+            <RadzenGridColumn TItem="Product" Property="Merk.Name" Title="Merk">
 
-        suppliers = new List<Supplier>() { new Supplier { Id = 0, Nama = "All" } };
-        foreach (var item in sourceSupplier)
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Product" Width="80px" Property="Size" Title="Size"></RadzenGridColumn>
+            <RadzenGridColumn TItem="Product" Width="100px" Property="UnitSelected.Name" Title="Name">
+
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Product" Width="110px" Property="UnitSelected.Buy" Title="Beli">
+                <Template Context="item">
+                    @item.UnitSelected.Buy.ToString("N0")
+                </Template>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="Product" Width="110px" Property="UnitSelected.Sell" Title="Jual">
+                <Template Context="item">
+                    @item.UnitSelected.Sell.ToString("N0")
+                </Template>
+            </RadzenGridColumn>
+
+            <RadzenGridColumn TItem="Product" Context="sampleBlazorModelsSampleOrder"
+                              Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="65px">
+                <Template Context="item">
+                    <RadzenButton Icon="edit" Size="ButtonSize.Medium" Click="@(() => nav.NavigateTo($"/product/detail/{item.Id}"))">
+                    </RadzenButton>
+                </Template>
+            </RadzenGridColumn>
+
+        </Columns>
+    </RadzenGrid>
+</Radzen.Blazor.RadzenFieldset>
+
+    @code{
+
+        [Parameter]
+        public string id { get; set; }
+
+        private IEnumerable<Product> products;
+        private ICollection<Category> categories;
+        private ICollection<Supplier> suppliers;
+
+        private Supplier SelectedSupplier;
+        private Category SelectedCategory;
+
+
+        private int categoryId;
+
+
+        RadzenGrid<Product> grid;
+
+        protected override async Task OnInitializedAsync()
         {
-            suppliers.Add(item);
+            var sourceSupplier = await supplierService.GetSuppliers();
+
+            suppliers = new List<Supplier>() { new Supplier { Id = 0, Nama = "All" } };
+            foreach (var item in sourceSupplier)
+            {
+                suppliers.Add(item);
+            }
+
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                var supid = Convert.ToInt32(id);
+                SelectedSupplier = suppliers.SingleOrDefault(x => x.Id == supid);
+            }
+            else
+            {
+                SelectedSupplier = suppliers.SingleOrDefault(x => x.Id == 0);
+            }
+
+            var sourceCategory = await categoryService.Get();
+            categories = new List<Category>() { new Category { Id = 0, Name = "All" } };
+            foreach (var item in sourceCategory)
+            {
+                categories.Add(item);
+            }
+
+            SelectedCategory = categories.SingleOrDefault(x => x.Id == 0);
+            // products = await productService.Get();
         }
 
 
-        if (!string.IsNullOrEmpty(id))
+        int count;
+
+        async Task LoadData(LoadDataArgs args)
         {
-            var supid = Convert.ToInt32(id);
-            SelectedSupplier = suppliers.SingleOrDefault(x => x.Id == supid);
-        }
-        else
-        {
-            SelectedSupplier = suppliers.SingleOrDefault(x => x.Id == 0);
+            var query = dbContext.Product.Include(x => x.Category)
+                .Include(x => x.Units)
+                .Include(x => x.Merk)
+                .Include(x => x.Supplier).AsQueryable();
+
+            if (SelectedSupplier != null && SelectedSupplier.Id > 0)
+                query = query.Where(x => x.Supplier.Id == SelectedSupplier.Id);
+
+            if (categoryId > 0)
+            {
+                query = query.Where(x => x.Category.Id == categoryId);
+
+            }
+
+            if (!string.IsNullOrEmpty(args.Filter))
+            {
+                query = query.Where(args.Filter);
+            }
+
+            if (!string.IsNullOrEmpty(args.OrderBy))
+            {
+                query = query.OrderBy(args.OrderBy);
+            }
+
+            count = query.Count();
+            products = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+
+
+            await InvokeAsync(StateHasChanged);
         }
 
-        var sourceCategory = await categoryService.Get();
-        categories = new List<Category>() { new Category { Id = 0, Name = "All" } };
-        foreach (var item in sourceCategory)
+
+
+        void ChangeFilter()
         {
-            categories.Add(item);
+            grid.Reload();
         }
 
-        SelectedCategory = categories.SingleOrDefault(x => x.Id == 0);
-        // products = await productService.Get();
     }
-
-
-    int count;
-
-    async Task LoadData(LoadDataArgs args)
-    {
-        var query = dbContext.Product.Include(x=>x.Category)
-            .Include(x=>x.Units)
-            .Include(x=>x.Supplier).AsQueryable();
-
-        if (categoryId > 0)
-            query = query.Where(x => x.CategoryId == categoryId);
-
-        if (SelectedSupplier != null && SelectedSupplier.Id > 0)
-            query = query.Where(x => x.SupplierId == SelectedSupplier.Id);
-
-        if (!string.IsNullOrEmpty(args.Filter))
-        {
-            query = query.Where(args.Filter);
-        }
-
-        if (!string.IsNullOrEmpty(args.OrderBy))
-        {
-            query = query.OrderBy(args.OrderBy);
-        }
-
-        count = query.Count();
-        products = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
-
-
-        await InvokeAsync(StateHasChanged);
-    }
-
-
-
-    void ChangeFilter()
-    {
-        grid.Reload();
-    }
-
-}

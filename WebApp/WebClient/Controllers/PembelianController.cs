@@ -66,12 +66,12 @@ namespace WebClient.Controllers
 
 
         [ApiAuthorize]
-        [HttpPost("{orderid}")]
-        public async Task<IActionResult> Post(int orderid)
+        [HttpPost("{orderid}/{gudangid}")]
+        public async Task<IActionResult> Post(int orderid, int gudangid)
         {
             try
             {
-                return Ok(await service.CreatePembelian(orderid));
+                return Ok(await service.CreatePembelian(orderid, gudangid));
             }
             catch (Exception ex)
             {

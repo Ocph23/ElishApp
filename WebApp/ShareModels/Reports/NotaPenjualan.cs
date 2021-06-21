@@ -18,6 +18,8 @@ namespace ShareModels.Reports
         public string OrderStatus { get; set; }
         public string Address { get; set; }
         public double Ekspedisi{ get; set; }
+        public double DeadLine { get; set; }
+        public string NomorSuratJalan { get; set; }
     }
 
 
@@ -29,7 +31,7 @@ namespace ShareModels.Reports
         public string ProductName { get; set; }
         public string Unit { get; set; }
         public double Amount { get; set; }
-        public string DiscountValue { get; set; }
+        public double DiscountValue { get; set; }
         public double Price { get; set; }
         public double Total { get; set; }
         public string Size{ get; set; }

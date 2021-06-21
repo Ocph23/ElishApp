@@ -15,7 +15,9 @@
 
 <RadzenTabs>
     <Tabs>
-        <RadzenTabsItem Text="Data Realisasi Penjualan">
+        <RadzenTabsItem Text="Data Penjualan">
+            <RadzenButton Icon="add" Style="margin-bottom:10px" ButtonStyle="ButtonStyle.Success"
+                          Click="@(()=> nav.NavigateTo($"/penjualan/realisasiorder"))" />
             <RadzenGrid Data="@penjualans" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Penjualan"
                         @ref="grid" LoadData="@LoadData" Count="@count" PageSize="12">
                 <Columns>
@@ -25,14 +27,9 @@
                         </Template>
                     </RadzenGridColumn>
                     <RadzenGridColumn Width="160px" TItem="Penjualan" Property="Nomor" Title="Sale Number" />
-                    <RadzenGridColumn  CssClass="" TItem="Penjualan" Property="OrderPenjualan.Customer.Name" Title="Customer" />
-                    <RadzenGridColumn TItem="Penjualan" Property="OrderPenjualan.Sales.Name" Title="Sales" />
+                    <RadzenGridColumn CssClass="" TItem="Penjualan" Property="Customer.Name" Title="Customer" />
+                    <RadzenGridColumn TItem="Penjualan" Property="Salesman.Name" Title="Sales" />
                     <RadzenGridColumn TItem="Penjualan" Property="Payment" Width="100px" Title="Payment" />
-                    <RadzenGridColumn TItem="Penjualan" Property="Discount" Width="65px" Title="Disc">
-                        <Template Context="item">
-                            @(item.Discount + "%")
-                        </Template>
-                    </RadzenGridColumn>
                     <RadzenGridColumn Width="150px" TItem="Penjualan" TextAlign="TextAlign.Right" Property="Total" Title="Total">
                         <Template Context="item">
                             @item.Total.ToString("N")
@@ -56,6 +53,7 @@
                 </Columns>
             </RadzenGrid>
         </RadzenTabsItem>
+       
     </Tabs>
 </RadzenTabs>
 
@@ -74,8 +72,8 @@
     {
         var query = dbContext.Penjualan
             .Include(x=>x.Items)
-            .Include(x => x.OrderPenjualan).ThenInclude(x => x.Customer)
-            .Include(x => x.OrderPenjualan).ThenInclude(x => x.Sales)
+            .Include(x => x.Customer)
+            .Include(x => x.Salesman)
             .AsQueryable();
 
         query = query.OrderByDescending(x => x.Id);

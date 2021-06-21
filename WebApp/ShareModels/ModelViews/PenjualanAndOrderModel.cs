@@ -23,5 +23,7 @@ namespace ShareModels.ModelViews
         public double Total { get; set; }
         public double TotalAfterDiscount => Total - (Total * Discount / 100);
         public double TotalFeeSales => TotalAfterDiscount * (FeeSales / 100);
+
+        public Gudang Gudang { get; set; }
     }
 }

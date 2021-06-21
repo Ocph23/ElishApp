@@ -77,14 +77,14 @@ namespace WebClient.Services
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             var result = (from a in value.Items
-                         join b in dbContext.IncomingItem.Where(x => x.PembelianId == value.Id)  
-                         on new { a.PembelianId, a.ProductId } equals new { b.PembelianId, b.ProductId }
+                         join b in dbContext.IncomingItem.Where(x => x.Pembelian.Id == value.Id)  
+                         on new { PembelianId=a.Pembelian.Id, ProductId= a.Product.Id } equals new { PembelianId=b.Pembelian.Id,ProductId=b.Product.Id }
                          into cc
                          from b in cc.DefaultIfEmpty()
                          select new IncomingItem
-                         {   PembelianId=a.PembelianId,
+                         {   Pembelian=a.Pembelian,
                              ActualValue = b==null?0: b.ActualValue, Amount= a.Amount, Product=a.Product,  
-                             ProductId=a.ProductId, Id= b==null?0:b.Id, UnitId=a.UnitId, Unit = b==null?a.Unit: a.Product.Units.Where(x=>x.Id== b.UnitId).FirstOrDefault()
+                            Id= b==null?0:b.Id, Unit = b.Unit==null?a.Unit: a.Product.Units.Where(x=>x.Id== b.Unit.Id).FirstOrDefault()
                          }).ToList();
                         
             if (result.Any())

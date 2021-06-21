@@ -47,7 +47,6 @@
 
     private string NavMenuCssClass => GetMenuClass();
 
-    string color = "red";
     List<MenuItem> Menus = new List<MenuItem>();
 
 
@@ -57,8 +56,9 @@
         new MenuItem(){ Icon="home", Path="/", Text="Master" , Children =
                 new List<MenuItem>{
                     new MenuItem(){ Icon="category", Path="category", Text="Kategori" },
+                    new MenuItem(){ Icon="merk", Path="merk", Text="Merek" },
+                    new MenuItem(){ Icon="category", Path="gudang", Text="Gudang" },
                     new MenuItem(){ Icon="supervised_user_circle", Path="supplier", Text="Suplier" },
-                    new MenuItem(){ Icon="emoji_people", Path="customer", Text="Pelanggan" },
                     new MenuItem(){ Icon="group", Path="karyawan", Text="Karyawan" },
                 }
             },
@@ -75,14 +75,18 @@
                 new List<MenuItem>{
                     new MenuItem(){ Icon="shopping_cart", Path="pembelian/order", Text="Order" },
                     new MenuItem(){ Icon="shopping_cart", Path="pembelian/realisasi", Text="Reaslisasi" },
+                    new MenuItem(){ Icon="storefront", Path="pembelian/return", Text="Return" },
                 }
         },
         new MenuItem(){ Icon="storefront", Text="Penjualan" , Children =
                 new List<MenuItem>{
                     new MenuItem(){ Icon="storefront", Path="penjualan/order", Text="Order" },
                     new MenuItem(){ Icon="storefront", Path="penjualan/realisasi", Text="Reaslisasi" },
+                    new MenuItem(){ Icon="storefront", Path="penjualan/return", Text="Return" },
                 }
         },
+
+         new MenuItem(){ Icon="storefront", Text="Pemindahan", Path="pemindahan" },
         new MenuItem(){ Icon="save", Text="Laporan" , Children =
                 new List<MenuItem>{
                     new MenuItem(){ Icon="receipt_log", Path="data/stock", Text="Stock" },

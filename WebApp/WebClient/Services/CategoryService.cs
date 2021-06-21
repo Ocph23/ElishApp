@@ -13,7 +13,7 @@ namespace WebClient.Services
         {
             dbContext = db;
         }
-        public async Task<bool> Delete(int id)
+        public  Task<bool> Delete(int id)
         {
             try
             {
@@ -22,9 +22,9 @@ namespace WebClient.Services
                     throw new SystemException("Data Not Found !");
 
                 dbContext.Category.Remove(existsModel);
-               await dbContext.SaveChangesAsync();
+               dbContext.SaveChanges();
 
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
@@ -44,13 +44,13 @@ namespace WebClient.Services
             return Task.FromResult(results.AsEnumerable());
         }
 
-        public async Task<Category> Post(Category value)
+        public  Task<Category> Post(Category value)
         {
             try
             {
                 dbContext.Category.Add(value);
-                await dbContext.SaveChangesAsync();
-                return value;
+                dbContext.SaveChanges();
+                return Task.FromResult(value);
             }
             catch (Exception ex)
             {
@@ -58,7 +58,7 @@ namespace WebClient.Services
             }
         }
 
-        public async Task<bool> Update(int id, Category value)
+        public  Task<bool> Update(int id, Category value)
         {
             try
             {
@@ -68,10 +68,10 @@ namespace WebClient.Services
 
                 dbContext.Entry(existsModel).CurrentValues.SetValues(value);
 
-                var updated = await dbContext.SaveChangesAsync();
+                var updated =  dbContext.SaveChanges();
                 if (updated <= 0)
                     throw new SystemException("Data Not Saved !");
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
