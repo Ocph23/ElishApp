@@ -188,6 +188,8 @@ namespace WebClient.Services
                 await _context.SaveChangesAsync();
                 model.User= user;
                 var role = _context.Role.Where(x => x.Name == "Sales").AsNoTracking().FirstOrDefault();
+
+                _context.Entry(role).State = EntityState.Unchanged;
                 _context.Userrole.Add(new UserRole { Role= role, User= user});
                 _context.Karyawan.Add(model);
                 await _context.SaveChangesAsync();
