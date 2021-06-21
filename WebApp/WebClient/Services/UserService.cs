@@ -37,7 +37,7 @@ namespace WebClient.Services
             try
             {
                 var password = GeneratePasswordHash(model.Password);
-                var user = (from u in _context.User.Where(x => (x.UserName == model.UserName || x.Email == model.UserName)
+                var user = (from u in _context.User.Include(x=>x.Roles).ThenInclude(x=>x.Role).Where(x => (x.UserName == model.UserName || x.Email == model.UserName)
                           && x.PasswordHash == password)
                             select u).FirstOrDefault();
                 if (user == null)
@@ -48,7 +48,6 @@ namespace WebClient.Services
 
 
 
-                user = await FindUserById(user.Id);
                 var token = await GenerateJwtToken(user);
                 return new AuthenticateResponse(user, token);
             }
@@ -60,7 +59,7 @@ namespace WebClient.Services
 
         public async Task<User> FindUserById(int id)
         {
-            var user = _context.User.Where(x => x.Id == id).Include(x=>x.Roles).FirstOrDefault();
+            var user = _context.User.Where(x => x.Id == id).Include(x=>x.Roles).ThenInclude(x=>x.Role).FirstOrDefault();
             return await Task.FromResult(user);
         }
         public async Task<User> FindUserByUserName(string username)
