@@ -233,6 +233,7 @@ namespace WebClient.Services
                 if (role != null)
                 {
                     _context.Userrole.Add(new UserRole { Role= role, User= user});
+                    _context.SaveChanges();
                 }
                 return Task.FromResult(0);
             }
