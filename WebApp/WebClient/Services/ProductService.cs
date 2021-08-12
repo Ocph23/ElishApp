@@ -308,8 +308,7 @@ namespace WebClient.Services
                         Merk = x.Merk,
                         Name = x.Name,      
                         Discount =x.Discount, Color=x.Color, 
-                        Pembelian = x.PembelianItem.Sum(x=>x.Amount * x.Unit.Quantity),
-                        Penjualan = x.PenjualanItem.Sum(x=>x.Quantity * x.Unit.Quantity),
+                        Stock = x.PembelianItem.Sum(x=>x.Amount * x.Unit.Quantity)- x.PenjualanItem.Sum(x=>x.Quantity * x.Unit.Quantity),
                         Size = x.Size,
                         Units = x.Units, ProductImage= x.ProductImage,  
                         SelectedUnit= x.Units.FirstOrDefault(),
@@ -321,7 +320,7 @@ namespace WebClient.Services
                 foreach (var item in result)
                 {
                     var totalNewOrder = orders.Where(x => x.Product.Id == item.Id).Sum(x => x.Quantity * x.Unit.Quantity);
-                    item.Penjualan += totalNewOrder;
+                    item.Stock += totalNewOrder;
                 }
 
                 return Task.FromResult(result.AsEnumerable());
@@ -336,165 +335,154 @@ namespace WebClient.Services
         {
             try
             {
-                var pembelian = dbContext.Pembelian
+
+                IQueryable<Pembelian> pembelian = dbContext.Pembelian
                  .Include(x => x.Gudang)
                  .Include(x => x.Items).ThenInclude(x => x.Unit)
-                 .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
-                 .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x=>x.Merk)
-                 .Include(x => x.Items).ThenInclude(x => x.Product).AsQueryable();
+                 .Include(x => x.Items).ThenInclude(x => x.Product);
 
-                var pengembalianPenjualan = dbContext.PengembalianPenjualan
+                IQueryable<Penjualan> penjualan = dbContext.Penjualan
                .Include(x => x.Gudang)
-               .Include(x => x.Items)
-               .ThenInclude(x => x.Unit)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Merk)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Category)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier).AsQueryable();
+               .Include(x => x.Items).ThenInclude(x => x.Unit)
+               .Include(x => x.Items).ThenInclude(x => x.Product);
+
+                IQueryable<PengembalianPenjualan> pengembalianPenjualan = dbContext.PengembalianPenjualan
+                .Include(x => x.Gudang)
+                .Include(x => x.Items)
+                .Include(x => x.Items).ThenInclude(x => x.Product);
+
+                IQueryable<Pemindahan> pemindahans = dbContext.Pemindahan
+                    .Include(x => x.Dari)
+                    .Include(x => x.Tujuan)
+                    .Include(x => x.Items).ThenInclude(x => x.Unit)
+                    .Include(x => x.Items).ThenInclude(x => x.Product);
+
+                IEnumerable<ProductStock> pemindahan = new List<ProductStock>();
+
 
                 if (gudangId > 0)
                 {
                     pembelian = pembelian.Where(x => x.Gudang.Id == gudangId);
-                    pengembalianPenjualan = pengembalianPenjualan.Where(x => x.Gudang.Id == gudangId);
-                }
-
-                IEnumerable<ProductStock> temppembelians = pembelian.SelectMany(x => x.Items).AsEnumerable().GroupBy(x => x.Product.Id)
-                     .Select(x => new ProductStock
-                     {      
-                         Category = x.First().Product.Category,
-                         Supplier = x.First().Product.Supplier,
-                         CodeArticle = x.First().Product.CodeArticle,
-                         CodeName = x.First().Product.CodeName,
-                         Description = x.First().Product.Description,
-                         Id = x.First().Product.Id,
-                         Merk = x.First().Product.Merk,
-                         Name = x.First().Product.Name,
-                         Discount = x.First().Product.Discount,
-                         Color = x.First().Product.Color,
-                         Pembelian = x.Sum(x => x.Amount * x.Unit.Quantity),
-                         Size = x.First().Product.Size,
-                         Units = x.First().Product.Units,
-                         ProductImage = x.First().Product.ProductImage,
-                         SelectedUnit = x.First().Product.Units.FirstOrDefault(),
-
-                     });
-
-                if (merkId > 0)
-                {
-                    temppembelians = temppembelians.Where(x => x.Merk.Id == merkId);
-                }
-
-               var pembelians = temppembelians.ToList();
-
-                //-> masuk - pemindahan
-
-                var pemindahans = dbContext.Pemindahan
-                    .Include(x => x.Dari)
-                    .Include(x => x.Tujuan)
-                    .Include(x => x.Items).ThenInclude(x => x.Unit)
-                    .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Merk)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Category)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier).AsQueryable();
-
-                var daris = pemindahans.Where(x => x.Dari.Id == gudangId).SelectMany(x => x.Items).ToList().GroupBy(x => x.Product.Id);
-
-                foreach (var item in daris)
-                {
-                    var d = pembelians.Where(x => x.Id == item.Key).FirstOrDefault();
-                    if (d != null)
-                    {
-                        d.Pembelian -= item.Sum(x=>x.Quantity*x.Unit.Quantity);
-                    }
-                }
-
-                var tujuans = pemindahans.Where(x => x.Tujuan.Id == gudangId).SelectMany(x => x.Items).ToList().GroupBy(x => x.Product.Id);
-                foreach (var item in tujuans)
-                {
-                    var d = pembelians.Where(x => x.Id == item.Key).FirstOrDefault();
-                    if (d != null)
-                    {
-                        d.Pembelian += item.Sum(x => x.Quantity * x.Unit.Quantity);
-                    }
-                    else
-                    {
-                        pembelians.Add(new ProductStock
-                        {
-                            Category = item.First().Product.Category,
-                            Supplier = item.First().Product.Supplier,
-                            CodeArticle = item.First().Product.CodeArticle,
-                            CodeName = item.First().Product.CodeName,
-                            Description = item.First().Product.Description,
-                            Id = item.First().Product.Id,
-                            Merk = item.First().Product.Merk,
-                            Name = item.First().Product.Name,
-                            Discount = item.First().Product.Discount,
-                            Color = item.First().Product.Color,
-                            Pembelian = item.Sum(x => x.Quantity * x.Unit.Quantity),
-                            Size = item.First().Product.Size,
-                            Units = item.First().Product.Units,
-                            ProductImage = item.First().Product.ProductImage,
-                            SelectedUnit = item.First().Product.Units.FirstOrDefault(),
-
-
-                        });
-                    }
-                }
-
-                var penjualan = dbContext.Penjualan
-               .Include(x => x.Gudang)
-               .Include(x => x.Items)
-               .ThenInclude(x => x.Unit)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Merk)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Category)
-               .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier).AsQueryable();
-                if (gudangId > 0)
-                {
                     penjualan = penjualan.Where(x => x.Gudang.Id == gudangId);
+                    pengembalianPenjualan = pengembalianPenjualan.Where(x => x.Gudang.Id == gudangId);
+
+                    pemindahan = (from x in pemindahans.Where(x => x.Dari.Id == gudangId).SelectMany(x => x.Items)
+                                  select new ProductStock
+                                  {
+                                      Category = x.Product.Category,
+                                      Supplier = x.Product.Supplier,
+                                      CodeArticle = x.Product.CodeArticle,
+                                      CodeName = x.Product.CodeName,
+                                      Description = x.Product.Description,
+                                      Id = x.Product.Id,
+                                      Merk = x.Product.Merk,
+                                      Name = x.Product.Name,
+                                      Discount = x.Product.Discount,
+                                      Color = x.Product.Color,
+                                      Stock = -1 * x.Quantity * x.Unit.Quantity,
+                                      Size = x.Product.Size,
+                                      Units = x.Product.Units,
+                                      ProductImage = x.Product.ProductImage,
+                                      SelectedUnit = x.Unit
+
+                                  }).ToList();
+
+                    IEnumerable<ProductStock> pemindahan1 = (from x in pemindahans.Where(x => x.Tujuan.Id == gudangId).SelectMany(x => x.Items)
+                                                             select new ProductStock
+                                                             {
+                                                                 Category = x.Product.Category,
+                                                                 Supplier = x.Product.Supplier,
+                                                                 CodeArticle = x.Product.CodeArticle,
+                                                                 CodeName = x.Product.CodeName,
+                                                                 Description = x.Product.Description,
+                                                                 Id = x.Product.Id,
+                                                                 Merk = x.Product.Merk,
+                                                                 Name = x.Product.Name,
+                                                                 Discount = x.Product.Discount,
+                                                                 Color = x.Product.Color,
+                                                                 Stock = x.Quantity * x.Unit.Quantity,
+                                                                 Size = x.Product.Size,
+                                                                 Units = x.Product.Units,
+                                                                 ProductImage = x.Product.ProductImage,
+                                                                 SelectedUnit = x.Unit
+
+                                                             }).ToList();
+                    pemindahan = pemindahan.Concat(pemindahan1);
+
+
+
+                        
+
+
                 }
-                var penjualans = penjualan.SelectMany(x => x.Items).AsEnumerable().GroupBy(x => x.Product.Id)
-                   .Select(x => new ProductStock
-                   {
-                       Id = x.First().Product.Id,
-                       Merk = x.First().Product.Merk,           
-                       Penjualan = x.Sum(x => x.Quantity * x.Unit.Quantity),
-                   });
 
-                if (merkId > 0)
-                {
-                    penjualans = penjualans.Where(x => x.Merk.Id == merkId);
-                }
+                IEnumerable<ProductStock> results = from x in pembelian.SelectMany(x => x.Items)
+                                                    select new ProductStock
+                                                    {
+                                                        Category = x.Product.Category,
+                                                        Supplier = x.Product.Supplier,
+                                                        CodeArticle = x.Product.CodeArticle,
+                                                        CodeName = x.Product.CodeName,
+                                                        Description = x.Product.Description,
+                                                        Id = x.Product.Id,
+                                                        Merk = x.Product.Merk,
+                                                        Name = x.Product.Name,
+                                                        Discount = x.Product.Discount,
+                                                        Color = x.Product.Color,
+                                                        Stock = x.Amount * x.Unit.Quantity,
+                                                        Size = x.Product.Size,
+                                                        Units = x.Product.Units,
+                                                        ProductImage = x.Product.ProductImage,
+                                                        SelectedUnit = x.Unit
 
-                foreach (var item in pembelians)
-                {
-                    var data = penjualans.Where(x => x.Id == item.Id).FirstOrDefault();
-                    var retunPenjualans = pengembalianPenjualan.SelectMany(x => x.Items).Where(x => x.Product.Id == item.Id);
-                    item.Pembelian += retunPenjualans.Sum(x => x.Quantity * x.Unit.Quantity);
-                    item.Penjualan = data == null ? 0 : data.Penjualan;
-                }
+                                                    };
 
 
+                IEnumerable<ProductStock> penjualans = from x in penjualan.SelectMany(x => x.Items)
+                                 select new ProductStock
+                                 {
+                                     Id = x.Product.Id,
+                                     Stock = -1 * x.Quantity * x.Unit.Quantity,
+                                     SelectedUnit = x.Unit,
+                                 };
+                results = results.Concat(penjualans);
 
-                //order
-                if (withOrder)
-                {
-                    var orders = dbContext.OrderPenjualan.Where(x => x.Status == OrderStatus.Baru).Include(x => x.Items).ThenInclude(x => x.Product).SelectMany(x => x.Items).ToList();
-                    foreach (var item in pembelians)
-                    {
-                        var totalNewOrder = orders.Where(x => x.Product.Id == item.Id).Sum(x => x.Quantity * x.Unit.Quantity);
-                        item.Penjualan += totalNewOrder;
-                    }
-                }
 
-                var stocks = pembelians.ToList();
+                results = results.Concat(from x in pengembalianPenjualan.SelectMany(x => x.Items)
+                                         select new ProductStock
+                                         {
+                                             Id = x.Product.Id,
+                                             Stock = x.Quantity * x.Unit.Quantity,
+                                             SelectedUnit = x.Unit,
+                                         });
 
-                foreach (var item in stocks)
-                {
-                    item.SelectedUnit = item.Units.Where(x => x.Level == 0).FirstOrDefault();
-                }
+                if(pemindahan!=null)
+                    results = results.Concat(pemindahan);
 
-                return Task.FromResult(stocks.AsEnumerable());
+                var resultGroup = from x in results.GroupBy(x => x.Id)
+                                  select new ProductStock
+                                  {
+                                      Category = x.First().Category,
+                                      Supplier = x.First().Supplier,
+                                      CodeArticle = x.First().CodeArticle,
+                                      CodeName = x.First().CodeName,
+                                      Description = x.First().Description,
+                                      Id = x.First().Id,
+                                      Merk = x.First().Merk,
+                                      Name = x.First().Name,
+                                      Discount = x.First().Discount,
+                                      Color = x.First().Color,
+                                      Stock = x.Sum(m => m.Stock),
+                                      Size = x.First().Size,
+                                      Units = x.First().Units,
+                                      SelectedUnit = x.First().SelectedUnit
+                                  };
+
+                var finalResult = merkId <= 0 ? resultGroup.AsEnumerable() : resultGroup.Where(x => x.Merk.Id == merkId);
+
+                return Task.FromResult( finalResult.AsEnumerable());
+
+
             }
             catch (Exception ex)
             {

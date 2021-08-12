@@ -26,13 +26,13 @@
                     <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="OrderPembelian" Title="PO Number" Property="Nomor" />
                     <Radzen.Blazor.RadzenGridColumn TItem="OrderPembelian" Title="Supplier" Property="Supplier.Nama" />
                     <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Disc" >
-                        <Template>
-                            @(orders.Sum(x=>x.Discount).ToString("N2"))
+                        <Template Context="item">
+                            @(item.Discount.ToString("N2"))
                         </Template>
                     </Radzen.Blazor.RadzenGridColumn>
                     <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Total" >
-                        <Template>
-                            @((orders.Sum(x=>x.Total)- orders.Sum(x=>x.Discount)).ToString("N2"))
+                        <Template Context="item">
+                            @((item.Total-item.Discount).ToString("N2"))
                         </Template>
                     </Radzen.Blazor.RadzenGridColumn>
                     <Radzen.Blazor.RadzenGridColumn Width="120px" TItem="OrderPembelian" Title="Status" Property="Status">

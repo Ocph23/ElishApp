@@ -5,6 +5,13 @@
 * @version         1.0
 * @lastmodified    16.06.2016
 */
+
+.rz-spinner input[type='number'], .rz-spinner input[type='text'] {
+    padding: 1px 20px 1px 0.5rem;
+}
+
+
+
 .minwidth {
     min-width: 200px !important;
 }

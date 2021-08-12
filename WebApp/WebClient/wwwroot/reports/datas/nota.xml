@@ -2,23 +2,22 @@
 <Nota>
   <Table1>
     <No>1</No>
-    <CodeArticle />
-    <CodeProduct>SWLELGANT10</CodeProduct>
-    <ProductName>Man Elegant 10 10</ProductName>
-    <Unit>Lusin</Unit>
-    <Amount>1</Amount>
+    <CodeProduct>SWL06D10</CodeProduct>
+    <ProductName>Sun Swallow 06D 10</ProductName>
+    <Unit>Psg</Unit>
+    <Amount>3</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>250000</Price>
-    <Total>250000</Total>
+    <Price>22000</Price>
+    <Total>66000</Total>
   </Table1>
   <Table1>
     <No>2</No>
-    <CodeProduct>SWL06D12</CodeProduct>
-    <ProductName>Sun Swallow 06D 12</ProductName>
+    <CodeProduct>SWLElGANT 11</CodeProduct>
+    <ProductName>Sun Swallow Elegant 11</ProductName>
     <Unit>Psg</Unit>
-    <Amount>12</Amount>
+    <Amount>3</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>22000</Price>
-    <Total>264000</Total>
+    <Price>22500</Price>
+    <Total>67500</Total>
   </Table1>
 </Nota>

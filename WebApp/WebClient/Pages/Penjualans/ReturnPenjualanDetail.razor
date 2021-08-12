@@ -1,10 +1,13 @@
-﻿@page "/penjualan/returndetail/{id?}"
+﻿@page "/penjualan/pengembaliandetail/{id?}"
 
 @using ShareModels.ModelViews;
 @using WebClient.Pages.ShareComponent;
 @using Radzen;
+@using Microsoft.EntityFrameworkCore;
 
 @attribute [Authorize]
+
+@inject ApplicationDbContext dbContext;
 @inject IMerkService merkService;
 @inject IGudangService gudangService;
 @inject ICustomerService customerService;
@@ -33,8 +36,6 @@
                                         <RadzenTextBox Value="@model.Nomor" Style="width:80%" />
                                     </div>
                                 </div>
-
-
                                 <div class="row" style="margin-top:10px">
                                     <div class="col-md-4 align-items-center d-flex">
                                         <RadzenLabel Text="Customer " />
@@ -47,7 +48,10 @@
                                                         TextProperty="Name" Style="width:80%" />
                                     </div>
                                 </div>
-                                <div class="row" style="margin-top:10px">
+                               
+                            </div>
+                            <div class="col-md-6">
+                                 <div class="row" style="margin-top:10px">
                                     <div class="col-md-4 align-items-center d-flex">
                                         <RadzenLabel Text="Gudang" />
                                     </div>
@@ -55,6 +59,14 @@
                                         <RadzenDropDown Data=@gudangs
                                                         @bind-Value=@model.Gudang
                                                         TextProperty="Name" Style="width:80%" />
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:10px">
+                                    <div class="col-md-4 align-items-center d-flex">
+                                        <RadzenLabel Text="Tanggal" />
+                                    </div>
+                                    <div class="col-md-8">
+                                         <RadzenDatePicker @bind-Value="model.Created" Placeholder="Tanggal" Style="width:80%" />
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +83,7 @@
                             <div class="col-md-8">
                                 <RadzenDropDown AllowClear="true" AllowFiltering="true"
                                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                Data=@penjualans.Where(item=> !model.Items.Any(data=> data.Product.Id.Equals(item.Id)))
+                                                Data=@penjualans.Where(item=> !model.Items.Any(data=> data.Product.Id.Equals(item.Product.Id) && data.Penjualan.Id.Equals(item.Penjualan.Id)))
                                                 @bind-Value=@product.Id
                                                 TextProperty="Product.CodeName" ValueProperty="Id" Style="width:400px"
                                                 Change=@(args => SelectProduct(args, "Supplier")) />
@@ -82,17 +94,17 @@
                                 <RadzenGridColumn TItem="PengembalianPenjualanItem" Property="Penjualan.Nomor" Title="Penjualan" />
                                 <RadzenGridColumn TItem="PengembalianPenjualanItem" Property="Product.CodeName" Title="Code" />
                                 <RadzenGridColumn TItem="PengembalianPenjualanItem" Property="Product.Name" Title="Product" />
-                                <RadzenGridColumn Width="120px"  Title="Qty"  TItem="PengembalianPenjualanItem" >
+                                <RadzenGridColumn Width="120px" Title="Qty" TItem="PengembalianPenjualanItem">
                                     <Template Context="item">
                                         <RadzenNumeric @bind-Value="item.Quantity" Step="1" TValue="double"
-                                                      Change=@(args => OnChangeOrderItem(args, item)) />
+                                                       Change=@(args => OnChangeOrderItem(args, item)) />
                                     </Template>
                                 </RadzenGridColumn>
                                 <RadzenGridColumn Width="110px" TItem="PengembalianPenjualanItem" Property="Unit.Name" Title="Unit">
                                     <EditTemplate Context="item">
                                         <RadzenDropDown @bind-Value="item.Unit" Data="@item.Product.Units"
                                                         Change=@(args => OnChangeOrderItem(args, item))
-                                                        TextProperty="Name"  Style="width:100%" />
+                                                        TextProperty="Name" Style="width:100%" />
                                     </EditTemplate>
                                 </RadzenGridColumn>
                                 <RadzenGridColumn Width="100px" TItem="PengembalianPenjualanItem" Property="Price" Title="Price">
@@ -101,7 +113,8 @@
                                     </EditTemplate>
 
                                 </RadzenGridColumn>
-                                <RadzenGridColumn TItem="PengembalianPenjualanItem" Width="150px" TextAlign="TextAlign.Right" Property="DiscountView" Title="Disc">
+                                  <RadzenGridColumn TItem="PengembalianPenjualanItem" Width="150px" TextAlign="TextAlign.Right" Property="DiscountView" Title="Disc"></RadzenGridColumn>
+                                <RadzenGridColumn TItem="PengembalianPenjualanItem" Width="150px" TextAlign="TextAlign.Right" Property="Total" Title="Total">
                                     <EditTemplate Context="item">
                                         <RadzenNumeric @bind-Value="item.Discount" Step="0.1" />
                                     </EditTemplate>
@@ -127,7 +140,7 @@
                                                       Click="@((args) => CancelEdit(order))">
                                         </RadzenButton>
                                     </EditTemplate>
-                                    <FooterTemplate >
+                                    <FooterTemplate>
                                         <div>@model.Items.Sum(x => x.Price * x.Quantity) </div>
                                         <div>@model.Items.Sum(x => x.DiscountView) </div>
                                         <div>@(model.Items.Sum(x => x.Price * x.Quantity)-model.Items.Sum(x => x.DiscountView))  </div>
@@ -169,7 +182,7 @@
     RadzenGrid<PengembalianPenjualanItem> ordersGrid;
 
     bool checkall;
-    int merkid = 0;
+    // int merkid = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -181,6 +194,17 @@
         sales = await karyawanService.Get();
 
         model.Gudang = gudangs.FirstOrDefault();
+
+
+        if (!string.IsNullOrEmpty(id))
+        {
+            var Id = Convert.ToInt32(id);
+            model = dbContext.PengembalianPenjualan.Where(x=>x.Id==Id)
+            .Include(x => x.Customer)
+            .Include(x => x.Items).ThenInclude(x=>x.Product).FirstOrDefault();
+                penjualans = await returnSerivce.GetPenjualanByCustomerId(model.Customer.Id);
+        }
+
 
 
     }
@@ -224,7 +248,12 @@
             {
                 PengembalianPenjualan result = await returnSerivce.Post(model);
             }
-
+            else
+            {
+               if(Validate(model)){
+                    var saved = await returnSerivce.Put(model.Id, model);
+               }
+            }
         }
         catch (System.Exception ex)
         {
@@ -237,6 +266,29 @@
             });
         }
 
+    }
+
+
+
+    public bool Validate(PengembalianPenjualan model){
+        
+      try
+      {
+            var groups = penjualans.GroupBy(x=>x.Id);
+        foreach (var item in model.Items)
+        {
+            var group = groups.Where(xx=>xx.Key==item.Id).FirstOrDefault();
+            if(group!=null && item.Quantity > group.Sum(xx=>xx.Quantity)){
+                throw new SystemException($"Penjualan {item.Product.Name} hanya {group.Sum(xx=>xx.Quantity)}");
+            }
+        }
+        return true;
+      }
+      catch (System.Exception ex)
+      {
+          
+          throw new SystemException(ex.Message);
+      }
     }
 
     string OnErrorStock(Penjualanitem data)
@@ -265,15 +317,15 @@
         }
 
 
-        var productStok = penjualans.Where(x => x.Id == item.Product.Id).FirstOrDefault();
+        var productStok = penjualans.Where(x => x.Product.Id == item.Product.Id && x.Penjualan.Id == item.Penjualan.Id).FirstOrDefault();
         if (productStok != null)
         {
-            var readyStok = item.Stock / item.Unit.Quantity;
+            var readyStok = productStok.Quantity / item.Unit.Quantity;
             if (item.Quantity > readyStok)
             {
                 notificationService.Notify(new NotificationMessage
                 {
-                    Detail = $"Stock {productStok.Product.CodeName} Tidak Cukup \r Sisa Stock = {readyStok} {item.Unit.Name}",
+                    Detail = $"Penjualan {productStok.Product.CodeName} hanya = {readyStok} {item.Unit.Name}",
                     Severity = NotificationSeverity.Error
                 });
                 item.Quantity = readyStok;
@@ -303,8 +355,8 @@
 
     async Task SelectCustomer(object dataParameter)
     {
-        var customer= dataParameter as Customer;
-        if(customer!=null)
+        var customer = dataParameter as Customer;
+        if (customer != null)
         {
             penjualans = await returnSerivce.GetPenjualanByCustomerId(customer.Id);
 
@@ -319,7 +371,7 @@
             var _product = penjualans.Where(x => x.Id == prodId).FirstOrDefault();
             if (_product != null && model.Items.Where(x => x.Product.Id == _product.Id).FirstOrDefault() == null)
             {
-                var item = new PengembalianPenjualanItem { Stock = _product.Quantity, Product = _product.Product, Quantity = 1, Discount= _product.Discount, Price= _product.Price, Unit= _product.Unit, Penjualan=_product.Penjualan};
+                var item = new PengembalianPenjualanItem { Stock = _product.Quantity, Product = _product.Product, Quantity = 1, Discount = _product.Discount, Price = _product.Price, Unit = _product.Unit, Penjualan = _product.Penjualan };
                 item.Unit = _product.Product.Units.FirstOrDefault();
 
                 model.Items.Add(item);

@@ -213,7 +213,13 @@ namespace WebClient.Services
         {
             try
             {
+
+                dbContext.ChangeTracker.Clear();
+
                 dbContext.Set<OrderPembelian>().AsNoTracking();
+
+                var entries = dbContext.ChangeTracker.Entries();
+
                 if (order.Supplier != null)
                     dbContext.Entry(order.Supplier).State = EntityState.Unchanged;
                 foreach (var item in order.Items)

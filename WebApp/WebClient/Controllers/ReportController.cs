@@ -14,6 +14,7 @@ using FastReport.Export.Html;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using ShareModels.ModelViews;
+using System.Diagnostics;
 
 namespace WebClient.Controllers
 {
@@ -338,14 +339,14 @@ namespace WebClient.Controllers
                         datas.Add(new ShareModels.Reports.NotaData
                         {
                             No = nomor,
-                            Amount = item.StockView,
+                            Amount = item.Stock,
                             CodeArticle = item.CodeArticle,
                             CodeProduct = item.CodeName,
                             ProductName = $"{item.Name} {item.Size}",
                             Unit = item.SelectedUnit.Name,
                             Price = item.SelectedUnit.Sell,
                             Size = item.Size,
-                            Total = item.SelectedUnit.Sell * item.StockView,
+                            Total = item.SelectedUnit.Sell * item.Stock,
 
                         });
 
@@ -555,6 +556,7 @@ namespace WebClient.Controllers
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex.Message);
                     return new NoContentResult();
                 }
             }

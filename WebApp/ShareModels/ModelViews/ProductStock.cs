@@ -9,26 +9,7 @@ namespace ShareModels.ModelViews
     public class ProductStock : Product
     {
         private Unit _selected;
-
-        public double Pembelian { get; set; }
-        public double Penjualan { get; set; }
-        public virtual double Stock => Pembelian - Penjualan;
-
-        public virtual double StockView
-        {
-            get
-            {
-                if (SelectedUnit == null && Units != null)
-                {
-                    SelectedUnit = Units.Where(x => x.Level == 0).FirstOrDefault();
-                }
-
-                if(SelectedUnit!=null)
-                    return Stock / SelectedUnit.Quantity;
-
-                return 0;
-            }
-        }
+        public double Stock { get; set; }
         public virtual Unit SelectedUnit {
 
             get { return _selected; }

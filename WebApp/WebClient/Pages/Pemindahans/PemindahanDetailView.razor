@@ -28,7 +28,7 @@
                                 <RadzenDropDown AllowClear="true" AllowFiltering="true" Style="width:90%"
                                                 FilterCaseSensitivity="FilterCaseSensitivity.Default"
                                                 Data=@gudangs TextProperty="Name" @bind-Value="model.Dari"
-                                                Change="@(args=> { SelectGudangAsal(args); })" />
+                                                Change="@( async(args)=> { await SelectGudangAsal(args); })" />
                             </div>
                         </div>
 

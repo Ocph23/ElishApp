@@ -43,7 +43,7 @@
                 <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeName" Title="Code" />
                 <RadzenGridColumn TItem="ProductStock" Property="Name" Title="Product" />
                 <RadzenGridColumn Width="75px" TItem="ProductStock" Property="Size" Title="Size" />
-                <RadzenGridColumn Width="75px" TItem="ProductStock" Property="StockView" Title="Stock" />
+                <RadzenGridColumn Width="75px" TItem="ProductStock" Property="Stock" Title="Stock" />
                 <RadzenGridColumn Width="150px" TItem="ProductStock" Title="Unit">
                     <Template Context="data">
                         <Radzen.Blazor.RadzenDropDown Data="data.Units"
@@ -54,10 +54,10 @@
                 </RadzenGridColumn>
                 <RadzenGridColumn Width="150px" Title="Nilai" TItem="ProductStock" TextAlign="TextAlign.Right">
                     <Template Context="data">
-                        @((data.SelectedUnit.Sell * data.StockView).ToString("N2"))
+                        @((data.SelectedUnit.Sell * data.Stock).ToString("N2"))
                     </Template>
                     <FooterTemplate>
-                        @Stocks.Where(x => merkId == 0 ? true : x.Merk.Id == merkId).Sum(x => x.SelectedUnit == null ? 0 : x.SelectedUnit.Sell * x.StockView).ToString("N2");
+                        @Stocks.Where(x => merkId == 0 ? true : x.Merk.Id == merkId).Sum(x => x.SelectedUnit == null ? 0 : x.SelectedUnit.Sell * x.Stock).ToString("N2");
                     </FooterTemplate>
                 </RadzenGridColumn>
             </Columns>
@@ -74,7 +74,7 @@
     int merkId = 0;
     int gudangId = 0;
     int count;
-    bool withOrder;
+  //  bool withOrder = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,9 +126,9 @@
 
         try
         {
-            Stocks = await productService.GetProductStockByGudangId(merkId, gudangId, withOrder);
+            Stocks = await productService.GetProductStockByGudangId(merkId, gudangId, false);
             count = Stocks.Count();
-         //   await InvokeAsync(() => StateHasChanged());
+            //   await InvokeAsync(() => StateHasChanged());
         }
         catch (Exception ex)
         {

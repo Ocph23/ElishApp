@@ -13,7 +13,7 @@ namespace ShareModels
                 return $"{Id}/RETURN-APS/{Created.Month}/{Created.Year}";
             }
         }
-        public DateTime Created { get; set; }
+        public DateTime Created { get; set; }=DateTime.Now;
         public Customer Customer { get; set; }
         public Gudang Gudang { get; set; }
         public virtual ICollection<PengembalianPenjualanItem> Items { get; set; }

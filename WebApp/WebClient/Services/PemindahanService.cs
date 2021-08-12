@@ -68,7 +68,7 @@ namespace WebClient.Services
         {
             try
             {
-
+                dbContext.ChangeTracker.Clear();
                 var changeTracker = dbContext.ChangeTracker.Entries<Product>();
                 Validate(value);
                 dbContext.Entry(value.Dari).State = EntityState.Detached;
@@ -76,6 +76,7 @@ namespace WebClient.Services
 
                 foreach (var item in value.Items)
                 {
+                    dbContext.Entry(item.Pemindahan).State = EntityState.Unchanged;
                     dbContext.Entry(item.Product).State = EntityState.Unchanged;
                     dbContext.Entry(item.Unit).State = EntityState.Unchanged;
                 }

@@ -32,12 +32,13 @@ namespace WebClient.Services
             var trans = dbContext.Database.BeginTransaction();
             try
             {
-
+                dbContext.ChangeTracker.Clear();
 
                 dbContext.Entry(model.Customer).State = EntityState.Unchanged;
                 dbContext.Entry(model.Gudang).State = EntityState.Unchanged;
                 dbContext.Entry(model.Salesman).State = EntityState.Unchanged;
 
+                var tracker = dbContext.ChangeTracker.Entries();
                 foreach (var item in model.Items)
                 {
                     dbContext.Entry(item.Product).State = EntityState.Unchanged;
@@ -66,6 +67,9 @@ namespace WebClient.Services
         }
         public Task<Penjualan> UpdatePenjualan(int penjualanId, Penjualan order)
         {
+
+            dbContext.ChangeTracker.Clear();
+
             var trans = dbContext.Database.BeginTransaction();
             try
             {
@@ -409,12 +413,25 @@ namespace WebClient.Services
             try
             {
 
+
+
+
                ValidateCreateOrder(order);
+
+
+                dbContext.ChangeTracker.Clear();
                 var lastOrder = dbContext.OrderPenjualan.Where(x => x.Id == id)
                                 .Include(x=>x.Gudang)
                                 .Include(x => x.Customer)
                                 .Include(x => x.Sales)
                                 .Include(x => x.Items).FirstOrDefault();
+
+                dbContext.ChangeTracker.DisplayTrackedEntities();
+
+                dbContext.Entry(order.Customer).State = EntityState.Detached;
+                dbContext.Entry(order.Sales).State = EntityState.Detached;
+
+
                 if (lastOrder == null)
                     throw new SystemException("Order Not Found  !");
 
@@ -423,7 +440,8 @@ namespace WebClient.Services
                 {
                     if (item.Id <= 0)
                     {
-                        dbContext.Entry(item.Product).State = EntityState.Unchanged;
+                        dbContext.Entry(item.Product).State = EntityState.Detached;
+                        dbContext.Entry(item.Unit).State = EntityState.Detached;
                         dbContext.OrderPenjualanItem.Add(item);
                     }
                     else
@@ -431,6 +449,10 @@ namespace WebClient.Services
                         var olditem = lastOrder.Items.Where(x => x.Id == item.Id).FirstOrDefault();
                         if (olditem != null)
                         {
+                            if (olditem.Product != null)
+                                dbContext.Entry(olditem.Product).State = EntityState.Unchanged;
+                            if (olditem.Unit!= null)
+                            dbContext.Entry(olditem.Unit).State = EntityState.Unchanged;
                             dbContext.Entry<OrderPenjualanItem>(olditem).CurrentValues.SetValues(item);
                         }
                     }
@@ -445,7 +467,7 @@ namespace WebClient.Services
                         lastOrder.Items.Remove(item);
                     }
                 }
-
+                dbContext.ChangeTracker.DisplayTrackedEntities();
                 var result=  dbContext.SaveChanges();
                 trans.Commit();
                 return Task.FromResult(order);

@@ -158,6 +158,7 @@ namespace ShareModels
     {
         Task<IEnumerable<Penjualanitem>> GetPenjualanByCustomerId(int customerId);
         Task<PengembalianPenjualan> Post(PengembalianPenjualan model);
+        Task<PengembalianPenjualan> Put(int id, PengembalianPenjualan model);
 
     }
 

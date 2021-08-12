@@ -15,6 +15,7 @@ namespace ShareModels
         public virtual Unit Unit { get; set; }
 
         public virtual Product Product { get; set; }
+        public virtual Pemindahan Pemindahan{ get; set; }
 
     }
 }

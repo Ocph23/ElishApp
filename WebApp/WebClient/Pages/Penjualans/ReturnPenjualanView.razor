@@ -1,4 +1,4 @@
-@page "/penjualan/return";
+@page "/penjualan/pengembalian";
 
 @attribute [Authorize]
 
@@ -17,7 +17,7 @@
     <Tabs>
         <RadzenTabsItem Text="RETURN PENJUALAN">
             <RadzenButton Icon="add" Style="margin-bottom:10px" ButtonStyle="ButtonStyle.Success"
-                          Click="@(()=> nav.NavigateTo($"/penjualan/returndetail"))" />
+                          Click="@(()=> nav.NavigateTo($"/penjualan/pengembaliandetail"))" />
             <RadzenGrid Data="@penjualans" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="PengembalianPenjualan"
                         @ref="grid" LoadData="@LoadData" Count="@count" PageSize="12">
                 <Columns>
@@ -40,7 +40,7 @@
                         <Template Context="item">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list"
                                           Size="ButtonSize.Medium"
-                                          Click="@(() => nav.NavigateTo($"/penjualan/returndetail/{item.Id}"))" />
+                                          Click="@(() => nav.NavigateTo($"/penjualan/pengembaliandetail/{item.Id}"))" />
                         </Template>
                     </RadzenGridColumn>
                 </Columns>

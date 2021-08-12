@@ -440,7 +440,7 @@
                 var dataStock = products.Where(x => x.Id == itemData.Product.Id).FirstOrDefault();
                 if (dataStock != null)
                 {
-                    dataStock.Pembelian += (itemData.Quantity * itemData.Unit.Quantity);
+                    dataStock.Stock += (itemData.Quantity * itemData.Unit.Quantity);
                 }
             }
         }

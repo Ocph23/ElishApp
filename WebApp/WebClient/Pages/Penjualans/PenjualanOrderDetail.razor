@@ -235,7 +235,7 @@
     private RadzenGrid<OrderPenjualanItem> ordersGrid;
     private bool editAll;
 
-    object photo;
+   // object photo;
 
     protected override async Task OnInitializedAsync()
     {
@@ -262,7 +262,7 @@
                         var product = products.Where(x => x.Id == dataitem.Product.Id).FirstOrDefault();
                         if (product != null)
                         {
-                            product.Pembelian += dataitem.Quantity;
+                            product.Stock += dataitem.Quantity;
                         }
                     }
                 }
