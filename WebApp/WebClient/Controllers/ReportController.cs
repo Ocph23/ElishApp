@@ -282,7 +282,7 @@ namespace WebClient.Controllers
                         EmbedPictures = true,
                         Print = true,
                         Preview = true,
-                        PageBreaks = true
+                        PageBreaks = true,  
                     };
                     report.Export(html, stream);
 
@@ -572,7 +572,7 @@ namespace WebClient.Controllers
             report.SetParameterValue("Customer", nota.Customer);
             report.SetParameterValue("Salesman", nota.Sales);
             report.SetParameterValue("JatuhTempo", nota.InvoiceDeadLine.ToString("dd MMM yyyy"));
-            report.SetParameterValue("DeadLine", nota.DeadLine.ToString()+ " hari");
+            report.SetParameterValue("DeadLine", nota.DeadLine.ToString()+ " hr");
             report.SetParameterValue("Tanggal", nota.CreateDate.ToString("dd MMM yyyy"));
             report.SetParameterValue("Discount", nota.Discount);
             report.SetParameterValue("Address", nota.Address);

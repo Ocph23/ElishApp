@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30711.63
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareModels", "ShareModels\ShareModels.csproj", "{EF0CD1CF-F473-4E3F-82F8-7D6908E23DBD}"
 EndProject
@@ -11,9 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElishAppMobile.Android", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElishAppMobile", "ElishAppMobile\ElishAppMobile\ElishAppMobile.csproj", "{7C4DB746-1BD6-4DCC-96A0-F33107D3470C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject2", "TestProject2\TestProject2.csproj", "{9BE9152D-1279-4685-A030-84C6BFB073CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject2", "TestProject2\TestProject2.csproj", "{9BE9152D-1279-4685-A030-84C6BFB073CA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject1", "TestProject1\TestProject1.csproj", "{26F4DB9D-DCE1-4C99-B332-C83412B852F7}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AB9414D6-8240-4635-9000-80A067191C7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,6 +161,26 @@ Global
 		{26F4DB9D-DCE1-4C99-B332-C83412B852F7}.Release|x64.Build.0 = Release|Any CPU
 		{26F4DB9D-DCE1-4C99-B332-C83412B852F7}.Release|x86.ActiveCfg = Release|Any CPU
 		{26F4DB9D-DCE1-4C99-B332-C83412B852F7}.Release|x86.Build.0 = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|ARM.Build.0 = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|x64.Build.0 = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Debug|x86.Build.0 = Debug|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|ARM.Build.0 = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|ARM64.Build.0 = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|x64.ActiveCfg = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|x64.Build.0 = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|x86.ActiveCfg = Release|Any CPU
+		{AB9414D6-8240-4635-9000-80A067191C7E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

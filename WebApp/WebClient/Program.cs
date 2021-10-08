@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using ShareModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebClient
 {
@@ -20,6 +21,8 @@ namespace WebClient
                 try
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
+                    if (context.Database.EnsureCreated())
+                        context.Database.Migrate();
                     var userManager = services.GetRequiredService<IUserService>();
                     await DbInitializer.Initialize(context, userManager);
                 }

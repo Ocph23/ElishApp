@@ -2,22 +2,112 @@
 <Nota>
   <Table1>
     <No>1</No>
-    <CodeProduct>SWL06D10</CodeProduct>
+    <CodeProduct>SSWL06D.10</CodeProduct>
     <ProductName>Sun Swallow 06D 10</ProductName>
-    <Unit>Psg</Unit>
-    <Amount>3</Amount>
+    <Unit>psg</Unit>
+    <Amount>12</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>22000</Price>
-    <Total>66000</Total>
+    <Price>18750</Price>
+    <Total>225000</Total>
   </Table1>
   <Table1>
     <No>2</No>
-    <CodeProduct>SWLElGANT 11</CodeProduct>
-    <ProductName>Sun Swallow Elegant 11</ProductName>
-    <Unit>Psg</Unit>
-    <Amount>3</Amount>
+    <CodeProduct>SSWL938L-9.5</CodeProduct>
+    <ProductName>Sun Swallow 938 Ladies 9.5</ProductName>
+    <Unit>psg</Unit>
+    <Amount>6</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22833</Price>
+    <Total>136998</Total>
+  </Table1>
+  <Table1>
+    <No>3</No>
+    <CodeProduct>SSWL938L-10</CodeProduct>
+    <ProductName>Sun Swallow 938 Ladies 10</ProductName>
+    <Unit>psg</Unit>
+    <Amount>6</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22833</Price>
+    <Total>136998</Total>
+  </Table1>
+  <Table1>
+    <No>4</No>
+    <CodeProduct>SSWL938L-10.5</CodeProduct>
+    <ProductName>Sun Swallow 938 Ladies 10.5</ProductName>
+    <Unit>psg</Unit>
+    <Amount>6</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22833</Price>
+    <Total>136998</Total>
+  </Table1>
+  <Table1>
+    <No>5</No>
+    <CodeProduct>SSWLELGNT- 10</CodeProduct>
+    <ProductName>Sun Swallow Elegant 10</ProductName>
+    <Unit>psg</Unit>
+    <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
     <Price>22500</Price>
-    <Total>67500</Total>
+    <Total>135000</Total>
+  </Table1>
+  <Table1>
+    <No>6</No>
+    <CodeProduct>SSWLLDSBTY-9.5</CodeProduct>
+    <ProductName>Sun Swallow Ladies Beauty 9.5</ProductName>
+    <Unit>psg</Unit>
+    <Amount>6</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22833</Price>
+    <Total>136998</Total>
+  </Table1>
+  <Table1>
+    <No>7</No>
+    <CodeProduct>SSWLLDSBTY-10</CodeProduct>
+    <ProductName>Sun Swallow Ladies Beauty 10</ProductName>
+    <Unit>psg</Unit>
+    <Amount>6</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22833</Price>
+    <Total>136998</Total>
+  </Table1>
+  <Table1>
+    <No>8</No>
+    <CodeProduct>SSWLLDSBTY-10.5</CodeProduct>
+    <ProductName>Sun Swallow Ladies Beauty 10.5</ProductName>
+    <Unit>psg</Unit>
+    <Amount>6</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22833</Price>
+    <Total>136998</Total>
+  </Table1>
+  <Table1>
+    <No>9</No>
+    <CodeProduct>SSWLELGNT-10.5</CodeProduct>
+    <ProductName>Sun Swallow Man Elegant 10.5</ProductName>
+    <Unit>psg</Unit>
+    <Amount>12</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22500</Price>
+    <Total>270000</Total>
+  </Table1>
+  <Table1>
+    <No>10</No>
+    <CodeProduct>SSWLELGNT-11</CodeProduct>
+    <ProductName>Sun Swallow Man Elegant 11</ProductName>
+    <Unit>psg</Unit>
+    <Amount>12</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22500</Price>
+    <Total>270000</Total>
+  </Table1>
+  <Table1>
+    <No>11</No>
+    <CodeProduct>SSWLELGNT-11.5</CodeProduct>
+    <ProductName>Sun Swallow Man Elegant 11.5</ProductName>
+    <Unit>psg</Unit>
+    <Amount>12</Amount>
+    <DiscountValue>0</DiscountValue>
+    <Price>22750</Price>
+    <Total>273000</Total>
   </Table1>
 </Nota>
