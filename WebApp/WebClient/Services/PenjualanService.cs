@@ -68,7 +68,7 @@ namespace WebClient.Services
         public Task<Penjualan> UpdatePenjualan(int penjualanId, Penjualan order)
         {
 
-            dbContext.ChangeTracker.Clear();
+            //dbContext.ChangeTracker.Clear();
 
             var trans = dbContext.Database.BeginTransaction();
             try
@@ -86,15 +86,28 @@ namespace WebClient.Services
                     if (item.Id <= 0)
                     {
                         if (item.Product != null)
+                        {
                             dbContext.Entry(item.Product).State = EntityState.Unchanged;
+                            dbContext.Entry(item.Product.UnitSelected).State = EntityState.Unchanged;
+                        }
                         dbContext.Penjualanitem.Add(item);
                     }
                     else
                     {
                         var oldItem = lastPenjualan.Items.SingleOrDefault(x => x.Id == item.Id);
-                        if (item.Product != null)
-                            dbContext.Entry(item.Product).State = EntityState.Unchanged;
-                        dbContext.Entry(oldItem).CurrentValues.SetValues(item);
+                        if (item.Unit != oldItem.Unit||
+                            item.Discount != oldItem.Discount||
+                            item.Price != oldItem.Price||
+                            item.Quantity != oldItem.Quantity
+                            )
+                        {
+                            oldItem.Unit=item.Unit;
+                            oldItem.Discount=item.Discount;
+                            oldItem.Price=item.Price;
+                            oldItem.Quantity=item.Quantity;
+                        }
+
+                        
                     }
                 }
 
