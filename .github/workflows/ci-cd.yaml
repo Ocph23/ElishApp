@@ -22,3 +22,27 @@ jobs:
 
       - name: Build app
         run: dotnet build "WebApp/WebClient/WebClient.csproj" -c Release --no-restore
+
+      - name: Build app
+        run: dotnet publish "WebApp/WebClient/WebClient.csproj" -c Release -o ./out
+
+
+      - name: Copy repository contents via scp
+        uses: appleboy/scp-action@master
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSHKEY }}
+        with:
+          source: "./out"
+          target: "/var/www/mywebsite"
+
+      - name: Executing remote command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSHKEY }}
+          script: ls
