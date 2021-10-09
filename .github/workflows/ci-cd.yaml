@@ -18,7 +18,7 @@ jobs:
           dotnet-version: '5.0.x'
 
       - name: Restore Dependencies
-        run: dotnet restore
+        run: dotnet "WebApp/WebClient/WebClient.csproj" restore
 
       - name: Build app
-        run: dotnet build -c Release --no-restore
+        run: dotnet build "WebApp/WebClient/WebClient.csproj" -c Release --no-restore
