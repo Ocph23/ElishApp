@@ -9,16 +9,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps: 
-      -name : Check Out Code
+      - name : Check Out Code
         uses : actions/checkout@v2
 
-      -name : Setup .net 5
+      - name : Setup .net 5
         uses : actions/setup-dotnet@v1
         with: 
           dotnet-version: '5.0.x'
 
-      -name: Restore Dependencies
+      - name: Restore Dependencies
         run: dotnet restore
 
-      -name: Build app
+      - name: Build app
         run: dotnet build -c Release --no-restore
