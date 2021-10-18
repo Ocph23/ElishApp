@@ -22,10 +22,6 @@ namespace WebClient.Services
             _logger = log;
         }
 
-
-       
-
-
         #region penjualan
         public Task<Penjualan> CreatePenjualan(int orderid, Penjualan model)
         {
@@ -119,7 +115,7 @@ namespace WebClient.Services
                     var existsDb = order.Items.Where(x => x.Id == item.Id).FirstOrDefault();
                     if (existsDb == null)
                     {
-                        dbContext.Penjualanitem.Remove(item);
+                        lastPenjualan.Items.Remove(item);
                     }
                 }
 
@@ -426,28 +422,33 @@ namespace WebClient.Services
             try
             {
 
-
-
-
+            //    dbContext.ChangeTracker.Clear();
                ValidateCreateOrder(order);
-
-
-                dbContext.ChangeTracker.Clear();
                 var lastOrder = dbContext.OrderPenjualan.Where(x => x.Id == id)
                                 .Include(x=>x.Gudang)
                                 .Include(x => x.Customer)
                                 .Include(x => x.Sales)
                                 .Include(x => x.Items).FirstOrDefault();
 
-                dbContext.ChangeTracker.DisplayTrackedEntities();
-
-                dbContext.Entry(order.Customer).State = EntityState.Detached;
-                dbContext.Entry(order.Sales).State = EntityState.Detached;
-
-
                 if (lastOrder == null)
                     throw new SystemException("Order Not Found  !");
 
+
+                if (lastOrder.Customer.Id != order.Customer.Id)
+                {
+                    lastOrder.Customer = order.Customer;
+                }
+
+                if (lastOrder.Sales.Id != order.Sales.Id)
+                {
+                    lastOrder.Sales = order.Sales;
+                }
+
+                if (lastOrder.Gudang.Id != order.Gudang.Id)
+                {
+                    lastOrder.Gudang = order.Gudang;
+                }
+                lastOrder.DeadLine = order.DeadLine;
 
                 foreach (var item in order.Items)
                 {
@@ -480,7 +481,6 @@ namespace WebClient.Services
                         lastOrder.Items.Remove(item);
                     }
                 }
-                dbContext.ChangeTracker.DisplayTrackedEntities();
                 var result=  dbContext.SaveChanges();
                 trans.Commit();
                 return Task.FromResult(order);
