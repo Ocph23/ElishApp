@@ -494,18 +494,18 @@ namespace WebClient.Services
         #endregion
 
         #region Pembayaran
-        public  Task<PembayaranPenjualan> CreatePembayaran(int penjualanId, PembayaranPenjualan pembayaran, bool forced)
+        public Task<PembayaranPenjualan> CreatePembayaran(int penjualanId, PembayaranPenjualan pembayaran, bool forced)
         {
+            if (pembayaran.Id > 0)
+                throw new SystemException("Data Sudah Disimpan !");
+
             var trans = dbContext.Database.BeginTransaction();
             try
             {
                 var penjualan = dbContext
                     .Penjualan.Where(x => x.Id == penjualanId)
                     .Include(x=>x.PembayaranPenjualan)
-                    .Include(x => x.Items).FirstOrDefault();
-
-
-                var tracker = dbContext.ChangeTracker.Entries();
+                    .Include(x => x.Items).SingleOrDefault();
 
                 if (penjualan == null)
                     throw new SystemException("Penjualan Tidak Ditemukan !");
@@ -525,12 +525,11 @@ namespace WebClient.Services
                     throw new SystemException($"Pembayaran Melebihi Tagihan Invoice ! sisa {sisa}");
 
 
+                dbContext.Entry(pembayaran.Penjualan).State = EntityState.Unchanged;
+                dbContext.PembayaranPenjualan.Add(pembayaran);
+                
                 var status = sisa > 0 ? PaymentStatus.Panjar : PaymentStatus.Lunas;
                 penjualan.Status = status;
-
-                dbContext.Entry(pembayaran.Penjualan).State = EntityState.Unchanged;
-
-                dbContext.PembayaranPenjualan.Add(pembayaran);
                 dbContext.SaveChanges();
                 trans.Commit();
                 return Task.FromResult(pembayaran);
