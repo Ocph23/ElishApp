@@ -1,0 +1,72 @@
+﻿@page "/gudang"
+
+
+
+@using ApsWebApp.Pages.Gudangs;
+
+@inject NavigationManager nav;
+@inject IGudangService gudangService;
+@inject DialogService DialogService;
+
+@attribute [Authorize]
+
+
+<RadzenFieldset>
+    <HeaderTemplate>Data Gudang</HeaderTemplate>
+    <ChildContent>
+        <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditGudang>($"Add Gudang",
+                      new Dictionary<string, object>() { { "model", new Gudang()}, },
+                      new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
+
+        <RadzenDataGrid @ref="grid" Data="@datas" AllowFiltering="true" AllowPaging="true" AllowSorting="true">
+            <Columns>
+                <RadzenDataGridColumn Width="300" Property="Name" Title="Name" TItem="Gudang" />
+                <RadzenDataGridColumn Property="Description" Title="Description" TItem="Gudang" />
+                <RadzenDataGridColumn Width="60px" TItem="Gudang">
+                    <Template Context="item">
+                        <RadzenButton Click=@(args => DialogService.OpenAsync<EditGudang>($"Edit Gudang",
+                                      new Dictionary<string, object>() { { "model", item}, },
+                                      new DialogOptions())) Icon="edit" ButtonStyle="ButtonStyle.Warning" sty />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </ChildContent>
+
+</RadzenFieldset>
+
+@code {
+    private ICollection<Gudang> datas;
+
+    RadzenDataGrid<Gudang> grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DialogService.OnClose += OnCloseDialog;
+        datas = (await gudangService.Get()).ToList();
+
+    }
+
+
+
+    public  void OnCloseDialog(dynamic result)
+    {
+        if (result != null && ((object)result).GetType() == typeof(Gudang))
+        {
+            Gudang model = (Gudang)result;
+
+            if (datas == null)
+                datas = new List<Gudang>();
+
+            datas.Add(model);
+
+            grid.Reload();
+            StateHasChanged();
+        }
+
+    }
+
+
+
+
+}

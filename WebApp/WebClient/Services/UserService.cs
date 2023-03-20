@@ -6,14 +6,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using WebClient.Models;
+using ApsWebApp.Models;
 using System.Security.Cryptography;
 using ShareModels;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebClient.Services
+namespace ApsWebApp.Services
 {
 
     public class UserService : IUserService

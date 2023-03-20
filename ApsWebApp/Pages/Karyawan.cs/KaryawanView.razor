@@ -1,0 +1,73 @@
+﻿@page "/karyawan"
+
+@inject IKaryawanService karyawanService;
+@inject NavigationManager nav;
+
+@attribute [Authorize]
+
+
+<RadzenFieldset>
+    <HeaderTemplate >Data Karyawan & Sales</HeaderTemplate>
+    <ChildContent>
+
+
+
+    @if (employees == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <RadzenButton Icon="add" ButtonType="ButtonType.Button" Click="@(()=>nav.NavigateTo($"/karyawan/change"))"
+                                    ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
+
+
+        <RadzenDataGrid Data="@(employees)" FilterCaseSensitivity="FilterCaseSensitivity.Default"
+                    AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Karyawan">
+            <Columns>
+                <RadzenDataGridColumn TItem="Karyawan" Property="Name" Title="Name" />
+                <RadzenDataGridColumn TItem="Karyawan" Width="250px" Property="Email" Title="Email" />
+                <RadzenDataGridColumn TItem="Karyawan" Width="250px" Property="Telepon" Title="Telepon" />
+                <RadzenDataGridColumn TItem="Karyawan" Context="data" Width="65px">
+                    <Template>
+                        <RadzenButton ButtonStyle="ButtonStyle.Warning" ButtonType="ButtonType.Button" Icon="edit" Click="@(()=> nav.NavigateTo($"/karyawan/change/{data.Id}"))" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    }
+    </ChildContent>
+
+</RadzenFieldset>
+    @code {
+        public enum TitleOfCourtesy
+        {
+            Ms,
+            Mr,
+            All = -1
+        }
+
+        public class Employee
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public TitleOfCourtesy TitleOfCourtesy { get; set; }
+
+        }
+
+        IEnumerable<Karyawan> employees;
+
+        protected override async Task OnInitializedAsync()
+        {
+            employees = await karyawanService.Get();
+        }
+    }
+
+
+
+
+
+
+    @code {
+
+    }

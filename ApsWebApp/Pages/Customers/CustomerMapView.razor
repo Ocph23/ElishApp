@@ -1,0 +1,115 @@
+﻿@page "/customermap"
+
+@inject ApplicationDbContext context
+@inject DialogService dialog;
+
+<style>
+    .customer {
+        padding: 15px;
+        border-radius: 10px;
+        background-color: deepskyblue;
+        margin: 5px;
+    }
+</style>
+
+<Radzen.Blazor.RadzenFieldset>
+    <FieldSetHeader Title="Peta Pelanggan"></FieldSetHeader>
+   
+    <div class="row">
+        <div class="col-xl-3" style="border:1px solid silver; background-color: white; height: 80vh; overflow-y: auto;">
+            <div style=" align-items: center; display: flex; padding:5px;line-height: 0">
+                <Radzen.Blazor.RadzenAutoComplete @bind-Value="searchtext" /> <button class="btn">Cari</button>
+            </div>
+            @foreach (var item in customers.Where(x => x.Name.ToLower().Contains(searchtext.ToLower()) || x.ContactName.ToLower().Contains(searchtext.ToLower())))
+            {
+                <div @onclick="@(()=> SelectCustomer(item))" class="customer" style="@( CustomerSelected!=null && item.Id==CustomerSelected.Id ? "background-color:goldenrod" : "")">
+                    <Radzen.Blazor.RadzenLabel Text="@item.Name"></Radzen.Blazor.RadzenLabel>
+                    <div style="">
+                        <Radzen.Blazor.RadzenLabel Style="font-size:small" Text="@item.Location" @onclick="@(()=> SelectCustomer(item))"></Radzen.Blazor.RadzenLabel>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-xl-9">
+            <RadzenGoogleMap @ref="map" style="height: 80vh;border:1px solid silver;" ApiKey="AIzaSyBVoxKIqCOGybbDmgLYrTGiFSfDjeMC5DA" Zoom=@zoom
+                             Center=@mapcenter MapClick=@OnMapClick MarkerClick=@OnMarkerClick>
+                <Markers>
+                    @if (customers.Count() > 0)
+                    {
+                        foreach (var item in customers)
+                        {
+                            if (!string.IsNullOrEmpty(item.Location))
+                            {
+                                <RadzenGoogleMapMarker Title="@item.Name" Label="@item.Name" Position=@(GetLocationFromString(item.Location)) />
+                            }
+                        }
+                    }
+                </Markers>
+            </RadzenGoogleMap>
+        </div>
+    </div>
+
+</Radzen.Blazor.RadzenFieldset>
+
+@code {
+
+    RadzenGoogleMap map;
+    ICollection<RadzenGoogleMapMarker> markers = new List<RadzenGoogleMapMarker>();
+    IEnumerable<Customer> customers;
+
+    string searchtext = "";
+
+    protected override Task OnInitializedAsync()
+    {
+        customers = context.Customer.AsEnumerable();
+        return Task.CompletedTask;
+    }
+
+    int zoom = 18;
+    GoogleMapPosition mapcenter = new GoogleMapPosition() { Lat = -2.612870, Lng = 140.678475 };
+
+    Customer CustomerSelected;
+
+
+    GoogleMapPosition GetLocationFromString(string location)
+    {
+        var args = location.Split(',');
+        return new GoogleMapPosition() { Lat = Convert.ToDouble(args[0]), Lng = Convert.ToDouble(args[1]) };
+    }
+
+    async Task OnMapClick(GoogleMapClickEventArgs args)
+    {
+        if (CustomerSelected != null)
+        {
+            var resultDialog = await dialog.Confirm($"Yakin Tandai Sebagai {CustomerSelected.Name} ", "Marker", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
+            if (resultDialog != null && resultDialog == true)
+            {
+                CustomerSelected.Location = $"{args.Position.Lat}, {args.Position.Lng}";
+                mapcenter = new GoogleMapPosition() { Lat = args.Position.Lat, Lng = args.Position.Lng };
+
+                var cust = context.Customer.Where(x => x.Id == CustomerSelected.Id).FirstOrDefault();
+                if (cust != null)
+                {
+                    context.Entry(cust).CurrentValues.SetValues(CustomerSelected);
+                    context.SaveChanges();
+                }
+            }
+        }
+    }
+
+    void OnMarkerClick(RadzenGoogleMapMarker marker)
+    {
+        //console.Log($"Map {marker.Title} marker clicked. Marker position -> Lat: {marker.Position.Lat}, Lng: {marker.Position.Lng}");
+    }
+
+    void SelectCustomer(Customer data)
+    {
+        CustomerSelected = data;
+
+        if (!string.IsNullOrEmpty(data.Location))
+        {
+            var args = data.Location.Split(',');
+            mapcenter = new GoogleMapPosition() { Lat = Convert.ToDouble(args[0]), Lng = Convert.ToDouble(args[1]) };
+        }
+    }
+}

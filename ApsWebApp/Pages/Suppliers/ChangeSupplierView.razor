@@ -1,0 +1,115 @@
+﻿@page "/supplier/change/{id?}"
+
+@inject NavigationManager nav;
+@inject ISupplierService supplierService;
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<h3>@title</h3>
+
+<EditForm Model="@model" OnValidSubmit="@Save">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Supplier Name</label>
+            <input type="text" @bind="model.Nama" class="form-control" id="name">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">NPWP</label>
+            <input type="text" @bind="model.NPWP" class="form-control" id="npwp">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Contact Person Name</label>
+            <input type="text" @bind="model.ContactPersonName" class="form-control" id="personName">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword4">Contact Person Telepon</label>
+            <input type="text" @bind="model.ContactPerson" class="form-control" id="personTelp">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputAddress">Address</label>
+        <input type="text" class="form-control" @bind="model.Address" id="inputAddress" placeholder="Jln.">
+    </div>
+    <div class="form-group">
+        <label for="inputAddress2">Telepon</label>
+        <input type="text" class="form-control" @bind="model.Telepon" id="inputAddress2" placeholder="Telepon">
+    </div>
+
+    <button type="button" @onclick="GoBack" class="btn btn-primary">Back</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    public string title = "Tambah Supplier";
+
+    public Supplier model { get; set; } = new Supplier();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                model = new Supplier();
+            }
+            else
+            {
+                title = "Edit Supplier";
+                model = await supplierService.GetSupplier(Convert.ToInt32(id));
+            }
+        }
+        catch
+        {
+            //ex.Message;
+        }
+    }
+
+
+    private async Task Save()
+    {
+        try
+        {
+            var Id = Convert.ToInt32(id);
+            if (Id <= 0)
+            {
+                var data = await supplierService.Post(model);
+                if (data != null)
+                {
+                    nav.NavigateTo("/supplier");
+                }
+            }
+            else
+            {
+                var updated = await supplierService.Update(Convert.ToInt32(id), model);
+                if (updated)
+                {
+                    nav.NavigateTo("/supplier");
+                }
+            }
+
+
+        }
+        catch
+        {
+            //ex.Message;
+        }
+
+
+    }
+
+
+    private void GoBack()
+    {
+        nav.NavigateTo("/supplier");
+    }
+
+
+
+}

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using ShareModels;
 
-namespace WebClient
+namespace ApsWebApp
 {
     public partial class ApplicationDbContext : DbContext
     {

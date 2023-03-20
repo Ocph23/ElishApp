@@ -1,0 +1,72 @@
+﻿@page "/merk"
+
+@using ApsWebApp.Pages.Merks;
+
+@inject NavigationManager nav;
+@inject IMerkService merkService;
+@inject DialogService DialogService;
+
+@attribute [Authorize]
+
+
+<RadzenFieldset >
+    <HeaderTemplate>Data Merek</HeaderTemplate>
+   <ChildContent>
+        <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditMerk>($"Add Merk",
+                      new Dictionary<string, object>() { { "model", new Merk()}, },
+                      new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
+
+        <RadzenDataGrid @ref="grid" Data="@merks" AllowFiltering="true" AllowPaging="true" AllowSorting="true">
+            <Columns>
+                <RadzenDataGridColumn Width="300" Property="Name" Title="Name" TItem="Merk" />
+                <RadzenDataGridColumn Property="Description" Title="Description" TItem="Merk" />
+                <RadzenDataGridColumn Width="60px" TItem="Merk">
+                    <Template Context="item">
+                        <RadzenButton Click=@(args => DialogService.OpenAsync<EditMerk>($"Edit Merk",
+                                      new Dictionary<string, object>() { { "model", item}, },
+                                      new DialogOptions())) Icon="edit" ButtonStyle="ButtonStyle.Warning" sty />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+   </ChildContent>
+
+</RadzenFieldset>
+
+@code {
+    private ICollection<Merk> merks;
+
+    RadzenDataGrid<Merk> grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DialogService.OnClose += OnCloseDialog;
+        merks = (await merkService.Get()).ToList();
+
+    }
+
+
+
+    public void OnCloseDialog(dynamic result)
+    {
+        if (result != null && ((object)result).GetType() == typeof(Merk))
+        {
+            Merk model = (Merk)result;
+
+            if (merks == null)
+                merks = new List<Merk>();
+
+
+            merks.Add(model);
+
+            grid.Reload();
+            StateHasChanged();
+
+        }
+
+    }
+
+
+
+
+}

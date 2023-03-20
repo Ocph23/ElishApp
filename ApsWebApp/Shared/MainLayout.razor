@@ -1,0 +1,43 @@
+﻿@inherits LayoutComponentBase
+<RadzenNotification />
+<RadzenDialog />
+
+    <div class="page noprint">
+        <div class="@sidebar">
+            <NavMenu @ref="nav" OnChange="OnChangeEvent" />
+        </div>
+
+        <div class="main">
+            <div class="top-row noprint">
+                <a class="noprint" href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            </div>
+
+            <div class="content px-4">
+                @Body
+            </div>
+        </div>
+    </div>
+
+
+@code{
+
+    NavMenu nav;
+    string sidebar => GetSidebarClass();
+    private string GetSidebarClass()
+    {
+
+        if (nav != null && !nav.isWidth)
+            return "sidebar-half";
+
+        return "sidebar";
+
+
+    }
+
+    public void OnChangeEvent(int data)
+    {
+        this.StateHasChanged();
+    }
+
+
+}

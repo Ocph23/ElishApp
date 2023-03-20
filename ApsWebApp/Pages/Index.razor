@@ -1,0 +1,48 @@
+﻿@page "/"
+
+@using ShareModels;
+@using ApsWebApp;
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager nav;
+
+<div style="height:90vh; display:flex; justify-content:center; align-items:center">
+        <AuthorizeView>
+            <Authorized>
+                <img style="width:30%" src="/images/apslogowithtext.png" />
+            </Authorized>
+            <NotAuthorized>
+                <div style="display:block; text-align:center">
+                    <img style="width:30%" src="/images/apslogowithtext.png" />
+                    <p><em>@loading</em></p>
+                    <h1>Authentication Failure !</h1>
+                    <div><p>You're not signed in. Please Login</p></div>
+                    <div>
+                        <button class="btn btn-success" @onclick="@dologin">Login</button>
+                    </div>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+</div>
+
+@code{
+
+    string loading ="Loading....";
+    //bool login = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Loading();
+    }
+
+    void dologin()
+    {
+        nav.NavigateTo("/login");
+    }
+
+    async Task Loading()
+    {
+        await Task.Delay(2000);
+        loading = string.Empty;
+      //  login = true;
+    }
+}

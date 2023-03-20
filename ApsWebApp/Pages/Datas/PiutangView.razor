@@ -1,0 +1,103 @@
+﻿@page "/data/piutang"
+
+@using ShareModels.ModelViews;
+@using ShareModels.Reports;
+@using Newtonsoft.Json;
+
+@attribute [Authorize]
+
+
+@inject IReportService reportService
+@inject NavigationManager nav
+
+
+<RadzenFieldset Text="Laporan Piutang">
+    <div class="row">
+        <div class="row" style="margin:5px">
+            <div class="col-md-12">
+                <div>
+                    <span>Periode : @date.ToLongDateString()</span>
+                </div>
+                <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" href="@($"/report/printpiutang/0")"><i class="ui-button-icon-left pi">print</i></a>
+
+                <RadzenGrid @ref="grid" Data="@(datas)" FilterCaseSensitivity="FilterCaseSensitivity.Default"
+                            AllowFiltering="true" AllowSorting="true" TItem="PiutangData">
+                    <Columns>
+                        <RadzenGridColumn TItem="PiutangData" Title="Nomor" Width="160px">
+                            <Template Context="item">
+                                <RadzenLabel @onclick="@(()=>Detail(item))" Text="@item.Nomor" />
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="PiutangData" Property="Customer" Title="Customer" />
+                        <RadzenGridColumn TItem="PiutangData" Title="Jatuh Tempo" Width="100px">
+                            <Template Context="item">
+                                @if (item.JatuhTempo < DateTime.Now)
+                                {
+                                    <span style="color:red">@item.JatuhTempo.ToString("dd-MM-yyyy")</span>
+                                }
+                                else
+                                {
+                                    <span> @item.JatuhTempo.ToString("dd-MM-yyyy")</span>
+                                }
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="PiutangData" Property="Sales" Title="Sales" />
+                        <RadzenGridColumn TItem="PiutangData" TextAlign="TextAlign.Right" Width="110px">
+                            <Template Context="item">
+                                @item.TagihanAfterDiscount.ToString("N0")
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="PiutangData" Title="Panjar" TextAlign="TextAlign.Right" Width="110px">
+                            <Template Context="item">
+                                @item.Panjar.ToString("N0")
+                            </Template>
+                        </RadzenGridColumn>
+                        <RadzenGridColumn TItem="PiutangData" Title="Sisa" TextAlign="TextAlign.Right" Width="110px">
+                            <Template Context="item">
+                                @(item.Sisa.ToString("N0"))
+                            </Template>
+                            <FooterTemplate>
+                                @datas.Sum(x => x.Sisa).ToString("N0");
+                            </FooterTemplate>
+                        </RadzenGridColumn>
+                    </Columns>
+                </RadzenGrid>
+            </div>
+        </div>
+    </div>
+</RadzenFieldset>
+
+
+
+
+@code {
+
+    RadzenGrid<PiutangData> grid;
+
+    DateTime date = DateTime.Now;
+
+    IEnumerable<PiutangData> datas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            datas = await reportService.GetPiutang();
+        }
+        catch
+        {
+
+        }
+
+    }
+
+
+
+    public void Detail(PiutangData data)
+    {
+        var item = (PiutangData)data;
+        nav.NavigateTo($"penjualan/realisasidetail/{item.PenjualanId}");
+    }
+
+
+}

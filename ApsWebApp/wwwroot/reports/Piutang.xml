@@ -1,0 +1,543 @@
+<?xml version="1.0" standalone="yes"?>
+<Piutang>
+  <Table1>
+    <Nomor>92/INV-APS/5/2022</Nomor>
+    <Customer>Rizky Mulia</Customer>
+    <JatuhTempo>2022-06-19T12:29:58.502014+09:00</JatuhTempo>
+    <Tagihan>9070200</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>92</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>9070200</TagihanAfterDiscount>
+    <Sisa>9070200</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>95/INV-APS/5/2022</Nomor>
+    <Customer>Lia Jaya Sport</Customer>
+    <JatuhTempo>2022-05-20T15:09:38.939998+09:00</JatuhTempo>
+    <Tagihan>3394890</Tagihan>
+    <Panjar>1000000</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>95</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>3394890</TagihanAfterDiscount>
+    <Sisa>2394890</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>97/INV-APS/5/2022</Nomor>
+    <Customer>andi sembako</Customer>
+    <JatuhTempo>2022-05-21T04:38:11.153235+09:00</JatuhTempo>
+    <Tagihan>2210196</Tagihan>
+    <Panjar>1200000</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>97</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2210196</TagihanAfterDiscount>
+    <Sisa>1010196</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>107/INV-APS/6/2022</Nomor>
+    <Customer>Pak Amir</Customer>
+    <JatuhTempo>2022-06-13T04:44:55.881447+09:00</JatuhTempo>
+    <Tagihan>2910492</Tagihan>
+    <Panjar>1000000</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>107</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2910492</TagihanAfterDiscount>
+    <Sisa>1910492</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>111/INV-APS/6/2022</Nomor>
+    <Customer>Flourish</Customer>
+    <JatuhTempo>2022-06-18T00:14:12.886098+09:00</JatuhTempo>
+    <Tagihan>2210196</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>111</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2210196</TagihanAfterDiscount>
+    <Sisa>2210196</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>112/INV-APS/6/2022</Nomor>
+    <Customer>Tk.ulpa</Customer>
+    <JatuhTempo>2022-06-20T03:39:24.986215+09:00</JatuhTempo>
+    <Tagihan>2871000</Tagihan>
+    <Panjar>871000</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>112</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2871000</TagihanAfterDiscount>
+    <Sisa>2000000</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>113/INV-APS/6/2022</Nomor>
+    <Customer>Rizky Mulia</Customer>
+    <JatuhTempo>2022-07-10T02:38:55.629906+09:00</JatuhTempo>
+    <Tagihan>10311600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>113</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>10311600</TagihanAfterDiscount>
+    <Sisa>10311600</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>114/INV-APS/6/2022</Nomor>
+    <Customer>Hokky</Customer>
+    <JatuhTempo>2022-07-10T04:35:38.144681+09:00</JatuhTempo>
+    <Tagihan>2737800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>114</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2737800</TagihanAfterDiscount>
+    <Sisa>2737800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>115/INV-APS/6/2022</Nomor>
+    <Customer>Tifa Mart</Customer>
+    <JatuhTempo>2022-07-10T23:30:25.655725+09:00</JatuhTempo>
+    <Tagihan>1015800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>115</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1015800</TagihanAfterDiscount>
+    <Sisa>1015800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>116/INV-APS/6/2022</Nomor>
+    <Customer>H. Jabal</Customer>
+    <JatuhTempo>2022-07-29T05:22:04.251149+09:00</JatuhTempo>
+    <Tagihan>4093200</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>116</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>4093200</TagihanAfterDiscount>
+    <Sisa>4093200</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>117/INV-APS/7/2022</Nomor>
+    <Customer>Flourish</Customer>
+    <JatuhTempo>2022-07-15T22:23:12.217394+09:00</JatuhTempo>
+    <Tagihan>2719800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>117</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2719800</TagihanAfterDiscount>
+    <Sisa>2719800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>118/INV-APS/7/2022</Nomor>
+    <Customer>Hj.ali</Customer>
+    <JatuhTempo>2022-07-16T09:41:01.09659+09:00</JatuhTempo>
+    <Tagihan>550200</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>118</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>550200</TagihanAfterDiscount>
+    <Sisa>550200</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>119/INV-APS/7/2022</Nomor>
+    <Customer>Maxi Mart</Customer>
+    <JatuhTempo>2022-07-17T05:07:12.75417+09:00</JatuhTempo>
+    <Tagihan>2995800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>119</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2995800</TagihanAfterDiscount>
+    <Sisa>2995800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>120/INV-APS/7/2022</Nomor>
+    <Customer>Tk.Mala</Customer>
+    <JatuhTempo>2022-07-20T00:24:22.443821+09:00</JatuhTempo>
+    <Tagihan>1344000</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>120</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1344000</TagihanAfterDiscount>
+    <Sisa>1344000</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>121/INV-APS/7/2022</Nomor>
+    <Customer>Pak Amir</Customer>
+    <JatuhTempo>2022-07-24T13:09:04.060735+09:00</JatuhTempo>
+    <Tagihan>3274800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>121</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>3274800</TagihanAfterDiscount>
+    <Sisa>3274800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>122/INV-APS/7/2022</Nomor>
+    <Customer>Flourish</Customer>
+    <JatuhTempo>2022-08-06T23:18:00.992036+09:00</JatuhTempo>
+    <Tagihan>2751600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>122</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2751600</TagihanAfterDiscount>
+    <Sisa>2751600</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>123/INV-APS/7/2022</Nomor>
+    <Customer>Evan Jaya Mart</Customer>
+    <JatuhTempo>2022-08-07T08:02:57.194184+09:00</JatuhTempo>
+    <Tagihan>2564400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>123</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2564400</TagihanAfterDiscount>
+    <Sisa>2564400</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>124/INV-APS/7/2022</Nomor>
+    <Customer>esmk mart</Customer>
+    <JatuhTempo>2022-08-08T02:15:57.197331+09:00</JatuhTempo>
+    <Tagihan>2190000</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>124</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2190000</TagihanAfterDiscount>
+    <Sisa>2190000</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>125/INV-APS/7/2022</Nomor>
+    <Customer>Mekar Sari</Customer>
+    <JatuhTempo>2022-08-09T01:39:23.172747+09:00</JatuhTempo>
+    <Tagihan>546600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>125</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>546600</TagihanAfterDiscount>
+    <Sisa>546600</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>126/INV-APS/7/2022</Nomor>
+    <Customer>hope mart</Customer>
+    <JatuhTempo>2022-08-09T23:57:41.468284+09:00</JatuhTempo>
+    <Tagihan>1663200</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>126</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1663200</TagihanAfterDiscount>
+    <Sisa>1663200</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>127/INV-APS/8/2022</Nomor>
+    <Customer>aneka jasa</Customer>
+    <JatuhTempo>2022-08-23T00:59:04.704336+09:00</JatuhTempo>
+    <Tagihan>1065000</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>127</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1065000</TagihanAfterDiscount>
+    <Sisa>1065000</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>128/INV-APS/8/2022</Nomor>
+    <Customer>Flourish</Customer>
+    <JatuhTempo>2022-08-29T10:02:19.417529+09:00</JatuhTempo>
+    <Tagihan>2448000</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>128</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2448000</TagihanAfterDiscount>
+    <Sisa>2448000</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>129/INV-APS/9/2022</Nomor>
+    <Customer>Evan Jaya Mart</Customer>
+    <JatuhTempo>2022-09-21T09:03:32.599001+09:00</JatuhTempo>
+    <Tagihan>2548200</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>129</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2548200</TagihanAfterDiscount>
+    <Sisa>2548200</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>130/INV-APS/9/2022</Nomor>
+    <Customer>Pak Amir</Customer>
+    <JatuhTempo>2022-09-22T10:26:44.864418+09:00</JatuhTempo>
+    <Tagihan>2240400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>130</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2240400</TagihanAfterDiscount>
+    <Sisa>2240400</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>131/INV-APS/9/2022</Nomor>
+    <Customer>Rizky Mulia</Customer>
+    <JatuhTempo>2022-09-27T09:45:25.056744+09:00</JatuhTempo>
+    <Tagihan>3254400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>131</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>3254400</TagihanAfterDiscount>
+    <Sisa>3254400</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>132/INV-APS/9/2022</Nomor>
+    <Customer>Maxi Mart</Customer>
+    <JatuhTempo>2022-09-27T09:46:55.002074+09:00</JatuhTempo>
+    <Tagihan>2719800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>132</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2719800</TagihanAfterDiscount>
+    <Sisa>2719800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>133/INV-APS/9/2022</Nomor>
+    <Customer>Tk.Rudi</Customer>
+    <JatuhTempo>2022-09-27T09:52:00.970689+09:00</JatuhTempo>
+    <Tagihan>2481000</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>133</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2481000</TagihanAfterDiscount>
+    <Sisa>2481000</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>134/INV-APS/9/2022</Nomor>
+    <Customer>Hokky</Customer>
+    <JatuhTempo>2022-09-27T09:55:23.440095+09:00</JatuhTempo>
+    <Tagihan>2605800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>134</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2605800</TagihanAfterDiscount>
+    <Sisa>2605800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>135/INV-APS/9/2022</Nomor>
+    <Customer>Nusantara, Tk</Customer>
+    <JatuhTempo>2022-10-03T01:49:52.31234+09:00</JatuhTempo>
+    <Tagihan>1672800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>135</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1672800</TagihanAfterDiscount>
+    <Sisa>1672800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>136/INV-APS/9/2022</Nomor>
+    <Customer>Tk.sejahtra</Customer>
+    <JatuhTempo>2022-10-04T02:34:31.205895+09:00</JatuhTempo>
+    <Tagihan>5624400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>136</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>5624400</TagihanAfterDiscount>
+    <Sisa>5624400</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>137/INV-APS/9/2022</Nomor>
+    <Customer>Tk.sejahtra</Customer>
+    <JatuhTempo>2022-10-04T02:40:29.02054+09:00</JatuhTempo>
+    <Tagihan>644400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>137</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>644400</TagihanAfterDiscount>
+    <Sisa>644400</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>138/INV-APS/9/2022</Nomor>
+    <Customer>Flourish</Customer>
+    <JatuhTempo>2022-10-04T02:46:48.330367+09:00</JatuhTempo>
+    <Tagihan>2359200</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>138</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2359200</TagihanAfterDiscount>
+    <Sisa>2359200</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>139/INV-APS/9/2022</Nomor>
+    <Customer>Tk.sejahtra</Customer>
+    <JatuhTempo>2022-10-04T03:08:29.007472+09:00</JatuhTempo>
+    <Tagihan>50000</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>139</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>50000</TagihanAfterDiscount>
+    <Sisa>50000</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>140/INV-APS/9/2022</Nomor>
+    <Customer>Tk.ulpa</Customer>
+    <JatuhTempo>2022-10-04T03:17:25.680452+09:00</JatuhTempo>
+    <Tagihan>2832600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>140</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2832600</TagihanAfterDiscount>
+    <Sisa>2832600</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>141/INV-APS/10/2022</Nomor>
+    <Customer>Rizky Bonggo</Customer>
+    <JatuhTempo>2022-10-24T23:51:41.384395+09:00</JatuhTempo>
+    <Tagihan>1584700</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>141</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1584700</TagihanAfterDiscount>
+    <Sisa>1584700</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>142/INV-APS/10/2022</Nomor>
+    <Customer>Rizky Bonggo</Customer>
+    <JatuhTempo>2022-10-24T23:53:19.098977+09:00</JatuhTempo>
+    <Tagihan>5798400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>142</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>5798400</TagihanAfterDiscount>
+    <Sisa>5798400</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>143/INV-APS/12/2022</Nomor>
+    <Customer>Pak Amir</Customer>
+    <JatuhTempo>2023-01-02T11:59:12.36185+09:00</JatuhTempo>
+    <Tagihan>951600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>143</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>951600</TagihanAfterDiscount>
+    <Sisa>951600</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>144/INV-APS/12/2022</Nomor>
+    <Customer>Flourish</Customer>
+    <JatuhTempo>2023-01-12T03:51:53.535209+09:00</JatuhTempo>
+    <Tagihan>3871800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>144</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>3871800</TagihanAfterDiscount>
+    <Sisa>3871800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>145/INV-APS/12/2022</Nomor>
+    <Customer>H. Jabal</Customer>
+    <JatuhTempo>2023-01-12T03:59:29.777327+09:00</JatuhTempo>
+    <Tagihan>5109600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>145</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>5109600</TagihanAfterDiscount>
+    <Sisa>5109600</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>146/INV-APS/12/2022</Nomor>
+    <Customer>Maxi Mart</Customer>
+    <JatuhTempo>2023-01-12T06:30:57.950095+09:00</JatuhTempo>
+    <Tagihan>3541800</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>146</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>3541800</TagihanAfterDiscount>
+    <Sisa>3541800</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>147/INV-APS/12/2022</Nomor>
+    <Customer>Pak Amir</Customer>
+    <JatuhTempo>2023-01-12T06:35:49.224324+09:00</JatuhTempo>
+    <Tagihan>2634000</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>147</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2634000</TagihanAfterDiscount>
+    <Sisa>2634000</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>148/INV-APS/1/2023</Nomor>
+    <Customer>Tk.Rudi</Customer>
+    <JatuhTempo>2023-01-30T11:07:52.201402+09:00</JatuhTempo>
+    <Tagihan>3771600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>148</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>3771600</TagihanAfterDiscount>
+    <Sisa>3771600</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>149/INV-APS/1/2023</Nomor>
+    <Customer>Tk.Mala</Customer>
+    <JatuhTempo>2023-01-31T03:54:26.927233+09:00</JatuhTempo>
+    <Tagihan>3319200</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>149</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>3319200</TagihanAfterDiscount>
+    <Sisa>3319200</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>150/INV-APS/1/2023</Nomor>
+    <Customer>Evan Jaya Mart</Customer>
+    <JatuhTempo>2023-01-31T03:58:10.789681+09:00</JatuhTempo>
+    <Tagihan>1740600</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>150</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>1740600</TagihanAfterDiscount>
+    <Sisa>1740600</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>151/INV-APS/1/2023</Nomor>
+    <Customer>Tk.ulpa</Customer>
+    <JatuhTempo>2023-01-31T04:02:29.608216+09:00</JatuhTempo>
+    <Tagihan>2981400</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Herman Hamid</Sales>
+    <PenjualanId>151</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>2981400</TagihanAfterDiscount>
+    <Sisa>2981400</Sisa>
+  </Table1>
+</Piutang>

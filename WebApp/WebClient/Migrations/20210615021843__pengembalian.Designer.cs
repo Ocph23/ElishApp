@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebClient;
+using ApsWebApp;
 
-namespace WebClient.Migrations
+namespace ApsWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20210615021843__pengembalian")]

@@ -38,7 +38,9 @@ namespace ShareModels
         {
             get
             {
-                return CreateDate.AddDays(DeadLine);
+                if(DeadLine>0)
+                    return CreateDate.AddDays(DeadLine);
+                return CreateDate;
             }
         }
 

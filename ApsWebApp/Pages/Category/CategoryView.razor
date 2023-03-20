@@ -1,0 +1,65 @@
+﻿@page "/category"
+
+@using ApsWebApp.Pages.Category;
+@using ApsWebApp.Pages.ShareComponent
+
+@inject NavigationManager nav;
+@inject ICategoryService categoryService;
+@inject DialogService DialogService;
+@attribute [Authorize]
+
+
+
+<RadzenFieldset>
+
+    <HeaderTemplate>Data Kategori</HeaderTemplate>
+    <ChildContent>
+
+    <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditCategory>($"Tambah",
+                        new Dictionary<string, object>() { { "model", new Category()}, },
+                        new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
+
+    <RadzenDataGrid @ref="grid"  AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" 
+                    PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                    Data="@categories" TItem="Category" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+        <Columns>
+            <RadzenDataGridColumn Width="300" Property="Name" Title="Nama" TItem="Category" />
+            <RadzenDataGridColumn Property="Description" Title="Keterangan" TItem="Category" />
+            <RadzenDataGridColumn Width="60px" TItem="Category">
+                <Template Context="item">
+                    <RadzenButton Click=@(args => DialogService.OpenAsync<EditCategory>($"Edit Category",
+                        new Dictionary<string, object>() { { "model", item}, },
+                        new DialogOptions())) Icon="edit" ButtonStyle="ButtonStyle.Warning" sty />
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+   
+    </ChildContent>
+
+</RadzenFieldset>
+
+@code {
+
+    private ICollection<Category> categories;
+    RadzenDataGrid<Category> grid;
+
+  //  RenderFragment fragment;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DialogService.OnClose += OnCloseDialog;
+        categories = (await categoryService.Get()).ToList();
+    }
+
+    public void OnCloseDialog(dynamic result)
+    {
+        if (result != null && ((object)result).GetType() == typeof(Category))
+        {
+            Category model = (Category)result;
+            categories.Add(model);
+            grid.Reload();
+            StateHasChanged();
+        }
+    }
+}

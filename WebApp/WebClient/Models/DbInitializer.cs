@@ -2,11 +2,11 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
-using WebClient.Services;
+using ApsWebApp.Services;
 using System.Collections.Generic;
 using ShareModels;
 
-namespace WebClient
+namespace ApsWebApp
 {
     public class DbInitializer
     {

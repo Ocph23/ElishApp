@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WebClient.Migrations
+namespace ApsWebApp.Migrations
 {
     public partial class _changePembayaran : Migration
     {

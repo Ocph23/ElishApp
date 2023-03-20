@@ -1,0 +1,105 @@
+﻿@page "/dialogpembelian/{IdPembelian}";
+
+@attribute [Authorize]
+
+@inject Radzen.DialogService dialogService;
+<div class="row">
+    <div class="col-md-12">
+        <RadzenFieldset Text="Pembayaran">
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Payment Method" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenDropDown @bind-Value="Model.PayType"
+                                    Data=@(Enum.GetValues(typeof(PayType)).Cast<PayType>()) />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Account Name" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="Model.PayTo" style="width: 100%;" Name="CardNr" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Bank Name" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="Model.BankName" style="width: 100%;" Name="CardNr" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Account Number" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="Model.RekNumber" style="width: 100%;" Name="CardNr" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Description" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextArea style="width: 100%;" @bind-Value="Model.Description" />
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Total" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenNumeric TValue="double" style="width: 100%;" @bind-Value="Model.PayValue" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Paid Date" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenDatePicker style="width: 100%;" @bind-Value="Model.PayDate" />
+                </div>
+            </div>
+        </RadzenFieldset>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-right" style="margin-top:20px">
+        <RadzenButton Click="@((args) => dialogService.Close(Model))" Text="OK" Style="margin-bottom: 10px; width: 150px" />
+        <RadzenButton Click="@((args) => dialogService.Close(false))" ButtonStyle="ButtonStyle.Secondary" Text="Cancel" Style="margin-bottom: 10px; width: 150px" />
+    </div>
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public int IdPembelian { get; set; }
+   
+    [Parameter]
+    public double Total { get; set; }
+
+
+    public PembayaranPembelian Model { get; set; }
+
+
+    protected override Task OnInitializedAsync()
+    {
+        var Id = Convert.ToInt32(IdPembelian);
+        Model = new PembayaranPembelian() { PayDate=DateTime.Now, PayValue=Total  };
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+
+
+
+}

@@ -1,0 +1,17 @@
+﻿@page "/test"
+
+@inject IPenjualanService penjualan
+@inject HttpClient client
+
+<h3>TestPage</h3>
+
+@code {
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await client.GetAsync("http://localhost:5000/api/penjualan");
+
+    }
+
+}

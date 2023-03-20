@@ -1,0 +1,57 @@
+﻿@page "/customer"
+
+@using System;
+@using ShareModels;
+@using ApsWebApp.Services;
+
+@inject NavigationManager nav;
+@inject ICustomerService customerService;
+
+@attribute [Authorize]
+
+
+<RadzenFieldset>
+    <HeaderTemplate>Data Pelanggan</HeaderTemplate>
+   <ChildContent>
+        <RadzenButton Icon="add" ButtonType="ButtonType.Button"
+                      Click="@(()=>nav.NavigateTo($"/customer/change"))" ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
+        <RadzenDataGrid Data="customers" AllowFiltering="true" AllowPaging="true" AllowSorting="true">
+            <Columns>
+                <RadzenDataGridColumn TItem="Customer" Title="Nama" Property="Name" />
+                <RadzenDataGridColumn TItem="Customer" Title="Nama Kontak" Property="ContactName" Width="250px" />
+                <RadzenDataGridColumn TItem="Customer" Title="Telepon" Property="Telepon" Width="200px" />
+                <RadzenDataGridColumn TItem="Customer" Title="Seles" Width="200px">
+                    <Template Context="item">
+                        @(item.Karyawan == null ? "None" : item.Karyawan.Name)
+                    </Template>
+                </RadzenDataGridColumn>
+
+                <RadzenDataGridColumn TItem="Customer" Context="item" Width="65px">
+                    <Template>
+                        <RadzenButton Icon="info" ButtonStyle="ButtonStyle.Warning" Click="@(()=> nav.NavigateTo($"/customer/change/{item.Id}"))"></RadzenButton>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+   </ChildContent>
+
+</RadzenFieldset>
+
+    @code {
+        private IEnumerable<Customer> customers;
+
+        protected override async Task OnInitializedAsync()
+        {
+            try
+            {
+                customers = await customerService.Get();
+                var a = customers.Where(x => x.Karyawan.Id == 0);
+            }
+            catch (Exception)
+            {
+
+
+            }
+        }
+
+    }

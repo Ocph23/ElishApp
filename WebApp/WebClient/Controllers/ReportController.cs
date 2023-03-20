@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using ShareModels.ModelViews;
 using System.Diagnostics;
 
-namespace WebClient.Controllers
+namespace ApsWebApp.Controllers
 {
     public class ReportController : Controller
     {

@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebClient.Services
+namespace ApsWebApp.Services
 {
     public class IncommingService : ShareModels.BaseNotify, IIncommingService
     {
