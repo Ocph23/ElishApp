@@ -57,6 +57,17 @@ namespace ShareModels
         [NotMapped]
         public PaymentType Payment { get => DeadLine <= 0 ? PaymentType.Tunai : PaymentType.Kredit; }
 
+
+        public virtual double TotalQuantity
+        {
+            get
+            {
+                if (Items == null)
+                    return 0;
+                return Items.Sum(x => x.Quantity);
+            }
+        }
+
         public virtual double Total
         {
             get

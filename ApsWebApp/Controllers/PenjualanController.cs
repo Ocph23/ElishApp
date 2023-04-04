@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApsWebApp.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class PenjualanController : ControllerBase
@@ -27,11 +27,7 @@ namespace ApsWebApp.Controllers
         {
             try
             {
-                if (User.InRole("Administrator"))
-                {
-                    return Ok(await service.GetPenjualans());
-                }
-                else
+                if (User.InRole("Sales") || User.IsInRole("Customer"))
                 {
                     var profile = await _userService.Profile();
                     if (profile != null)
@@ -39,7 +35,7 @@ namespace ApsWebApp.Controllers
                         if (User.InRole("Sales"))
                         {
                             Karyawan karyawan = profile as Karyawan;
-                            return Ok(await service.GetPenjualansBySalesId(karyawan.Id));
+                            return Ok((await service.GetPenjualansBySalesId(karyawan.Id)).ToList());
                         }
 
                         if (User.InRole("Customer"))
@@ -49,7 +45,8 @@ namespace ApsWebApp.Controllers
                         }
                     }
                 }
-                throw new SystemException("Not Found !");
+                var result = await service.GetPenjualans();
+                return Ok(result.ToList());
             }
             catch (Exception ex)
             {
@@ -112,7 +109,7 @@ namespace ApsWebApp.Controllers
             {
                 if (User.InRole("Administrator"))
                 {
-                   return Ok(await service.GetOrders());
+                    return Ok(await service.GetOrders());
                 }
                 else
                 {
@@ -123,10 +120,10 @@ namespace ApsWebApp.Controllers
                         if (User.InRole("Sales"))
                         {
                             Karyawan karyawan = profile as Karyawan;
-                            return Ok( await service.GetOrdersBySalesId(karyawan.Id));
+                            return Ok(await service.GetOrdersBySalesId(karyawan.Id));
                         }
 
-                        if(User.InRole("Customer"))
+                        if (User.InRole("Customer"))
                         {
                             Customer karyawan = profile as Customer;
                             return Ok(await service.GetOrdersByCustomerId(karyawan.Id));
@@ -152,7 +149,57 @@ namespace ApsWebApp.Controllers
                 var result = await service.GetOrder(id);
                 if (result != null)
                     return Ok(result);
-                throw new SystemException("Order Not Created !");
+                throw new SystemException("Order Not Found !");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
+
+
+        //[ApiAuthorize]
+        //[HttpGet("pembayaranbypembelianid/{id}")]
+        //public async Task<IActionResult> GetPembayaranByPembelianId(int id)
+        //{
+        //    try
+        //    {
+        //        var result = await service.GetPembayaran(id);
+        //        if (result != null)
+        //            return Ok(result);
+        //        throw new SystemException("Order Not Found !");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new ErrorMessage(ex.Message));
+        //    }
+        //}
+
+
+        [ApiAuthorize]
+        [HttpGet("pembayaranbypenjualanid/{id}")]
+        public async Task<IActionResult> GetPembayaranByPenjualanId(int id)
+        {
+            try
+            {
+                var result = await service.GetPembayaran(id);
+                if (result != null)
+                    return Ok(result);
+                throw new SystemException("Order Not Found !");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
+
+        [ApiAuthorize]
+        [HttpPost("cretaepembayaran/{id}")]
+        public async Task<IActionResult> CreatePembayaran(int id, PembayaranPenjualan model)
+        {
+            try
+            {
+                return Ok(await service.CreatePembayaran(id, model, true));
             }
             catch (Exception ex)
             {

@@ -27,11 +27,11 @@ using System.Threading.Tasks;
         public Supplier Supplier { get; set; }
         public Category Category { get; set; }
         public ICollection<Unit> Units { get; set; }
-        public ICollection<IncomingItem> Incomingitem { get; set; }
-        public ICollection<OrderPembelianItem> Orderpembelianitem { get; set; }
-        public ICollection<OrderPenjualanItem> Orderpenjualanitem { get; set; }
-        public ICollection<PembelianItem> PembelianItem { get; set; }
-        public ICollection<Penjualanitem> PenjualanItem { get; set; }
+        //public ICollection<IncomingItem> Incomingitem { get; set; }
+        //public ICollection<OrderPembelianItem> Orderpembelianitem { get; set; }
+        //public ICollection<OrderPenjualanItem> Orderpenjualanitem { get; set; }
+        //public ICollection<PembelianItem> PembelianItem { get; set; }
+        //public ICollection<Penjualanitem> PenjualanItem { get; set; }
         public ICollection<ProductImage> ProductImage { get; set; }
         public Unit UnitSelected => Units!=null&& Units.Count>0?Units.FirstOrDefault():new Unit();
         

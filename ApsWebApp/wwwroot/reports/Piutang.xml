@@ -1,66 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
 <Piutang>
   <Table1>
-    <Nomor>92/INV-APS/5/2022</Nomor>
-    <Customer>Rizky Mulia</Customer>
-    <JatuhTempo>2022-06-19T12:29:58.502014+09:00</JatuhTempo>
-    <Tagihan>9070200</Tagihan>
-    <Panjar>0</Panjar>
-    <Sales>Herman Hamid</Sales>
-    <PenjualanId>92</PenjualanId>
-    <Discount>0</Discount>
-    <TagihanAfterDiscount>9070200</TagihanAfterDiscount>
-    <Sisa>9070200</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>95/INV-APS/5/2022</Nomor>
-    <Customer>Lia Jaya Sport</Customer>
-    <JatuhTempo>2022-05-20T15:09:38.939998+09:00</JatuhTempo>
-    <Tagihan>3394890</Tagihan>
-    <Panjar>1000000</Panjar>
-    <Sales>Herman Hamid</Sales>
-    <PenjualanId>95</PenjualanId>
-    <Discount>0</Discount>
-    <TagihanAfterDiscount>3394890</TagihanAfterDiscount>
-    <Sisa>2394890</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>97/INV-APS/5/2022</Nomor>
-    <Customer>andi sembako</Customer>
-    <JatuhTempo>2022-05-21T04:38:11.153235+09:00</JatuhTempo>
-    <Tagihan>2210196</Tagihan>
-    <Panjar>1200000</Panjar>
-    <Sales>Herman Hamid</Sales>
-    <PenjualanId>97</PenjualanId>
-    <Discount>0</Discount>
-    <TagihanAfterDiscount>2210196</TagihanAfterDiscount>
-    <Sisa>1010196</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>107/INV-APS/6/2022</Nomor>
-    <Customer>Pak Amir</Customer>
-    <JatuhTempo>2022-06-13T04:44:55.881447+09:00</JatuhTempo>
-    <Tagihan>2910492</Tagihan>
-    <Panjar>1000000</Panjar>
-    <Sales>Herman Hamid</Sales>
-    <PenjualanId>107</PenjualanId>
-    <Discount>0</Discount>
-    <TagihanAfterDiscount>2910492</TagihanAfterDiscount>
-    <Sisa>1910492</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>111/INV-APS/6/2022</Nomor>
-    <Customer>Flourish</Customer>
-    <JatuhTempo>2022-06-18T00:14:12.886098+09:00</JatuhTempo>
-    <Tagihan>2210196</Tagihan>
-    <Panjar>0</Panjar>
-    <Sales>Herman Hamid</Sales>
-    <PenjualanId>111</PenjualanId>
-    <Discount>0</Discount>
-    <TagihanAfterDiscount>2210196</TagihanAfterDiscount>
-    <Sisa>2210196</Sisa>
-  </Table1>
-  <Table1>
     <Nomor>112/INV-APS/6/2022</Nomor>
     <Customer>Tk.ulpa</Customer>
     <JatuhTempo>2022-06-20T03:39:24.986215+09:00</JatuhTempo>
@@ -71,30 +11,6 @@
     <Discount>0</Discount>
     <TagihanAfterDiscount>2871000</TagihanAfterDiscount>
     <Sisa>2000000</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>113/INV-APS/6/2022</Nomor>
-    <Customer>Rizky Mulia</Customer>
-    <JatuhTempo>2022-07-10T02:38:55.629906+09:00</JatuhTempo>
-    <Tagihan>10311600</Tagihan>
-    <Panjar>0</Panjar>
-    <Sales>Herman Hamid</Sales>
-    <PenjualanId>113</PenjualanId>
-    <Discount>0</Discount>
-    <TagihanAfterDiscount>10311600</TagihanAfterDiscount>
-    <Sisa>10311600</Sisa>
-  </Table1>
-  <Table1>
-    <Nomor>114/INV-APS/6/2022</Nomor>
-    <Customer>Hokky</Customer>
-    <JatuhTempo>2022-07-10T04:35:38.144681+09:00</JatuhTempo>
-    <Tagihan>2737800</Tagihan>
-    <Panjar>0</Panjar>
-    <Sales>Herman Hamid</Sales>
-    <PenjualanId>114</PenjualanId>
-    <Discount>0</Discount>
-    <TagihanAfterDiscount>2737800</TagihanAfterDiscount>
-    <Sisa>2737800</Sisa>
   </Table1>
   <Table1>
     <Nomor>115/INV-APS/6/2022</Nomor>

@@ -35,7 +35,7 @@
     }
     @if (penjualans != null)
     {
-    <RadzenGrid Data="penjualans" AllowFiltering="true" AllowSorting="true">
+        <RadzenGrid Data="penjualans" AllowFiltering="true" AllowSorting="true" FilterMode="FilterMode.Advanced">
         <Columns>
             <RadzenGridColumn Title="Tgl" TItem="PenjualanAndOrderModel" Property="Created" Width="95px">
                 <Template Context="item">

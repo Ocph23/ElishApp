@@ -12,7 +12,7 @@ namespace ElishAppMobile.ViewModels
     {
         public SignalrClient Signalr=> DependencyService.Get<SignalrClient>();
         public ICategoryService Categories => DependencyService.Get<ICategoryService>();
-        public ICustomerService Customers => DependencyService.Get<ICustomerService>();
+       // public ICustomerService Customers => DependencyService.Get<ICustomerService>();
         public ISupplierService Suppliers => DependencyService.Get<ISupplierService>();
         public IProductService Products=> DependencyService.Get<IProductService>();
         public IIncommingService IncomingService => DependencyService.Get<IIncommingService>();

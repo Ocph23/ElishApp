@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:ShareModels;assembly=ShareModels" 
+             Title="Detail Product"
+             x:Class="ApsMobileApp.Views.ProductDetailView">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem  IconImageSource="camera.png" Command="{Binding AddPictureCommand}"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ScrollView Padding="20" >
+            <StackLayout>
+                
+                <StackLayout Grid.Row="1" Margin="10">
+                    <StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Product Name" FontAttributes="Bold" FontSize="12"/>
+                            <Label Text="{Binding Model.Name}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Merk" FontAttributes="Bold" FontSize="12"/>
+                            <Label Text="{Binding Model.Merk}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Product Code" FontAttributes="Bold" FontSize="12"/>
+                            <Label Text="{Binding Model.CodeName}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Article" FontAttributes="Bold" FontSize="12"/>
+                            <Label Text="{Binding Model.CodeArticle}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Size" FontAttributes="Bold" FontSize="12"/>
+                            <Label Text="{Binding Model.Size}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Price" FontAttributes="Bold" FontSize="12"/>
+                            <StackLayout Margin="10,0"  Orientation="Horizontal">
+                                <Label Text="Rp. "></Label>
+                                <Label  Text="{Binding Model.SelectedUnit.Sell, StringFormat='{}{0:N2}'}"/>
+                                <Label  Text="{Binding Model.SelectedUnit.Name, StringFormat='/{0}'}"/>
+
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Sisa Stock" FontAttributes="Bold" FontSize="12"/>
+                            <Label Text="{Binding Model.Stock}" Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout Margin="5" Spacing="0">
+                            <Label Text="Description" FontAttributes="Bold" FontSize="12"/>
+                            <Label Text="{Binding Model.Description}"  Margin="10,0"/>
+                        </StackLayout>
+                        <StackLayout >
+                            <Label Text="Picture" FontAttributes="Bold" FontSize="12"/>
+                            <StackLayout>
+                                <IndicatorView
+                                x:Name="indicatorview"
+                                AbsoluteLayout.LayoutBounds="0.5,0.95,100,100"
+                                AbsoluteLayout.LayoutFlags="PositionProportional"
+                                IndicatorColor="LightGray"
+                                IndicatorSize="10"   
+                                SelectedIndicatorColor="Black" />
+                                <CarouselView x:Name="TheCarousel" ItemsSource="{Binding Pictures}" WidthRequest="150" HeightRequest="200"  IndicatorView="indicatorview">
+                                    <CarouselView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout  >
+                                                <Grid HorizontalOptions="CenterAndExpand" HeightRequest="220" WidthRequest="250">
+                                                    <Frame CornerRadius="5" HeightRequest="200" WidthRequest="180" Padding="10" Margin="2" >
+                                                        <Image HorizontalOptions="Center" VerticalOptions="Center"
+                                                                                    HeightRequest="200" WidthRequest="180" Aspect="Fill"
+                                                                                    Source = "{Binding ThumbView}">
+                                                            <Image.GestureRecognizers >
+                                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.ShowImageCommand, Source={x:Reference TheCarousel}}" CommandParameter="{Binding .}"/>
+                                                            </Image.GestureRecognizers>
+                                                        </Image>
+                                                    </Frame>
+                                                    <Image Source="remove.png" WidthRequest="30" Margin="0" HorizontalOptions="End" VerticalOptions="Start">
+                                                        <Image.GestureRecognizers >
+                                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.RemoveImageCommand, Source={x:Reference TheCarousel}}" CommandParameter="{Binding .}"/>
+                                                        </Image.GestureRecognizers>
+                                                    </Image>
+                                                </Grid>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CarouselView.ItemTemplate>
+                                </CarouselView>
+                            </StackLayout>
+                           
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

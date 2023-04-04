@@ -38,7 +38,7 @@ namespace ApsWebApp.Services
             try
             {
                 var password = GeneratePasswordHash(model.Password);
-                var user = (from u in _context.User.Include(x=>x.Roles).ThenInclude(x=>x.Role).Where(x => (x.UserName == model.UserName || x.Email == model.UserName)
+                var user = (from u in _context.User.Include(x => x.Roles).ThenInclude(x => x.Role).Where(x => (x.UserName == model.UserName || x.Email == model.UserName)
                           && x.PasswordHash == password)
                             select u).FirstOrDefault();
                 if (user == null)
@@ -60,12 +60,12 @@ namespace ApsWebApp.Services
 
         public async Task<User> FindUserById(int id)
         {
-            var user = _context.User.Where(x => x.Id == id).Include(x=>x.Roles).ThenInclude(x=>x.Role).FirstOrDefault();
+            var user = _context.User.Where(x => x.Id == id).Include(x => x.Roles).ThenInclude(x => x.Role).FirstOrDefault();
             return await Task.FromResult(user);
         }
         public async Task<User> FindUserByUserName(string username)
         {
-            var user = _context.User.Where(x => x.UserName == username).Include(x=>x.Roles).FirstOrDefault();
+            var user = _context.User.Where(x => x.UserName == username).Include(x => x.Roles).FirstOrDefault();
             return await Task.FromResult(user);
         }
 
@@ -100,7 +100,7 @@ namespace ApsWebApp.Services
             var roles = "";
             foreach (var item in user.Roles)
             {
-                    roles += $"{item.Role.Name}, ";
+                roles += $"{item.Role.Name}, ";
             }
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -127,10 +127,10 @@ namespace ApsWebApp.Services
         {
             try
             {
-                User user = new User { Email = model.Email, Activated=true, UserName = model.UserName, PasswordHash = GeneratePasswordHash(model.Password) };
-                if(user.Roles !=null && user.Roles.Count > 0)
+                User user = new User { Email = model.Email, Activated = true, UserName = model.UserName, PasswordHash = GeneratePasswordHash(model.Password) };
+                if (user.Roles != null && user.Roles.Count > 0)
                 {
-                    var roles = from a in model.Roles select new UserRole { Role=a, User=user };
+                    var roles = from a in model.Roles select new UserRole { Role = a, User = user };
                     user.Roles = roles.ToList();
                 }
                 _context.User.Add(user);
@@ -155,12 +155,12 @@ namespace ApsWebApp.Services
                     model.Email = userName[0..5];
                 }
 
-                User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email), Activated=true };
+                User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email), Activated = true };
                 _context.User.Add(user);
                 await _context.SaveChangesAsync();
                 var role = _context.Role.Where(x => x.Name == "customer").FirstOrDefault();
-                _context.Userrole.Add(new UserRole { Role = role, User = user});
-                model.User= user;
+                _context.Userrole.Add(new UserRole { Role = role, User = user });
+                model.User = user;
                 _context.Customer.Add(model);
                 await _context.SaveChangesAsync();
                 trans.Commit();
@@ -184,14 +184,17 @@ namespace ApsWebApp.Services
                     model.Email = userName[0..5];
                 }
 
-                User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email), Activated=true };
+                User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email), Activated = true };
                 _context.User.Add(user);
                 await _context.SaveChangesAsync();
-                model.User= user;
+                model.User = user;
                 var role = _context.Role.Where(x => x.Name == "Sales").AsNoTracking().FirstOrDefault();
 
-                _context.Entry(role).State = EntityState.Unchanged;
-                _context.Userrole.Add(new UserRole { Role= role, User= user});
+                var data = new UserRole { Role = role, User = user };
+                _context.Userrole.Add(data);
+                _context.Entry(data.User).State = EntityState.Unchanged;
+                _context.Entry(data.Role).State = EntityState.Unchanged;
+                _context.Entry(model.User).State = EntityState.Unchanged;
                 _context.Karyawan.Add(model);
                 await _context.SaveChangesAsync();
                 trans.Commit();
@@ -234,7 +237,7 @@ namespace ApsWebApp.Services
                 var role = _context.Role.Where(x => x.Name == roleName).FirstOrDefault();
                 if (role != null)
                 {
-                    _context.Userrole.Add(new UserRole { Role= role, User= user});
+                    _context.Userrole.Add(new UserRole { Role = role, User = user });
                     _context.SaveChanges();
                 }
                 return Task.FromResult(0);
@@ -246,7 +249,7 @@ namespace ApsWebApp.Services
         }
 
 
-        [ApiAuthorize(Roles="Administrator")]
+        [ApiAuthorize(Roles = "Administrator")]
         public async Task<IEnumerable<User>> GetUsers()
         {
             try
@@ -266,22 +269,18 @@ namespace ApsWebApp.Services
             if (!string.IsNullOrEmpty(userName))
             {
                 var user = await FindUserByUserName(userName);
-                if(user != null)
+                if (user != null)
                 {
                     var role = user.Roles.FirstOrDefault();
 
-                    if (role.Role.Name == "Administrator" || role.Role.Name == "Sales")
-                    {
-                        return _context.Karyawan.Where(x => x.User.Id == user.Id).FirstOrDefault();
-                    }
-
                     if (role.Role.Name == "Customer")
                     {
-                        return _context.Customer.Where(x => x.User.Id == user.Id).Include(x=>x.Karyawan).FirstOrDefault();
+                        return _context.Customer.Where(x => x.User.Id == user.Id).Include(x => x.Karyawan).FirstOrDefault();
                     }
+                    return _context.Karyawan.Where(x => x.User.Id == user.Id).FirstOrDefault();
                 }
             }
-                throw new UnauthorizedAccessException("You Are Profile Not Found !");
+            throw new UnauthorizedAccessException("You Are Profile Not Found !");
         }
     }
 }

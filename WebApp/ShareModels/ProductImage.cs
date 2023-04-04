@@ -12,6 +12,7 @@ namespace ShareModels
         public string FileName { get; set; }
         public string Thumb { get; set; }
         public FileType FileType { get; set; }
+        public int ProductId { get; set; }
 
         [NotMapped]
         public byte[] Buffer { get; set; }

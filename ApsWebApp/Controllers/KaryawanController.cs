@@ -35,6 +35,21 @@ namespace ApsWebApp.Controllers
             }
         }
 
+
+        [HttpGet("sales")]
+        public async Task<IActionResult> GetSales()
+        {
+            try
+            {
+                var result = await karyawanService.GetSales();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
+
         // GET api/<UnitController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)

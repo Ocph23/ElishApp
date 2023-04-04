@@ -4,8 +4,8 @@
 @attribute [Authorize]
 
 @using Microsoft.EntityFrameworkCore
-@using Newtonsoft.Json
 @using System.Text;
+@using System.Text.Json;
 
 @inject IProductService productService
 @inject IMerkService merkService
@@ -34,7 +34,7 @@
             </div>
             <RadzenButton Icon="print" Click="@(()=> { navManager.NavigateTo($"/report/PrintStockBarang/{gudangId}?merkid={merkId}", true); })" />
         </div>
-        <RadzenGrid Data="@Stocks" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="ProductStock"
+        <RadzenGrid Data="@Stocks" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="ProductStock" FilterMode="FilterMode.Advanced"
                     @ref="gridStock" LoadData="@LoadData" Count="@count" PageSize="12">
             <Columns>
                 <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeName" Title="Code" />
@@ -111,12 +111,7 @@
     }
 
 
-    public StringContent GenerateHttpContent(object data)
-    {
-        var json = JsonConvert.SerializeObject(data);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        return content;
-    }
+   
 
     async Task LoadData(LoadDataArgs args)
     {

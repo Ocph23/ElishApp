@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:gv="clr-namespace:BarcodeScanner.Mobile;assembly=BarcodeScanner.Mobile.Maui"
+             x:Class="ApsMobileApp.Views.BarcodeScannerView">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <gv:CameraView x:Name="scanView" 
+                                        OnDetectedCommand="{Binding ScanningCommand}"
+                                        IsScanning="{Binding IsScanning}"
+                                        WidthRequest="300"
+                                        HeightRequest="300"
+                                        VerticalOptions="CenterAndExpand"
+                                        HorizontalOptions="CenterAndExpand"/>
+            </Grid>
+
+            <Label Grid.Row="1" Margin="20" FontSize="20" HorizontalOptions="CenterAndExpand" Text="{Binding TextResult}"/>
+
+            <Button Grid.Row="2" Margin="10"  HorizontalOptions="CenterAndExpand" BackgroundColor="OrangeRed" Text="Keluar" Command="{Binding CancalCommand}" ></Button>
+            <StackLayout Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding ScanAgain}">
+                <Button Margin="10"  HorizontalOptions="CenterAndExpand" BackgroundColor="YellowGreen" Text="Ulang" Command="{Binding ScanAgainCommand}" ></Button>
+                <Button  Margin="10"  HorizontalOptions="CenterAndExpand" Text="Take" Command="{Binding TakeCommand}" ></Button>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

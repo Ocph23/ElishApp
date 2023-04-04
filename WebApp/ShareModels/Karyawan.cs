@@ -1,6 +1,5 @@
 using System; 
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +18,8 @@ using System.Threading.Tasks;
         public string Address { get; set; }
         public string Email { get; set; }
         public virtual User User { get; set; }
+
+       public bool IsSales => User != null && User.Roles.Where(x=>x.Role.Name=="Sales").Count()>0 ?true:false;
 
     }
 

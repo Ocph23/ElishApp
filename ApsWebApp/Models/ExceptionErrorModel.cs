@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Runtime.Serialization;
+using System.Text.Json;
 
 namespace ApsWebApp
 {
@@ -14,7 +14,7 @@ namespace ApsWebApp
         {
             this.result = result;
             var resultString = result.Content.ReadAsStringAsync().Result;
-            var errorModel = JsonConvert.DeserializeObject<ErrorModel>(resultString);
+            var errorModel = JsonSerializer.Deserialize<ErrorModel>(resultString,Helper.JsonOption);
 
             if (errorModel == null)
                 Message = result.ReasonPhrase;

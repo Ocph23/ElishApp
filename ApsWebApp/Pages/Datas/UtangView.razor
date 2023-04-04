@@ -2,7 +2,6 @@
 
 @using ShareModels.ModelViews;
 @using ShareModels.Reports;
-@using Newtonsoft.Json;
 
 @attribute [Authorize]
 
@@ -20,7 +19,7 @@
                 </div>
                 <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" href="@($"/report/printpiutang/0")"><i class="ui-button-icon-left pi">print</i></a>
 
-                <RadzenGrid @ref="grid" Data="@(datas)" FilterCaseSensitivity="FilterCaseSensitivity.Default"
+                <RadzenGrid @ref="grid" Data="@(datas)" FilterCaseSensitivity="FilterCaseSensitivity.Default" FilterMode="FilterMode.Advanced"
                             AllowFiltering="true" AllowSorting="true" TItem="PiutangData">
                     <Columns>
                         <RadzenGridColumn TItem="PiutangData" Title="Nomor" Width="160px">

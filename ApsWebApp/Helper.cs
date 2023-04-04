@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ApsWebApp
@@ -19,6 +21,16 @@ namespace ApsWebApp
         public static string Rekening => "154-00-1395694-5";
 
         public static double DefaultFeeSalesman => 3;
+
+        public static JsonSerializerOptions JsonOption { get; set; } = new() { PropertyNameCaseInsensitive = true };
+
+        public static StringContent GenerateHttpContent(object data)
+        {
+            var json = JsonSerializer.Serialize(data);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            return content;
+        }
+
 
         public static DataTable ToDataTable<T>(this List<T> data)
         {

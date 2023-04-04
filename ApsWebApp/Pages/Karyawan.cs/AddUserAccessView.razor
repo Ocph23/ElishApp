@@ -1,0 +1,88 @@
+﻿@using ApsWebApp.Data;
+@using Radzen;
+@using ShareModels;
+
+
+@inject IMerkService merkService
+@inject NotificationService NotificationService
+@inject DialogService dialogService
+@inject ApplicationDbContext dbcontext
+
+<div class="row">
+    <div class="col-md-12">
+        <RadzenFieldset Text="Merek">
+            <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            Data=@Roles.Where(item=> !model.Roles.Any(data=> data.Role.Id.Equals(item.Id))).OrderBy(x=>x.Id)
+                            @bind-Value=@Role
+                            TextProperty="Name" TValue="Role" Style="width:400px" />
+
+
+        </RadzenFieldset>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-right" style="margin-top:20px">
+        <RadzenButton Click="@(()=>Close())" ButtonStyle="ButtonStyle.Secondary" Text="Cancel" Style="margin-bottom: 10px; width: 150px" />
+        <RadzenButton Click="@(async (args) => await SaveAction())" Text="OK" Style="margin-bottom: 10px; width: 150px" />
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public User model { get; set; }
+
+    public IEnumerable<Role> Roles;
+
+    Role Role;
+
+    protected override Task OnInitializedAsync()
+    {
+        Roles = dbcontext.Role.ToList();
+        return Task.CompletedTask;
+    }
+
+
+
+    public void Close()
+    {
+        dialogService.Close();
+    }
+
+
+
+    public async Task SaveAction()
+    {
+        try
+        {
+            var data = new UserRole { User = model, Role = Role };
+            dbcontext.Userrole.Add(data);
+            dbcontext.SaveChanges();
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Detail = "Data Saved !",
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Success"
+
+                });
+
+            dialogService.Close(data);
+
+        }
+        catch (Exception ex)
+        {
+
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Detail = ex.Message,
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error"
+
+                });
+        }
+    }
+}

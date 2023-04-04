@@ -294,11 +294,11 @@ namespace ApsWebApp.Services
                     .Include(x=>x.Supplier)
                     .Include(x=>x.Merk)
                     .Include(x=>x.Category)
-                    
                     .Include(x => x.PenjualanItem)
                     .Include(x=> x.Units)
-                    .Include(x => x.Orderpenjualanitem)
-                    .ThenInclude(x => x.OrderPenjualan).Select(x => new ProductStock {
+                    //.Include(x => x.Orderpenjualanitem)
+                    //.ThenInclude(x => x.OrderPenjualan)
+                    .Select(x => new ProductStock {
                         Category= x.Category,
                         Supplier = x.Supplier,
                         CodeArticle =x.CodeArticle,

@@ -47,7 +47,7 @@ namespace ShareModels
         public virtual Unit Unit { get; set; }
         public virtual Product Product { get; set; }
         public virtual Penjualan Penjualan{ get; set; }
-        public virtual PengembalianPenjualan PengembalianPenjualan  { get; set; }
+       // public virtual PengembalianPenjualan PengembalianPenjualan  { get; set; }
 
 
         [NotMapped]

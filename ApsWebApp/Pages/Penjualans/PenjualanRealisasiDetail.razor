@@ -281,7 +281,7 @@
 
 
                     <RadzenGrid @ref="pembayaranGrid" Data="@(pembayarans)" AllowFiltering="true"
-                                AllowPaging="true" AllowSorting="true" TItem="PembayaranPenjualan">
+                                AllowPaging="true" FilterMode="FilterMode.Advanced" AllowSorting="true" TItem="PembayaranPenjualan">
                         <Columns>
                             <RadzenGridColumn TItem="PembayaranPenjualan" Property="PayDate" Title="Date">
                                 <EditTemplate Context="item">

@@ -83,7 +83,7 @@
                             <div class="col-md-8">
                                 <RadzenDropDown AllowClear="true" AllowFiltering="true"
                                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                Data=@penjualans.Where(item=> !model.Items.Any(data=> data.Product.Id.Equals(item.Product.Id) && data.Penjualan.Id.Equals(item.Penjualan.Id)))
+                                                Data=@penjualans.Where(item=> !model.Items.Any(data=> data.Product.Id.Equals(item.Product.Id) && data.Penjualan.Id.Equals( item.Penjualan.Id)))
                                                 @bind-Value=@product.Id
                                                 TextProperty="Product.CodeName" ValueProperty="Id" Style="width:400px"
                                                 Change=@(args => SelectProduct(args, "Supplier")) />

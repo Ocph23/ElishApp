@@ -11,16 +11,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using ShareModels;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsProduction())
-{
-    builder.WebHost.UseKestrel(serverOptions =>
-    {
-        serverOptions.ListenLocalhost(5000);
-    });
-}
+//if (builder.Environment.IsProduction())
+//{
+//    builder.WebHost.UseKestrel(serverOptions =>
+//    {
+//        serverOptions.ListenLocalhost(5000);
+//    });
+//}
 
 // Add services to the container.
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
@@ -45,10 +47,13 @@ builder.Services.Add(new ServiceDescriptor(
 
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
-builder.Services.AddControllers().AddNewtonsoftJson(options =>
- options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
- );
+builder.Services.AddSwaggerGen();
 
+builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions
+                .ReferenceHandler = ReferenceHandler.Preserve); 
+//.AddNewtonsoftJson(options =>
+// options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+// );
 
 
 
@@ -79,6 +84,8 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
@@ -94,6 +101,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseMiddleware<JwtMiddleware>();
+app.UseFastReport();
+app.UseDefaultFiles();
 
 //app.MapControllers();
 //app.MapBlazorHub();

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ApsWebApp.Services;
+using ShareModels.ModelViews;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,7 +28,8 @@ namespace ApsWebApp.Controllers
         {
             try
             {
-                return Ok(await service.GetPembelians());
+                var data = await service.GetPembelians();
+                return Ok(data.ToList());
             }
             catch (Exception ex)
             {
@@ -64,6 +66,22 @@ namespace ApsWebApp.Controllers
             }
         }
 
+        [ApiAuthorize]
+        [HttpGet("pembayaranbypembelianid/{id}")]
+        public async Task<IActionResult> GetPembayaranByPembelianId(int id)
+        {
+            try
+            {
+                var result = await service.GetPembayaran(id);
+                if (result != null)
+                    return Ok(result);
+                throw new SystemException("Order Not Found !");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
 
         [ApiAuthorize]
         [HttpPost("{orderid}/{gudangid}")]
@@ -78,6 +96,23 @@ namespace ApsWebApp.Controllers
                 return BadRequest(new ErrorMessage(ex.Message));
             }
         }
+
+
+        [ApiAuthorize]
+        [HttpPost("cretaepembayaran/{id}")]
+        public async Task<IActionResult> CreatePembayaran(int id, PembayaranPembelian model)
+        {
+            try
+            {
+                return Ok(await service.CreatePembayaran(id, model));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ErrorMessage(ex.Message));
+            }
+        }
+
+
 
 
         [HttpPut("{id}")]

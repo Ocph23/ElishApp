@@ -3,6 +3,7 @@
 @inject NavigationManager nav;
 @inject IKaryawanService karyawanService;
 @inject ICustomerService customerService;
+@inject DialogService dialogService
 @attribute [Authorize]
 
 <Radzen.Blazor.RadzenFieldset Text="@title">
@@ -12,12 +13,12 @@
                 <Tabs>
                     <RadzenTabsItem Text="Data Karaywan">
                         <RadzenTemplateForm Data="model" Submit="@(async(Karyawan arg)=>await Save(arg))">
-                            <Radzen.Blazor.RadzenFieldset Text="Customer">
+                            <Radzen.Blazor.RadzenFieldset Text="Data Karyawan/Sales">
                                 <div class="form-row">
                                     <div class="col-md-6">
                                         <div class="row" style="margin-top:10px">
                                             <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Customer Name" />
+                                                <RadzenLabel Text="Nama Karyawan/Sales" />
                                             </div>
                                             <div class="col-md-8">
                                                 <RadzenTextBox @bind-Value="model.Name" Name="Name" />
@@ -47,9 +48,9 @@
 
                                         <div class="row" style="margin-top:10px">
                                             <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Address" />
+                                                <RadzenLabel Text="Alamat" />
                                             </div>
-                                            <div class="col-md-8">
+                                            <div  class="col-md-8">
                                                 <RadzenTextArea @bind-Value="model.Address" Name="Address" />
                                                 <RadzenRequiredValidator Component="Address" Text="Address is required" Popup=true Style="position: absolute" />
                                             </div>
@@ -59,29 +60,47 @@
                                 </div>
 
                                 <hr />
-                                <div class="row text-center" style="margin:10px">
-
-                                    <Radzen.Blazor.RadzenButton Icon="undo" ButtonType="ButtonType.Button" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" Style="margin:5px" />
-                                    <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Button" Click="@(()=>Save(null))" ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
+                                <div class="row text-center" style="margin:10px;display:flex">
+                                    <Radzen.Blazor.RadzenButton  Icon="undo" ButtonType="ButtonType.Button" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" 
+                                        Style="margin:5px; width:50px" />
+                                    <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Button" Click="@(()=>Save(null))" ButtonStyle="ButtonStyle.Warning" 
+                                        Style="margin:5px; width:50px"  />
                                 </div>
 
                             </Radzen.Blazor.RadzenFieldset>
                         </RadzenTemplateForm>
                     </RadzenTabsItem>
-                    <RadzenTabsItem Text="Data Customer">
-                        <RadzenGrid Data="customers" AllowFiltering="true" AllowPaging="false" AllowSorting="true">
+                    <RadzenTabsItem Text="User Akses">
+                        <RadzenButton Click=@AddRole Icon="add" ButtonStyle="ButtonStyle.Success"  />
+                        <RadzenGrid Data="model.User.Roles">
                             <Columns>
-                                <RadzenGridColumn TItem="Customer" Title="Name" Property="Name" />
-                                <RadzenGridColumn TItem="Customer" Title="Contact Person" Property="ContactName" Width="250px" />
-                                <RadzenGridColumn TItem="Customer" Title="Telepon" Property="Telepon" Width="250px" />
-                                <RadzenGridColumn TItem="Customer" Context="item" Width="65px">
+                                <RadzenGridColumn TItem="UserRole" Title="Role" Property="Role.Name" />
+                                <RadzenGridColumn TItem="UserRole" Context="item" Width="100px">
                                     <Template>
-                                        <RadzenButton Icon="info" ButtonStyle="ButtonStyle.Warning" Click="@(()=> nav.NavigateTo($"/customer/change/{item.Id}"))"></RadzenButton>
+                                        <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@(async()=> await DeleteRole(item))"></RadzenButton>
                                     </Template>
                                 </RadzenGridColumn>
                             </Columns>
                         </RadzenGrid>
                     </RadzenTabsItem>
+
+                    @if (customers != null && customers.Count() > 0)
+                    {
+                        <RadzenTabsItem Text="Data Customer">
+                            <RadzenGrid Data="customers" AllowFiltering="true" AllowPaging="false" AllowSorting="true">
+                                <Columns>
+                                    <RadzenGridColumn TItem="Customer" Title="Name" Property="Name" />
+                                    <RadzenGridColumn TItem="Customer" Title="Contact Person" Property="ContactName" Width="250px" />
+                                    <RadzenGridColumn TItem="Customer" Title="Telepon" Property="Telepon" Width="250px" />
+                                    <RadzenGridColumn TItem="Customer" Context="item" Width="65px">
+                                        <Template>
+                                            <RadzenButton Icon="info" ButtonStyle="ButtonStyle.Warning" Click="@(()=> nav.NavigateTo($"/customer/change/{item.Id}"))"></RadzenButton>
+                                        </Template>
+                                    </RadzenGridColumn>
+                                </Columns>
+                            </RadzenGrid>
+                        </RadzenTabsItem>
+                    }
                 </Tabs>
             </RadzenTabs>
         </div>
@@ -101,13 +120,15 @@
     {
         try
         {
+
+
             if (string.IsNullOrEmpty(id))
             {
                 model = new Karyawan();
             }
             else
             {
-                title = "Edit Karyawan";
+                title = "Edit Karyawan/Sales";
                 model = await karyawanService.Get(Convert.ToInt32(id));
                 customers = await customerService.GetBySales(Convert.ToInt32(id));
             }
@@ -116,6 +137,35 @@
         {
             //ex.Message;
         }
+    }
+
+
+    public async Task AddRole()
+    {
+        var args =await dialogService.OpenAsync<AddUserAccessView>($"Add Role Access",
+                                        new Dictionary<string, object>() { { "model", model.User }, },
+                                        new DialogOptions());
+
+        if (args != null)
+        {
+            var result = args as UserRole;
+            model.User.Roles.Add(result);
+        }
+        StateHasChanged();
+
+    }
+
+    async Task DeleteRole(UserRole role)
+    {
+        var result = await dialogService.Confirm("Yakin Hapus Role ? ", "Hapus ?");
+        if (result.Value)
+        {
+            var deleted = await karyawanService.RemoveRole(role.Id);
+            if (deleted)
+                model.User.Roles.Remove(role);
+        }
+
+        StateHasChanged();
     }
 
 

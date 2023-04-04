@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:control="clr-namespace:ApsMobileApp.Helpers"
+             xmlns:local="clr-namespace:ApsMobileApp.Views.PenjualanViews"
+             xmlns:model="clr-namespace:ShareModels;assembly=ShareModels"
+             x:Class="ApsMobileApp.Views.PenjualanViews.PenjualanView">
+    <Shell.SearchHandler>
+        <control:TextSearchHandler x:Name="search" OnSearchFound="Search_OnSearchFound" Placeholder="Cari"></control:TextSearchHandler>
+    </Shell.SearchHandler>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Frame CornerRadius="10" BackgroundColor="#FF0C9E" Padding="10" HorizontalOptions="Start" Margin="3">
+                <Label Margin="10,0" FontSize="20" FontAttributes="Bold" Text="Penjualan" TextColor="White"></Label>
+            </Frame>
+            <RefreshView Grid.Row="1" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy}">
+                <CollectionView x:Name="ItemsListView" 
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems >
+                                        <SwipeItem Text="Pembayaran"  Command="{Binding Source={RelativeSource AncestorType={x:Type local:PenjualanViewModel}}, Path=PembayaranCommand}"		
+                                    CommandParameter="{Binding .}" BackgroundColor="BlueViolet">
+                                        </SwipeItem>
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+                                <StackLayout>
+                                    <Frame  Margin="3"  BackgroundColor="#FF0C9E" CornerRadius="10" Padding="10,0,0,0">
+                                        <Frame BackgroundColor="WhiteSmoke" Padding="15" CornerRadius="5">
+                                            <Grid >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackLayout Spacing="0">
+                                                    <Label Text="{Binding Invoice}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
+                                                    <Label Text="{Binding Customer}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
+                                                    <Label Text="{Binding Sales}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="Small" />
+                                                </StackLayout>
+                                                <StackLayout Grid.Column="1" Spacing="0">
+                                                    <Label Text="{Binding Created, StringFormat='{}{0:dd-MM-yyyy HH:mm}'}" HorizontalOptions="EndAndExpand" LineBreakMode="NoWrap"
+                                               Style="{DynamicResource ListItemTextStyle}" FontSize="Micro" />
+                                                    <Label Text="{Binding PaymentStatus}" HorizontalOptions="EndAndExpand" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" 
+                                                   FontSize="13" />
+                                                    <Label  LineBreakMode="NoWrap" HorizontalOptions="EndAndExpand" Style="{DynamicResource ListItemTextStyle}" FontSize="15">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Rp."></Span>
+                                                                <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"></Span>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </StackLayout>
+                                                <Grid.GestureRecognizers>
+                                                    <TapGestureRecognizer 
+                                    NumberOfTapsRequired="1"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:PenjualanViewModel}}, Path=SelectCommand}"		
+                                    CommandParameter="{Binding .}">
+                                                    </TapGestureRecognizer>
+                                                </Grid.GestureRecognizers>
+                                            </Grid>
+                                        </Frame>
+                                       
+                                    </Frame>
+                                </StackLayout>
+                            </SwipeView>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

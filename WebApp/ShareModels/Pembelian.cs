@@ -24,15 +24,19 @@ namespace ShareModels
         }
 
         public int OrderPembelianId { get; set; }
-        
+
         public int DeadLine { get; set; }
         public DateTime CreatedDate { get; set; }
         public string InvoiceNumber { get; set; }
         public PaymentStatus Status { get; set; }
         [NotMapped]
-        public DateTime PayDeadLine { get {
+        public DateTime PayDeadLine
+        {
+            get
+            {
                 return CreatedDate.AddDays(DeadLine);
-            } }
+            }
+        }
 
         [NotMapped]
         public virtual double Total
@@ -60,7 +64,7 @@ namespace ShareModels
         public virtual OrderPembelian OrderPembelian { get; set; }
         public virtual ICollection<PembelianItem> Items { get; set; }
         public virtual ICollection<IncomingItem> Incomingitem { get; set; }
-        public virtual ICollection<PembayaranPembelian> PembayaranPembelian { get; set; }
+        public virtual ICollection<PembayaranPembelian> PembayaranPembelian { get; set; } = new List<PembayaranPembelian>();
     }
 }
 

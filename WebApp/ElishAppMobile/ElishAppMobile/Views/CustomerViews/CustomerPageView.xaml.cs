@@ -98,7 +98,7 @@ namespace ElishAppMobile.Views.CustomerViews
                     {
                         if (await Account.UserInRole("Sales"))
                         {
-                            _SourceItems = new ObservableCollection<Customer>(orders.Where(x=>x.KaryawanId==profile.Id));
+                            _SourceItems = new ObservableCollection<Customer>(orders.Where(x=>x.Karyawan.Id==profile.Id));
                         }
                         else
                         {

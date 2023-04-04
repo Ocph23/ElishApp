@@ -41,7 +41,7 @@ namespace ApsWebApp.Services
         public Task<Karyawan> Get(int id)
         {
             var result = dbContext.Karyawan.Where(x => x.Id == id)
-                .Include(x=>x.User).FirstOrDefault();
+                .Include(x => x.User).ThenInclude(x=>x.Roles).ThenInclude(x=>x.Role).FirstOrDefault();
             return Task.FromResult(result);
         }
 
@@ -49,6 +49,13 @@ namespace ApsWebApp.Services
         {
             var results = dbContext.Karyawan;
             return Task.FromResult(results.AsEnumerable());
+        }
+
+        public Task<IEnumerable<Karyawan>> GetSales()
+        {
+            var result = dbContext.Karyawan
+                .Include(x => x.User).ThenInclude(x => x.Roles).ThenInclude(x => x.Role).AsEnumerable();
+            return Task.FromResult(result.AsEnumerable());
         }
 
         public async Task<Karyawan> Post(Karyawan value)
@@ -60,6 +67,26 @@ namespace ApsWebApp.Services
                 if (result == null)
                     throw new SystemException("Data Not Saved !");
                 return result;
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
+        public Task<bool> RemoveRole(int id)
+        {
+            try
+            {
+                var userrole = dbContext.Userrole.FirstOrDefault(x => x.Id == id);
+                if(userrole != null)
+                {
+                    dbContext.Userrole.Remove(userrole);
+                    dbContext.SaveChanges();
+                    return Task.FromResult(true);
+                }
+                throw new SystemException("User Role Not Found !");
+
             }
             catch (Exception ex)
             {
@@ -87,7 +114,8 @@ namespace ApsWebApp.Services
 
 
 
-        public  Task<bool> UpdateUser(User user) {
+        public Task<bool> UpdateUser(User user)
+        {
             try
             {
                 var result = dbContext.User.Where(x => x.Id == user.Id).FirstOrDefault();

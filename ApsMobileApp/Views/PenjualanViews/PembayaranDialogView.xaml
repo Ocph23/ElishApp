@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ApsMobileApp.Views.PenjualanViews.PembayaranDialogView"
+             Shell.PresentationMode="ModalAnimated"
+             Title="PembayaranDialogView" Padding="20" >
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid RowDefinitions="auto,*" >
+                <Frame CornerRadius="10" BackgroundColor="#FF0C9E" Margin="0" HorizontalOptions="Start" Padding="10" >
+                    <Label Margin="10,0" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" Text="Pembayaran" TextColor="White"></Label>
+                </Frame>
+                <StackLayout Grid.Row="1" Margin="10">
+                    <Label Text="Metode Pembayaran"/>
+                    <Picker ItemsSource="{Binding PaymentTypes}" SelectedItem="{Binding PayType}" />
+                    <Label Margin="0,20,0,0" Text="Tanggal Bayar"/>
+                    <DatePicker Date="{Binding PayDate}"/>
+                    <Label Margin="0,20,0,0" Text="Penerima"/>
+                    <Entry Text="{Binding PayTo}"/>
+                    <StackLayout IsVisible="{Binding ShowBank}">
+                        <Label Margin="0,20,0,0" Text="Nama Bank"/>
+                        <Entry Text="{Binding BankName}"/>
+                        <Label Margin="0,20,0,0" Text="Nomor Rekening"/>
+                        <Entry Text="{Binding RekNumber}"/>
+                    </StackLayout>
+                    <Label Margin="0,20,0,0" Text="Total"/>
+                    <Entry Text="{Binding PayValue}" Keyboard="Numeric"/>
+                    <Label Margin="0,20,0,0" Text="Catatan/Keterangan"/>
+                    <Editor Text="{Binding Description}" />
+                    <HorizontalStackLayout Margin="0,20" HorizontalOptions="End" Spacing="3">
+                        <Button Text="Bayar" WidthRequest="100" Command="{Binding BayarCommand}"></Button>
+                        <Button BackgroundColor="OrangeRed" WidthRequest="100" Text="Batal" Command="{Binding CancelCommand}"></Button>
+                    </HorizontalStackLayout>
+                </StackLayout>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

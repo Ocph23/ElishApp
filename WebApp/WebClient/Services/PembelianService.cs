@@ -440,6 +440,11 @@ namespace ApsWebApp.Services
                 throw new SystemException(ex.Message);
             }
         }
+
+        public Task<PembayaranPembelian> CreatePembayaran(int pembelianId, PembayaranPembelian model)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
 

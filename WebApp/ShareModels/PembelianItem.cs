@@ -49,7 +49,7 @@ namespace ShareModels
         }
 
 
-        public virtual Pembelian Pembelian { get; set; }
+      //  public virtual Pembelian Pembelian { get; set; }
 
     }
 }

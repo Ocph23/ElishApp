@@ -14,10 +14,10 @@ namespace ApsWebApp.Services
     {
         //private readonly IServiceProvider provider;
         private readonly ApplicationDbContext dbContext;
-     //   private readonly IHttpContextAccessor auth;
+        //   private readonly IHttpContextAccessor auth;
         private readonly ILogger<PenjualanService> _logger;
 
-        public PenjualanService(ApplicationDbContext db, IServiceProvider _provider,  ILogger<PenjualanService> log)
+        public PenjualanService(ApplicationDbContext db, IServiceProvider _provider, ILogger<PenjualanService> log)
         {
             dbContext = db;
             _logger = log;
@@ -58,7 +58,7 @@ namespace ApsWebApp.Services
             catch (Exception ex)
             {
 
-                 trans.Rollback();
+                trans.Rollback();
                 throw new SystemException(ex.Message);
             }
         }
@@ -70,11 +70,11 @@ namespace ApsWebApp.Services
             var trans = dbContext.Database.BeginTransaction();
             try
             {
-                var lastPenjualan = dbContext.Penjualan.AsNoTracking().Where(x => x.Id == penjualanId)  .Include(x=>x.Items)
+                var lastPenjualan = dbContext.Penjualan.AsNoTracking().Where(x => x.Id == penjualanId).Include(x => x.Items)
                                  .FirstOrDefault();
                 if (lastPenjualan == null)
                     throw new SystemException("Penjualan Not Found  !");
-                order.Activity = order.Activity == ActivityStatus.None ? ActivityStatus.Created :order.Activity;
+                order.Activity = order.Activity == ActivityStatus.None ? ActivityStatus.Created : order.Activity;
                 //order.OrderPenjualan.Status = OrderStatus.Diproses;
                 dbContext.Entry(lastPenjualan).CurrentValues.SetValues(order);
 
@@ -92,19 +92,19 @@ namespace ApsWebApp.Services
                     else
                     {
                         var oldItem = lastPenjualan.Items.SingleOrDefault(x => x.Id == item.Id);
-                        if (item.Unit != oldItem.Unit||
-                            item.Discount != oldItem.Discount||
-                            item.Price != oldItem.Price||
+                        if (item.Unit != oldItem.Unit ||
+                            item.Discount != oldItem.Discount ||
+                            item.Price != oldItem.Price ||
                             item.Quantity != oldItem.Quantity
                             )
                         {
-                            oldItem.Unit=item.Unit;
-                            oldItem.Discount=item.Discount;
-                            oldItem.Price=item.Price;
-                            oldItem.Quantity=item.Quantity;
+                            oldItem.Unit = item.Unit;
+                            oldItem.Discount = item.Discount;
+                            oldItem.Price = item.Price;
+                            oldItem.Quantity = item.Quantity;
                         }
 
-                        
+
                     }
                 }
 
@@ -135,13 +135,13 @@ namespace ApsWebApp.Services
         {
             var datas = dbContext.Penjualan
                  .Include(x => x.Gudang)
-                    .Include(x => x.Items).ThenInclude(x=>x.Product)
+                    .Include(x => x.Items).ThenInclude(x => x.Product)
                     .Include(x => x.Customer)
-                    .Include(x => x.Salesman);
+                    .Include(x => x.Salesman).ToList();
 
             var result = datas.Select(x => new PenjualanAndOrderModel
-            {                  
-                 Gudang = x.Gudang,
+            {
+                Gudang = x.Gudang,
                 PenjualanId = x.Id,
                 Invoice = x.Nomor,
                 Customer = x.Customer.Name,
@@ -157,10 +157,10 @@ namespace ApsWebApp.Services
         }
         public Task<Penjualan> GetPenjualan(int id)
         {
-            var orders = dbContext.Penjualan.Where(x=>x.Id==id)
-                .Include(x=>x.Gudang)
+            var orders = dbContext.Penjualan.Where(x => x.Id == id)
+                .Include(x => x.Gudang)
                           .Include(x => x.Items).ThenInclude(x => x.Product)
-                          .ThenInclude(x=>x.Units)
+                          .ThenInclude(x => x.Units)
                           .Include(x => x.Items).ThenInclude(x => x.Unit)
                           .Include(x => x.Customer)
                           .Include(x => x.Salesman);
@@ -170,53 +170,61 @@ namespace ApsWebApp.Services
 
         public Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansBySalesId(int id)
         {
-            var datas = dbContext.Penjualan.Where(x => x.Salesman.Id == id )
+            var datas = dbContext.Penjualan
                 .Include(x => x.Gudang)
-                .Include(x=>x.Items)
-                .Include(x=>x.Salesman)
-                .Include(x=>x.Customer)
-                .Select(x => new PenjualanAndOrderModel {
+                   .Include(x => x.Items).ThenInclude(x => x.Product)
+                   .Include(x => x.Customer)
+                   .Include(x => x.Salesman).Where(x => x.Salesman.Id == id).ToList();
+
+            var result = datas.Select(x => new PenjualanAndOrderModel
+            {
+                Gudang = x.Gudang,
                 PenjualanId = x.Id,
                 Invoice = x.Nomor,
                 Customer = x.Customer.Name,
                 Sales = x.Salesman.Name,
                 Total = x.Total,
                 DeadLine = x.DeadLine,
-                Created = x.CreateDate, 
-                PaymentStatus = x.Status,  FeeSales=x.FeeSalesman, PaymentType=x.Payment, NomorSO=x.Nomor
+                Created = x.CreateDate,
+                NomorSO = x.Nomor,
+                PaymentStatus = x.Status,
             });
-            return Task.FromResult(datas.AsEnumerable());
+
+            return Task.FromResult(result.AsEnumerable());
         }
 
         public Task<IEnumerable<PenjualanAndOrderModel>> GetPenjualansByCustomerId(int id)
         {
-            var datas = dbContext.Penjualan.Where(x => x.Customer.Id == id)
-                  .Include(x => x.Gudang)
-              .Include(x => x.Items)
-              .Include(x => x.Salesman)
-              .Include(x => x.Customer)
-              .Select(x => new PenjualanAndOrderModel
-              {
-                  PenjualanId = x.Id,
-                  Invoice = x.Nomor,
-                  Customer = x.Customer.Name,
-                  Sales = x.Salesman.Name,
-                  Total = x.Total,
-                  DeadLine = x.DeadLine,
-                  Created = x.CreateDate,
-                  PaymentStatus = x.Status,
-                  NomorSO = x.Nomor,
-              });                    
-            return Task.FromResult(datas.AsEnumerable());
+            var datas = dbContext.Penjualan
+                .Include(x => x.Gudang)
+                   .Include(x => x.Items).ThenInclude(x => x.Product)
+                   .Include(x => x.Customer)
+                   .Include(x => x.Salesman).Where(x => x.Customer.Id == id).ToList();
+
+            var result = datas.Select(x => new PenjualanAndOrderModel
+            {
+                Gudang = x.Gudang,
+                PenjualanId = x.Id,
+                Invoice = x.Nomor,
+                Customer = x.Customer.Name,
+                Sales = x.Salesman.Name,
+                Total = x.Total,
+                DeadLine = x.DeadLine,
+                Created = x.CreateDate,
+                NomorSO = x.Nomor,
+                PaymentStatus = x.Status,
+            });
+
+            return Task.FromResult(result.AsEnumerable());
         }
 
 
-        public  Task<bool> DeletePenjualan(int id)
+        public Task<bool> DeletePenjualan(int id)
         {
             try
             {
                 var penjualan = dbContext.Penjualan.SingleOrDefault(x => x.Id == id);
-                if (penjualan==null)
+                if (penjualan == null)
                     throw new SystemException("Penjualan Tidak Ditemukan !");
                 dbContext.Penjualan.Remove(penjualan);
                 dbContext.SaveChanges();
@@ -240,7 +248,7 @@ namespace ApsWebApp.Services
 
                 var result = datas.Select(x => new PenjualanAndOrderModel
                 {
-                    Gudang=x.Gudang,
+                    Gudang = x.Gudang,
                     PenjualanId = x.Id,
                     Invoice = x.Nomor,
                     Customer = x.Customer.Name,
@@ -274,8 +282,6 @@ namespace ApsWebApp.Services
 
 
                 this.ValidateCreateOrder(order);
-                //using var scope = provider.CreateScope();
-                //var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 dbContext.ChangeTracker.Clear();
 
                 if (order.Customer != null)
@@ -283,7 +289,7 @@ namespace ApsWebApp.Services
                 if (order.Gudang != null)
                     dbContext.Entry(order.Gudang).State = EntityState.Unchanged;
 
-                if (order.Sales!= null)
+                if (order.Sales != null)
                     dbContext.Entry(order.Sales).State = EntityState.Unchanged;
 
                 foreach (var item in order.Items)
@@ -303,13 +309,13 @@ namespace ApsWebApp.Services
 
         private bool ValidateCreateOrder(OrderPenjualan order)
         {
-
-            if (order.Customer== null)
+            if (order.Customer == null)
                 throw new SystemException("Customer Tidak Boleh Kosong !");
 
             if (order.Sales == null)
                 throw new SystemException("Salesman Tidak Boleh Kosong !");
-            if(order.Gudang==null)
+
+            if (order.Gudang == null)
                 throw new SystemException("Pilih Gudang Sumber !");
             return true;
         }
@@ -320,7 +326,7 @@ namespace ApsWebApp.Services
             {
                 var oldData = dbContext.OrderPenjualan.Where(x => x.Id == id)
                     .FirstOrDefault();
-                if (oldData==null)
+                if (oldData == null)
                     throw new SystemException("Order Not Found !");
 
                 dbContext.OrderPenjualan.Remove(oldData);
@@ -333,19 +339,18 @@ namespace ApsWebApp.Services
             }
         }
 
-        public Task<OrderPenjualan> GetOrder(int id)
+        public async Task<OrderPenjualan?> GetOrder(int id)
         {
 
-            var orders = dbContext.OrderPenjualan.Where(x => x.Id == id)
-
+            var order = await dbContext.OrderPenjualan.Where(x => x.Id == id)
             .Include(x => x.Customer)
             .Include(x => x.Sales)
             .Include(x => x.Gudang)
             .Include(x => x.Items).ThenInclude(x => x.Unit).AsNoTracking()
-            .Include(x => x.Items).ThenInclude(x => x.Product)
-            .ThenInclude(x => x.Units);
-
-            return Task.FromResult(orders.FirstOrDefault());
+            .Include(x => x.Items)
+            .ThenInclude(x => x.Product).ThenInclude(x => x.Supplier)
+            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units).FirstOrDefaultAsync();
+            return order;
         }
 
         public Task<IEnumerable<PenjualanAndOrderModel>> GetOrders()
@@ -366,7 +371,7 @@ namespace ApsWebApp.Services
                 Total = x.Total,
                 DeadLine = x.DeadLine,
                 Created = x.OrderDate,
-                OrderStatus = x.Status, 
+                OrderStatus = x.Status,
             });
 
             return Task.FromResult(results.AsEnumerable());
@@ -382,7 +387,7 @@ namespace ApsWebApp.Services
 
             var results = orders.Select(x => new PenjualanAndOrderModel
             {
-                Gudang=x.Gudang,
+                Gudang = x.Gudang,
                 OrderId = x.Id,
                 NomorSO = x.Nomor,
                 Customer = x.Customer.Name,
@@ -402,31 +407,31 @@ namespace ApsWebApp.Services
                .Include(x => x.Customer)
                .Include(x => x.Sales)
                .Include(x => x.Items).Select(x => new PenjualanAndOrderModel
-            {
-                   Gudang=x.Gudang,
-                OrderId = x.Id,
-                NomorSO = x.Nomor,
-                Customer = x.Customer.Name,
-                Sales = x.Sales.Name,
-                Total = x.Total,
-                DeadLine = x.DeadLine,
-                Created = x.OrderDate,
-                OrderStatus = x.Status
-            });
+               {
+                   Gudang = x.Gudang,
+                   OrderId = x.Id,
+                   NomorSO = x.Nomor,
+                   Customer = x.Customer.Name,
+                   Sales = x.Sales.Name,
+                   Total = x.Total,
+                   DeadLine = x.DeadLine,
+                   Created = x.OrderDate,
+                   OrderStatus = x.Status
+               });
 
             return Task.FromResult(orders.AsEnumerable());
         }
 
         public Task<OrderPenjualan> UpdateOrder(int id, OrderPenjualan order)
         {
-            Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction trans=dbContext.Database.BeginTransaction();
+            Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction trans = dbContext.Database.BeginTransaction();
             try
             {
 
-            //    dbContext.ChangeTracker.Clear();
-               ValidateCreateOrder(order);
+                //    dbContext.ChangeTracker.Clear();
+                ValidateCreateOrder(order);
                 var lastOrder = dbContext.OrderPenjualan.Where(x => x.Id == id)
-                                .Include(x=>x.Gudang)
+                                .Include(x => x.Gudang)
                                 .Include(x => x.Customer)
                                 .Include(x => x.Sales)
                                 .Include(x => x.Items).FirstOrDefault();
@@ -466,8 +471,8 @@ namespace ApsWebApp.Services
                         {
                             if (olditem.Product != null)
                                 dbContext.Entry(olditem.Product).State = EntityState.Unchanged;
-                            if (olditem.Unit!= null)
-                            dbContext.Entry(olditem.Unit).State = EntityState.Unchanged;
+                            if (olditem.Unit != null)
+                                dbContext.Entry(olditem.Unit).State = EntityState.Unchanged;
                             dbContext.Entry<OrderPenjualanItem>(olditem).CurrentValues.SetValues(item);
                         }
                     }
@@ -482,7 +487,7 @@ namespace ApsWebApp.Services
                         lastOrder.Items.Remove(item);
                     }
                 }
-                var result=  dbContext.SaveChanges();
+                var result = dbContext.SaveChanges();
                 trans.Commit();
                 return Task.FromResult(order);
             }
@@ -505,14 +510,14 @@ namespace ApsWebApp.Services
             {
                 var penjualan = dbContext
                     .Penjualan.Where(x => x.Id == penjualanId)
-                    .Include(x=>x.PembayaranPenjualan)
+                    .Include(x => x.PembayaranPenjualan)
                     .Include(x => x.Items).SingleOrDefault();
 
                 if (penjualan == null)
                     throw new SystemException("Penjualan Tidak Ditemukan !");
 
 
-                var totalInvoice = penjualan.Total- penjualan.TotalDiscount;
+                var totalInvoice = penjualan.Total - penjualan.TotalDiscount;
                 double totalBayar = 0;
                 if (pembayaran != null)
                 {
@@ -525,10 +530,11 @@ namespace ApsWebApp.Services
                 if (sisa < 0 && !forced)
                     throw new SystemException($"Pembayaran Melebihi Tagihan Invoice ! sisa {sisa}");
 
+                //if (pembayaran.Penjualan != null)
+                //    dbContext.Entry(pembayaran.Penjualan).State = EntityState.Unchanged;
 
-                dbContext.Entry(pembayaran.Penjualan).State = EntityState.Unchanged;
-                dbContext.PembayaranPenjualan.Add(pembayaran);
-                
+                penjualan.PembayaranPenjualan.Add(pembayaran);
+
                 var status = sisa > 0 ? PaymentStatus.Panjar : PaymentStatus.Lunas;
                 penjualan.Status = status;
                 dbContext.SaveChanges();
@@ -545,8 +551,8 @@ namespace ApsWebApp.Services
 
         public Task<IEnumerable<PembayaranPenjualan>> GetPembayaran(int penjualanId)
         {
-            var pembayarans = dbContext.PembayaranPenjualan.Include(x=>x.Penjualan).Where(x => x.Penjualan.Id== penjualanId);
-            return Task.FromResult(pembayarans.AsEnumerable());
+            var penjualan = dbContext.Penjualan.Where(x=>x.Id==penjualanId).Include(x => x.PembayaranPenjualan);
+            return Task.FromResult(penjualan!=null?penjualan.FirstOrDefault().PembayaranPenjualan.AsEnumerable():null);
         }
 
 
@@ -555,8 +561,8 @@ namespace ApsWebApp.Services
             try
             {
                 var penjualan = dbContext.Penjualan.Where(x => x.Id == model.Penjualan.Id)
-                    .Include(x=>x.Items)
-                    .Include(x=>x.PembayaranPenjualan).FirstOrDefault();
+                    .Include(x => x.Items)
+                    .Include(x => x.PembayaranPenjualan).FirstOrDefault();
 
                 if (penjualan == null || !penjualan.PembayaranPenjualan.Any())
                     throw new SystemException("Data Penjualan atau Pembayaran Tidak Ditemukan");
@@ -564,7 +570,7 @@ namespace ApsWebApp.Services
 
                 var totalInvoice = penjualan.Total - penjualan.TotalDiscount;
                 var totalWithoutCurrentPayment = penjualan.PembayaranPenjualan.Where(x => x.Id != model.Id).Sum(x => x.PayValue);
-              
+
                 if (totalWithoutCurrentPayment + model.PayValue > totalInvoice)
                     throw new SystemException("Maaf, Nilai Bayar Terlalu Besar !");
 
@@ -576,18 +582,18 @@ namespace ApsWebApp.Services
                 {
                     if (penjualan.OrderPenjualan != null)
                         penjualan.OrderPenjualan.Status = OrderStatus.Diproses;
-                     model.Penjualan.Status =  PaymentStatus.Panjar;
-                     penjualan.Status =  PaymentStatus.Panjar;
+                    model.Penjualan.Status = PaymentStatus.Panjar;
+                    penjualan.Status = PaymentStatus.Panjar;
                 }
                 else
                 {
-                    if(penjualan.OrderPenjualan!=null)
+                    if (penjualan.OrderPenjualan != null)
                         penjualan.OrderPenjualan.Status = OrderStatus.Selesai;
                     model.Penjualan.Status = PaymentStatus.Lunas;
                     penjualan.Status = PaymentStatus.Lunas;
                 }
 
-                 var result = dbContext.SaveChangesAsync().Result;
+                var result = dbContext.SaveChangesAsync().Result;
                 return Task.FromResult(true);
 
             }

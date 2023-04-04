@@ -31,7 +31,7 @@
             }
         </div>
         <div class="col-xl-9">
-            <RadzenGoogleMap @ref="map" style="height: 80vh;border:1px solid silver;" ApiKey="AIzaSyBVoxKIqCOGybbDmgLYrTGiFSfDjeMC5DA" Zoom=@zoom
+            <RadzenGoogleMap @ref="map" style="height: 80vh;border:1px solid silver;" ApiKey="AIzaSyAFFbR5iOLDp40I8lp8gT5MCyOxCReFXpc" Zoom=@zoom
                              Center=@mapcenter MapClick=@OnMapClick MarkerClick=@OnMarkerClick>
                 <Markers>
                     @if (customers.Count() > 0)
@@ -73,7 +73,9 @@
 
     GoogleMapPosition GetLocationFromString(string location)
     {
-        var args = location.Split(',');
+        var args = location.Split(';');
+        if (args.Count() < 2)
+            return null;
         return new GoogleMapPosition() { Lat = Convert.ToDouble(args[0]), Lng = Convert.ToDouble(args[1]) };
     }
 
@@ -81,10 +83,10 @@
     {
         if (CustomerSelected != null)
         {
-            var resultDialog = await dialog.Confirm($"Yakin Tandai Sebagai {CustomerSelected.Name} ", "Marker", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
+            var resultDialog = await dialog.Confirm($"Yakin Tandai Sebagai {CustomerSelected.Name} ", "Marker", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak"});
             if (resultDialog != null && resultDialog == true)
             {
-                CustomerSelected.Location = $"{args.Position.Lat}, {args.Position.Lng}";
+                CustomerSelected.Location = $"{args.Position.Lat}; {args.Position.Lng}";
                 mapcenter = new GoogleMapPosition() { Lat = args.Position.Lat, Lng = args.Position.Lng };
 
                 var cust = context.Customer.Where(x => x.Id == CustomerSelected.Id).FirstOrDefault();
@@ -108,8 +110,9 @@
 
         if (!string.IsNullOrEmpty(data.Location))
         {
-            var args = data.Location.Split(',');
-            mapcenter = new GoogleMapPosition() { Lat = Convert.ToDouble(args[0]), Lng = Convert.ToDouble(args[1]) };
+            var args = data.Location.Split(';');
+            if(args.Count()>1)
+                mapcenter = new GoogleMapPosition() { Lat = Convert.ToDouble(args[0]), Lng = Convert.ToDouble(args[1]) };
         }
     }
 }

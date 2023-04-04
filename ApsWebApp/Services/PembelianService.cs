@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Ocph.DAL;
 using ShareModels;
+using ShareModels.ModelViews;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +16,13 @@ namespace ApsWebApp.Services
     public class PembelianService : IPembelianService
     {
         private readonly ApplicationDbContext dbContext;
-    //    private readonly IHttpContextAccessor auth;
+        //    private readonly IHttpContextAccessor auth;
         private readonly ILogger _logger;
 
         public PembelianService(ILogger<PembelianService> logger, ApplicationDbContext db)
         {
             dbContext = db;
-       //     auth = httpContextAccessor;
+            //     auth = httpContextAccessor;
             _logger = logger;
         }
 
@@ -37,8 +38,8 @@ namespace ApsWebApp.Services
                     throw new SystemException("Gudang tidak ditemukan !");
 
                 var lastOrder = dbContext.OrderPembelian.Where(x => x.Id == orderid)
-                    .Include(x => x.Items).ThenInclude(x=>x.Product)
-                    .Include(x => x.Items).ThenInclude(x=>x.Unit)
+                    .Include(x => x.Items).ThenInclude(x => x.Product)
+                    .Include(x => x.Items).ThenInclude(x => x.Unit)
                     .Include(x => x.Supplier)
                     .FirstOrDefault();
 
@@ -47,13 +48,19 @@ namespace ApsWebApp.Services
 
 
                 dbContext.Set<Pembelian>().AsNoTracking();
-                var pembelian = new Pembelian { Gudang=gudang, OrderPembelianId = orderid, OrderPembelian=lastOrder,      
-                    CreatedDate = DateTime.Now, Items = new List<PembelianItem>() };
+                var pembelian = new Pembelian
+                {
+                    Gudang = gudang,
+                    OrderPembelianId = orderid,
+                    OrderPembelian = lastOrder,
+                    CreatedDate = DateTime.Now,
+                    Items = new List<PembelianItem>()
+                };
 
                 foreach (var item in lastOrder.Items)
                 {
                     var data = new PembelianItem
-                    {   
+                    {
                         Amount = item.Quntity,
                         Price = item.Price,
                         Product = item.Product,
@@ -84,14 +91,14 @@ namespace ApsWebApp.Services
             }
         }
 
-      
+
         public Task<Pembelian> UpdatePembelian(int pembelianId, Pembelian order)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
             {
 
-                var lastOrder = dbContext.Pembelian.Where(x=>x.Id==pembelianId).Include(x=>x.OrderPembelian).FirstOrDefault();
+                var lastOrder = dbContext.Pembelian.Where(x => x.Id == pembelianId).Include(x => x.OrderPembelian).FirstOrDefault();
 
                 if (lastOrder == null)
                     throw new SystemException("Pembelian Not Found  !");
@@ -108,7 +115,7 @@ namespace ApsWebApp.Services
                     else
                     {
                         var oldItem = dbContext.PembelianItem.SingleOrDefault(x => x.Id == item.Id);
-                        if(oldItem==null)
+                        if (oldItem == null)
                             throw new SystemException("Item Pembelian Tidak Ditemukan !");
                         dbContext.Entry(oldItem).CurrentValues.SetValues(item);
                     }
@@ -156,23 +163,42 @@ namespace ApsWebApp.Services
                 _logger.LogError(ex.Message);
                 throw new SystemException(ex.Message);
             }
-        }                               
+        }
 
-        public Task<IEnumerable<Pembelian>> GetPembelians()
+        public Task<IEnumerable<PembelianDataModel>> GetPembelians()
         {
             try
             {
                 var pembelians = dbContext.Pembelian
+                    .Include(x=>x.Gudang)
                                    .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
-                                   .Include(x => x.OrderPembelian).ThenInclude(x => x.Supplier).AsNoTracking();
-                return Task.FromResult(pembelians.AsEnumerable());
+                                   .Include(x => x.OrderPembelian).ThenInclude(x => x.Supplier).ToList();
+
+                var datas = from a in pembelians
+                            select new PembelianDataModel
+                            {
+                                CreatedDate = a.CreatedDate,
+                                DeadLine = a.DeadLine,
+                                Gudang = a.Gudang.Name,
+                                Id = a.Id,
+                                InvoiceNumber = a.InvoiceNumber,
+                                OrderNumber = a.OrderPembelian.Nomor,
+                                Items = a.Items,
+                                OrderPembelianId = a.OrderPembelianId,
+                                Status = a.Status,
+                                SupplierId = a.OrderPembelian.Supplier.Id,
+                                SupplierName = a.OrderPembelian.Supplier.Nama
+                            };
+
+                return Task.FromResult(datas.AsEnumerable());
             }
             catch (System.Exception ex)
             {
-               
+
                 _logger.LogError(ex.Message);
                 throw new SystemException(ex.Message);
-            }  finally
+            }
+            finally
             {
                 dbContext.Dispose();
             }
@@ -180,10 +206,10 @@ namespace ApsWebApp.Services
 
         public Task<IEnumerable<Pembelian>> GetPembeliansBySupplierId(int id)
         {
-             var pembelians = dbContext.Pembelian
-                                   .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
-                                   .Include(x => x.OrderPembelian).ThenInclude(x => x.Supplier).AsNoTracking(); 
-                return Task.FromResult(pembelians.Where(x=>x.OrderPembelian.Supplier.Id==id).AsEnumerable());
+            var pembelians = dbContext.Pembelian
+                                  .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
+                                  .Include(x => x.OrderPembelian).ThenInclude(x => x.Supplier).AsNoTracking();
+            return Task.FromResult(pembelians.Where(x => x.OrderPembelian.Supplier.Id == id).AsEnumerable());
         }
 
 
@@ -191,8 +217,8 @@ namespace ApsWebApp.Services
         {
             try
             {
-                var oldData  = dbContext.Pembelian.SingleOrDefault(x => x.Id == id);
-                if (oldData==null)
+                var oldData = dbContext.Pembelian.SingleOrDefault(x => x.Id == id);
+                if (oldData == null)
                     throw new SystemException("Pembelian Not Found !");
 
                 dbContext.Pembelian.Remove(oldData);
@@ -229,7 +255,7 @@ namespace ApsWebApp.Services
                     dbContext.Entry(item.Unit).State = EntityState.Unchanged;
                 }
                 dbContext.OrderPembelian.Add(order);
-               dbContext.SaveChanges();
+                dbContext.SaveChanges();
                 return Task.FromResult(order);
             }
             catch (Exception ex)
@@ -244,7 +270,7 @@ namespace ApsWebApp.Services
             try
             {
                 var deleted = dbContext.OrderPembelian.SingleOrDefault(x => x.Id == id);
-                if (deleted==null)
+                if (deleted == null)
                     throw new SystemException("Order Not Found !");
                 dbContext.OrderPembelian.Remove(deleted);
                 dbContext.SaveChanges();
@@ -261,7 +287,7 @@ namespace ApsWebApp.Services
         {
             var lastOrder = dbContext.OrderPembelian.Where(x => x.Id == id)
                             .Include(x => x.Supplier)
-                            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);             
+                            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);
             return Task.FromResult(lastOrder.FirstOrDefault());
         }
 
@@ -275,7 +301,7 @@ namespace ApsWebApp.Services
 
         public Task<IEnumerable<OrderPembelian>> GetOrdersBySupplierId(int supplierId)
         {
-            var lastOrder = dbContext.OrderPembelian.Where(x=>x.Supplier.Id==supplierId)
+            var lastOrder = dbContext.OrderPembelian.Where(x => x.Supplier.Id == supplierId)
                             .Include(x => x.Supplier)
                             .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units).AsNoTracking();
             return Task.FromResult(lastOrder.AsEnumerable());
@@ -289,7 +315,7 @@ namespace ApsWebApp.Services
             {
 
 
-                var lastOrder = dbContext.OrderPembelian.Where(x=>x.Id==id).Include(x=>x.Supplier).Include(x => x.Items).AsNoTracking().FirstOrDefault();
+                var lastOrder = dbContext.OrderPembelian.Where(x => x.Id == id).Include(x => x.Supplier).Include(x => x.Items).AsNoTracking().FirstOrDefault();
 
 
                 if (lastOrder == null)
@@ -307,8 +333,8 @@ namespace ApsWebApp.Services
                     }
                     else
                     {
-                       var updatedItem = dbContext.OrderPembelianItem.AsNoTracking().SingleOrDefault(x => x.Id == item.Id);
-                        if (updatedItem==null)
+                        var updatedItem = dbContext.OrderPembelianItem.AsNoTracking().SingleOrDefault(x => x.Id == item.Id);
+                        if (updatedItem == null)
                             throw new SystemException("Order Item Not Found !");
                         dbContext.Entry(updatedItem).CurrentValues.SetValues(item);
                     }
@@ -328,7 +354,7 @@ namespace ApsWebApp.Services
                     }
                 }
 
-                
+
 
                 dbContext.SaveChanges();
                 return Task.FromResult(order);
@@ -345,7 +371,7 @@ namespace ApsWebApp.Services
 
 
         #region Pembayaran
-        public Task<PembayaranPembelian> CreatePembayaran(int pembelianId, PembayaranPembelian pembayaran, bool forced)
+        public Task<PembayaranPembelian> CreatePembayaran(int pembelianId, PembayaranPembelian pembayaran)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
@@ -353,32 +379,29 @@ namespace ApsWebApp.Services
                 var pembelian = dbContext.Pembelian.Where(x => x.Id == pembelianId)
                     .Include(x => x.Items)
                     .Include(x => x.OrderPembelian)
-                    .Include(x => x.PembayaranPembelian).AsNoTracking().FirstOrDefault();
+                    .Include(x => x.PembayaranPembelian).FirstOrDefault();
 
                 if (pembelian == null)
                     throw new SystemException("Pembelian Tidak Ditemukan");
 
                 var totalInvoice = pembelian.Total - pembelian.TotalDiscount;
                 double totalBayar = 0;
-                if (pembelian.PembayaranPembelian != null)
-                {
-                   totalBayar= pembelian.PembayaranPembelian.Sum(x => x.PayValue);
-                }
 
+                totalBayar = pembelian.PembayaranPembelian.Sum(x => x.PayValue);
                 var sisa = totalInvoice - totalBayar - pembayaran.PayValue;
 
-                if (sisa < 0 && !forced)
+                if (sisa < 0 )
                     throw new SystemException("Pembayaran Anda Melebihi Tagihan Invoice !");
 
-                var status = sisa > 0 ? PaymentStatus.Panjar:  PaymentStatus.Lunas;
+                var status = sisa > 0 ? PaymentStatus.Panjar : PaymentStatus.Lunas;
                 pembelian.Status = status;
                 pembelian.OrderPembelian.Status = OrderStatus.Selesai;
-                dbContext.PembayaranPembelian.Add(pembayaran);
+                pembelian.PembayaranPembelian.Add(pembayaran);
                 var result = dbContext.SaveChanges();
-                
-                if (result <=0)
+
+                if (result <= 0)
                     throw new SystemException("Pembayaran Gagal !");
-                
+
                 trans.Commit();
                 return Task.FromResult(pembayaran);
             }
@@ -392,8 +415,8 @@ namespace ApsWebApp.Services
 
         public Task<IEnumerable<PembayaranPembelian>> GetPembayaran(int pembelianId)
         {
-            var pembayarans = dbContext.PembayaranPembelian.Where(x => x.Pembelian.Id == pembelianId).AsNoTracking();
-            return Task.FromResult(pembayarans.AsEnumerable());
+            var pembayaran = dbContext.Pembelian.Include(x => x.PembayaranPembelian).FirstOrDefault(x => x.Id == pembelianId);
+            return Task.FromResult(pembayaran.PembayaranPembelian.AsEnumerable());
         }
 
 
@@ -410,7 +433,7 @@ namespace ApsWebApp.Services
                     throw new SystemException("Data Pembelian atau Pembayaran Tidak Ditemukan");
 
 
-                var totalInvoice = pembelian.Total- pembelian.TotalDiscount;
+                var totalInvoice = pembelian.Total - pembelian.TotalDiscount;
                 var totalWithoutCurrentPayment = pembelian.PembayaranPembelian.Where(x => x.Id != model.Id).Sum(x => x.PayValue);
 
                 if (totalWithoutCurrentPayment + model.PayValue > totalInvoice)

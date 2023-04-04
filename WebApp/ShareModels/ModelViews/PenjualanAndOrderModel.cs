@@ -5,8 +5,9 @@ using System.Text;
 
 namespace ShareModels.ModelViews
 {
-    public class PenjualanAndOrderModel
+    public class PenjualanAndOrderModel: IEntity
     {
+        public int Id { get; set; }
         public int PenjualanId { get; set; }
         public int OrderId { get; set; }
         public string NomorSO { get; set; }
@@ -25,5 +26,7 @@ namespace ShareModels.ModelViews
         public double TotalFeeSales => TotalAfterDiscount * (FeeSales / 100);
 
         public Gudang Gudang { get; set; }
+
+       
     }
 }

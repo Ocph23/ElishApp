@@ -122,7 +122,10 @@
                                 </div>
 
 
-                                <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" AllowPaging="false" AllowSorting="true" TItem="PembelianItem">
+                                <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" 
+                                 AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" 
+                                     PageSize="20" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                                 TItem="PembelianItem">
                                     <Columns>
                                         <RadzenGridColumn Width="180px" TItem="PembelianItem" Property="Product.CodeName" Title="Code" />
                                         <RadzenGridColumn TItem="PembelianItem" Property="Product.Name" Title="Product" />
@@ -217,7 +220,7 @@
                         new Dictionary<string, object>() { { "IdPembelian", model.Id },{ "Total", (model.Total-model.TotalDiscount)- pembayarans.Sum(x=>x.PayValue) } },
                         new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Warning" />
 
-                        <RadzenGrid @ref="pembayaranGrid" Data="@(pembayarans)" AllowFiltering="true"
+                        <RadzenGrid @ref="pembayaranGrid" Data="@(pembayarans)" FilterMode="FilterMode.Advanced" AllowFiltering="true"
                                     AllowPaging="true" AllowSorting="true" TItem="PembayaranPembelian">
                             <Columns>
                                 <RadzenGridColumn TItem="PembayaranPembelian" Property="PayDate" Title="Date">
@@ -251,16 +254,19 @@
                                         <div>Sisa</div>
                                     </FooterTemplate>
                                 </RadzenGridColumn>
-                                <RadzenGridColumn TItem="PembayaranPembelian" Property="PayValue" Title="Total" TextAlign="TextAlign.Right">
+                                <RadzenGridColumn TItem="PembayaranPembelian" Title="Total" TextAlign="TextAlign.Right">
+                                    <Template>
+                                        @context.PayValue.ToString("N2");
+                                    </Template>
                                     <EditTemplate Context="item">
                                         <RadzenNumeric @bind-Value="item.PayValue" Step="0.25" />
                                     </EditTemplate>
                                     <FooterTemplate>
-                                        <div>@pembayarans.Sum(x => x.PayValue).ToString("N")</div>
+                                        <div>@pembayarans.Sum(x => x.PayValue).ToString("N2")</div>
                                         <div>
                                             @{
                                                 var sisa = (model.Total - model.TotalDiscount) - pembayarans.Sum(x => x.PayValue);
-                                                @sisa.ToString("N");
+                                                @sisa.ToString("N2");
                                             }
                                         </div>
                                     </FooterTemplate>
@@ -451,9 +457,10 @@
 
                 if (data != null)
                 {
-                    var result = pembelianService.CreatePembayaran(data.Pembelian.Id, data, false).Result;
+                    var result = pembelianService.CreatePembayaran(data.Pembelian.Id, data).Result;
                     if (result == null)
                         throw new SystemException("Not Saved !");
+
 
 
                     pembayarans.Add(result);

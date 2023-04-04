@@ -23,7 +23,7 @@ namespace ApsWebApp.Services
             _serviceProvider = provider;
 
             using var scope = provider.CreateScope();
-            Pembelians = new ObservableCollection<Pembelian>();
+            Pembelians = new ObservableCollection<PembelianDataModel>();
             
             
         }
@@ -35,13 +35,13 @@ namespace ApsWebApp.Services
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var pembelians = dbContext.Pembelian.ToList();
-            foreach (var item in pembelians)
-            {
-                Pembelians.Add(item);
-            }
+            //foreach (var item in pembelians)
+            //{
+            //    Pembelians.Add(item);
+            //}
         }
 
-        public ObservableCollection<Pembelian> Pembelians { get; set; }
+        public ObservableCollection<PembelianDataModel> Pembelians { get; set; }
 
        
         public Pembelian PembelianSelected
@@ -74,32 +74,32 @@ namespace ApsWebApp.Services
 
         private void SetDataSource(Pembelian value)
         {
-            using var scope = _serviceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            //using var scope = _serviceProvider.CreateScope();
+            //var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            var result = (from a in value.Items
-                         join b in dbContext.IncomingItem.Where(x => x.Pembelian.Id == value.Id)  
-                         on new { PembelianId=a.Pembelian.Id, ProductId= a.Product.Id } equals new { PembelianId=b.Pembelian.Id,ProductId=b.Product.Id }
-                         into cc
-                         from b in cc.DefaultIfEmpty()
-                         select new IncomingItem
-                         {   Pembelian=a.Pembelian,
-                             ActualValue = b==null?0: b.ActualValue, Amount= a.Amount, Product=a.Product,  
-                            Id= b==null?0:b.Id, Unit = b.Unit==null?a.Unit: a.Product.Units.Where(x=>x.Id== b.Unit.Id).FirstOrDefault()
-                         }).ToList();
+            //var result = (from a in value.Items
+            //             join b in dbContext.IncomingItem.Where(x => x.Pembelian.Id == value.Id)  
+            //             on new { PembelianId=a.Pembelian.Id, ProductId= a.Product.Id } equals new { PembelianId=b.Pembelian.Id,ProductId=b.Product.Id }
+            //             into cc
+            //             from b in cc.DefaultIfEmpty()
+            //             select new IncomingItem
+            //             {   Pembelian=a.Pembelian,
+            //                 ActualValue = b==null?0: b.ActualValue, Amount= a.Amount, Product=a.Product,  
+            //                Id= b==null?0:b.Id, Unit = b.Unit==null?a.Unit: a.Product.Units.Where(x=>x.Id== b.Unit.Id).FirstOrDefault()
+            //             }).ToList();
                         
-            if (result.Any())
-            {
-                Datas.Clear();
-                foreach (var item in result)
-                {
-                    Datas.Add(item);
-                }
-            }
-            else
-            {
-               _= CreateNew(value.Id).Result;
-            }
+            //if (result.Any())
+            //{
+            //    Datas.Clear();
+            //    foreach (var item in result)
+            //    {
+            //        Datas.Add(item);
+            //    }
+            //}
+            //else
+            //{
+            //   _= CreateNew(value.Id).Result;
+            //}
         }
 
         //  public Pembelian Model { get; private set; }

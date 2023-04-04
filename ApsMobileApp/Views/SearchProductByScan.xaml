@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ApsMobileApp.Views.SearchProductByScan">
+    <ContentPage.Content>
+        <Grid>
+            <Button Text="Scan" Clicked="Button_Clicked"  WidthRequest="150"
+                    VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
+                    />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

@@ -19,7 +19,7 @@
             <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => Nav.NavigateTo("/pembelian/order/detail")) Style="margin-bottom:10px" />
 
             <RadzenGrid Data="@orders"
-                        @ref="grid"  LoadData="@LoadData" Count="@count" PageSize="20"
+                        @ref="grid"  LoadData="@LoadData" Count="@count" PageSize="20" FilterMode="FilterMode.Advanced"
                         AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPembelian">
                 <Columns>
                     <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="OrderPembelian" Title="Order Date" Property="OrderDate" />

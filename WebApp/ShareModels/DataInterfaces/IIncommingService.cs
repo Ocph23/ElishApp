@@ -14,7 +14,7 @@ namespace ShareModels
         void LoadPembelian();
         Task Invoike(IncomingItem data);
         Task Save();
-        ObservableCollection<Pembelian> Pembelians { get; }
+        ObservableCollection<PembelianDataModel> Pembelians { get; }
         ObservableCollection<IncomingItem> Datas { get;  }
         Pembelian PembelianSelected { get; set; }
 

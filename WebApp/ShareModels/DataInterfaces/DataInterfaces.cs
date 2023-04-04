@@ -61,14 +61,14 @@ namespace ShareModels
         Task<Pembelian> CreatePembelian(int orderid, int gudangId);
         Task<Pembelian> UpdatePembelian(int pembelianId, Pembelian order);
         Task<Pembelian> GetPembelian(int id);
-        Task<IEnumerable<Pembelian>> GetPembelians();
+        Task<IEnumerable<PembelianDataModel>> GetPembelians();
         Task<IEnumerable<Pembelian>> GetPembeliansBySupplierId(int id);
         Task<bool> DeletePembelian(int id);
         #endregion
 
         #region Pembayaran
         Task<IEnumerable<PembayaranPembelian>> GetPembayaran(int pembayaranId);
-        Task<PembayaranPembelian> CreatePembayaran(int pembelianId, PembayaranPembelian model, bool forced);
+        Task<PembayaranPembelian> CreatePembayaran(int pembelianId, PembayaranPembelian model);
         Task<bool> UpdatePembayaran(PembayaranPembelian model);
 
         #endregion
@@ -93,8 +93,8 @@ namespace ShareModels
         Task<bool> DeletePenjualan(int id);
 
         #region Pembayaran
-        Task<IEnumerable<PembayaranPenjualan>> GetPembayaran(int pembelianId);
-        Task<PembayaranPenjualan> CreatePembayaran(int pembelianId, PembayaranPenjualan model, bool forced);
+        Task<IEnumerable<PembayaranPenjualan>> GetPembayaran(int penjualanId);
+        Task<PembayaranPenjualan> CreatePembayaran(int penjualanId, PembayaranPenjualan model, bool forced);
         Task<bool> UpdatePembayaran(PembayaranPenjualan model);
         #endregion
     }
@@ -142,17 +142,17 @@ namespace ShareModels
         Task<IEnumerable<Customer>> GetBySales(int id);
         Task<bool> UpdateLocation(Customer cust);
     }
-    public interface IKaryawanService : IService<Karyawan>{}
-
+    public interface IKaryawanService : IService<Karyawan>
+    {
+        Task<bool> RemoveRole(int id);
+        Task<IEnumerable<Karyawan>> GetSales();
+    }
 
     public interface IReportService
     {
         Task<IEnumerable<PiutangData>> GetPiutang();
         Task<IEnumerable<PiutangData>> GetUtang();
     }
-
-
-
 
     public interface IPengembalianPenjualanService
     {

@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ApsMobileApp.Views.SalesmanView.HomeSalesman"
+             xmlns:vm="clr-namespace:ApsMobileApp.Views.SalesmanView"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Title="Home">
+    <ContentPage.Content>
+        <RefreshView IsRefreshing="{Binding IsBusy}" Command="{Binding LoadItemsCommand}">
+            <Grid BackgroundColor="WhiteSmoke">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Margin="20" FontSize="20">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Hi,  "/>
+                        <Span Text="{Binding SalesName }" FontSize="20" FontAttributes="Bold"/>
+                        <Span Text="... !"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+          
+            <StackLayout Grid.Row="1" Margin="5" >
+                    <CarouselView x:Name="ItemsListView" ItemsSource="{Binding PeriodePenjualan}" >
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout>
+                                    <Frame Margin="5,5" CornerRadius="10" Padding="10,0,0,0" BackgroundColor="#FF0C9E">
+                                        <Frame Margin="0" CornerRadius="10" Padding="20" >
+                                            <StackLayout>
+                                                <Label HorizontalOptions="Start" Padding="10,3" Margin="0" Text="{Binding Name}" BackgroundColor="#FF0C9E" TextColor="White"/>
+                                                <Label Margin="0,20" TextColor="Black" FontSize="Large" HorizontalOptions="CenterAndExpand">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Rp. "  />
+                                                            <Span Text="{Binding Total, StringFormat='{0:N2}'}"  />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </StackLayout>
+                                        </Frame>
+                                    </Frame>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>
+                    <CarouselView  ItemsSource="{Binding JatuhTempo}" >
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout>
+                                    <Frame Margin="5,5" CornerRadius="10" Padding="10,0,0,0" BackgroundColor="#f58b00">
+                                        <Frame Margin="0" CornerRadius="10" Padding="20" >
+                                            <StackLayout>
+                                                <Label HorizontalOptions="Start" Padding="10,3" Margin="0" Text="Penjualan Jatuh Tempo" BackgroundColor="#f58b00" TextColor="White"/>
+                                                <StackLayout>
+                                                    <Label TextColor="Black" >
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text=" Invoice :"  />
+                                                                <Span Text="{Binding Invoice}"  />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                    <Label TextColor="Black" >
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Customer :"  />
+                                                                <Span Text="{Binding Customer}"  />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                    <Label TextColor="Black" >
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Total : Rp. "  />
+                                                                <Span Text="{Binding Total, StringFormat='{0:N2}'}"  />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </StackLayout>
+                                            </StackLayout>
+                                        </Frame>
+                                    </Frame>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>
+                    <CarouselView  ItemsSource="{Binding Orders}" >
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout>
+                                    <Frame Margin="5,5" CornerRadius="10" Padding="10,0,0,0" BackgroundColor="#69CC00">
+                                        <Frame Margin="0" CornerRadius="10" Padding="20" >
+                                            <StackLayout>
+                                                <Label HorizontalOptions="Start" Padding="10,3" Margin="0" Text="Orderan Terbaru" BackgroundColor="#69CC00" TextColor="White"/>
+                                                <StackLayout>
+                                                    <Label TextColor="Black" >
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Sales Order :"  />
+                                                                <Span Text="{Binding NomorSO}"  />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                    <Label TextColor="Black" >
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Customer :"  />
+                                                                <Span Text="{Binding Customer}"  />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                    <Label TextColor="Black" >
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Total : Rp. "  />
+                                                                <Span Text="{Binding Total, StringFormat='{0:N2}'}"  />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                </StackLayout>
+                                            </StackLayout>
+                                        </Frame>
+                                    </Frame>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>
+                    <CarouselView  ItemsSource="{Binding LastCustomers}" >
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout>
+                                    <Frame Margin="5,0" CornerRadius="10" Padding="10,0,0,0" BackgroundColor="#08BDBD">
+                                        <Frame Margin="0" CornerRadius="10" Padding="20" >
+                                            <StackLayout>
+                                                <Label HorizontalOptions="Start" Padding="10,3" Margin="0" Text="Customer Belum Order Bulan Ini" BackgroundColor="#08BDBD" TextColor="White"/>
+                                                <Label Text="{Binding Name}" Margin="0,10" TextColor="Black" FontSize="Small" HorizontalOptions="CenterAndExpand"/>
+                                                <Label Text="{Binding Address}" Margin="0,0" TextColor="Black" FontSize="Micro" HorizontalOptions="CenterAndExpand"/>
+                                            </StackLayout>
+                                        </Frame>
+                                    </Frame>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>
+            </StackLayout>
+            <ActivityIndicator  IsVisible="true" HorizontalOptions="Center" IsRunning="{Binding IsBusy}" Grid.RowSpan="3" VerticalOptions="Center"/>
+        </Grid>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

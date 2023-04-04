@@ -4,7 +4,7 @@
 
 @inject Radzen.DialogService dialogService;
 @inject IPenjualanService penjualanService;
-
+@inject NotificationService NotificationService
 
 <div class="row">
     <div class="col-md-12">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-md-8">
                     <RadzenDropDown @bind-Value="Model.PayType"
-                                    Data=@(Enum.GetValues(typeof(PayType)).Cast<PayType>()) />
+                        Data=@(Enum.GetValues(typeof(PayType)).Cast<PayType>()) />
                 </div>
             </div>
             <div class="row">
@@ -26,22 +26,25 @@
                     <RadzenTextBox @bind-Value="Model.PayTo" style="width: 100%;" Name="CardNr" />
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Bank Name" />
+            @if (Model.PayType != PayType.Tunai)
+            {
+                <div class="row">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Bank Name" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextBox @bind-Value="Model.BankName" style="width: 100%;" Name="CardNr" />
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <RadzenTextBox @bind-Value="Model.BankName" style="width: 100%;" Name="CardNr" />
+                <div class="row">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Account Number" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextBox @bind-Value="Model.RekNumber" style="width: 100%;" Name="CardNr" />
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Account Number" />
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextBox @bind-Value="Model.RekNumber" style="width: 100%;" Name="CardNr" />
-                </div>
-            </div>
+            }
 
             <div class="row">
                 <div class="col-md-4 align-items-center d-flex">
@@ -74,10 +77,10 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12 text-right" style="margin-top:20px">
-        <RadzenButton Click="SavePembayaran" Text="OK" Style="margin-bottom: 10px; width: 150px" />
-        <RadzenButton Click="@((args) => dialogService.Close(false))" ButtonStyle="ButtonStyle.Secondary" Text="Cancel"
-                      Style="margin-bottom: 10px; width: 150px" />
+    <div class="col-md-12 text-right" style="margin-top:20px; display:flex;justify-content:end">
+        <RadzenButton Click="SavePembayaran" Text="Simpan" Style="margin: 5px; width: 150px" />
+        <RadzenButton Click="@((args) => dialogService.Close(false))" ButtonStyle="ButtonStyle.Danger" Text="Cancel"
+            Style="margin: 5px; width: 150px" />
     </div>
 </div>
 
@@ -99,18 +102,44 @@
     {
         var Id = Convert.ToInt32(IdPenjualan);
         var penjualan = await penjualanService.GetPenjualan(Id);
-        if(penjualan!=null)
-            {
-        Model = new PembayaranPenjualan() { Penjualan = penjualan, PayValue = Total, PayDate = DateTime.Now };
-        StateHasChanged();
-            }
+        if (penjualan != null)
+        {
+            Model = new PembayaranPenjualan() { Penjualan = penjualan, PayValue = Total, PayDate = DateTime.Now };
+            StateHasChanged();
+        }
 
     }
 
     public async Task SavePembayaran()
     {
-        await Task.Delay(1000);
-        dialogService.Close(Model);
+
+        try
+        {
+            if ((Model.PayType != PayType.Tunai))
+            {
+                if (string.IsNullOrEmpty(Model.RekNumber) || string.IsNullOrEmpty(Model.PayTo) || string.IsNullOrEmpty(Model.BankName))
+                {
+                    throw new SystemException("Lengkapi Data Bank Pembayaran !");
+                }
+            }
+
+            if (Model.PayType == PayType.Etc && string.IsNullOrEmpty(Model.PayTo))
+                throw new SystemException("Account Name/Penerima Pembayaran tidak Boleh Kosong !");
+
+            dialogService.Close(Model);
+        }
+        catch (Exception ex)
+        {
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Detail = ex.Message,
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error"
+                });
+
+
+        }
     }
 
 

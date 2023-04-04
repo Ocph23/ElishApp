@@ -21,7 +21,7 @@
             <RadzenButton Icon="add" Style="margin-bottom:10px" ButtonStyle="ButtonStyle.Success"
                           Click="@(()=> nav.NavigateTo($"/penjualan/orderdetail"))" />
             <RadzenGrid Data="@orders"
-                        @ref="grid" LoadData="@LoadData" Count="@count" PageSize="12"
+                        @ref="grid" LoadData="@LoadData" Count="@count" PageSize="12" FilterMode="FilterMode.Advanced"
                         AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPenjualan">
                 <Columns>
                     <RadzenGridColumn Width="120px" TItem="OrderPenjualan" Property="OrderDate" Title="Order" />

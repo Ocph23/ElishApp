@@ -18,7 +18,7 @@
         <RadzenTabsItem Text="RETURN PENJUALAN">
             <RadzenButton Icon="add" Style="margin-bottom:10px" ButtonStyle="ButtonStyle.Success"
                           Click="@(()=> nav.NavigateTo($"/penjualan/pengembaliandetail"))" />
-            <RadzenGrid Data="@penjualans" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="PengembalianPenjualan"
+            <RadzenGrid Data="@penjualans" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="PengembalianPenjualan" FilterMode="FilterMode.Advanced"
                         @ref="grid" LoadData="@LoadData" Count="@count" PageSize="12">
                 <Columns>
                     <RadzenGridColumn Width="100px" TItem="PengembalianPenjualan" Property="CreateDate" Title="Crated">
@@ -28,7 +28,7 @@
                     </RadzenGridColumn>
                     <RadzenGridColumn Width="160px" TItem="PengembalianPenjualan" Property="Nomor" Title="Sale Number" />
                     <RadzenGridColumn CssClass="" TItem="PengembalianPenjualan" Property="Customer.Name" Title="Customer" />
-                    <RadzenGridColumn Width="100px" TItem="PengembalianPenjualan" Property="Status" Title="Status">
+                    <RadzenGridColumn Width="100px" TItem="PengembalianPenjualan" Property="Gudang.Name" Title="Ke Gudang">
                         <FilterTemplate>
                             <RadzenDropDown @bind-Value="@currentPeyment" TextProperty="Text"
                                             ValueProperty="Value" Style="width:100%" Change="@(()=>grid.Reload())"

@@ -17,7 +17,7 @@
         <RadzenTabsItem Text="Pemindahan">
             <RadzenButton Icon="add" Style="margin-bottom:10px" ButtonStyle="ButtonStyle.Success"
                           Click="@(()=> nav.NavigateTo($"/pemindahan/detail"))" />
-            <RadzenGrid Data="@pemindahans"
+            <RadzenGrid Data="@pemindahans" FilterMode="FilterMode.Advanced"
                         AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Pemindahan" @ref="grid" LoadData="@LoadData" Count="@count" PageSize="10">
                 <Columns>
                     <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="Pemindahan" Title="Created" Property="CreatedDate">

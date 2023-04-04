@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+             mc:Ignorable="d"
+             x:Class="ApsMobileApp.Views.LoginPage"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.Content>
+        <Grid Margin="20" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="65*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <StackLayout Margin="0,20" >
+                <Image Source="icon.png" WidthRequest="100" VerticalOptions="CenterAndExpand"/>
+                <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"/>
+            </StackLayout>
+            <StackLayout VerticalOptions="StartAndExpand" Grid.Row="1" Margin="30,0">
+                <Label Text="Login" FontSize="Title" Margin="0,20"/>
+                <Label Text="User Name"/>
+                <Entry Text="{Binding UserName}"/>
+                <Label Text="Password"/>
+                <Grid ColumnDefinitions="*,auto">
+                    <Entry IsPassword="{Binding ShowPassword}" Text="{Binding Password}"/>
+                    <ImageButton Grid.Column="1" WidthRequest="30" HeightRequest="30" Opacity="0.5" HorizontalOptions="End" 
+                                 BackgroundColor="Transparent" Source="{Binding EyeIcon}" Command="{Binding ShowPasswordCommand}" />
+                </Grid>
+                <Button Margin="0,20" VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
+            </StackLayout>
+            <StackLayout Grid.Row="2" Margin="5">
+                <Entry HorizontalOptions="Center" FontSize="Small" WidthRequest="200" IsVisible="false" HorizontalTextAlignment="Center" Text="{Binding Url}"/>
+                <Label x:Name="cr" HorizontalOptions="CenterAndExpand" FontAttributes="Bold" TextColor="OrangeRed" Margin="0,0,0,0" FontSize="10"/>
+                <Label x:Name="version" HorizontalOptions="CenterAndExpand" FontSize="Micro" ></Label>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

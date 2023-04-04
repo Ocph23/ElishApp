@@ -1,0 +1,61 @@
+﻿@url = https://localhost:7232
+#@url = http://localhost
+@token = bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJuYW1lIjoiaGVybWFuQGdtYWlsLmNvbSIsInJvbGVzIjoiU2FsZXMsICIsIm5iZiI6MTY4MDE2NTI1MywiZXhwIjoxNjgwNzcwMDUzLCJpYXQiOjE2ODAxNjUyNTN9.91KNAWgQA9LaObvU6RmqUQNkm_HkDNb-yO8yfKW--Nk
+
+
+
+POST {{url}}/api/user/login
+Content-Type:application/json
+
+{
+    "UserName":"administrator",
+    "Password":"Sony@77"
+}
+
+####
+
+Get {{url}}/api/product/stock
+Content-Type:application/json
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiQWRtaW5pc3RyYXRvciIsInJvbGVzIjoiQWRtaW5pc3RyYXRvciwgIiwibmJmIjoxNjc5NTQyMjQ2LCJleHAiOjE2ODAxNDcwNDYsImlhdCI6MTY3OTU0MjI0Nn0.r4puTlihL5LIgkNcC2pPlMReB3Whk40te51Sv-F5fjE 
+
+####
+
+
+Get {{url}}/api/penjualan/order
+Content-Type:application/json
+Authorization :bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiQWRtaW5pc3RyYXRvciIsInJvbGVzIjoiQWRtaW5pc3RyYXRvciwgIiwibmJmIjoxNjc5NjM1NTM4LCJleHAiOjE2ODAyNDAzMzgsImlhdCI6MTY3OTYzNTUzOH0._1d2zqdZSUNZy7TgxOkA1ewB5lcj6VmHeH9XbCy6JHM
+
+####
+
+
+
+Get {{url}}/api/penjualan/order/15
+Content-Type:application/json
+Authorization :bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiQWRtaW5pc3RyYXRvciIsInJvbGVzIjoiQWRtaW5pc3RyYXRvciwgIiwibmJmIjoxNjc5NjM1NTM4LCJleHAiOjE2ODAyNDAzMzgsImlhdCI6MTY3OTYzNTUzOH0._1d2zqdZSUNZy7TgxOkA1ewB5lcj6VmHeH9XbCy6JHM
+
+
+####
+
+
+
+Get {{url}}/api/karyawan/sales
+Content-Type:application/json
+Authorization :bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiQWRtaW5pc3RyYXRvciIsInJvbGVzIjoiQWRtaW5pc3RyYXRvciwgIiwibmJmIjoxNjc5NjM1NTM4LCJleHAiOjE2ODAyNDAzMzgsImlhdCI6MTY3OTYzNTUzOH0._1d2zqdZSUNZy7TgxOkA1ewB5lcj6VmHeH9XbCy6JHM
+
+#####
+
+Get {{url}}/api/penjualan
+Content-Type:application/json
+Authorization : {{token}}
+
+
+####
+
+
+
+Get {{url}}/api/penjualan/3
+Content-Type:application/json
+Authorization :bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJuYW1lIjoiQWRtaW5pc3RyYXRvciIsInJvbGVzIjoiQWRtaW5pc3RyYXRvciwgIiwibmJmIjoxNjc5NjM1NTM4LCJleHAiOjE2ODAyNDAzMzgsImlhdCI6MTY3OTYzNTUzOH0._1d2zqdZSUNZy7TgxOkA1ewB5lcj6VmHeH9XbCy6JHM
+
+
+####
