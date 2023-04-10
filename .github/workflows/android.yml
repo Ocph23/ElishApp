@@ -53,6 +53,7 @@ jobs:
       # - name: Create service_account.json
       #   run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
 
+<<<<<<< HEAD
       # - name: Deploy to Alpha
       #   uses: r0adkll/upload-google-play@v1
       #   with:
@@ -61,3 +62,13 @@ jobs:
       #     releaseFiles: com.ocph23.apsmobileapp-Signed.aab
       #     track: alpha
       #     whatsNewDirectory: distribution/
+=======
+      - name: Deploy to Alpha
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.ocph23.apsmobileapp
+          releaseFiles: /ApsMobileApp/bin/Release/net7.0-android/com.ocph23.apsmobileapp-Signed.aab
+          track: alpha
+          whatsNewDirectory: distribution/
+>>>>>>> 483a3229859e1d45d97094ff2b9e6deb4b54791e
