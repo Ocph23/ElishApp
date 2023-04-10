@@ -50,8 +50,22 @@ namespace ShareModels
             }
         }
 
-        public virtual Customer Customer { get; set; }
-        public virtual Karyawan Sales { get; set; }
+        private Customer customer;
+
+        public Customer Customer
+        {
+            get { return customer; }
+            set { SetProperty(ref customer , value); }
+        }
+
+
+        private Karyawan sales;
+
+        public Karyawan Sales
+        {
+            get { return sales; }
+            set { SetProperty(ref sales , value); }
+        }
 
         #endregion
 

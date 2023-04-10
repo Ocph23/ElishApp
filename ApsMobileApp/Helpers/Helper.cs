@@ -9,8 +9,8 @@ namespace ApsMobileApp;
 
 public class Helper
 {
-    public static string Url { get; set; } = "https://rr6cngw0-7232.asse.devtunnels.ms";
-    //public static string  Url { get; set; } = "https://apspapua.com";
+  //  public static string Url { get; set; } = "https://rr6cngw0-7232.asse.devtunnels.ms";
+    public static string  Url { get; set; } = "https://apspapua.com";
     public static JsonSerializerOptions JsonOption { get; set; } = new () { PropertyNameCaseInsensitive = true, ReferenceHandler = ReferenceHandler.Preserve };
 
     internal static Tuple<bool, NetworkAccess> CheckInterNetConnection()

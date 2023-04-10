@@ -2,8 +2,9 @@ name: aps CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "web" ]
+  pull_request:
+    branches: [ "web" ]
 
 jobs:
   build:

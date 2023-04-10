@@ -107,11 +107,8 @@ namespace ApsWebApp.Controllers
         {
             try
             {
-                if (User.InRole("Administrator"))
-                {
-                    return Ok(await service.GetOrders());
-                }
-                else
+                if (User.InRole("Sales") || User.InRole("Customer"))
+                
                 {
                     var profile = await _userService.Profile();
                     if (profile != null)
@@ -131,7 +128,7 @@ namespace ApsWebApp.Controllers
                     }
                 }
 
-                throw new SystemException("Not Found !");
+                return Ok(await service.GetOrders());
 
             }
             catch (Exception ex)
@@ -156,24 +153,6 @@ namespace ApsWebApp.Controllers
                 return BadRequest(new ErrorMessage(ex.Message));
             }
         }
-
-
-        //[ApiAuthorize]
-        //[HttpGet("pembayaranbypembelianid/{id}")]
-        //public async Task<IActionResult> GetPembayaranByPembelianId(int id)
-        //{
-        //    try
-        //    {
-        //        var result = await service.GetPembayaran(id);
-        //        if (result != null)
-        //            return Ok(result);
-        //        throw new SystemException("Order Not Found !");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new ErrorMessage(ex.Message));
-        //    }
-        //}
 
 
         [ApiAuthorize]

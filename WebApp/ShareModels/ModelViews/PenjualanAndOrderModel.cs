@@ -14,6 +14,7 @@ namespace ShareModels.ModelViews
         public string Invoice { get; set; }
         public string Customer { get; set; }
         public string Sales { get; set; }
+        public int SalesId { get; set; }
         public DateTime Created { get; set; }
         public double DeadLine { get; set; }
         public OrderStatus OrderStatus { get; set; }

@@ -17,7 +17,7 @@ public partial class OrdesrView : ContentPage
     public OrdesrView(OrdesrViewModel vm)
     {
         InitializeComponent();
-        BindingContext= _viewModel = vm;
+        BindingContext = _viewModel = vm;
         search.OnSearchFound += Search_OnSearchFound;
     }
 
@@ -45,9 +45,7 @@ public partial class OrdesrView : ContentPage
 public class OrdesrViewModel : BaseViewModel
 {
     private ObservableCollection<PenjualanAndOrderModel> _SourceItems;
-    private bool fromdetail;
     private readonly IPenjualanService penjualanService;
-
     public Command LoadItemsCommand { get; }
     public Command AddNewCommand { get; }
     public Command SelectCommand { get; }
@@ -75,7 +73,6 @@ public class OrdesrViewModel : BaseViewModel
 
     private async void SelectCommandAction(object obj)
     {
-        fromdetail = true;
         IsBusy = true;
         var order = (PenjualanAndOrderModel)obj;
         var navigationParameter = new Dictionary<string, object>
@@ -97,30 +94,28 @@ public class OrdesrViewModel : BaseViewModel
     {
         try
         {
-            Sales = await Account.GetProfile();
-            if (!fromdetail)
+            if (await Account.UserInRole("Sales"))
+                Sales = await Account.GetProfile();
+            Items.Clear();
+            var orders = await penjualanService.GetOrders();
+            if (orders != null)
             {
-                Items.Clear();
-                var orders = await penjualanService.GetOrders();
-                if (orders != null)
-                {
-                    _SourceItems = new ObservableCollection<PenjualanAndOrderModel>(orders.OrderByDescending(x => x.OrderId));
-                }
+                _SourceItems = new ObservableCollection<PenjualanAndOrderModel>(orders.OrderByDescending(x => x.OrderId));
+            }
 
-                foreach (var item in _SourceItems.OrderByDescending(x => x.OrderId))
-                {
-                    Items.Add(item);
-                }
+            foreach (var item in _SourceItems.OrderByDescending(x => x.OrderId))
+            {
+                Items.Add(item);
             }
         }
         catch (Exception ex)
         {
+           await MessageShow.ErrorAsync(ex.Message);
             Debug.WriteLine(ex);
         }
         finally
         {
             IsBusy = false;
-            fromdetail = false;
         }
     }
     public void OnAppearing()

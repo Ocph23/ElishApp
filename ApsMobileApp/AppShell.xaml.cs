@@ -14,7 +14,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute($"//{nameof(PenjualanView)}/{nameof(PenjualanPembayaranView)}", typeof(PenjualanPembayaranView));
         Routing.RegisterRoute($"//{nameof(PenjualanView)}/{nameof(PenjualanPembayaranView)}/{nameof(PembayaranDialogView)}", typeof(PembayaranDialogView));
 
-        //Routing.RegisterRoute($"//{nameof(PembelianView)}/{nameof(PenjualanDetailView)}", typeof(PenjualanDetailView));
+        Routing.RegisterRoute($"//{nameof(PembelianView)}/{nameof(PembelianDetailView)}", typeof(PembelianDetailView));
         Routing.RegisterRoute($"//{nameof(PembelianView)}/{nameof(PembelianPembayaranView)}", typeof(PembelianPembayaranView));
         Routing.RegisterRoute($"//{nameof(PembelianView)}/{nameof(PembelianPembayaranView)}/{nameof(PembelianPembayaranDialogView)}", typeof(PembelianPembayaranDialogView));
 

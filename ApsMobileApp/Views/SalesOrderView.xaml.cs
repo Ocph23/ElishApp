@@ -85,14 +85,20 @@ public class SalesOrderViewModel : BaseViewModel
         Datas.CollectionChanged += Datas_CollectionChanged;
         DeleteCommand = new Command(DeleteAction);
         this.PropertyChanged += SalesOrderViewModel_PropertyChanged;
-
-        Load();
+        Title = "Create Order";
+       _= Load();
 
     }
 
     private async Task Load()
     {
         salessource = await karyawanService.GetSales();
+
+        foreach (var item in salessource.Where(x=>x.IsSales))
+        {
+            SalesSource.Add(item);
+        }
+
         customersource = await CustomerService.Get();
         products = await productService.GetProductStock();
         foreach (var p in products.GroupBy(x => x.Supplier.Id))
@@ -132,7 +138,6 @@ public class SalesOrderViewModel : BaseViewModel
     private IEnumerable<ProductStock> products;
     #endregion
 
-
     #region Properties
     private OrderPenjualan _order;
     private int _selectedIndex = -1;
@@ -162,6 +167,8 @@ public class SalesOrderViewModel : BaseViewModel
     //  public ObservableCollection<Customer> DataCustomers { get; set; } = new ObservableCollection<Customer>();
     public ObservableCollection<Supplier> DataSupplier { get; set; } = new ObservableCollection<Supplier>();
     public ObservableCollection<ProductStock> ProductStocks { get; set; } = new ObservableCollection<ProductStock>();
+
+    public ObservableCollection<Karyawan> SalesSource { get; set; } = new ObservableCollection<Karyawan>();
 
     private PenjualanAndOrderModel _orderParameter;
     private readonly IPenjualanService penjualanService;
@@ -219,6 +226,17 @@ public class SalesOrderViewModel : BaseViewModel
         }
     }
 
+
+    private Karyawan salesSelected;
+
+    public Karyawan SalesSelected
+    {
+        get { return salesSelected; }
+        set { SetProperty(ref salesSelected , value); }
+    }
+
+
+
     private Supplier supplierSelected;
 
     public Supplier SupplierSelected
@@ -237,7 +255,7 @@ public class SalesOrderViewModel : BaseViewModel
     #region Methods
     private bool CanSaved(object arg)
     {
-        if (Order != null && Datas.Count > 0 && Order.Customer.Id > 0 && Order.Status == OrderStatus.Baru)
+        if (Order != null && Datas.Count > 0 && Order.Sales != null && Order.Customer !=null && Order.Status == OrderStatus.Baru)
             return true;
         return false;
     }
@@ -265,6 +283,7 @@ public class SalesOrderViewModel : BaseViewModel
             {
                 Order = await penjualanService.GetOrder(vParam.OrderId);
                 Title = "View/Edit Order";
+                SalesSelected = SalesSource.FirstOrDefault(x => x.Id== vParam.SalesId);
             }
 
             if (Order != null && vParam != null)
@@ -340,11 +359,6 @@ public class SalesOrderViewModel : BaseViewModel
             {
                 Order.Items.Add(new OrderPenjualanItem { Id = item.Id, Unit = item.Unit, Product = item.Product });
             }
-
-            var profile = await Account.GetProfile();
-            if (profile != null)
-                Order.Sales.Id = profile.Id;
-
 
             OrderPenjualan result;
 
@@ -442,7 +456,7 @@ public class SalesOrderViewModel : BaseViewModel
             // ProductId = value.Id,
             Unit = unit,
             UnitId = unit.Id,
-            Real = value.Stock < 0.5 ? value.Stock : 0.5
+            Real = value.Stock < 1 ? value.Stock : 1
         };
 
         newData.UpdateEvent += NewData_UpdateEvent;

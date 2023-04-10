@@ -90,9 +90,30 @@ namespace ApsMobileApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<Pembelian> GetPembelian(int id)
+        
+        public async Task<Pembelian> GetPembelian(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var connection = Helper.CheckInterNetConnection();
+
+                if (connection.Item1)
+                {
+                    using var res = new RestService();
+                    var response = await res.GetAsync($"{controller}/{id}");
+                    if (!response.IsSuccessStatusCode)
+                        throw new SystemException(await res.Error(response));
+                    return await response.GetResult<Pembelian>();
+                }
+                else
+                {
+                    throw new SystemException("Tidak Ada Koneksi Internet !");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         public async Task<IEnumerable<PembelianDataModel>> GetPembelians()

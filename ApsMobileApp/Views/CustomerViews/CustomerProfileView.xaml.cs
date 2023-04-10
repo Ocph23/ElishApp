@@ -114,6 +114,7 @@ public class CustomerProfileViewModel:BaseViewModel
             var customer = new Customer() { Id = Model.Id, Location = $"{location.Latitude}; {location.Longitude}" };
 
           await  CustomerService.UpdateLocation(customer);
+            Model.Location = customer.Location;
             _map.MoveToRegion(newMap);
         }
     }

@@ -187,7 +187,7 @@ namespace ApsWebApp.Services
                 DeadLine = x.DeadLine,
                 Created = x.CreateDate,
                 NomorSO = x.Nomor,
-                PaymentStatus = x.Status,
+                PaymentStatus = x.Status,    SalesId=x.Salesman.Id, 
             });
 
             return Task.FromResult(result.AsEnumerable());
@@ -212,7 +212,7 @@ namespace ApsWebApp.Services
                 DeadLine = x.DeadLine,
                 Created = x.CreateDate,
                 NomorSO = x.Nomor,
-                PaymentStatus = x.Status,
+                PaymentStatus = x.Status,   SalesId = x.Salesman.Id,
             });
 
             return Task.FromResult(result.AsEnumerable());
@@ -257,7 +257,7 @@ namespace ApsWebApp.Services
                     DeadLine = x.DeadLine,
                     Created = x.CreateDate,
                     NomorSO = x.Nomor,
-                    PaymentStatus = x.Status,
+                    PaymentStatus = x.Status,       SalesId=x.Salesman.Id
                 });
 
                 return Task.FromResult(result.AsEnumerable());
@@ -371,7 +371,7 @@ namespace ApsWebApp.Services
                 Total = x.Total,
                 DeadLine = x.DeadLine,
                 Created = x.OrderDate,
-                OrderStatus = x.Status,
+                OrderStatus = x.Status,   SalesId= x.Sales.Id
             });
 
             return Task.FromResult(results.AsEnumerable());
@@ -395,7 +395,8 @@ namespace ApsWebApp.Services
                 Total = x.Total,
                 DeadLine = x.DeadLine,
                 Created = x.OrderDate,
-                OrderStatus = x.Status
+                OrderStatus = x.Status,
+                SalesId = x.Sales.Id
             });
 
             return Task.FromResult(results.AsEnumerable());
@@ -416,7 +417,8 @@ namespace ApsWebApp.Services
                    Total = x.Total,
                    DeadLine = x.DeadLine,
                    Created = x.OrderDate,
-                   OrderStatus = x.Status
+                   OrderStatus = x.Status,
+                   SalesId = x.Sales.Id
                });
 
             return Task.FromResult(orders.AsEnumerable());

@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:view="clr-namespace:ApsMobileApp.Views.PembelianViews"
+             xmlns:model="clr-namespace:ShareModels;assembly=ShareModels" 
+             xmlns:helpers="clr-namespace:ApsMobileApp.Helpers" 
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="ApsMobileApp.Views.PembelianViews.PembelianDetailView" Padding="10"
+             Title="{Binding Pembelian.Nomor}">
+    <ContentPage.Resources>
+        <helpers:EnumToStringConverter x:Key="enumTostringConverter"/>
+        <helpers:EnumToBoolConverter x:Key="enumToBoolConverter"/>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <toolkit:Expander  Grid.Row="0"  IsExpanded="False" >
+                <toolkit:Expander.Header>
+                    <StackLayout Spacing="0">
+                        <StackLayout Orientation="Horizontal"  x:DataType="view:PembelianDetailViewModel">
+                            <Label WidthRequest="100" Text="Nomor" VerticalOptions="CenterAndExpand" HorizontalOptions="Start">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OrderDetailCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label  Text="{Binding Pembelian.Nomor}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start">
+                                
+                            </Label>
+                        </StackLayout>
+                        <StackLayout Spacing="0">
+                            <StackLayout Orientation="Horizontal">
+                                <Label WidthRequest="100"  Text="Supplier" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                                <Label  Text="{Binding Pembelian.OrderPembelian.Supplier.Nama}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label WidthRequest="100" Text="To Gudang" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                                <Label  Text="{Binding Pembelian.Gudang.Name}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </toolkit:Expander.Header>
+                <StackLayout >
+                    <StackLayout Orientation="Horizontal" >
+                        <Label WidthRequest="100" Text="Invoice" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                        <Label  Text="{Binding Pembelian.InvoiceNumber}" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HeightRequest="35" >
+                        <Label WidthRequest="100" Text="Tanggal" VerticalOptions="CenterAndExpand"/>
+                        <DatePicker IsEnabled="{Binding AddCustomerVisible}" Date="{Binding Pembelian.CreatedDate, StringFormat='dd-MM-yyyy'}" Format="d" 
+                               FontSize="Small" VerticalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HeightRequest="35">
+                        <Label WidthRequest="100" Text="Jatuh Tempo" VerticalOptions="CenterAndExpand"/>
+                        <Entry IsEnabled="{Binding AddCustomerVisible}" WidthRequest="100" FontSize="Small" Text="{Binding Pembelian.DeadLine}"/>
+                        <Label WidthRequest="100" Text="Hari" VerticalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                </StackLayout>
+            </toolkit:Expander>
+            <StackLayout Orientation="Horizontal" Grid.Row="1">
+                <Label WidthRequest="100" Text="Total" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                <Label FontSize="Small">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Rp."></Span>
+                            <Span Text="{Binding Pembelian.Total,StringFormat='{}{0:N2}'}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+            <StackLayout BackgroundColor="WhiteSmoke" HeightRequest="40" Orientation="Horizontal" Grid.Row="2">
+                <Label HorizontalOptions="Start" Margin="10,0,0,0" 
+                       FontSize="Small" VerticalOptions="CenterAndExpand">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Status : "/>
+                            <Span Text="{Binding Pembelian.Status}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+            <RefreshView Grid.Row="4"  Margin="0,5" 
+                         Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <CollectionView x:Name="ItemsListView" x:DataType="view:PembelianDetailViewModel" BackgroundColor="LightGray"
+                ItemsSource="{Binding Pembelian.Items}"
+                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Margin="0,0.5" >
+                                <SwipeView x:DataType="model:PembelianItem"  >
+                                    <SwipeView.LeftItems  >
+                                        <SwipeItemView  
+                                               BackgroundColor="OrangeRed" 
+                                            Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference ItemsListView}}" CommandParameter="{Binding .}">
+                                            <StackLayout WidthRequest="80">
+                                                <Label Text="Delete" TextColor="White" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"></Label>
+                                            </StackLayout>
+                                        </SwipeItemView>
+                                    </SwipeView.LeftItems>
+                                    <Grid  BackgroundColor="White" >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackLayout  Padding="10" Spacing="0" >
+                                            <Label Text="{Binding Product.CodeName}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="15" />
+                                            <Label Text="{Binding Product.Name}"  LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="12" />
+                                            <Label Text="{Binding Product.CodeArticle}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="11" />
+                                            <Label Text="{Binding Total}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Price : Rp. "></Span>
+                                                        <Span Text="{Binding Unit.Buy,StringFormat='{0:N2}'}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                        <StackLayout Grid.Column="1" Padding="10" HorizontalOptions="End" Spacing="0" 
+                                                     VerticalOptions="StartAndExpand">
+                                            <Label HorizontalOptions="End" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding Amount}"></Span>
+                                                        <Span Text="  "></Span>
+                                                        <Span Text="{Binding Unit.Name}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label HorizontalOptions="End" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="14" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Rp : "></Span>
+                                                        <Span Text="{Binding Total,StringFormat='{}{0:N2}'}"></Span>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </Grid>
+                                </SwipeView>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

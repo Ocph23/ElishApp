@@ -83,10 +83,8 @@
     <FlyoutItem Title="Customer" Icon="customers.png">
         <ShellContent Route="CustomerPageView" ContentTemplate="{DataTemplate custView:CustomerPageView}" />
     </FlyoutItem>
-    <FlyoutItem Title="Incoming Check" Icon="icon_feed.png">
-        <ShellContent Route="IncomingCheckView" ContentTemplate="{DataTemplate local:IncomingCheckView}" />
-    </FlyoutItem>
-    <FlyoutItem Title="Orders" Icon="order.png">
+   
+    <FlyoutItem Title="Order Penjualan" Icon="order.png">
         <ShellContent Route="OrdesrView" ContentTemplate="{DataTemplate local:OrdesrView}" />
     </FlyoutItem>
     <FlyoutItem IsVisible="{Binding ShowPembelian}" Title="Pembelian" Icon="pembelian.png">

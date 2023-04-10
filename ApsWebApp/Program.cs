@@ -16,13 +16,13 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//if (builder.Environment.IsProduction())
-//{
-//    builder.WebHost.UseKestrel(serverOptions =>
-//    {
-//        serverOptions.ListenLocalhost(5000);
-//    });
-//}
+if (builder.Environment.IsProduction())
+{
+    builder.WebHost.UseKestrel(serverOptions =>
+    {
+        serverOptions.ListenLocalhost(5000);
+    });
+}
 
 // Add services to the container.
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));

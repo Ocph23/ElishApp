@@ -51,9 +51,7 @@ public partial class CustomerPageView : ContentPage
 public class CustomerPageViewModel : BaseViewModel
 {
     private IEnumerable<Customer> _SourceItems;
-    private bool fromdetail;
     private ICustomerService _customerService;
-
     public Command LoadItemsCommand { get; }
     public Command AddNewCommand { get; }
     public Command SelectCommand { get; }
@@ -73,9 +71,7 @@ public class CustomerPageViewModel : BaseViewModel
 
     private void SelectCommandAction(object obj)
     {
-        fromdetail = true;
-        var cust = (Customer)obj;
-
+        var cust = obj as Customer;
         var data = new Dictionary<string, object>() {
             { "Customer", cust}
         };
@@ -94,27 +90,26 @@ public class CustomerPageViewModel : BaseViewModel
     {
         try
         {
-            if (!fromdetail)
+            if(IsBusy) return;
+            IsBusy= true;
+            Items.Clear();
+            var orders = await _customerService.Get();
+            var profile = await Account.GetProfile();
+            if (orders != null)
             {
-                Items.Clear();
-                var orders = await _customerService.Get();
-                var profile = await Account.GetProfile();
-                if (orders != null)
+                if (await Account.UserInRole("Sales"))
                 {
-                    if (await Account.UserInRole("Sales"))
-                    {
-                        _SourceItems = new ObservableCollection<Customer>(orders.Where(x => x.Karyawan.Id == profile.Id));
-                    }
-                    else
-                    {
-                        _SourceItems = new ObservableCollection<Customer>(orders);
-                    }
+                    _SourceItems = new ObservableCollection<Customer>(orders.Where(x => x.Karyawan.Id == profile.Id));
                 }
+                else
+                {
+                    _SourceItems = new ObservableCollection<Customer>(orders);
+                }
+            }
 
-                foreach (var item in _SourceItems)
-                {
-                    Items.Add(item);
-                }
+            foreach (var item in _SourceItems)
+            {
+                Items.Add(item);
             }
         }
         catch (Exception ex)
@@ -124,7 +119,6 @@ public class CustomerPageViewModel : BaseViewModel
         finally
         {
             IsBusy = false;
-            fromdetail = false;
         }
     }
 

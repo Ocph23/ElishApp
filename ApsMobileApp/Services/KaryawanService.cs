@@ -10,9 +10,15 @@ namespace ApsMobileApp.Services
 {
     public class KaryawanService : IKaryawanService
     {
+        private readonly ElishDbStore localDb;
         private string controller = "/api/karyawan";
         private IEnumerable<Karyawan> karyawans;
 
+
+        public KaryawanService(ElishDbStore _localDb)
+        {
+            localDb = _localDb;
+        }
         public async Task<bool> Delete(int id)
         {
             try
@@ -56,7 +62,7 @@ namespace ApsMobileApp.Services
                 if (karyawans == null)
                 {
                     var connection = Helper.CheckInterNetConnection();
-                    var db = DependencyService.Get<ElishDbStore>();
+                    
                     if (connection.Item1)
                     {
                         using var res = new RestService();
@@ -64,12 +70,12 @@ namespace ApsMobileApp.Services
                         if (!response.IsSuccessStatusCode)
                             throw new SystemException(await res.Error(response));
                         var datas = await response.GetResult<IEnumerable<Karyawan>>();
-                        _ = db.Save<SqlDataModelKaryawan, Karyawan>(datas);
+                        _ = localDb.Save<SqlDataModelKaryawan, Karyawan>(datas);
                         karyawans = datas;
                     }
                     else
                     {
-                        var datas = await db.GetAsync<SqlDataModelKaryawan, Karyawan>();
+                        var datas = await localDb.GetAsync<SqlDataModelKaryawan, Karyawan>();
                         karyawans = datas;
                     }
 
@@ -89,7 +95,7 @@ namespace ApsMobileApp.Services
                 if (karyawans == null)
                 {
                     var connection = Helper.CheckInterNetConnection();
-                    var db = DependencyService.Get<ElishDbStore>();
+                  
                     if (connection.Item1)
                     {
                         using var res = new RestService();
@@ -97,12 +103,12 @@ namespace ApsMobileApp.Services
                         if (!response.IsSuccessStatusCode)
                             throw new SystemException(await res.Error(response));
                         var datas = await response.GetResult<IEnumerable<Karyawan>>();
-                        _ = db.Save<SqlDataModelKaryawan, Karyawan>(datas);
+                        _ =  localDb.Save<SqlDataModelKaryawan, Karyawan>(datas);
                         karyawans = datas;
                     }
                     else
                     {
-                        var datas = await db.GetAsync<SqlDataModelKaryawan, Karyawan>();
+                        var datas = await localDb.GetAsync<SqlDataModelKaryawan, Karyawan>();
                         karyawans = datas;
                     }
 

@@ -18,7 +18,7 @@
     <ApplicationIdGuid>08796868-7754-403c-9368-24b63babbbb6</ApplicationIdGuid>
 
     <!-- Versions -->
-    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
 
 
@@ -58,6 +58,27 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\Images\camera.png" />
+    <None Remove="Resources\Images\clearicon.png" />
+    <None Remove="Resources\Images\closeeye.png" />
+    <None Remove="Resources\Images\customers.png" />
+    <None Remove="Resources\Images\home.png" />
+    <None Remove="Resources\Images\logout.png" />
+    <None Remove="Resources\Images\map.png" />
+    <None Remove="Resources\Images\map2.png" />
+    <None Remove="Resources\Images\openeye.png" />
+    <None Remove="Resources\Images\order.png" />
+    <None Remove="Resources\Images\pembelian.png" />
+    <None Remove="Resources\Images\penjualan.png" />
+    <None Remove="Resources\Images\plus.png" />
+    <None Remove="Resources\Images\product.png" />
+    <None Remove="Resources\Images\qr.png" />
+    <None Remove="Resources\Images\save.png" />
+    <None Remove="Resources\Images\trash.png" />
+    <None Remove="Resources\Images\usersquare.png" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="BarcodeScanner.Mobile.Maui" Version="6.3.0.25-pre" />
@@ -86,6 +107,9 @@
     <Compile Update="Views\PembelianViews\PembelianPembayaranView.xaml.cs">
       <DependentUpon>PembelianPembayaranView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\PembelianViews\PembelianDetailView.xaml.cs">
+      <DependentUpon>PembelianDetailView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -99,6 +123,9 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\PembelianViews\PembelianPembayaranView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\PembelianViews\PembelianDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\PenjualanViews\PembayaranDialogView.xaml">

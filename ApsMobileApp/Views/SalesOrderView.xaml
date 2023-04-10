@@ -8,7 +8,7 @@
              x:Class="ApsMobileApp.Views.SalesOrderView"
              Title="{Binding Title}">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save" Command="{Binding SaveCommand}"/>
+        <ToolbarItem Text="Save" IconImageSource="save.png" Command="{Binding SaveCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Resources>
         <helpers:EnumToStringConverter x:Key="enumTostringConverter"/>
@@ -33,9 +33,16 @@
                             <ImageButton IsVisible="{Binding AddCustomerVisible}" Clicked="ImageButton_Clicked_1" Source="customer.png"  BackgroundColor="Transparent"
                                  WidthRequest="25" HeightRequest="25" Aspect="Fill"/>
                         </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label WidthRequest="100" Text="Sales" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
+                            <Picker IsEnabled="{Binding AddCustomerVisible}"  ItemDisplayBinding="{Binding Name}"  ItemsSource="{Binding SalesSource}" 
+                            VerticalOptions="EndAndExpand" HorizontalOptions="StartAndExpand" WidthRequest="220"
+                             FontSize="Small" SelectedItem="{Binding Order.Sales}"  />
+                        </StackLayout>
                     </StackLayout>
                 </toolkit:Expander.Header>
                 <StackLayout>
+                    
                     <StackLayout Orientation="Horizontal">
                         <Label WidthRequest="100" Text="Status" VerticalOptions="CenterAndExpand" HorizontalOptions="Start"/>
                         <Label Text="{Binding Order.Status}"/>

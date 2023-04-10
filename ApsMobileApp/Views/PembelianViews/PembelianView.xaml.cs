@@ -53,14 +53,14 @@ public class PembelianViewModel : BaseViewModel
     {
         IsBusy = true;
         fromdetail = true;
-        var order = (Pembelian)obj;
+        var pembelian = obj as PembelianDataModel;
         //var vm = new PenjualanDetailViewModel(order);
 
         var dataParameter = new Dictionary<string, object>() { 
-             {"PembelianId", order.Id }
+             {"PembelianId", pembelian.Id }
         };
 
-      // await Shell.Current.GoToAsync($"//{nameof(PembelianView)}/{nameof(PembelianDetailView)}", dataParameter);
+       await Shell.Current.GoToAsync($"//{nameof(PembelianView)}/{nameof(PembelianDetailView)}", dataParameter);
 
         await Task.Delay(1000);
         IsBusy = false;

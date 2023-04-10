@@ -28,8 +28,8 @@ namespace ApsWebApp.Data
         public virtual DbSet<OrderPembelianItem> OrderPembelianItem { get; set; }
         public virtual DbSet<OrderPenjualan> OrderPenjualan { get; set; }
         public virtual DbSet<OrderPenjualanItem> OrderPenjualanItem { get; set; }
-        public virtual DbSet<PembayaranPembelian> PembayaranPembelian { get; set; }
-        public virtual DbSet<PembayaranPenjualan> PembayaranPenjualan { get; set; }
+        //public virtual DbSet<PembayaranPembelian> PembayaranPembelian { get; set; }
+        //public virtual DbSet<PembayaranPenjualan> PembayaranPenjualan { get; set; }
         public virtual DbSet<Pembelian> Pembelian { get; set; }
         public virtual DbSet<PembelianItem> PembelianItem { get; set; }
         public virtual DbSet<Penjualan> Penjualan { get; set; }

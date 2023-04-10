@@ -44,12 +44,14 @@ public static class ApsAppServiceExtention
         builder.Services.AddTransient<PenjualanPembayaranViewModel>();
         builder.Services.AddTransient<PembayaranDialogViewModel>();
         builder.Services.AddTransient<PembelianViewModel>();
+        builder.Services.AddTransient<PembelianDetailViewModel>();
         builder.Services.AddTransient<PembelianPembayaranViewModel>();
         builder.Services.AddTransient<PembelianPembayaranDialogViewModel>();
 
 
 
         //views
+        builder.Services.AddTransient<PembelianDetailView>();
         builder.Services.AddTransient<PembelianView>();
         builder.Services.AddTransient<PembelianPembayaranView>();
         builder.Services.AddTransient<PembelianPembayaranDialogView>();
