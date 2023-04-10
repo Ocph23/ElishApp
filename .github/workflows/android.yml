@@ -29,22 +29,22 @@ jobs:
         shell: bash
         run: |
           dotnet nuget locals all --clear 
-          dotnet workload install maui --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
-          dotnet workload install android ios maccatalyst tvos macos maui wasm-tools --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
+          dotnet workload install maui-android --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
+          dotnet workload install android --source https://aka.ms/dotnet6/nuget/index.json --source https://api.nuget.org/v3/index.json
     
       - name: Restore Dependencies
-        run: dotnet restore ElishApp/ApsMobileApp/ApsMobileApp.csproj
+        run: dotnet restore ApsMobileApp/ApsMobileApp.csproj
 
       - name: Build MAUI Android
-        run: dotnet build ElishApp/ApsMobileApp/ApsMobileApp.csproj -c Release -f net7.0-android /p:AndroidSigningKeyStore=ocph23.keystore /p:AndroidSigningKeyAlias=Ocph23 /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" /p:AndroidSigningStorePass="${{ secrets.KEYSTORE_PASSWORD }}" --no-restore
+        run: dotnet build ApsMobileApp/ApsMobileApp.csproj -c Release -f net7.0-android /p:AndroidSigningKeyStore=ocph23.keystore /p:AndroidSigningKeyAlias=Ocph23 /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" /p:AndroidSigningStorePass="${{ secrets.KEYSTORE_PASSWORD }}" --no-restore ./release
 
-      - name: Upload Android Artifact
-        uses: actions/upload-artifact@v3.1.0
-        with:
-          name: android-ci-build
-          path: | 
-            ./**/*.aab
-            ./**/*.apk  
+      # - name: Upload Android Artifact
+      #   uses: actions/upload-artifact@v3.1.0
+      #   with:
+      #     name: android-ci-build
+      #     path: | 
+      #       ./**/*.aab
+      #       ./**/*.apk  
 
       - name: Create service_account.json
         run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
@@ -54,6 +54,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.ocph23.apsmobileapp
-          releaseFile: app/build/outputs/bundle/release/app-release.aab
+          releaseFile: ./release/*.aab
           track: alpha
           whatsNewDirectory: distribution/
