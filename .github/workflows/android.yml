@@ -16,6 +16,7 @@ jobs:
       
       - name: Setup keystore file
         run: |
+          ls
           echo "${{ secrets.KEYSTOREFILE }}" > ocph23.keystore.asc
           gpg -d --passphrase "${{ secrets.KEYSTORE_PASSWORD }}" --batch ocph23.keystore.asc > ocph23.keystore
       
