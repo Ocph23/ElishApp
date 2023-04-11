@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env: 
+  whatnew : adasdasda asdasdasdasdwads asdasd adasd
+
+
 jobs:
   build-android:
     runs-on: macos-12
@@ -17,13 +21,10 @@ jobs:
       - name: Setup keystore file
         shell: bash
         run: |
-          mkdir -pv production/whatsnew
-          echo "ini adalah yang baru" > ./production/whatsnew/whatsnew-id-ID
+          mkdir -pv distribution/whatsnew
+          echo "$whatnew" > ./distribution/whatsnew/whatsnew-id-ID
           echo "${{ secrets.KEYSTOREFILE }}" > ocph23.keystore.asc
           gpg -d --passphrase "${{ secrets.KEYSTORE_PASSWORD }}" --batch ocph23.keystore.asc > ocph23.keystore
-          cd production/whatsnew
-          cat whatsnew-id-ID
-          ls
       
       - name: Setup .NET 7
         uses: actions/setup-dotnet@v1
