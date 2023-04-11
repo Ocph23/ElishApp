@@ -55,11 +55,11 @@ jobs:
           ls
           echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
 
-      - name: Deploy to Alpha
+      - name: Deploy to Production
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: service_account.json
           packageName: com.ocph23.apsmobileapp
           releaseFiles: com.ocph23.apsmobileapp-Signed.aab
-          track: alpha
-          whatsNewDirectory: distribution/
+          track: production
+          whatsNewDirectory: distribution/whatsnew
