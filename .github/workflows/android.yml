@@ -36,13 +36,13 @@ jobs:
         run: dotnet restore ApsMobileApp/ApsMobileApp.csproj
 
       - name: Build MAUI Android
-        run: dotnet build ApsMobileApp/ApsMobileApp.csproj -c Release -f net7.0-android /p:AndroidSigningKeyStore=ocph23.keystore /p:AndroidSigningKeyAlias=Ocph23 /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" /p:AndroidSigningStorePass="${{ secrets.KEYSTORE_PASSWORD }}" --no-restore
+        run: dotnet build ApsMobileApp/ApsMobileApp.csproj -c Release ./output -f net7.0-android /p:AndroidSigningKeyStore=ocph23.keystore /p:AndroidSigningKeyAlias=Ocph23 /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" /p:AndroidSigningStorePass="${{ secrets.KEYSTORE_PASSWORD }}" --no-restore
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
           name: android-ci-build
-          path: ./**/*.aab
+          path: ./output/*.aab
 
 
       - name: Get appbundle from artifacts
@@ -53,7 +53,7 @@ jobs:
       - name: Create service_account.json
         run: |
           ls
-          cd /ApsMobileApp/bin/Release/net7.0-android
+          cd /output
           ls
           echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
 
