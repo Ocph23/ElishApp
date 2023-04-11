@@ -36,7 +36,7 @@ jobs:
         run: dotnet restore ApsMobileApp/ApsMobileApp.csproj
 
       - name: Build MAUI Android
-        run: dotnet build ApsMobileApp/ApsMobileApp.csproj -c Release ./output -f net7.0-android /p:AndroidSigningKeyStore=ocph23.keystore /p:AndroidSigningKeyAlias=Ocph23 /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" /p:AndroidSigningStorePass="${{ secrets.KEYSTORE_PASSWORD }}" --no-restore
+        run: dotnet build ApsMobileApp/ApsMobileApp.csproj -c Release -o ./output -f net7.0-android /p:AndroidSigningKeyStore=ocph23.keystore /p:AndroidSigningKeyAlias=Ocph23 /p:AndroidSigningKeyPass="${{ secrets.KEYSTORE_PASSWORD }}" /p:AndroidSigningStorePass="${{ secrets.KEYSTORE_PASSWORD }}" --no-restore
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v3.1.0
