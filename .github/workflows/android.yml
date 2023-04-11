@@ -17,7 +17,7 @@ jobs:
       - name: Setup keystore file
         shell: bash
         run: |
-          mkdir production/whatsnew
+          mkdir production
           echo "ini adalah yang baru" > ./production/whatsnew/whatsnew-id-ID
           echo "${{ secrets.KEYSTOREFILE }}" > ocph23.keystore.asc
           gpg -d --passphrase "${{ secrets.KEYSTORE_PASSWORD }}" --batch ocph23.keystore.asc > ocph23.keystore
