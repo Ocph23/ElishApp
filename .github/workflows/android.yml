@@ -60,6 +60,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.ocph23.apsmobileapp
-          releaseFiles: /ApsMobileApp/bin/Release/net7.0-android/com.ocph23.apsmobileapp-Signed.aab
+          releaseFiles: com.ocph23.apsmobileapp-Signed.aab
           track: alpha
           whatsNewDirectory: distribution/
