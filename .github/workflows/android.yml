@@ -17,7 +17,7 @@ jobs:
       - name: Setup keystore file
         shell: bash
         run: |
-          mkdir ./production/whatsnew
+          mkdir /production/whatsnew
           echo "ini adalah yang baru" > ./production/whatsnew/whatsnew-id-ID
           ls
           echo "${{ secrets.KEYSTOREFILE }}" > ocph23.keystore.asc
