@@ -22,6 +22,7 @@ jobs:
           echo "${{ secrets.KEYSTOREFILE }}" > ocph23.keystore.asc
           gpg -d --passphrase "${{ secrets.KEYSTORE_PASSWORD }}" --batch ocph23.keystore.asc > ocph23.keystore
           cd production/whatsnew
+          cat whatsnew-id-ID
           ls
       
       # - name: Setup .NET 7
