@@ -72,7 +72,7 @@
                     </RadzenTabsItem>
                     <RadzenTabsItem Text="User Akses">
                         <RadzenButton Click=@AddRole Icon="add" ButtonStyle="ButtonStyle.Success"  />
-                        <RadzenGrid Data="model.User.Roles">
+                        <RadzenGrid @ref="grid" Data="model.User.Roles">
                             <Columns>
                                 <RadzenGridColumn TItem="UserRole" Title="Role" Property="Role.Name" />
                                 <RadzenGridColumn TItem="UserRole" Context="item" Width="100px">
@@ -116,6 +116,9 @@
     public Karyawan model { get; set; } = new Karyawan();
     IEnumerable<Customer> customers;
 
+    RadzenGrid<UserRole> grid;
+
+
     protected override async Task OnInitializedAsync()
     {
         try
@@ -151,7 +154,7 @@
             var result = args as UserRole;
             model.User.Roles.Add(result);
         }
-        StateHasChanged();
+        await grid.Reload();
 
     }
 
@@ -164,8 +167,7 @@
             if (deleted)
                 model.User.Roles.Remove(role);
         }
-
-        StateHasChanged();
+       await grid.Reload();
     }
 
 
@@ -191,7 +193,7 @@
                 }
             }
 
-
+           await grid.Reload();
         }
         catch
         {

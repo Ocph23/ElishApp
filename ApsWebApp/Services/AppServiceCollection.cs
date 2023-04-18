@@ -30,6 +30,7 @@ namespace ApsWebApp.Services
             services.AddScoped<IPengembalianPenjualanService, PengembalianPenjualanService>();
             services.AddScoped<IPemindahanService, PemindahanService>();
             services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<TooltipService>();

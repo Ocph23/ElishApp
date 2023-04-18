@@ -36,7 +36,6 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-builder.Services.AddMyServices();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddLogging();
@@ -48,6 +47,7 @@ builder.Services.Add(new ServiceDescriptor(
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMyServices();
 
 builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions
                 .ReferenceHandler = ReferenceHandler.Preserve); 

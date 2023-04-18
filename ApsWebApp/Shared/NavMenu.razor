@@ -1,4 +1,6 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inject IUserStateService userServiceState
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">@title</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -14,15 +16,24 @@
 
         @foreach (var menu in Menus)
         {
-            <RadzenPanelMenuItem Text="@(!isWidth?"":menu.Text)" Icon="@menu.Icon" Path="@menu.Path">
-                @if (menu.Children != null)
-                {
-                    @foreach (var menu1 in menu.Children)
+            if (menu.Path == "logout")
+            {
+                <RadzenButton Style="width:100%" ButtonStyle="ButtonStyle.Danger" Icon="logout" Click="@LogoutAction" Text="Logout"></RadzenButton>
+            }
+            else
+            {
+                <RadzenPanelMenuItem Text="@(!isWidth?"":menu.Text)" Icon="@menu.Icon" Path="@menu.Path">
+                    @if (menu.Children != null)
                     {
-                        <RadzenPanelMenuItem Style="margin-left:15px" Text="@(!isWidth?"":menu1.Text)" Icon="@menu1.Icon" Path="@menu1.Path"></RadzenPanelMenuItem>
+                        @foreach (var menu1 in menu.Children)
+                        {
+
+                            <RadzenPanelMenuItem Style="margin-left:15px" Text="@(!isWidth?"":menu1.Text)" Icon="@menu1.Icon" Path="@menu1.Path"></RadzenPanelMenuItem>
+                        }
                     }
-                }
-            </RadzenPanelMenuItem>
+                </RadzenPanelMenuItem>
+            }
+
         }
 
 
@@ -48,6 +59,11 @@
     private string NavMenuCssClass => GetMenuClass();
 
     List<MenuItem> Menus = new List<MenuItem>();
+
+    private void LogoutAction()
+    {
+        userServiceState.Logout();
+    }
 
 
     public NavMenu()
@@ -97,7 +113,8 @@
                     new MenuItem(){ Icon="receipt_log", Path="data/summary", Text="Sumarry" },
                 }
             },
-        new MenuItem(){ Icon="receipt_log", Text="Incomming Check" , Path="incomming" },
+       // new MenuItem(){ Icon="receipt_log", Text="Incomming Check" , Path="incomming" },
+        new MenuItem(){ Icon="logout", Text="Logout" , Path="logout"  },
     };
     }
 

@@ -19,13 +19,13 @@ jobs:
           dotnet-version: '5.0.x'
 
       - name: Restore Dependencies
-        run: dotnet restore "WebApp/WebClient/WebClient.csproj"
+        run: dotnet restore "ApsWebApp/ApsWebApp.csproj"
 
       - name: Build app
-        run: dotnet build "WebApp/WebClient/WebClient.csproj" -c Release --no-restore
+        run: dotnet build "ApsWebApp/ApsWebApp.csproj" -c Release --no-restore
 
       - name: Publish App
-        run: dotnet publish "WebApp/WebClient/WebClient.csproj" -c Release -o ./aps
+        run: dotnet publish "ApsWebApp/ApsWebApp.csproj" -c Release -o ./aps
 
 
       - name: Copy To VPS

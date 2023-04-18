@@ -9,6 +9,7 @@ using ShareModels.ModelViews;
 using System.Diagnostics;
 using ApsWebApp.Data;
 using Microsoft.EntityFrameworkCore;
+using ApsWebApp.Services;
 
 namespace ApsWebApp.Controllers
 {
@@ -20,10 +21,14 @@ namespace ApsWebApp.Controllers
         private readonly IPenjualanService _penjualanService;
         private readonly IPembelianService _pembelianService;
         private readonly ApplicationDbContext _dbContext;
+        Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
+        private IEmailService emailService;
 
         //private readonly IOptions<AppSettings> _appSettings;
 
-        public ReportController(ApplicationDbContext dbContext, IWebHostEnvironment iwebhost, IReportService reportService, IProductService productService, IPembelianService pembelianService, IPenjualanService penjualanService)
+        public ReportController(ApplicationDbContext dbContext, IWebHostEnvironment iwebhost, IReportService reportService,
+            IProductService productService, IPembelianService pembelianService, IPenjualanService penjualanService,
+            IEmailService _emailService, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             _iwebhost = iwebhost;
             _reportService = reportService;
@@ -31,6 +36,8 @@ namespace ApsWebApp.Controllers
             _penjualanService = penjualanService;
             _pembelianService = pembelianService;
             _dbContext = dbContext;
+            emailService = _emailService;
+            _env = env;
         }
 
 
@@ -640,70 +647,14 @@ namespace ApsWebApp.Controllers
         {
 
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
             try
             {
+                var logo = _env.WebRootPath + "/images/apslogo.png";
                 var pembelian = await _pembelianService.GetOrder(id);
                 string fileName = $"Order Pembelian No:{pembelian.Nomor}.xlsx";
+                var content = Helper.CreateFileOrderPembelian(contentType, pembelian, logo);
 
-                using var workbook = new XLWorkbook();
-                IXLWorksheet worksheet = workbook.Worksheets.Add("Order");
-                worksheet.Cell(1, 1).Value = "ORDER PEMBELIAN";
-                worksheet.Cell(2, 1).Value = $"Kepada : {pembelian.Supplier.Nama}";
-
-                var range = worksheet.Range("A1:G1");
-                range.Merge().Style.Font.SetBold().Font.FontSize = 16;
-
-                var range2 = worksheet.Range("A2:G2");
-                range2.Merge().Style.Font.SetBold().Font.FontSize = 14;
-
-                var start = 4;
-                worksheet.Cell(start, 1).Value = "Nomor";
-                worksheet.Cell(start, 2).Value = "Article";
-                worksheet.Cell(start, 3).Value = "Nama";
-                worksheet.Cell(start, 4).Value = "Jumlah";
-                worksheet.Cell(start, 5).Value = "Harga";
-                worksheet.Cell(start, 6).Value = $"Discount";
-                worksheet.Cell(start, 7).Value = "Total";
-
-                var items = pembelian.Items.ToList();
-                int nomor = 1;
-                for (int index = 1; index <= items.Count; index++)
-                {
-                    var total = items[index - 1].Total;
-                    worksheet.Cell(index + start, 1).Value = nomor;
-                    worksheet.Cell(index + start, 2).Value = items[index - 1].Product.CodeArticle;
-                    worksheet.Cell(index + start, 3).Value = items[index - 1].Product.Name + " | " + items[index - 1].Product.Size;
-                    worksheet.Cell(index + start, 4).Value = items[index - 1].Quntity;
-                    worksheet.Cell(index + start, 5).Value = items[index - 1].Price;
-
-
-                    worksheet.Cell(index + start, 6).Value = total * 10 / 100;
-                    worksheet.Cell(index + start, 7).Value = total - (total * 10 / 100);
-
-                    worksheet.Cell(index + start, 5).Style.NumberFormat.Format = "0,000.00";
-                    worksheet.Cell(index + start, 6).Style.NumberFormat.Format = "0,000.00";
-                    worksheet.Cell(index + start, 7).Style.NumberFormat.Format = "0,000.00";
-                    nomor++;
-                }
-
-                worksheet.Range($"A{start}:G{items.Count + start}").Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-                worksheet.Range($"A{start}:G{items.Count + start}").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
-                foreach (var item in worksheet.ColumnsUsed())
-                {
-                    item.AdjustToContents();
-                }
-
-
-                worksheet.Cell(items.Count + 8, 1).Value = "Hormat Kami";
-                worksheet.Cell(items.Count + 12, 1).Value = "Elish";
-                var rangeAsign = worksheet.Range($"A{items.Count + 8}:B{items.Count + 8}");
-                rangeAsign.Merge().Style.Font.SetBold().Font.FontSize = 12;
-
-                using var stream = new MemoryStream();
-                workbook.SaveAs(stream);
-                var content = stream.ToArray();
+                var base64 = Convert.ToBase64String(content);
                 return File(content, contentType, fileName);
             }
             catch (Exception ex)
@@ -712,6 +663,7 @@ namespace ApsWebApp.Controllers
             }
 
         }
+       
 
         public DataSet ToDataSet<OrderPenjualanItem>(List<OrderPenjualanItem> list)
         {

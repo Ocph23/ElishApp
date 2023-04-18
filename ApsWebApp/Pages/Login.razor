@@ -3,16 +3,16 @@
 @inject IUserStateService userService
 @inject NavigationManager NavigationManager
 @inject NotificationService notif;
-
 @layout AuthLayout
-
 
 @page "/login"
 
-    <div class="col-md-12" style="height:80%; margin-top:20%">
-            <RadzenTemplateForm Data="user" TItem="UserLogin" Submit=@(async (x)=>await LoginAction(x)) OnInvalidSubmit=@OnInvalidSubmit >
-        <Radzen.Blazor.RadzenFieldset Style="width:500px; margin:auto" Text="LOGIN">
+<div style="display:flex; justify-content:center; align-items:center;  height:100vh; width:100%">
+    <div class="col-md-12" style="  width:50%">
+        <RadzenTemplateForm Data="user" TItem="UserLogin" Submit=@(async (x)=>await LoginAction(x)) OnInvalidSubmit=@OnInvalidSubmit>
+            <Radzen.Blazor.RadzenFieldset Style="margin:auto; padding:20px; border-radius:20px;background-color:whitesmoke;">
                 <div class="col-md-12">
+                    <div style="display:flex; justify-content:center"> <img style="width:20%" src="/images/apslogowithtext.png" /></div>
                     <div class="row" style="margin-top:10px">
                         <div class="col-md-4 align-items-center d-flex">
                             <RadzenLabel Text="User Name" />
@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-md-8">
                             <RadzenPassword @bind-Value="user.Password" Name="Password" />
-                            <RadzenRequiredValidator  Component="Password" Text="Password is required" Popup=true Style="position: absolute" />
+                            <RadzenRequiredValidator Component="Password" Text="Password is required" Popup=true Style="position: absolute" />
                         </div>
                     </div>
                     <div class="row" style="margin-top:10px">
@@ -46,65 +46,64 @@
                         <div class="col-md-4 align-items-center d-flex">
                         </div>
                         <div class="col-md-8">
-                            <RadzenButton ButtonType="ButtonType.Submit" class="btn btn-primary">Login</RadzenButton>
                         </div>
                     </div>
+                    <RadzenButton ButtonType="ButtonType.Submit" Style="width:100%; margin-top:30px " ButtonStyle="ButtonStyle.Danger">Login</RadzenButton>
                 </div>
 
-            @if (message != null)
-            {
-                <div class="alert alert-danger" role="alert">
-                    @message
-                </div>
-            }
-        </Radzen.Blazor.RadzenFieldset>
-            </RadzenTemplateForm>
-    </div>
-
-   
-
-
-    @code {
-        private UserLogin user = new UserLogin();
-
-        private string message;
-
-
-        protected override async Task OnInitializedAsync()
-        {
-            await Task.Delay(1000);
-        }
-
-        async Task LoginAction(UserLogin obj)
-        {
-            try
-            {
-
-                
-
-                var result = await userService.Login(user);
-
-                if (result)
+                @if (message != null)
                 {
-                    NavigationManager.NavigateTo("");
+                    <div class="alert alert-danger" role="alert">
+                        @message
+                    </div>
                 }
-            }
-            catch (Exception ex)
-            {
-                notif.Notify(new NotificationMessage { Detail = ex.Message, Duration = 3000, Severity= NotificationSeverity.Error,  Summary="Error Account" });
-            }
-        }
+            </Radzen.Blazor.RadzenFieldset>
+        </RadzenTemplateForm>
+    </div>
+</div>
 
 
-        private async Task HideMessage()
-        {
-            await Task.Delay(3000);
-            message = null;
-        }
 
-        void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
-        {
-            //  console.Log($"InvalidSubmit: {JsonSerializer.Serialize(args, new JsonSerializerOptions() { WriteIndented = true })}");
-        }
+@code {
+    private UserLogin user = new UserLogin();
 
+    private string message;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1000);
     }
+
+    async Task LoginAction(UserLogin obj)
+    {
+        try
+        {
+
+
+
+            var result = await userService.Login(user);
+
+            if (result)
+            {
+                NavigationManager.NavigateTo("");
+            }
+        }
+        catch (Exception ex)
+        {
+            notif.Notify(new NotificationMessage { Detail = ex.Message, Duration = 3000, Severity = NotificationSeverity.Error, Summary = "Error Account" });
+        }
+    }
+
+
+    private async Task HideMessage()
+    {
+        await Task.Delay(3000);
+        message = null;
+    }
+
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        //  console.Log($"InvalidSubmit: {JsonSerializer.Serialize(args, new JsonSerializerOptions() { WriteIndented = true })}");
+    }
+}

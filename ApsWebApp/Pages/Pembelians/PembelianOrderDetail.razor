@@ -10,7 +10,9 @@
 @inject IProductService productService;
 @inject NotificationService NotificationService;
 @inject NavigationManager nav;
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
 
+@inject IEmailService emailService
 
 <RadzenTabs>
     <Tabs>
@@ -51,9 +53,8 @@
 
                     </div>
                     <div class="col-md-6" style="text-align:right">
-                        <a class="btn btn-info" href="/report/OrderPembelianExcel/@model.Id">
-                            <i style="font-size:24px" class="material-icons">download</i> Download
-                        </a>
+                        <RadzenButton Icon="download" Click="@(()=> nav.NavigateTo($"/report/OrderPembelianExcel/{model.Id}",true))"></RadzenButton>
+                        <RadzenButton Icon="send" Click="@(async()=> await SendToSupplier(model.Id))"></RadzenButton>
                     </div>
                 </div>
             </RadzenFieldset>
@@ -81,7 +82,7 @@
                                         Data=@products.Where( item=> merkId<=0?true: item.Merk.Id==merkId && !model.Items.Any(data=> data.Product.Id.Equals(item.Id)))
                                         @bind-Value=@product
                                         TextProperty="CodeName"
-                                        Change=@(args => SelectProduct(args, "Supplier"))  Style="width:400px"/>
+                                        Change=@(args => SelectProduct(args, "Supplier")) Style="width:400px" />
                     </div>
                 </div>
 
@@ -99,7 +100,6 @@
                             <EditTemplate Context="item">
                                 <RadzenDropDown @bind-Value="item.Unit" Data="@item.Product.Units"
                                                 Change=@(args => OnChangeOrderItem(args, item))
-                                                
                                                 TextProperty="Name" Style="width:100%" />
                             </EditTemplate>
                         </RadzenGridColumn>
@@ -131,8 +131,8 @@
                             <FooterTemplate>
                                 @{
                                     <div>@((model.Total).ToString("N"))</div>
-                                    <div>@((model.Items.Sum(x=>x.DiscountView)).ToString("N"))</div>
-                                    <div>@((model.Total-model.Items.Sum(x=>x.DiscountView)).ToString("N"))</div>
+                                    <div>@((model.Items.Sum(x => x.DiscountView)).ToString("N"))</div>
+                                    <div>@((model.Total - model.Items.Sum(x => x.DiscountView)).ToString("N"))</div>
                                 }
                             </FooterTemplate>
                         </RadzenGridColumn>
@@ -168,7 +168,7 @@
 
 
 
-@code{
+@code {
 
     [Parameter]
     public string id { get; set; }
@@ -230,6 +230,29 @@
 
     }
 
+    async Task SendToSupplier(int id)
+    {
+        var pembelian = model;
+        string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        var logo = _env.WebRootPath + "/images/apslogo.png";
+
+        var content = Helper.CreateFileOrderPembelian(contentType, pembelian, logo);
+        var base64 = Convert.ToBase64String(content);
+        var contactName = $"{pembelian.Supplier.Nama} ({pembelian.Supplier.ContactPersonName ?? " - "})";
+        await emailService.SendEmailAsync(new Dictionary<string, string> { { pembelian.Supplier.Email, contactName } }, $"Order Pembelian : {pembelian.Nomor}",
+            string.IsNullOrEmpty(pembelian.Discription) ? "" : pembelian.Discription ?? "", new List<Attachment>() { new Attachment { ContentType = contentType,
+                        Filename = $"Order Pembelian No : {pembelian.Nomor}.xlsx", Base64Content = base64 } });
+
+        NotificationService.Notify(new NotificationMessage
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = "Success",
+                Detail = "Order Berhasil Dikirim Ke Supplier !",
+                Duration = 3000
+            });
+
+    }
+
     async Task SelectSupplier(object value, string name)
     {
         var supplier = (Supplier)value;
@@ -238,9 +261,6 @@
             model = new OrderPembelian() { Supplier = supplier, Items = new List<OrderPembelianItem>() };
             products = await productService.GetProductsBySupplier(supplier.Id);
         }
-
-
-
     }
 
 
@@ -296,12 +316,12 @@
             if (result != null)
             {
                 NotificationService.Notify(new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Success,
-                    Summary = "Success",
-                    Detail = "Order Berhasil Dibuat !",
-                    Duration = 3000
-                });
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Success",
+                        Detail = "Order Berhasil Dibuat !",
+                        Duration = 3000
+                    });
 
                 nav.NavigateTo("/pembelian/order");
             }
@@ -309,12 +329,12 @@
         catch (System.Exception ex)
         {
             NotificationService.Notify(new NotificationMessage
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Error",
-                Detail = ex.Message,
-                Duration = 3000
-            });
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail = ex.Message,
+                    Duration = 3000
+                });
         }
 
     }
