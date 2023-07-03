@@ -4,6 +4,7 @@ using ApsWebApp.Data;
 using ApsWebApp.Models;
 using ApsWebApp.Services;
 using Blazored.LocalStorage;
+using ClosedXML.Graphics;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using ShareModels;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -23,6 +25,7 @@ if (builder.Environment.IsProduction())
         serverOptions.ListenLocalhost(5000);
     });
 }
+
 
 // Add services to the container.
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));

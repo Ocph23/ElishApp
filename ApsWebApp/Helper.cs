@@ -138,6 +138,7 @@ namespace ApsWebApp
 
         internal static byte[] CreateFileOrderPembelian(string contentType, OrderPembelian pembelian, string imagePath)
         {
+            LoadOptions.DefaultGraphicEngine = new ClosedXML.Graphics.DefaultGraphicEngine("Carlito");
             string fileName = $"Order Pembelian No:{pembelian.Nomor}.xlsx";
 
             using var workbook = new XLWorkbook();
