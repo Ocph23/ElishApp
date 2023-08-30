@@ -26,6 +26,8 @@ namespace ShareModels
             set { price = value; }
         }
 
+        public string Keterangan { get; set; }
+
         public virtual double Total
         {
             get
@@ -42,7 +44,7 @@ namespace ShareModels
                 return Total * Discount/100;
             }
         }
-
+      
         public virtual Unit Unit { get; set; }
 
         public virtual Product Product { get; set; }

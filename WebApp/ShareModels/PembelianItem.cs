@@ -32,6 +32,8 @@ namespace ShareModels
         public virtual Product Product { get; set; }
         public double Discount { get; set; }
 
+    
+
         public virtual double Total
         {
             get

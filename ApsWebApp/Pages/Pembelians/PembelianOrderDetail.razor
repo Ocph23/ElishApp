@@ -137,6 +137,13 @@
                             </FooterTemplate>
                         </RadzenGridColumn>
 
+                        <RadzenGridColumn TItem="OrderPembelianItem" Property="Keterangan" Title="Keterangan">
+                            <Template Context="item">
+                                <RadzenTextBox Style="width:100%" @bind-Value="item.Keterangan" />
+                            </Template>
+                        </RadzenGridColumn>
+
+
                         <RadzenGridColumn TItem="OrderPembelianItem" Context="sampleBlazorModelsSampleOrder" Visible="@(model.Items.Count>0  && ((Int32)model.Status < 1))"
                                           Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                             <HeaderTemplate>

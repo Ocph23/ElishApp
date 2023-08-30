@@ -38,8 +38,8 @@ namespace ApsWebApp.Services
             try
             {
                 var password = GeneratePasswordHash(model.Password);
-                var user = (from u in _context.User.Include(x => x.Roles).ThenInclude(x => x.Role).Where(x => (x.UserName == model.UserName || x.Email == model.UserName)
-                          && x.PasswordHash == password)
+                var user = (from u in _context.User.Include(x => x.Roles).ThenInclude(x => x.Role)
+                            .Where(x => (x.UserName == model.UserName)&& x.PasswordHash == password)
                             select u).FirstOrDefault();
                 if (user == null)
                     throw new SystemException($"Your Account {model.UserName} Not Found !");

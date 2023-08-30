@@ -4,7 +4,7 @@ version: '3.4'
 
 #create a volume for the my sql container.To ensure Data persists after my sql container is stopped
 volumes:
-  datafiles:
+  datafiles_aps:
 
 services:
   #DataBase Service
@@ -13,17 +13,17 @@ services:
     image: mysql:8.0.22
     #Map port 3306 on the mysql container to port 3306 in the host
     ports:
-      - "3306:3306"
+      - "3307:3306"
     #Specify where the persisted Data should be stored
     volumes:
-      - ~/datafiles:/var/lib/mysql
+      - datafiles_aps:/var/lib/mysql
     restart: always
     #Specify Environment Variables for mysql
     environment: 
       MYSQL_ROOT_PASSWORD: Sonyalpha@77
       MYSQL_USER: ocph23
       MYSQL_PASSWORD: Sonyalpha@77
-      MYSQL_DATABASE: marampadb
+      MYSQL_DATABASE: apsdb2
       MYSQL_ROOT_HOST: '%'
   #Api  Service
   apswebapp:
@@ -36,13 +36,9 @@ services:
       - database
     #Map port 8888 in the docker container to port 80 in the Api
     ports:
-      - "5006:80"
+      - "5000:80"
     restart: always
     #Specify Environment Variables for the Api Service
     environment: 
       - DBHOST=database
-      - ASPNETCORE_ENVIRONMENT=Development
-
-
-
-
+      - ASPNETCORE_ENVIRONMENT=Development  

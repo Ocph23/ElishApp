@@ -19,20 +19,20 @@
             <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => Nav.NavigateTo("/pembelian/order/detail")) Style="margin-bottom:10px" />
 
             <RadzenGrid Data="@orders"
-                        @ref="grid"  LoadData="@LoadData" Count="@count" PageSize="20" FilterMode="FilterMode.Advanced"
+                        @ref="grid" LoadData="@LoadData" Count="@count" PageSize="20" FilterMode="FilterMode.Advanced"
                         AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPembelian">
                 <Columns>
                     <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="OrderPembelian" Title="Order Date" Property="OrderDate" />
                     <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="OrderPembelian" Title="PO Number" Property="Nomor" />
                     <Radzen.Blazor.RadzenGridColumn TItem="OrderPembelian" Title="Supplier" Property="Supplier.Nama" />
-                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Disc" >
+                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Disc">
                         <Template Context="item">
                             @(item.Discount.ToString("N2"))
                         </Template>
                     </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Total" >
+                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Total">
                         <Template Context="item">
-                            @((item.Total-item.Discount).ToString("N2"))
+                            @((item.Total - item.Discount).ToString("N2"))
                         </Template>
                     </Radzen.Blazor.RadzenGridColumn>
                     <Radzen.Blazor.RadzenGridColumn Width="120px" TItem="OrderPembelian" Title="Status" Property="Status">
@@ -48,8 +48,8 @@
                             @if (item.Status == OrderStatus.Baru)
                             {
                                 <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<DialogCreatePembelian>($"Create Pembelian",
-                                new Dictionary<string, object>() { { "model", item}, },
-                                new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
+                                          new Dictionary<string, object>() { { "model", item}, },
+                                          new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
                             }
                             else if (item.Status == OrderStatus.Diproses)
                             {
@@ -64,7 +64,7 @@
     </Tabs>
 </RadzenTabs>
 
-@code{
+@code {
 
 
     OrderStatus currentTOC;
@@ -95,12 +95,12 @@
             catch (System.Exception ex)
             {
                 NotificationService.Notify(new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Error,
-                    Summary = "Error",
-                    Detail = ex.Message,
-                    Duration = 3000
-                });
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Error",
+                        Detail = ex.Message,
+                        Duration = 3000
+                    });
             }
         }
     }
@@ -110,27 +110,34 @@
 
     async Task LoadData(LoadDataArgs args)
     {
-        var query = dbContext.OrderPembelian.Include(x => x.Supplier).Include(x=>x.Items).ThenInclude(x=>x.Unit).AsQueryable();
-
-        if (currentTOC !=  OrderStatus.Semua)
-            query = query.Where(x => x.Status == currentTOC);
-
-        if (!string.IsNullOrEmpty(args.Filter))
+        try
         {
-            query = query.Where(args.Filter);
-        }
+            var query = dbContext.OrderPembelian.Include(x => x.Supplier).Include(x => x.Items).ThenInclude(x => x.Unit).AsQueryable();
 
-        if (!string.IsNullOrEmpty(args.OrderBy))
+            if (currentTOC != OrderStatus.Semua)
+                query = query.Where(x => x.Status == currentTOC);
+
+            if (!string.IsNullOrEmpty(args.Filter))
+            {
+                query = query.Where(args.Filter);
+            }
+
+            if (!string.IsNullOrEmpty(args.OrderBy))
+            {
+                query = query.OrderBy(args.OrderBy);
+            }
+
+            var result = query.ToList();
+            count = result.Count();
+
+            orders = result.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+
+
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
         {
-            query = query.OrderBy(args.OrderBy);
+            Console.WriteLine(ex.Message);
         }
-
-        var result = query.ToList();
-        count = result.Count();
-
-        orders = result.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
-
-
-        await InvokeAsync(StateHasChanged);
     }
 }

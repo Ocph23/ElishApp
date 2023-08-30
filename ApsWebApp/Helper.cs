@@ -164,7 +164,7 @@ namespace ApsWebApp
             worksheet.Cell(6, 2).Value = $": {pembelian.Supplier.Nama}";
 
 
-            var range = worksheet.Range("A1:D2");
+            var range = worksheet.Range("A1:E2");
             range.Style.Font.SetBold().Font.FontSize = 14;
 
             //var range2 = worksheet.Range("A2:G2");
@@ -175,6 +175,7 @@ namespace ApsWebApp
             worksheet.Cell(start, 2).Value = "Article/Kode";
             worksheet.Cell(start, 3).Value = "Nama";
             worksheet.Cell(start, 4).Value = "Jumlah";
+            worksheet.Cell(start, 5).Value = "Keterangan";
             //worksheet.Cell(start, 5).Value = "Harga";
             //worksheet.Cell(start, 6).Value = $"Discount";
             //worksheet.Cell(start, 7).Value = "Total";
@@ -188,7 +189,7 @@ namespace ApsWebApp
                 worksheet.Cell(index + start, 2).Value = items[index - 1].Product.CodeName;
                 worksheet.Cell(index + start, 3).Value = items[index - 1].Product.Name + " | " + items[index - 1].Product.Size;
                 worksheet.Cell(index + start, 4).Value = $"{items[index - 1].Quntity/12} Lusin";
-                //worksheet.Cell(index + start, 5).Value = items[index - 1].Price;
+                worksheet.Cell(index + start, 5).Value = items[index - 1].Keterangan;
                 //worksheet.Cell(index + start, 6).Value = total * 10 / 100;
                 //worksheet.Cell(index + start, 7).Value = total - (total * 10 / 100);
                 //worksheet.Cell(index + start, 5).Style.NumberFormat.Format = "0,000.00";
@@ -197,8 +198,8 @@ namespace ApsWebApp
                 nomor++;
             }
 
-            worksheet.Range($"A{start}:D{items.Count + start+1}").Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-            worksheet.Range($"A{start}:D{items.Count + start+1}").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Range($"A{start}:E{items.Count + start+1}").Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+            worksheet.Range($"A{start}:E{items.Count + start+1}").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
             //foreach (var item in worksheet.ColumnsUsed())
             //{
@@ -215,7 +216,7 @@ namespace ApsWebApp
             
             worksheet.Cell(rowTotal + 2, 2).Value = "Hormat Kami";
             worksheet.Cell(rowTotal + 3, 2).Value = "Elish";
-            worksheet.Range($"A{rowTotal + 2}:D{rowTotal + 3}").Style.Font.SetBold().Font.FontSize = 12;
+            worksheet.Range($"A{rowTotal + 2}:E{rowTotal + 3}").Style.Font.SetBold().Font.FontSize = 12;
 
 
             worksheet.Column("A").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
@@ -224,6 +225,7 @@ namespace ApsWebApp
             worksheet.Column("C").AdjustToContents();
             worksheet.Column("D").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
             worksheet.Column("D").Width = 12;
+            worksheet.Column("E").Width = 15;
             worksheet.Row(1).AdjustToContents();
             worksheet.Row(2).AdjustToContents();
 
