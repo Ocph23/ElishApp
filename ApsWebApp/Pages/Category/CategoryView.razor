@@ -15,7 +15,7 @@
     <HeaderTemplate>Data Kategori</HeaderTemplate>
     <ChildContent>
 
-    <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditCategory>($"Tambah",
+    <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditCategory>($"Tambah Kategori",
                         new Dictionary<string, object>() { { "model", new Category()}, },
                         new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
 

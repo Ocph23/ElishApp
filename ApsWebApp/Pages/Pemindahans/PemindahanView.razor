@@ -17,36 +17,36 @@
         <RadzenTabsItem Text="Pemindahan">
             <RadzenButton Icon="add" Style="margin-bottom:10px" ButtonStyle="ButtonStyle.Success"
                           Click="@(()=> nav.NavigateTo($"/pemindahan/detail"))" />
-            <RadzenGrid Data="@pemindahans" FilterMode="FilterMode.Advanced"
+            <RadzenDataGrid Data="@pemindahans" FilterMode="FilterMode.Advanced"
                         AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="Pemindahan" @ref="grid" LoadData="@LoadData" Count="@count" PageSize="10">
                 <Columns>
-                    <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="Pemindahan" Title="Created" Property="CreatedDate">
+                    <Radzen.Blazor.RadzenDataGridColumn Width="200px" TItem="Pemindahan" Title="Created" Property="CreatedDate">
                         <Template Context="item">
                             @(item.Created.ToString("dd/MM/yyyy"))
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn TItem="Pemindahan" Title="Dari">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn TItem="Pemindahan" Title="Dari">
                         <Template Context="item">
                             @(item.Dari.Name)
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn TItem="Pemindahan" Title="Dari">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn TItem="Pemindahan" Title="Dari">
                         <Template Context="item">
                             @(item.Tujuan.Name)
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn Width="300px" TItem="Pemindahan" Title="Waktu" >
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn Width="300px" TItem="Pemindahan" Title="Waktu" >
                         <Template Context="item">
                             @(item.WaktuPemindahan.ToString("dd/MM/yyyy"))
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn TItem="Pemindahan" Width="65px">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn TItem="Pemindahan" Width="65px">
                         <Template Context="item">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list" Click=@(args => Nav.NavigateTo($"pemindahan/detail/{item.Id}")) />
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
+                    </Radzen.Blazor.RadzenDataGridColumn>
                 </Columns>
-            </RadzenGrid>
+            </RadzenDataGrid>
         </RadzenTabsItem>
     </Tabs>
 </RadzenTabs>
@@ -57,7 +57,7 @@
 
     private IEnumerable<Pemindahan> pemindahans;
   //  PaymentStatus currentPeyment;
-    RadzenGrid<Pemindahan> grid;
+    RadzenDataGrid<Pemindahan> grid;
     int count;
 
     private async Task CreatePembayaran(int idpembelian)

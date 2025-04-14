@@ -10,6 +10,8 @@ using System.Diagnostics;
 using ApsWebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using ApsWebApp.Services;
+using ApsWebApp.Models;
+using Microsoft.Extensions.Options;
 
 namespace ApsWebApp.Controllers
 {
@@ -19,25 +21,30 @@ namespace ApsWebApp.Controllers
         private readonly IReportService _reportService;
         private readonly IProductService _productService;
         private readonly IPenjualanService _penjualanService;
+        private readonly IStockService stockService;
         private readonly IPembelianService _pembelianService;
         private readonly ApplicationDbContext _dbContext;
-        Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
+        private AppSettings _appSettings;
         private IEmailService emailService;
 
+        Microsoft.AspNetCore.Hosting.IHostingEnvironment _env;
         //private readonly IOptions<AppSettings> _appSettings;
 
         public ReportController(ApplicationDbContext dbContext, IWebHostEnvironment iwebhost, IReportService reportService,
             IProductService productService, IPembelianService pembelianService, IPenjualanService penjualanService,
+            IStockService _stockService, IOptions<AppSettings> appSettings,
             IEmailService _emailService, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             _iwebhost = iwebhost;
             _reportService = reportService;
             _productService = productService;
             _penjualanService = penjualanService;
+            stockService = _stockService;
             _pembelianService = pembelianService;
             _dbContext = dbContext;
             emailService = _emailService;
             _env = env;
+            _appSettings = appSettings.Value;
         }
 
 
@@ -52,6 +59,10 @@ namespace ApsWebApp.Controllers
                 {
                     var data = await _penjualanService.GetPenjualan(id);
                     var nota = GetNotaParameters(data, data.GetType());
+                    nota.BankAccountName = _appSettings.BankAccountName;
+                    nota.BankAccountNumber = _appSettings.BankAccountNumber;
+
+
                     var datas = new List<ShareModels.Reports.NotaData>();
                     int nomor = 1;
                     foreach (var item in data.Items.OrderBy(x => x.Product.Name))
@@ -95,6 +106,8 @@ namespace ApsWebApp.Controllers
                 {
                     var data = await _penjualanService.GetPenjualan(id);
                     var nota = GetNotaParameters(data, data.GetType());
+                    nota.BankAccountName = _appSettings.BankAccountName;
+                    nota.BankAccountNumber = _appSettings.BankAccountNumber;
                     var datas = new List<ShareModels.Reports.NotaData>();
                     int nomor = 1;
                     foreach (var item in data.Items.OrderBy(x => x.Product.Name))
@@ -141,7 +154,7 @@ namespace ApsWebApp.Controllers
 
                 try
                 {
-                    var source = _dbContext.Penjualan.Where(x => x.CreateDate >= dstart.Value && x.CreateDate <= dend.Value)
+                    var source = _dbContext.Penjualan.Where(x => x.CreateDate.ToUniversalTime() >= dstart.Value.ToUniversalTime() && x.CreateDate <= dend.Value.ToUniversalTime())
             .Include(x => x.Salesman)
             .Include(x => x.Customer)
             .Include(x => x.Items).ThenInclude(x => x.Unit)
@@ -161,7 +174,7 @@ namespace ApsWebApp.Controllers
                                     PaymentStatus = item.Status.ToString(),
                                     PenjualanId = item.Id,
                                     Total = item.Total,
-                                    FeeSales = item.FeeSalesman 
+                                    FeeSales = item.FeeSalesman
                                 };
 
                     var datasets = datas.ToList().ToDataTable();
@@ -255,6 +268,35 @@ namespace ApsWebApp.Controllers
             else
                 return NotFound();
         }
+        public async Task<ActionResult> PrintUtang()
+        {
+            var reportItem = "utang.frx";
+            if (reportItem != null)
+            {
+                var path = $"{_iwebhost.WebRootPath}/reports/{reportItem}";
+
+                try
+                {
+                    var param1 = DateTime.Now.ToString("dd-MM-yyyy");
+                    IEnumerable<ShareModels.Reports.PiutangData> data = (await _reportService.GetUtang());
+                    var datas = new List<ShareModels.Reports.PiutangData>();
+                    foreach (var item in data)
+                    {
+                        datas.Add(item);
+                    }
+
+                    var datasets = datas.ToDataTable();
+                    return PrintPiutangction(datasets, param1, path);
+
+                }
+                catch (Exception)
+                {
+                    return new NoContentResult();
+                }
+            }
+            else
+                return NotFound();
+        }
 
         private ActionResult PrintPiutangction(DataTable datasets, string param, string path)
         {
@@ -306,7 +348,7 @@ namespace ApsWebApp.Controllers
         }
 
 
-        public async Task<ActionResult> PrintStockBarang(int id, int merkid)
+        public async Task<ActionResult> PrintStockBarang(int gudangId, int merkid)
         {
             var reportItem = "stock.frx";
             if (reportItem != null)
@@ -318,9 +360,9 @@ namespace ApsWebApp.Controllers
                     var dataParams = new Dictionary<string, string>();
                     var gudangName = "All";
                     var merkName = "-";
-                    if (id > 0)
+                    if (gudangId > 0)
                     {
-                        var gudang = _dbContext.Gudang.Where(x => x.Id == id).FirstOrDefault();
+                        var gudang = _dbContext.Gudang.Where(x => x.Id == gudangId).FirstOrDefault();
                         gudangName = gudang == null ? "" : gudang.Name;
                     }
                     dataParams.Add("Gudang", gudangName);
@@ -333,7 +375,7 @@ namespace ApsWebApp.Controllers
                     dataParams.Add("Merk", merkName);
 
                     IEnumerable<ShareModels.ModelViews.ProductStock> data = new List<ShareModels.ModelViews.ProductStock>();
-                    data = (await _productService.GetProductStockByGudangId(merkid, id, false)).OrderBy(x => x.Name);
+                    data = (await stockService.GetProductStocks(gudangId)).OrderBy(x => x.Name);
 
                     var datas = new List<ShareModels.Reports.NotaData>();
                     int nomor = 1;
@@ -535,7 +577,8 @@ namespace ApsWebApp.Controllers
                 {
                     var data = await _penjualanService.GetOrder(id);
                     var nota = GetNotaParameters(data, data.GetType());
-
+                    nota.BankAccountName = _appSettings.BankAccountName;
+                    nota.BankAccountNumber = _appSettings.BankAccountNumber;
                     var datas = new List<ShareModels.Reports.NotaData>();
                     int nomor = 1;
                     foreach (var item in data.Items.OrderBy(x => x.Product.Name))
@@ -588,6 +631,8 @@ namespace ApsWebApp.Controllers
             report.SetParameterValue("OfficeTelp", Helper.OfficeTelp);
             report.SetParameterValue("OfficeAddress", Helper.OfficeAddress);
             report.SetParameterValue("Ekspedisi", nota.Ekspedisi);
+            report.SetParameterValue("BankAccountNumber", nota.BankAccountNumber);
+            report.SetParameterValue("BankAccountName", nota.BankAccountName);
 
 
         }
@@ -631,7 +676,8 @@ namespace ApsWebApp.Controllers
                         PaymentType = data.DeadLine <= 0 ? "Tunai" : "Kredit",
                         DeadLine = data.DeadLine,
                         Address = data.Customer.Address,
-                        Discount = data.Items.Sum(x => x.DiscountView)
+                        Discount = data.Items.Sum(x => x.DiscountView),
+
                     };
                 }
             }
@@ -663,7 +709,7 @@ namespace ApsWebApp.Controllers
             }
 
         }
-       
+
 
         public DataSet ToDataSet<OrderPenjualanItem>(List<OrderPenjualanItem> list)
         {

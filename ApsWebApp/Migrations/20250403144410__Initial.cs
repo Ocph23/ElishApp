@@ -1,145 +1,118 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace ApsWebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class _addpembelianketerangan : Migration
+    public partial class _Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "Category",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Gudang",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Gudang", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Merk",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Merk", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Role",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Supplier",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nama = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ContactPerson = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ContactPersonName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Telepon = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NPWP = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nama = table.Column<string>(type: "text", nullable: true),
+                    ContactPerson = table.Column<string>(type: "text", nullable: true),
+                    ContactPersonName = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    Telepon = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    NPWP = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Supplier", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PasswordHash = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Activated = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserName = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    Activated = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Pemindahan",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DariId = table.Column<int>(type: "int", nullable: false),
-                    TujuanId = table.Column<int>(type: "int", nullable: false),
-                    WaktuPemindahan = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DariId = table.Column<int>(type: "integer", nullable: true),
+                    TujuanId = table.Column<int>(type: "integer", nullable: true),
+                    WaktuPemindahan = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -148,28 +121,24 @@ namespace ApsWebApp.Migrations
                         name: "FK_Pemindahan_Gudang_DariId",
                         column: x => x.DariId,
                         principalTable: "Gudang",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Pemindahan_Gudang_TujuanId",
                         column: x => x.TujuanId,
                         principalTable: "Gudang",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "OrderPembelian",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OrderDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Discription = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    SupplierId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Discription = table.Column<string>(type: "text", nullable: true),
+                    SupplierId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -178,33 +147,25 @@ namespace ApsWebApp.Migrations
                         name: "FK_OrderPembelian_Supplier_SupplierId",
                         column: x => x.SupplierId,
                         principalTable: "Supplier",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CodeName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CodeArticle = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Size = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Color = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Discount = table.Column<double>(type: "double", nullable: false),
-                    MerkId = table.Column<int>(type: "int", nullable: false),
-                    SupplierId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    CodeName = table.Column<string>(type: "text", nullable: true),
+                    CodeArticle = table.Column<string>(type: "text", nullable: true),
+                    Size = table.Column<string>(type: "text", nullable: true),
+                    Color = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Discount = table.Column<double>(type: "double precision", nullable: false),
+                    MerkId = table.Column<int>(type: "integer", nullable: true),
+                    SupplierId = table.Column<int>(type: "integer", nullable: true),
+                    CategoryId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -213,38 +174,30 @@ namespace ApsWebApp.Migrations
                         name: "FK_Product_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Product_Merk_MerkId",
                         column: x => x.MerkId,
                         principalTable: "Merk",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Product_Supplier_SupplierId",
                         column: x => x.SupplierId,
                         principalTable: "Supplier",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Karyawan",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Telepon = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Telepon = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -253,19 +206,17 @@ namespace ApsWebApp.Migrations
                         name: "FK_Karyawan_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Userrole",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<int>(type: "integer", nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -274,30 +225,26 @@ namespace ApsWebApp.Migrations
                         name: "FK_Userrole_Role_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Userrole_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Pembelian",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OrderPembelianId = table.Column<int>(type: "int", nullable: false),
-                    DeadLine = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    InvoiceNumber = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    GudangId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderPembelianId = table.Column<int>(type: "integer", nullable: false),
+                    DeadLine = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    InvoiceNumber = table.Column<string>(type: "text", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    GudangId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -306,29 +253,25 @@ namespace ApsWebApp.Migrations
                         name: "FK_Pembelian_Gudang_GudangId",
                         column: x => x.GudangId,
                         principalTable: "Gudang",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Pembelian_OrderPembelian_OrderPembelianId",
                         column: x => x.OrderPembelianId,
                         principalTable: "OrderPembelian",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "ProductImage",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FileName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Thumb = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    FileType = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FileName = table.Column<string>(type: "text", nullable: true),
+                    Thumb = table.Column<string>(type: "text", nullable: true),
+                    FileType = table.Column<int>(type: "integer", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -339,22 +282,74 @@ namespace ApsWebApp.Migrations
                         principalTable: "Product",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockMovements",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    GudangId = table.Column<int>(type: "integer", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    Quntity = table.Column<double>(type: "double precision", nullable: false),
+                    StockMovementType = table.Column<int>(type: "integer", nullable: false),
+                    ReferenceId = table.Column<int>(type: "integer", nullable: false),
+                    ReferenceType = table.Column<int>(type: "integer", nullable: false),
+                    MovementDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockMovements", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StockMovements_Gudang_GudangId",
+                        column: x => x.GudangId,
+                        principalTable: "Gudang",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_StockMovements_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Stocks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    GudangId = table.Column<int>(type: "integer", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    Quntity = table.Column<double>(type: "double precision", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Stocks_Gudang_GudangId",
+                        column: x => x.GudangId,
+                        principalTable: "Gudang",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Stocks_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Unit",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Level = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<double>(type: "double", nullable: false),
-                    Buy = table.Column<double>(type: "double", nullable: false),
-                    Sell = table.Column<double>(type: "double", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Level = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<double>(type: "double precision", nullable: false),
+                    Buy = table.Column<double>(type: "double precision", nullable: false),
+                    Sell = table.Column<double>(type: "double precision", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -364,31 +359,23 @@ namespace ApsWebApp.Migrations
                         column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Customer",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ContactName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Telepon = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NPWP = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Location = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    KaryawanId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    ContactName = table.Column<string>(type: "text", nullable: true),
+                    Telepon = table.Column<string>(type: "text", nullable: true),
+                    NPWP = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    Location = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<int>(type: "integer", nullable: true),
+                    KaryawanId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -397,36 +384,29 @@ namespace ApsWebApp.Migrations
                         name: "FK_Customer_Karyawan_KaryawanId",
                         column: x => x.KaryawanId,
                         principalTable: "Karyawan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Customer_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PembayaranPembelian",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PayDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PayTo = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PayType = table.Column<int>(type: "int", nullable: false),
-                    BankName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RekNumber = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    PayValue = table.Column<double>(type: "double", nullable: false),
-                    PembelianId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PayDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PayTo = table.Column<string>(type: "text", nullable: true),
+                    PayType = table.Column<int>(type: "integer", nullable: false),
+                    BankName = table.Column<string>(type: "text", nullable: true),
+                    RekNumber = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    PayValue = table.Column<double>(type: "double precision", nullable: false),
+                    PembelianId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -435,24 +415,21 @@ namespace ApsWebApp.Migrations
                         name: "FK_PembayaranPembelian_Pembelian_PembelianId",
                         column: x => x.PembelianId,
                         principalTable: "Pembelian",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "IncomingItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ActualValue = table.Column<double>(type: "double", nullable: false),
-                    Amount = table.Column<double>(type: "double", nullable: false),
-                    UnitId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    PembelianId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ActualValue = table.Column<double>(type: "double precision", nullable: false),
+                    Amount = table.Column<double>(type: "double precision", nullable: false),
+                    UnitId = table.Column<int>(type: "integer", nullable: true),
+                    Status = table.Column<string>(type: "text", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    PembelianId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -461,37 +438,32 @@ namespace ApsWebApp.Migrations
                         name: "FK_IncomingItem_Pembelian_PembelianId",
                         column: x => x.PembelianId,
                         principalTable: "Pembelian",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_IncomingItem_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_IncomingItem_Unit_UnitId",
                         column: x => x.UnitId,
                         principalTable: "Unit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "OrderPembelianItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Quntity = table.Column<double>(type: "double", nullable: false),
-                    Price = table.Column<double>(type: "double", nullable: false),
-                    Discount = table.Column<double>(type: "double", nullable: false),
-                    Keterangan = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UnitId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    OrderPembelianId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Quntity = table.Column<double>(type: "double precision", nullable: false),
+                    Price = table.Column<double>(type: "double precision", nullable: false),
+                    Keterangan = table.Column<string>(type: "text", nullable: true),
+                    Discount = table.Column<double>(type: "double precision", nullable: false),
+                    UnitId = table.Column<int>(type: "integer", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    OrderPembelianId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -500,37 +472,31 @@ namespace ApsWebApp.Migrations
                         name: "FK_OrderPembelianItem_OrderPembelian_OrderPembelianId",
                         column: x => x.OrderPembelianId,
                         principalTable: "OrderPembelian",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrderPembelianItem_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrderPembelianItem_Unit_UnitId",
                         column: x => x.UnitId,
                         principalTable: "Unit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PembelianItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Amount = table.Column<double>(type: "double", nullable: false),
-                    Price = table.Column<double>(type: "double", nullable: false),
-                    UnitId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Discount = table.Column<double>(type: "double", nullable: false),
-                    Keterangan = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PembelianId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Amount = table.Column<double>(type: "double precision", nullable: false),
+                    Price = table.Column<double>(type: "double precision", nullable: false),
+                    UnitId = table.Column<int>(type: "integer", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    Discount = table.Column<double>(type: "double precision", nullable: false),
+                    PembelianId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -544,27 +510,24 @@ namespace ApsWebApp.Migrations
                         name: "FK_PembelianItem_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PembelianItem_Unit_UnitId",
                         column: x => x.UnitId,
                         principalTable: "Unit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PemindahanItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Quantity = table.Column<double>(type: "double", nullable: false),
-                    UnitId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    PemindahanId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Quantity = table.Column<double>(type: "double precision", nullable: false),
+                    UnitId = table.Column<int>(type: "integer", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    PemindahanId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -573,37 +536,32 @@ namespace ApsWebApp.Migrations
                         name: "FK_PemindahanItem_Pemindahan_PemindahanId",
                         column: x => x.PemindahanId,
                         principalTable: "Pemindahan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PemindahanItem_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PemindahanItem_Unit_UnitId",
                         column: x => x.UnitId,
                         principalTable: "Unit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "OrderPenjualan",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OrderDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DeadLine = table.Column<double>(type: "double", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Discription = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    GudangId = table.Column<int>(type: "int", nullable: false),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
-                    SalesId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DeadLine = table.Column<double>(type: "double precision", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Discription = table.Column<string>(type: "text", nullable: true),
+                    GudangId = table.Column<int>(type: "integer", nullable: true),
+                    CustomerId = table.Column<int>(type: "integer", nullable: true),
+                    SalesId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -612,34 +570,29 @@ namespace ApsWebApp.Migrations
                         name: "FK_OrderPenjualan_Customer_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrderPenjualan_Gudang_GudangId",
                         column: x => x.GudangId,
                         principalTable: "Gudang",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrderPenjualan_Karyawan_SalesId",
                         column: x => x.SalesId,
                         principalTable: "Karyawan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PengembalianPenjualan",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Created = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
-                    GudangId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CustomerId = table.Column<int>(type: "integer", nullable: true),
+                    GudangId = table.Column<int>(type: "integer", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -648,29 +601,26 @@ namespace ApsWebApp.Migrations
                         name: "FK_PengembalianPenjualan_Customer_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PengembalianPenjualan_Gudang_GudangId",
                         column: x => x.GudangId,
                         principalTable: "Gudang",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "OrderPenjualanItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Quantity = table.Column<double>(type: "double", nullable: false),
-                    Discount = table.Column<double>(type: "double", nullable: false),
-                    Price = table.Column<double>(type: "double", nullable: false),
-                    UnitId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    OrderPenjualanId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Quantity = table.Column<double>(type: "double precision", nullable: false),
+                    Discount = table.Column<double>(type: "double precision", nullable: false),
+                    Price = table.Column<double>(type: "double precision", nullable: false),
+                    UnitId = table.Column<int>(type: "integer", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    OrderPenjualanId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -679,41 +629,36 @@ namespace ApsWebApp.Migrations
                         name: "FK_OrderPenjualanItem_OrderPenjualan_OrderPenjualanId",
                         column: x => x.OrderPenjualanId,
                         principalTable: "OrderPenjualan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrderPenjualanItem_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_OrderPenjualanItem_Unit_UnitId",
                         column: x => x.UnitId,
                         principalTable: "Unit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Penjualan",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
-                    SalesmanId = table.Column<int>(type: "int", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DeadLine = table.Column<double>(type: "double", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Activity = table.Column<int>(type: "int", nullable: false),
-                    FeeSalesman = table.Column<double>(type: "double", nullable: false),
-                    Expedisi = table.Column<double>(type: "double", nullable: false),
-                    GudangId = table.Column<int>(type: "int", nullable: false),
-                    OrderPenjualanId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CustomerId = table.Column<int>(type: "integer", nullable: true),
+                    SalesmanId = table.Column<int>(type: "integer", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DeadLine = table.Column<double>(type: "double precision", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Activity = table.Column<int>(type: "integer", nullable: false),
+                    FeeSalesman = table.Column<double>(type: "double precision", nullable: false),
+                    Expedisi = table.Column<double>(type: "double precision", nullable: false),
+                    GudangId = table.Column<int>(type: "integer", nullable: true),
+                    OrderPenjualanId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -722,48 +667,39 @@ namespace ApsWebApp.Migrations
                         name: "FK_Penjualan_Customer_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Penjualan_Gudang_GudangId",
                         column: x => x.GudangId,
                         principalTable: "Gudang",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Penjualan_Karyawan_SalesmanId",
                         column: x => x.SalesmanId,
                         principalTable: "Karyawan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Penjualan_OrderPenjualan_OrderPenjualanId",
                         column: x => x.OrderPenjualanId,
                         principalTable: "OrderPenjualan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PembayaranPenjualan",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PayDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PayTo = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PayType = table.Column<int>(type: "int", nullable: false),
-                    BankName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RekNumber = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    PayValue = table.Column<double>(type: "double", nullable: false),
-                    PenjualanId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PayDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PayTo = table.Column<string>(type: "text", nullable: true),
+                    PayType = table.Column<int>(type: "integer", nullable: false),
+                    BankName = table.Column<string>(type: "text", nullable: true),
+                    RekNumber = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    PayValue = table.Column<double>(type: "double precision", nullable: false),
+                    PenjualanId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -772,30 +708,28 @@ namespace ApsWebApp.Migrations
                         name: "FK_PembayaranPenjualan_Penjualan_PenjualanId",
                         column: x => x.PenjualanId,
                         principalTable: "Penjualan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "PengembalianPenjualanItem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Quantity = table.Column<double>(type: "double", nullable: false),
-                    Price = table.Column<double>(type: "double", nullable: false),
-                    Discount = table.Column<double>(type: "double", nullable: false),
-                    UnitId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    PenjualanId = table.Column<int>(type: "int", nullable: false),
-                    PengembalianPenjualanId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Quantity = table.Column<double>(type: "double precision", nullable: false),
+                    Price = table.Column<double>(type: "double precision", nullable: false),
+                    Discount = table.Column<double>(type: "double precision", nullable: false),
+                    UnitId = table.Column<int>(type: "integer", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    PenjualanId = table.Column<int>(type: "integer", nullable: true),
+                    PengembalianPenjualanId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PengembalianPenjualanItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PengembalianPenjualanItem_PengembalianPenjualan_Pengembalian~",
+                        name: "FK_PengembalianPenjualanItem_PengembalianPenjualan_Pengembalia~",
                         column: x => x.PengembalianPenjualanId,
                         principalTable: "PengembalianPenjualan",
                         principalColumn: "Id");
@@ -803,35 +737,31 @@ namespace ApsWebApp.Migrations
                         name: "FK_PengembalianPenjualanItem_Penjualan_PenjualanId",
                         column: x => x.PenjualanId,
                         principalTable: "Penjualan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PengembalianPenjualanItem_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PengembalianPenjualanItem_Unit_UnitId",
                         column: x => x.UnitId,
                         principalTable: "Unit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Penjualanitem",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Quantity = table.Column<double>(type: "double", nullable: false),
-                    Discount = table.Column<double>(type: "double", nullable: false),
-                    Price = table.Column<double>(type: "double", nullable: false),
-                    UnitId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    PenjualanId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Quantity = table.Column<double>(type: "double precision", nullable: false),
+                    Discount = table.Column<double>(type: "double precision", nullable: false),
+                    Price = table.Column<double>(type: "double precision", nullable: false),
+                    UnitId = table.Column<int>(type: "integer", nullable: true),
+                    ProductId = table.Column<int>(type: "integer", nullable: true),
+                    PenjualanId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -840,22 +770,18 @@ namespace ApsWebApp.Migrations
                         name: "FK_Penjualanitem_Penjualan_PenjualanId",
                         column: x => x.PenjualanId,
                         principalTable: "Penjualan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Penjualanitem_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Penjualanitem_Unit_UnitId",
                         column: x => x.UnitId,
                         principalTable: "Unit",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customer_KaryawanId",
@@ -1084,6 +1010,26 @@ namespace ApsWebApp.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StockMovements_GudangId",
+                table: "StockMovements",
+                column: "GudangId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StockMovements_ProductId",
+                table: "StockMovements",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stocks_GudangId",
+                table: "Stocks",
+                column: "GudangId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stocks_ProductId",
+                table: "Stocks",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Unit_ProductId",
                 table: "Unit",
                 column: "ProductId");
@@ -1131,6 +1077,12 @@ namespace ApsWebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductImage");
+
+            migrationBuilder.DropTable(
+                name: "StockMovements");
+
+            migrationBuilder.DropTable(
+                name: "Stocks");
 
             migrationBuilder.DropTable(
                 name: "Userrole");

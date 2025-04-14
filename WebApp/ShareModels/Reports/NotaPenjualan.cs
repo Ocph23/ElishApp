@@ -20,6 +20,9 @@ namespace ShareModels.Reports
         public double Ekspedisi{ get; set; }
         public double DeadLine { get; set; }
         public string NomorSuratJalan { get; set; }
+
+        public string BankAccountNumber { get; set; }
+        public string BankAccountName{ get; set; }
     }
 
 

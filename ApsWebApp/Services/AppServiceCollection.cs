@@ -10,10 +10,10 @@ namespace ApsWebApp.Services
         public  static IServiceCollection AddMyServices(this IServiceCollection services)
         {
           
-            services.AddSingleton<IIncommingService, IncommingService>();
             services.AddScoped<HttpClient>();
             services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
-            services.AddScoped<ApplicationDbContext>();
+            //services.AddScoped<ApplicationDbContext>();
+            services.AddSingleton<IIncommingService, IncommingService>();
             services.AddScoped<IUserStateService, UserStateService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISupplierService, SupplierService>();
@@ -29,6 +29,7 @@ namespace ApsWebApp.Services
 
             services.AddScoped<IPengembalianPenjualanService, PengembalianPenjualanService>();
             services.AddScoped<IPemindahanService, PemindahanService>();
+            services.AddScoped<IStockService, StockService>();
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<DialogService>();

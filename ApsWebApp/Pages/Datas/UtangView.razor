@@ -8,27 +8,30 @@
 
 @inject IReportService reportService
 @inject NavigationManager nav
+@inject IJSRuntime jsRuntime
 
-
-<RadzenFieldset Text="Laporan Piutang">
+<RadzenFieldset Text="Laporan Utang">
     <div class="row">
         <div class="row" style="margin:5px">
             <div class="col-md-12">
-                <div>
-                    <span>Periode : @date.ToLongDateString()</span>
+                <div style="margin-bottom:30px; display:flex; justify-content: space-between;">
+                    <div>
+                        <span>Periode : @date.ToLongDateString()</span>
+                    </div>
+                    <RadzenButton Icon="print" Text="Cetak" ButtonStyle="ButtonStyle.Danger"
+                                  Click="@(()=>  { jsRuntime.InvokeAsync<object>("open", $"/report/printutang/0", "black"); })" />
                 </div>
-                <a class="btn btn-info ui-button ui-button-md ui-widget ui-state-default ui-corner-all btn-info ui-button-icon-only" href="@($"/report/printpiutang/0")"><i class="ui-button-icon-left pi">print</i></a>
-
-                <RadzenGrid @ref="grid" Data="@(datas)" FilterCaseSensitivity="FilterCaseSensitivity.Default" FilterMode="FilterMode.Advanced"
-                            AllowFiltering="true" AllowSorting="true" TItem="PiutangData">
+                
+                <RadzenDataGrid @ref="grid" Data="@(datas)" FilterCaseSensitivity="FilterCaseSensitivity.Default" FilterMode="FilterMode.Advanced"
+                                AllowFiltering="true" AllowSorting="true" TItem="PiutangData">
                     <Columns>
-                        <RadzenGridColumn TItem="PiutangData" Title="Nomor" Width="160px">
+                        <RadzenDataGridColumn TItem="PiutangData" Title="Nomor" Width="160px">
                             <Template Context="item">
                                 <RadzenLabel @onclick="@(()=>Detail(item))" Text="@item.Nomor" />
                             </Template>
-                        </RadzenGridColumn>
-                        <RadzenGridColumn TItem="PiutangData" Property="Customer" Title="Customer" />
-                        <RadzenGridColumn TItem="PiutangData" Title="Jatuh Tempo" Width="100px">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PiutangData" Property="Customer" Title="Customer" />
+                        <RadzenDataGridColumn TItem="PiutangData" Title="Jatuh Tempo" Width="100px">
                             <Template Context="item">
                                 @if (item.JatuhTempo < DateTime.Now)
                                 {
@@ -39,28 +42,28 @@
                                     <span> @item.JatuhTempo.ToString("dd-MM-yyyy")</span>
                                 }
                             </Template>
-                        </RadzenGridColumn>
-                        <RadzenGridColumn TItem="PiutangData" Property="Sales" Title="Sales" />
-                        <RadzenGridColumn TItem="PiutangData" TextAlign="TextAlign.Right" Width="110px">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PiutangData" Property="Sales" Title="Sales" />
+                        <RadzenDataGridColumn TItem="PiutangData" TextAlign="TextAlign.Right" Width="110px">
                             <Template Context="item">
                                 @item.TagihanAfterDiscount.ToString("N0")
                             </Template>
-                        </RadzenGridColumn>
-                        <RadzenGridColumn TItem="PiutangData" Title="Panjar" TextAlign="TextAlign.Right" Width="110px">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PiutangData" Title="Panjar" TextAlign="TextAlign.Right" Width="110px">
                             <Template Context="item">
                                 @item.Panjar.ToString("N0")
                             </Template>
-                        </RadzenGridColumn>
-                        <RadzenGridColumn TItem="PiutangData" Title="Sisa" TextAlign="TextAlign.Right" Width="110px">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PiutangData" Title="Sisa" TextAlign="TextAlign.Right" Width="110px">
                             <Template Context="item">
                                 @(item.Sisa.ToString("N0"))
                             </Template>
                             <FooterTemplate>
                                 @datas.Sum(x => x.Sisa).ToString("N0");
                             </FooterTemplate>
-                        </RadzenGridColumn>
+                        </RadzenDataGridColumn>
                     </Columns>
-                </RadzenGrid>
+                </RadzenDataGrid>
             </div>
         </div>
     </div>
@@ -71,7 +74,7 @@
 
 @code {
 
-    RadzenGrid<PiutangData> grid;
+    RadzenDataGrid<PiutangData> grid;
 
     DateTime date = DateTime.Now;
 

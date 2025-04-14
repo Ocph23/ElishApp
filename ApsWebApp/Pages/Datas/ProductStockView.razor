@@ -12,6 +12,10 @@
 @inject IGudangService gudangService
 @inject ApplicationDbContext _dbContext
 @inject NavigationManager navManager
+@inject IStockService stockService;
+@inject NotificationService notificationService
+@inject IJSRuntime jsRuntime;
+
 
 <div class="col-md-12">
     <RadzenFieldset Text="Data Real Stok">
@@ -24,7 +28,7 @@
                                     ValueChanged="@((arg)=>SelectGudang(arg))"
                                     Data=@gudangs />
                 </div>
-                <div class="form-group" style="display:flex; flex-direction:column">
+                <div class="form-group mt-2" style="display:flex; flex-direction:column">
                     <label>Merk</label>
                     <RadzenDropDown TextProperty="Name" TValue="Merk"
                                     Style="width:300px"
@@ -32,46 +36,50 @@
                                     Data=@merks />
                 </div>
             </div>
-            <RadzenButton Icon="print" Click="@(()=> { navManager.NavigateTo($"/report/PrintStockBarang/{gudangId}?merkid={merkId}", true); })" />
+            <div class="d-flex gap-2">
+                <RadzenButton Icon="sync" Text="Sync Stock" ButtonStyle="ButtonStyle.Warning" Click="SyncStock" />
+                <RadzenButton Icon="print" Text="Cetak" ButtonStyle="ButtonStyle.Danger" 
+                Click="@(()=>  { jsRuntime.InvokeAsync<object>("open", $"/report/PrintStockBarang/{gudangId}?merkid={merkId}", "black"); })" />
+            </div>
         </div>
-        <RadzenGrid Data="@Stocks" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="ProductStock" FilterMode="FilterMode.Advanced"
-                    @ref="gridStock" LoadData="@LoadData" Count="@count" PageSize="12">
+        <RadzenDataGrid class="mt-2" Data="@Stocks" AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="ProductStock" FilterMode="FilterMode.Advanced"
+                        @ref="gridStock" LoadData="@LoadData" Count="@count" PageSize="12">
             <Columns>
-                <RadzenGridColumn Width="180px" TItem="ProductStock" Property="CodeName" Title="Code" />
-                <RadzenGridColumn TItem="ProductStock" Property="Name" Title="Product" />
-                <RadzenGridColumn Width="75px" TItem="ProductStock" Property="Size" Title="Size" />
-                <RadzenGridColumn Width="75px" TItem="ProductStock" Property="Stock" Title="Stock" />
-                <RadzenGridColumn Width="150px" TItem="ProductStock" Title="Unit">
+                <RadzenDataGridColumn Width="180px" TItem="ProductStock" Property="CodeName" Title="Code" />
+                <RadzenDataGridColumn TItem="ProductStock" Property="Name" Title="Product" />
+                <RadzenDataGridColumn Width="100px" TItem="ProductStock" Property="Size" Title="Size" />
+                <RadzenDataGridColumn Width="100px" TItem="ProductStock" Property="Stock" Title="Stock" />
+                <RadzenDataGridColumn Width="150px" TItem="ProductStock" Title="Unit">
                     <Template Context="data">
-                        <Radzen.Blazor.RadzenDropDown Data="data.Units"
+                        <Radzen.Blazor.RadzenDropDown Data="data.Units" Change="@(()=>ChangeUnit(data))"
                                                       TextProperty="Name" @bind-Value="data.SelectedUnit">
 
                         </Radzen.Blazor.RadzenDropDown>
                     </Template>
-                </RadzenGridColumn>
-                <RadzenGridColumn Width="150px" Title="Nilai" TItem="ProductStock" TextAlign="TextAlign.Right">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn Width="150px" Title="Nilai" TItem="ProductStock" TextAlign="TextAlign.Right">
                     <Template Context="data">
                         @((data.SelectedUnit.Sell * data.Stock).ToString("N2"))
                     </Template>
                     <FooterTemplate>
                         @Stocks.Where(x => merkId == 0 ? true : x.Merk.Id == merkId).Sum(x => x.SelectedUnit == null ? 0 : x.SelectedUnit.Sell * x.Stock).ToString("N2");
                     </FooterTemplate>
-                </RadzenGridColumn>
+                </RadzenDataGridColumn>
             </Columns>
-        </RadzenGrid>
+        </RadzenDataGrid>
     </RadzenFieldset>
 </div>
 
 @code {
 
-    RadzenGrid<ProductStock> gridStock;
+    RadzenDataGrid<ProductStock> gridStock;
     public IEnumerable<ProductStock> Stocks { get; set; } = new List<ProductStock>();
     public List<Merk> merks { get; set; } = new List<Merk>();
     public List<Gudang> gudangs { get; set; } = new List<Gudang>();
     int merkId = 0;
     int gudangId = 0;
     int count;
-  //  bool withOrder = false;
+    //  bool withOrder = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -111,20 +119,71 @@
     }
 
 
-   
-
     async Task LoadData(LoadDataArgs args)
     {
 
         try
         {
-            Stocks = await productService.GetProductStockByGudangId(merkId, gudangId, false);
+            Stocks = await stockService.GetProductStocks(gudangId);
             count = Stocks.Count();
             //   await InvokeAsync(() => StateHasChanged());
         }
         catch (Exception ex)
         {
             throw new SystemException(ex.Message);
+        }
+
+    }
+
+    async Task ChangeUnit(ProductStock stock)
+    {
+        if (stock.UnitSelected.Level < stock.SelectedUnit.Level)
+        {
+            stock.Stock = stock.Stock / stock.SelectedUnit.Quantity;
+        }
+        else
+        {
+            stock.Stock = stock.Stock * stock.UnitSelected.Quantity;
+        }
+        stock.UnitSelected = stock.SelectedUnit;
+    }
+
+
+    async Task SyncStock()
+    {
+        try
+        {
+            var success = await stockService.SyncStockFromMovmentStock();
+            if (success)
+                notificationService.Notify(new NotificationMessage
+                    {
+                        Detail = "Sync Stock berhasil !",
+                        Duration = 3000,
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Success"
+
+                    });
+            else
+                notificationService.Notify(new NotificationMessage
+                    {
+                        Detail = "Sync Stock Gagal !",
+                        Duration = 3000,
+                        Severity = NotificationSeverity.Info,
+                        Summary = "Info"
+
+                    });
+        }
+        catch (Exception)
+        {
+
+            notificationService.Notify(new NotificationMessage
+                {
+                    Detail = "Maaf terjadi kesalahan  !",
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error"
+
+                });
         }
 
     }

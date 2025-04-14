@@ -1,4 +1,4 @@
-@page "/pembelian/order/detail/{id?}";
+﻿@page "/pembelian/order/detail/{id?}";
 @using ShareModels
 @using ApsWebApp.Services;
 
@@ -16,9 +16,9 @@
 
 <RadzenTabs>
     <Tabs>
-        <RadzenTabsItem Text="@(@title +"Order Pembelian")">
+        <RadzenTabsItem Text="@(@title +" Order Pembelian")">
             <RadzenFieldset Text="Data Supplier">
-                <div class="col-md-12  align-items-center d-flex">
+                <div class="col-md-12 align-items-center d-flex">
                     <div class="col-md-6">
 
                         <div class="row" style="margin-top:5px">
@@ -32,7 +32,7 @@
                                                 Change=@(args => SelectSupplier(args, "Supplier")) />
                             </div>
                         </div>
-                        <div class="row" style="margin-top:5px">
+                        <div class="row nt-2" >
                             <div class="col-md-4 align-items-center d-flex">
                                 <RadzenLabel Text="Status" Style="margin-top:5px" />
                             </div>
@@ -60,11 +60,11 @@
             </RadzenFieldset>
 
             <RadzenFieldset Text="Data Orders">
-                <div class="row col-md-8">
+                <div class="row col-md-6">
                     <div class="col-md-4 align-items-center d-flex">
                         <RadzenLabel Text="Merek" />
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <RadzenDropDown AllowClear="true" AllowFiltering="true"
                                         FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                         Data=@merks
@@ -72,11 +72,11 @@
                                         TextProperty="Name" ValueProperty="Id" Style="width:400px" />
                     </div>
                 </div>
-                <div class="row col-md-8">
+                <div class="row col-md-6">
                     <div class="col-md-4 align-items-center d-flex">
                         <RadzenLabel Text="Product" />
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-8 mt-1">
                         <RadzenDropDown AllowClear="true" AllowFiltering="true"
                                         FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                         Data=@products.Where( item=> merkId<=0?true: item.Merk.Id==merkId && !model.Items.Any(data=> data.Product.Id.Equals(item.Id)))
@@ -86,24 +86,24 @@
                     </div>
                 </div>
 
-                <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true"
+                <RadzenDataGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" class="my-2"
                             AllowSorting="true" TItem="OrderPembelianItem">
                     <Columns>
-                        <RadzenGridColumn Width="180px" TItem="OrderPembelianItem" Property="Product.CodeName" Title="Code" />
-                        <RadzenGridColumn TItem="OrderPembelianItem" Property="Product.Name" Title="Product" />
-                        <RadzenGridColumn Width="100px" TItem="OrderPembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Quntity" Title="Quntity">
+                        <RadzenDataGridColumn Width="180px" TItem="OrderPembelianItem" Property="Product.CodeName" Title="Code" />
+                        <RadzenDataGridColumn TItem="OrderPembelianItem" Property="Product.Name" Title="Product" />
+                        <RadzenDataGridColumn Width="100px" TItem="OrderPembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Quntity" Title="Quntity">
                             <Template Context="item">
                                 <RadzenNumeric TValue="double" @bind-Value="item.Quntity" Step="1" Change=@(args => OnChangeOrderItem(args, item)) />
                             </Template>
-                        </RadzenGridColumn>
-                        <RadzenGridColumn Width="130px" TItem="OrderPembelianItem" Property="Unit.Name" Title="Unit">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Width="130px" TItem="OrderPembelianItem" Property="Unit.Name" Title="Unit">
                             <EditTemplate Context="item">
                                 <RadzenDropDown @bind-Value="item.Unit" Data="@item.Product.Units"
                                                 Change=@(args => OnChangeOrderItem(args, item))
                                                 TextProperty="Name" Style="width:100%" />
                             </EditTemplate>
-                        </RadzenGridColumn>
-                        <RadzenGridColumn Width="100px" TItem="OrderPembelianItem" TextAlign="TextAlign.Right" Property="Price" Title="Price">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Width="100px" TItem="OrderPembelianItem" TextAlign="TextAlign.Right" Property="Price" Title="Price">
                             <EditTemplate Context="item">
                                 <RadzenNumeric @bind-Value="item.Price" Step="0.25" />
                             </EditTemplate>
@@ -115,16 +115,16 @@
                                 <div>Discount</div>
                                 <div>Total Payment </div>
                             </FooterTemplate>
-                        </RadzenGridColumn>
-                        <RadzenGridColumn Width="130px" TItem="OrderPembelianItem" Property="DiscountView" Title="Disc">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Width="130px" TItem="OrderPembelianItem" Property="DiscountView" Title="Disc">
                             <EditTemplate Context="item">
                                 <RadzenNumeric @bind-Value="item.Discount" Step="0.1" />
                             </EditTemplate>
                             <Template Context="item">
                                 @item.DiscountView.ToString("N2")
                             </Template>
-                        </RadzenGridColumn>
-                        <RadzenGridColumn Width="150px" TItem="OrderPembelianItem" Property="Total" TextAlign="TextAlign.Right" Title="Total">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Width="150px" TItem="OrderPembelianItem" Property="Total" TextAlign="TextAlign.Right" Title="Total">
                             <Template Context="item">
                                 @item.Total.ToString("N2")
                             </Template>
@@ -135,17 +135,17 @@
                                     <div>@((model.Total - model.Items.Sum(x => x.DiscountView)).ToString("N"))</div>
                                 }
                             </FooterTemplate>
-                        </RadzenGridColumn>
+                        </RadzenDataGridColumn>
 
-                        <RadzenGridColumn TItem="OrderPembelianItem" Property="Keterangan" Title="Keterangan">
+                        <RadzenDataGridColumn TItem="OrderPembelianItem" Property="Keterangan" Title="Keterangan">
                             <Template Context="item">
                                 <RadzenTextBox Style="width:100%" @bind-Value="item.Keterangan" />
                             </Template>
-                        </RadzenGridColumn>
+                        </RadzenDataGridColumn>
 
 
-                        <RadzenGridColumn TItem="OrderPembelianItem" Context="sampleBlazorModelsSampleOrder" Visible="@(model.Items.Count>0  && ((Int32)model.Status < 1))"
-                                          Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                        <RadzenDataGridColumn TItem="OrderPembelianItem" Context="sampleBlazorModelsSampleOrder" Visible="@(model.Items.Count>0  && ((Int32)model.Status < 1))"
+                                           Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                             <HeaderTemplate>
                                 <RadzenCheckBox TValue="bool" ValueChanged="@((x)=>OnCheckChange(x))" />
                             </HeaderTemplate>
@@ -165,9 +165,9 @@
                                 <RadzenButton Click=@(args => nav.NavigateTo("/pembelian")) Icon="cancel" ButtonStyle="ButtonStyle.Warning" />
                                 <RadzenButton Visible="@(model.Items.Count>0  && ((Int32)model.Status < 1))" Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
                             </FooterTemplate>
-                        </RadzenGridColumn>
+                        </RadzenDataGridColumn>
                     </Columns>
-                </RadzenGrid>
+                </RadzenDataGrid>
             </RadzenFieldset>
         </RadzenTabsItem>
     </Tabs>
@@ -191,7 +191,7 @@
 
     private OrderPembelian model = new OrderPembelian() { Items = new List<OrderPembelianItem>() };
 
-    private RadzenGrid<OrderPembelianItem> ordersGrid;
+    private RadzenDataGrid<OrderPembelianItem> ordersGrid;
 
 
     void OnCheckChange(bool check)

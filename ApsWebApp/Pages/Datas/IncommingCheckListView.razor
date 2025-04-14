@@ -19,24 +19,24 @@
     @if (service.PembelianSelected != null)
     {
         <Radzen.Blazor.RadzenFieldset Text="Data">
-            <RadzenGrid Data="service.Datas" FilterCaseSensitivity=" FilterCaseSensitivity.CaseInsensitive" AllowSorting="true">
+            <RadzenDataGrid Data="service.Datas" FilterCaseSensitivity=" FilterCaseSensitivity.CaseInsensitive" AllowSorting="true">
                 <Columns>
-                    <Radzen.Blazor.RadzenGridColumn TItem="IncomingItem" Title="Article" Property="Product.CodeArticle" Width="150px" />
-                    <Radzen.Blazor.RadzenGridColumn TItem="IncomingItem" Title="Code Product" Property="Product.CodeName" Width="180px" />
-                    <Radzen.Blazor.RadzenGridColumn TItem="IncomingItem" Title="Name" Property="Product.Name" />
-                    <Radzen.Blazor.RadzenGridColumn TItem="IncomingItem" Title="Buy" Width="150px">
+                    <RadzenDataGridColumn TItem="IncomingItem" Title="Article" Property="Product.CodeArticle" Width="150px" />
+                    <RadzenDataGridColumn TItem="IncomingItem" Title="Code Product" Property="Product.CodeName" Width="180px" />
+                    <RadzenDataGridColumn TItem="IncomingItem" Title="Name" Property="Product.Name" />
+                    <RadzenDataGridColumn TItem="IncomingItem" Title="Buy" Width="150px">
                         <Template Context="data">
                             @($"{data.Amount} {data.Unit.Name}")
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn TItem="IncomingItem" Title="Real" Width="100px">
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="IncomingItem" Title="Real" Width="100px">
                         <Template Context="data">
                             <RadzenNumeric @bind-Value="data.ActualValue" />
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn TItem="IncomingItem" Title="Status" Property="Status" Width="150px" />
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="IncomingItem" Title="Status" Property="Status" Width="150px" />
                 </Columns>
-            </RadzenGrid>
+            </RadzenDataGrid>
         </Radzen.Blazor.RadzenFieldset>
     }
 

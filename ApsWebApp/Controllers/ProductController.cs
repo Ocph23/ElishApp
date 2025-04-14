@@ -15,10 +15,14 @@ namespace ApsWebApp.Controllers
     public class ProductController : ControllerBase, IBaseController<Product>
     {
         private readonly IProductService service;
+        private readonly IGudangService gudangService;
+        private readonly IStockService stockService;
 
-        public ProductController(IProductService _service)
+        public ProductController(IProductService _service, IGudangService _gudangService, IStockService _stockService)
         {
             service = _service;
+            gudangService = _gudangService;
+            stockService = _stockService;
         }
 
         [HttpGet]
@@ -39,7 +43,9 @@ namespace ApsWebApp.Controllers
         {
             try
             {
-                return Ok(await service.GetProductStock());
+                var gudangs = await gudangService.Get();
+                var gudang = gudangs.FirstOrDefault();
+                return Ok(await stockService.GetProductStocks(gudang.Id));
             }
             catch (Exception ex)
             {

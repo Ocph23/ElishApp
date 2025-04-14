@@ -12,7 +12,7 @@
 <RadzenFieldset >
     <HeaderTemplate>Data Merek</HeaderTemplate>
    <ChildContent>
-        <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditMerk>($"Add Merk",
+        <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditMerk>($"Tambah Merk",
                       new Dictionary<string, object>() { { "model", new Merk()}, },
                       new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
 

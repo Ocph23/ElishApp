@@ -12,7 +12,6 @@
 @inject DialogService dialog;
 
 
-
 <nav aria-label="breadcrumb">
     <div class="breadcrumb">
         <h3>Detail Product</h3>
@@ -24,7 +23,7 @@
     <Tabs>
         <RadzenTabsItem Text="Data Produk">
             <RadzenTemplateForm Data="model" Submit="@(async (Product prod)=> { await SaveProduct(model); })">
-                <Radzen.Blazor.RadzenFieldset >
+                <Radzen.Blazor.RadzenFieldset>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="row" style="margin-top:10px">
@@ -129,7 +128,7 @@
                         </div>
                     </div>
                     <hr />
-                    <div  style="margin:10px; display:flex; justify-content:end">
+                    <div style="margin:10px; display:flex; justify-content:end">
                         <Radzen.Blazor.RadzenButton Visible="!IsNew" Icon="undo" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" Style="margin:5px" />
                         <Radzen.Blazor.RadzenButton Visible="IsNew" Icon="add" Click="@(()=>CreateNew())" ButtonStyle="ButtonStyle.Info" Style="margin:5px" />
                         <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Warning" Style="margin:5px" />
@@ -139,62 +138,62 @@
                 <hr />
             </RadzenTemplateForm>
         </RadzenTabsItem>
-            <RadzenTabsItem Visible="model.Id > 0" Text="Harga Satuan">
-                <RadzenFieldset Text="Satuan dan Harga Product">
-                    <Radzen.Blazor.RadzenButton ButtonType="ButtonType.Button" class="btn btn-success" Click="@(()=>AddItem())" Icon="add" Style="margin-bottom:10px" />
-                    <RadzenGrid @ref="unitGrid" Data="@(model.Units)" AllowFiltering="true"
+        <RadzenTabsItem Visible="model.Id > 0" Text="Harga Satuan">
+            <RadzenFieldset Text="Satuan dan Harga Product">
+                <Radzen.Blazor.RadzenButton ButtonType="ButtonType.Button" class="btn btn-success" Click="@(()=>AddItem())" Icon="add" Style="margin-bottom:10px" />
+                <RadzenDataGrid @ref="unitGrid" Data="@(model.Units)" AllowFiltering="true"
                                 AllowPaging="true" AllowSorting="true" TItem="Unit">
-                        <Columns>
-                            <RadzenGridColumn TItem="Unit" Property="Level" Title="Level" Width="75px">
-                                <EditTemplate Context="item">
-                                    <RadzenNumeric @bind-Value="item.Level" />
-                                </EditTemplate>
-                            </RadzenGridColumn>
-                            <RadzenGridColumn TItem="Unit" Property="Quantity" TextAlign="TextAlign.Right" Width="75px" Title="Qty">
-                                <EditTemplate Context="item">
-                                    <RadzenNumeric @bind-Value="item.Quantity" />
-                                </EditTemplate>
-                            </RadzenGridColumn>
-                            <RadzenGridColumn TItem="Unit" Property="Name" Title="Unit Name">
-                                <Template Context="item">
-                                    <RadzenTextBox @bind-Value="item.Name" />
-                                </Template>
-                            </RadzenGridColumn>
-                            <RadzenGridColumn TItem="Unit" TextAlign="TextAlign.Right" Context="unit" Property="Buy" Title="Buy">
-                                <Template>
-                                    @unit.Buy.ToString("N")
-                                </Template>
-                                <EditTemplate Context="item">
-                                    <RadzenNumeric @bind-Value="item.Buy" />
-                                </EditTemplate>
-                            </RadzenGridColumn>
-                            <RadzenGridColumn TItem="Unit" Context="unit" TextAlign="TextAlign.Right" Property="Sell" Title="Sell">
-                                <Template>
-                                    @unit.Sell.ToString("N")
-                                </Template>
-                                <EditTemplate Context="item">
-                                    <RadzenNumeric @bind-Value="item.Sell" />
-                                </EditTemplate>
-                            </RadzenGridColumn>
+                    <Columns>
+                        <RadzenDataGridColumn TItem="Unit" Property="Level" Title="Level" Width="75px">
+                            <EditTemplate Context="item">
+                                <RadzenNumeric @bind-Value="item.Level" />
+                            </EditTemplate>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Unit" Property="Quantity" TextAlign="TextAlign.Right" Width="75px" Title="Qty">
+                            <EditTemplate Context="item">
+                                <RadzenNumeric @bind-Value="item.Quantity" />
+                            </EditTemplate>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Unit" Property="Name" Title="Unit Name">
+                            <Template Context="item">
+                                <RadzenTextBox @bind-Value="item.Name" />
+                            </Template>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Unit" TextAlign="TextAlign.Right" Context="unit" Property="Buy" Title="Buy">
+                            <Template>
+                                @unit.Buy.ToString("N")
+                            </Template>
+                            <EditTemplate Context="item">
+                                <RadzenNumeric @bind-Value="item.Buy" />
+                            </EditTemplate>
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="Unit" Context="unit" TextAlign="TextAlign.Right" Property="Sell" Title="Sell">
+                            <Template>
+                                @unit.Sell.ToString("N")
+                            </Template>
+                            <EditTemplate Context="item">
+                                <RadzenNumeric @bind-Value="item.Sell" />
+                            </EditTemplate>
+                        </RadzenDataGridColumn>
 
-                            <RadzenGridColumn TItem="Unit" Context="sampleBlazorModelsSampleOrder"
-                                              Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
-                                <Template Context="item">
-                                    <RadzenButton Icon="edit" Size="ButtonSize.Medium" Click="@(args => EditUnit(item))">
-                                    </RadzenButton>
-                                </Template>
-                                <EditTemplate Context="item">
-                                    <RadzenButton Icon="save" Size="ButtonSize.Medium" Click="@((args) => SaveUnit(item))" ButtonStyle="ButtonStyle.Warning">
-                                    </RadzenButton>
-                                    <RadzenButton Icon="cancel" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Danger"
-                                                  Click="@((args) => DeleteUnit(item))">
-                                    </RadzenButton>
-                                </EditTemplate>
-                            </RadzenGridColumn>
+                        <RadzenDataGridColumn TItem="Unit" Context="sampleBlazorModelsSampleOrder"
+                                              Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                            <Template Context="item">
+                                <RadzenButton Icon="edit" Size="ButtonSize.Medium" Click="@(args => EditUnit(item))">
+                                </RadzenButton>
+                            </Template>
+                            <EditTemplate Context="item">
+                                <RadzenButton Icon="save" Size="ButtonSize.Medium" Click="@((args) => SaveUnit(item))" ButtonStyle="ButtonStyle.Warning">
+                                </RadzenButton>
+                                <RadzenButton Icon="cancel" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Danger"
+                                              Click="@((args) => DeleteUnit(item))">
+                                </RadzenButton>
+                            </EditTemplate>
+                        </RadzenDataGridColumn>
 
-                        </Columns>
-                    </RadzenGrid>
-                </RadzenFieldset>
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenFieldset>
         </RadzenTabsItem>
     </Tabs>
 </RadzenTabs>
@@ -202,232 +201,232 @@
 
 
 
-         
 
-            @code{
-                [Parameter]
-                public string id { get; set; }
 
-                public Product model { get; set; }
+            @code {
+    [Parameter]
+    public string id { get; set; }
 
-                public IEnumerable<Merk> merks;
-                public IEnumerable<Category> categories;
-                public IEnumerable<Supplier> suppliers;
-                public bool IsNew;
+    public Product model { get; set; }
 
-               // Category selectedCategory;
+    public IEnumerable<Merk> merks;
+    public IEnumerable<Category> categories;
+    public IEnumerable<Supplier> suppliers;
+    public bool IsNew;
 
-                List<ButtonLitleSave> components = new List<ButtonLitleSave>();
+    // Category selectedCategory;
 
-                RadzenGrid<Unit> unitGrid;
+    List<ButtonLitleSave> components = new List<ButtonLitleSave>();
 
-                ButtonLitleSave ComponentRef
-                {
-                    set { components.Add(value); }
-                }
+    RadzenDataGrid<Unit> unitGrid;
 
-                protected override async Task OnInitializedAsync()
-                {
-                    suppliers = await supplierService.GetSuppliers();
-                    categories = await categoryService.Get();
-                    merks = await merkService.Get();
+    ButtonLitleSave ComponentRef
+    {
+        set { components.Add(value); }
+    }
 
-                    if (!string.IsNullOrEmpty(id))
+    protected override async Task OnInitializedAsync()
+    {
+        suppliers = await supplierService.GetSuppliers();
+        categories = await categoryService.Get();
+        merks = await merkService.Get();
+
+        if (!string.IsNullOrEmpty(id))
+        {
+            var Id = Convert.ToInt32(id);
+            model = await productService.Get(Id);
+        }
+        else
+        {
+            IsNew = true;
+            model = new Product() { };
+        }
+    }
+
+
+    public void AddItem()
+    {
+        if (model.Units == null)
+            model.Units = new List<Unit>();
+
+        var newUnit = new Unit { Quantity = 1, Level = model.Units.Count };
+        model.Units.Add(newUnit);
+        unitGrid.EditRow(newUnit);
+        unitGrid.Reload();
+    }
+
+    public void OnChange(int id)
+    {
+        var com = components.Where(x => x.unit.Id == id).FirstOrDefault();
+        if (com != null)
+        {
+            com.OnChange();
+        }
+    }
+
+    public async Task SaveProduct(Product prod)
+    {
+        try
+        {
+            var saved = false;
+            if (model.Id > 0)
+            {
+                var Id = Convert.ToInt32(id);
+                saved = await productService.Update(Id, model);
+
+            }
+            else
+            {
+                var result = await productService.AddProduct(model.Supplier.Id, model);
+                if (result != null)
+                    saved = true;
+
+            }
+
+            if (saved)
+                NotificationService.Notify(new NotificationMessage
                     {
-                        var Id = Convert.ToInt32(id);
-                        model = await productService.Get(Id);
-                    }
-                    else
-                    {
-                        IsNew = true;
-                        model = new Product() { };
-                    }
-                }
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Success",
+                        Detail = "Data Berhasil Disimpan !",
+                        Duration = 3000
+                    });
 
-
-                public void AddItem()
+            else
+                throw new SystemException("Data Not Saved !");
+        }
+        catch (System.Exception ex)
+        {
+            NotificationService.Notify(new NotificationMessage
                 {
-                    if (model.Units == null)
-                        model.Units = new List<Unit>();
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail = ex.Message,
+                    Duration = 3000
+                });
+        }
+    }
 
-                    var newUnit = new Unit { Quantity = 1, Level = model.Units.Count };
-                    model.Units.Add(newUnit);
-                    unitGrid.EditRow(newUnit);
-                    unitGrid.Reload();
-                }
+    public void CreateNew()
+    {
+        var newModel = new Product() { Supplier = model.Supplier, Merk = model.Merk, Category = model.Category };
+        model = newModel;
+    }
 
-                public void OnChange(int id)
+
+    public void GoBack()
+    {
+        nav.NavigateTo($"/product");
+    }
+
+
+    protected async Task OnButtonClickHandler(ChangeEventArgs e)
+    {
+        var paramss = (object[])e.Value;
+        var btn = (ButtonLitleSave)paramss[0];
+        var unit = (Unit)paramss[1];
+        btn.IconName = "support";
+        btn.IconStyle = "loader";
+        Unit temUnit;
+        if (unit.Id > 0)
+        {
+            temUnit = await productService.UpdateUnit(unit.Id, unit);
+        }
+        else
+        {
+            temUnit = await productService.AddUnit(model.Id, unit);
+            if (temUnit != null)
+            {
+                unit = temUnit;
+            }
+        }
+
+        if (temUnit != null)
+        {
+            btn.IconName = "check_circle";
+            btn.IconStyle = "iconSuccess";
+        }
+        else
+        {
+            btn.IconName = "error_outline";
+            btn.IconStyle = "iconError";
+        }
+
+        await Task.Delay(4000);
+        btn.IconName = "";
+        btn.IconStyle = "";
+        StateHasChanged();
+    }
+
+    async Task SaveUnit(Unit unit)
+    {
+        try
+        {
+            Unit temUnit;
+            if (unit.Id > 0)
+            {
+                temUnit = await productService.UpdateUnit(unit.Id, unit);
+
+            }
+            else
+            {
+                temUnit = await productService.AddUnit(model.Id, unit);
+                if (temUnit != null)
                 {
-                    var com = components.Where(x => x.unit.Id == id).FirstOrDefault();
-                    if (com != null)
-                    {
-                        com.OnChange();
-                    }
+                    unit = temUnit;
                 }
+            }
 
-                public async Task SaveProduct(Product prod)
+            await unitGrid.UpdateRow(unit);
+
+            NotificationService.Notify(new NotificationMessage
                 {
-                    try
-                    {
-                        var saved = false;
-                        if (model.Id > 0)
-                        {
-                            var Id = Convert.ToInt32(id);
-                            saved = await productService.Update(Id, model);
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Success",
+                    Detail = "Data Berhasil Disimpan !",
+                    Duration = 3000
+                });
 
-                        }
-                        else
-                        {
-                            var result = await productService.AddProduct(model.Supplier.Id, model);
-                            if (result != null)
-                                saved = true;
-
-                        }
-
-                        if (saved)
-                            NotificationService.Notify(new NotificationMessage
-                            {
-                                Severity = NotificationSeverity.Success,
-                                Summary = "Success",
-                                Detail = "Data Berhasil Disimpan !",
-                                Duration = 3000
-                            });
-
-                        else
-                            throw new SystemException("Data Not Saved !");
-                    }
-                    catch (System.Exception ex)
-                    {
-                        NotificationService.Notify(new NotificationMessage
-                        {
-                            Severity = NotificationSeverity.Error,
-                            Summary = "Error",
-                            Detail = ex.Message,
-                            Duration = 3000
-                        });
-                    }
-                }
-
-                public void CreateNew()
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            NotificationService.Notify(new NotificationMessage
                 {
-                    var newModel = new Product() { Supplier = model.Supplier, Merk = model.Merk, Category = model.Category };
-                    model = newModel;
-                }
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail = ex.Message,
+                    Duration = 3000
+                });
+        }
+    }
+
+    async Task DeleteUnit(Unit unit)
+    {
+
+        var resultDialog = await dialog.Confirm("Yakin Hapus Data Unit ? ", "Hapus Unit", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
+        if (resultDialog != null && resultDialog == true)
+        {
+            await unitGrid.UpdateRow(unit);
+            if (unit.Id > 0)
+            {
+                bool removed = await productService.RemoveUnit(unit.Id);
+            }
+            model.Units.Remove(unit);
+            await unitGrid.Reload();
+        }
+    }
 
 
-                public void GoBack()
-                {
-                    nav.NavigateTo($"/product");
-                }
+    void EditUnit(Unit item)
+    {
+        unitGrid.EditRow(item);
+    }
 
-
-                protected async Task OnButtonClickHandler(ChangeEventArgs e)
-                {
-                    var paramss = (object[])e.Value;
-                    var btn = (ButtonLitleSave)paramss[0];
-                    var unit = (Unit)paramss[1];
-                    btn.IconName = "support";
-                    btn.IconStyle = "loader";
-                    Unit temUnit;
-                    if (unit.Id > 0)
-                    {
-                        temUnit = await productService.UpdateUnit(unit.Id, unit);
-                    }
-                    else
-                    {
-                        temUnit = await productService.AddUnit(model.Id, unit);
-                        if (temUnit != null)
-                        {
-                            unit = temUnit;
-                        }
-                    }
-
-                    if (temUnit != null)
-                    {
-                        btn.IconName = "check_circle";
-                        btn.IconStyle = "iconSuccess";
-                    }
-                    else
-                    {
-                        btn.IconName = "error_outline";
-                        btn.IconStyle = "iconError";
-                    }
-
-                    await Task.Delay(4000);
-                    btn.IconName = "";
-                    btn.IconStyle = "";
-                    StateHasChanged();
-                }
-
-                async Task SaveUnit(Unit unit)
-                {
-                    try
-                    {
-                        Unit temUnit;
-                        if (unit.Id > 0)
-                        {
-                            temUnit = await productService.UpdateUnit(unit.Id, unit);
-
-                        }
-                        else
-                        {
-                            temUnit = await productService.AddUnit(model.Id, unit);
-                            if (temUnit != null)
-                            {
-                                unit = temUnit;
-                            }
-                        }
-
-                        await unitGrid.UpdateRow(unit);
-
-                        NotificationService.Notify(new NotificationMessage
-                        {
-                            Severity = NotificationSeverity.Success,
-                            Summary = "Success",
-                            Detail = "Data Berhasil Disimpan !",
-                            Duration = 3000
-                        });
-
-                        StateHasChanged();
-                    }
-                    catch (Exception ex)
-                    {
-                        NotificationService.Notify(new NotificationMessage
-                        {
-                            Severity = NotificationSeverity.Error,
-                            Summary = "Error",
-                            Detail = ex.Message,
-                            Duration = 3000
-                        });
-                    }
-                }
-
-                async Task DeleteUnit(Unit unit)
-                {
-
-                    var resultDialog = await dialog.Confirm("Yakin Hapus Data Unit ? ", "Hapus Unit", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
-                    if (resultDialog != null && resultDialog == true)
-                    {
-                        await unitGrid.UpdateRow(unit);
-                        if (unit.Id > 0)
-                        {
-                            bool removed = await productService.RemoveUnit(unit.Id);
-                        }
-                        model.Units.Remove(unit);
-                        await unitGrid.Reload();
-                    }
-                }
-
-
-                void EditUnit(Unit item)
-                {
-                    unitGrid.EditRow(item);
-                }
-
-                void CancelUnit(Unit item)
-                {
-                    unitGrid.CancelEditRow(item);
-                }
+    void CancelUnit(Unit item)
+    {
+        unitGrid.CancelEditRow(item);
+    }
 
 
 

@@ -1,4 +1,6 @@
 ﻿using ApsWebApp.Data;
+using ApsWebApp.Validations;
+using FluentValidation;
 using ShareModels;
 using System;
 using System.Collections.Generic;
@@ -10,9 +12,12 @@ namespace ApsWebApp.Services
     public class GudangService : IGudangService
     {
         private readonly ApplicationDbContext dbContext;
-        public GudangService(ApplicationDbContext db)
+        private readonly IValidator<Gudang> gudangValidator;
+
+        public GudangService(ApplicationDbContext db, IValidator<Gudang> _gudangValidator)
         {
             dbContext = db;
+            gudangValidator = _gudangValidator;
         }
         public  Task<bool> Delete(int id)
         {
@@ -49,6 +54,9 @@ namespace ApsWebApp.Services
         {
             try
             {
+                var validateResult = gudangValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 dbContext.Gudang.Add(value);
                  dbContext.SaveChanges();
                 return Task.FromResult(value);
@@ -63,6 +71,9 @@ namespace ApsWebApp.Services
         {
             try
             {
+                var validateResult = gudangValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 var existsModel = dbContext.Gudang.Where(x => x.Id == id).FirstOrDefault();
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");

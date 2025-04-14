@@ -14,7 +14,7 @@
 <RadzenFieldset>
     <HeaderTemplate>Data Gudang</HeaderTemplate>
     <ChildContent>
-        <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditGudang>($"Add Gudang",
+        <RadzenButton ButtonType="ButtonType.Button" Click=@(args => DialogService.OpenAsync<EditGudang>($"Tambah Gudang",
                       new Dictionary<string, object>() { { "model", new Gudang()}, },
                       new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Success" Style="margin:5px" />
 

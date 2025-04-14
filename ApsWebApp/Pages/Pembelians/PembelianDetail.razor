@@ -12,7 +12,7 @@
 @inject IProductService productService;
 @inject NotificationService NotificationService;
 @inject DialogService DialogService;
-
+@inject IStockService stockService;
 
 
 <nav aria-label="breadcrumb">
@@ -22,7 +22,7 @@
     <div class="col-md-12">
         <RadzenTabs>
             <Tabs>
-                <RadzenTabsItem Text="Data Pembelian" >
+                <RadzenTabsItem Text="Data Pembelian">
                     <div class="row" style="padding:10px">
                         <div class="col-md-6">
                             <div class="row" style="margin-top:10px">
@@ -122,28 +122,28 @@
                                 </div>
 
 
-                                <RadzenGrid @ref="ordersGrid" Data="@(model.Items)" 
-                                 AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" 
-                                 TItem="PembelianItem">
+                                <RadzenDataGrid class="my-2" @ref="ordersGrid" Data="@(model.Items)"
+                                                AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true"
+                                                TItem="PembelianItem">
                                     <Columns>
-                                        <RadzenGridColumn Width="180px" TItem="PembelianItem" Property="Product.CodeName" Title="Code" />
-                                        <RadzenGridColumn TItem="PembelianItem" Property="Product.Name" Title="Product" />
-                                        <RadzenGridColumn Width="85px" TItem="PembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
+                                        <RadzenDataGridColumn Width="180px" TItem="PembelianItem" Property="Product.CodeName" Title="Code" />
+                                        <RadzenDataGridColumn TItem="PembelianItem" Property="Product.Name" Title="Product" />
+                                        <RadzenDataGridColumn Width="85px" TItem="PembelianItem" TextAlign="TextAlign.Right" Context="data" Property="Amount" Title="Amount">
                                             <Template Context="data">
                                                 @data.Amount
                                             </Template>
                                             <EditTemplate Context="item">
                                                 <RadzenNumeric TValue="double" @bind-Value="item.Amount" Step="0.25" Change=@(args => OnChangeOrderItem(args, item)) />
                                             </EditTemplate>
-                                        </RadzenGridColumn>
-                                        <RadzenGridColumn Width="80px" TItem="PembelianItem" Property="Unit.Name" Title="Unit">
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn Width="80px" TItem="PembelianItem" Property="Unit.Name" Title="Unit">
                                             <EditTemplate Context="item">
                                                 <RadzenDropDown @bind-Value="item.Unit.Id" Data="@item.Product.Units"
                                                                 Change=@(args => OnChangeOrderItem(args, item))
                                                                 TextProperty="Name" ValueProperty="Id" Style="width:100%" />
                                             </EditTemplate>
-                                        </RadzenGridColumn>
-                                        <RadzenGridColumn Width="120px" TextAlign="TextAlign.Right" TItem="PembelianItem" Property="Price" Title="Price">
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn Width="120px" TextAlign="TextAlign.Right" TItem="PembelianItem" Property="Price" Title="Price">
                                             <Template Context="item">
                                                 @(item.Price.ToString("N"))
                                             </Template>
@@ -155,8 +155,8 @@
                                                 <div>Discount</div>
                                                 <div>Total Payment </div>
                                             </FooterTemplate>
-                                        </RadzenGridColumn>
-                                        <RadzenGridColumn Width="120px" TextAlign="TextAlign.Right" TItem="PembelianItem" Title="Disc">
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn Width="120px" TextAlign="TextAlign.Right" TItem="PembelianItem" Title="Disc">
                                             <Template Context="item">
                                                 @(item.DiscountView.ToString("N"))
                                             </Template>
@@ -168,8 +168,8 @@
                                                 <div>Discount</div>
                                                 <div>Total Payment </div>
                                             </FooterTemplate>
-                                        </RadzenGridColumn>
-                                        <RadzenGridColumn Width="150px" TItem="PembelianItem" Property="Total" Title="Total" TextAlign="TextAlign.Right">
+                                        </RadzenDataGridColumn>
+                                        <RadzenDataGridColumn Width="150px" TItem="PembelianItem" Property="Total" Title="Total" TextAlign="TextAlign.Right">
                                             <Template Context="item">
                                                 @(item.Total.ToString("N"))
                                             </Template>
@@ -177,14 +177,14 @@
                                                 @{
                                                     <div>@model.Total.ToString("N")</div>
                                                     <div>@model.Items.Sum(x => x.DiscountView).ToString("N")</div>
-                                                    <div>@((model.Total- model.Items.Sum(x => x.DiscountView)).ToString("N"))</div>
+                                                    <div>@((model.Total - model.Items.Sum(x => x.DiscountView)).ToString("N"))</div>
                                                 }
                                             </FooterTemplate>
-                                        </RadzenGridColumn>
+                                        </RadzenDataGridColumn>
 
-                                        <RadzenGridColumn TItem="PembelianItem" Context="sampleBlazorModelsSampleOrder"
-                                                          Visible=@((Int32)model.Status < 1)
-                                                          Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                                        <RadzenDataGridColumn TItem="PembelianItem" Context="sampleBlazorModelsSampleOrder"
+                                        Visible=@((Int32)model.Status < 1)
+                                        Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                                             <HeaderTemplate>
                                                 <RadzenCheckBox Value="@(checkall)" TValue="bool" ValueChanged="@((x)=>OnCheckChange(x))" />
                                             </HeaderTemplate>
@@ -196,15 +196,15 @@
                                                 <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(order))">
                                                 </RadzenButton>
                                                 <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary"
-                                                              Click="@((args) => CancelEdit(order))">
+                                                Click="@((args) => CancelEdit(order))">
                                                 </RadzenButton>
                                             </EditTemplate>
                                             <FooterTemplate>
                                                 <RadzenButton Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
                                             </FooterTemplate>
-                                        </RadzenGridColumn>
+                                        </RadzenDataGridColumn>
                                     </Columns>
-                                </RadzenGrid>
+                                </RadzenDataGrid>
                             </RadzenFieldset>
 
 
@@ -214,37 +214,38 @@
                 <RadzenTabsItem Text="Pembayaran">
                     <RadzenFieldset Text="Pembayaran">
                         <RadzenButton Visible=@(model.Status != PaymentStatus.Lunas)
-                                      Style="margin-bottom:10px"
-                                      Click=@(args => DialogService.OpenAsync<EditPembelianPembayaran>($"Pembayaran",
-                        new Dictionary<string, object>() { { "IdPembelian", model.Id },{ "Total", (model.Total-model.TotalDiscount)- pembayarans.Sum(x=>x.PayValue) } },
-                        new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Warning" />
+                        Style="margin-bottom:10px"
+                        Click=@(args => DialogService.OpenAsync<EditPembelianPembayaran>($"Pembayaran",
+                                      new Dictionary<string, object>() { { "IdPembelian", model.Id },{ "Total", (model.Total-model.TotalDiscount)- pembayarans.Sum(x=>x.PayValue) } },
+                                      new DialogOptions())) Icon="add" ButtonStyle="ButtonStyle.Warning" />
 
-                        <RadzenGrid @ref="pembayaranGrid" Data="@(pembayarans)" FilterMode="FilterMode.Advanced" AllowFiltering="true"
-                                    AllowPaging="true" AllowSorting="true" TItem="PembayaranPembelian">
+                        <RadzenDataGrid class="my-2" @ref="pembayaranGrid" Data="@(pembayarans)" FilterMode="FilterMode.Advanced"
+                        AllowFiltering="true"
+                        AllowPaging="true" AllowSorting="true" TItem="PembayaranPembelian">
                             <Columns>
-                                <RadzenGridColumn TItem="PembayaranPembelian" Property="PayDate" Title="Date">
+                                <RadzenDataGridColumn TItem="PembayaranPembelian" Property="PayDate" Title="Date">
                                     <EditTemplate Context="item">
                                         <RadzenDatePicker @bind-Value="item.PayDate" />
                                     </EditTemplate>
-                                </RadzenGridColumn>
+                                </RadzenDataGridColumn>
 
-                                <RadzenGridColumn TItem="PembayaranPembelian" Property="PayTo" Title="Name">
+                                <RadzenDataGridColumn TItem="PembayaranPembelian" Property="PayTo" Title="Name">
                                     <EditTemplate Context="item">
                                         <RadzenTextBox @bind-Value="item.PayTo" />
                                     </EditTemplate>
-                                </RadzenGridColumn>
+                                </RadzenDataGridColumn>
 
-                                <RadzenGridColumn TItem="PembayaranPembelian" Property="BankName" Title="Bank">
+                                <RadzenDataGridColumn TItem="PembayaranPembelian" Property="BankName" Title="Bank">
                                     <EditTemplate Context="item">
                                         <RadzenTextBox @bind-Value="item.BankName" />
                                     </EditTemplate>
-                                </RadzenGridColumn>
-                                <RadzenGridColumn TItem="PembayaranPembelian" Property="RekNumber" Title="Rekening">
+                                </RadzenDataGridColumn>
+                                <RadzenDataGridColumn TItem="PembayaranPembelian" Property="RekNumber" Title="Rekening">
                                     <EditTemplate Context="item">
                                         <RadzenTextBox @bind-Value="item.RekNumber" />
                                     </EditTemplate>
-                                </RadzenGridColumn>
-                                <RadzenGridColumn TItem="PembayaranPembelian" Property="Description" Title="Description" TextAlign="TextAlign.Right">
+                                </RadzenDataGridColumn>
+                                <RadzenDataGridColumn TItem="PembayaranPembelian" Property="Description" Title="Description" TextAlign="TextAlign.Right">
                                     <EditTemplate Context="item">
                                         <RadzenTextArea @bind-Value="item.Description" />
                                     </EditTemplate>
@@ -252,8 +253,8 @@
                                         <div>Total</div>
                                         <div>Sisa</div>
                                     </FooterTemplate>
-                                </RadzenGridColumn>
-                                <RadzenGridColumn TItem="PembayaranPembelian" Title="Total" TextAlign="TextAlign.Right">
+                                </RadzenDataGridColumn>
+                                <RadzenDataGridColumn TItem="PembayaranPembelian" Title="Total" TextAlign="TextAlign.Right">
                                     <Template>
                                         @context.PayValue.ToString("N2");
                                     </Template>
@@ -265,13 +266,14 @@
                                         <div>
                                             @{
                                                 var sisa = (model.Total - model.TotalDiscount) - pembayarans.Sum(x => x.PayValue);
-                                                @sisa.ToString("N2");
+                                                @sisa.ToString("N2")
+                                                ;
                                             }
                                         </div>
                                     </FooterTemplate>
-                                </RadzenGridColumn>
-                                <RadzenGridColumn Visible=@((Int32)model.Status < 1) TItem="PembayaranPembelian" Context="sampleBlazorModelsSampleOrder"
-                                                  Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                                </RadzenDataGridColumn>
+                                <RadzenDataGridColumn Visible=@((Int32)model.Status < 1) TItem="PembayaranPembelian" Context="sampleBlazorModelsSampleOrder"
+                                Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                                     <Template Context="pembayaran">
                                         <RadzenButton Icon="edit" Size="ButtonSize.Medium" Click="@(args => EditPembayaranRow(pembayaran))">
                                         </RadzenButton>
@@ -280,25 +282,25 @@
                                         <RadzenButton Icon="save" Size="ButtonSize.Medium" Click="@((args) => SavePembayaranRow(pembayaran))">
                                         </RadzenButton>
                                         <RadzenButton Icon="cancel" Size="ButtonSize.Medium" ButtonStyle="ButtonStyle.Secondary"
-                                                      Click="@((args) => CancelPembayaranEdit(pembayaran))">
+                                        Click="@((args) => CancelPembayaranEdit(pembayaran))">
                                         </RadzenButton>
                                     </EditTemplate>
-                                </RadzenGridColumn>
+                                </RadzenDataGridColumn>
                             </Columns>
-                        </RadzenGrid>
+                        </RadzenDataGrid>
                     </RadzenFieldset>
                 </RadzenTabsItem>
             </Tabs>
         </RadzenTabs>
 
 
-      
+
     </div>
 </div>
 
 
 
-@code{
+@code {
 
     [Parameter]
     public string id { get; set; }
@@ -308,8 +310,8 @@
     private IEnumerable<ProductStock> products = new List<ProductStock>();
     private List<PembayaranPembelian> pembayarans = new List<PembayaranPembelian>();
     private Pembelian model = new Pembelian() { Items = new List<PembelianItem>() };
-    RadzenGrid<PembelianItem> ordersGrid;
-    RadzenGrid<PembayaranPembelian> pembayaranGrid;
+    RadzenDataGrid<PembelianItem> ordersGrid;
+    RadzenDataGrid<PembayaranPembelian> pembayaranGrid;
 
     bool checkall;
 
@@ -333,17 +335,24 @@
                 else
                 {
                     NotificationService.Notify(new NotificationMessage
-                    {
-                        Detail = "Pembelian Tidak Ditemikan!",
-                        Duration = 3000,
-                        Severity = NotificationSeverity.Error,
-                        Summary = "Error"
-                    });
+                        {
+                            Detail = "Pembelian Tidak Ditemikan!",
+                            Duration = 3000,
+                            Severity = NotificationSeverity.Error,
+                            Summary = "Error"
+                        });
                 }
             }
 
         }
-        products = (await productService.GetProductStock()).ToList();
+        var gudang = gudangs.FirstOrDefault();
+
+        if (gudang != null)
+        {
+            model.Gudang = gudang;
+            products = (await stockService.GetProductStocks(gudang.Id)).ToList();
+        }
+
     }
 
     void OnCheckChange(bool data)
@@ -379,28 +388,28 @@
 
         try
         {
-            model.CreatedDate = DateTime.Now;
+            model.CreatedDate = DateTime.Now.ToUniversalTime();
             var result = await pembelianService.UpdatePembelian(model.Id, model);
             if (result != null)
             {
                 NotificationService.Notify(new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Success,
-                    Summary = "Success",
-                    Detail = "Pembelian Berhasil Disimpan !",
-                    Duration = 3000
-                });
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Success",
+                        Detail = "Pembelian Berhasil Disimpan !",
+                        Duration = 3000
+                    });
             }
         }
         catch (System.Exception ex)
         {
             NotificationService.Notify(new NotificationMessage
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Error",
-                Detail = ex.Message,
-                Duration = 3000
-            });
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail = ex.Message,
+                    Duration = 3000
+                });
         }
 
     }
@@ -411,7 +420,7 @@
         var _product = products.Where(x => x.Id == prodId).FirstOrDefault();
         if (_product != null && model.Items.Where(x => x.Product.Id == _product.Id).FirstOrDefault() == null)
         {
-            var item = new PembelianItem { Product = _product, Amount = 1, Discount= _product.Discount };
+            var item = new PembelianItem { Product = _product, Amount = 1, Discount = _product.Discount };
             item.Unit = _product.Units.FirstOrDefault();
             if (model.Items == null)
                 model.Items = new List<PembelianItem>();
@@ -444,7 +453,7 @@
         StateHasChanged();
     }
 
-    private void CreatePembayaran(dynamic parameter)
+    private async void CreatePembayaran(dynamic parameter)
     {
         try
         {
@@ -453,10 +462,11 @@
             {
 
                 PembayaranPembelian data = (PembayaranPembelian)parameter;
+                data.PayDate = data.PayDate.ToUniversalTime();
 
                 if (data != null)
                 {
-                    var result = pembelianService.CreatePembayaran(data.Pembelian.Id, data).Result;
+                    var result = await pembelianService.CreatePembayaran(data.Pembelian.Id, data);
                     if (result == null)
                         throw new SystemException("Not Saved !");
 
@@ -470,24 +480,24 @@
                         model.Status = PaymentStatus.Panjar;
 
                     NotificationService.Notify(new NotificationMessage
-                    {
-                        Detail = "Pembayaran Berhasil Dibuat",
-                        Duration = 3000,
-                        Severity = NotificationSeverity.Success,
-                        Summary = "Success"
-                    });
+                        {
+                            Detail = "Pembayaran Berhasil Dibuat",
+                            Duration = 3000,
+                            Severity = NotificationSeverity.Success,
+                            Summary = "Success"
+                        });
                 }
             }
         }
         catch (Exception ex)
         {
             NotificationService.Notify(new NotificationMessage
-            {
-                Detail = ex.Message,
-                Duration = 3000,
-                Severity = NotificationSeverity.Error,
-                Summary = "Error"
-            });
+                {
+                    Detail = ex.Message,
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error"
+                });
         }
     }
 
@@ -537,23 +547,23 @@
         {
             await pembayaranGrid.UpdateRow(item);
             NotificationService.Notify(new NotificationMessage
-            {
-                Detail = "Pembayaran Berhasil Diubah !",
-                Duration = 3000,
-                Severity = NotificationSeverity.Success,
-                Summary = "Success"
-            });
+                {
+                    Detail = "Pembayaran Berhasil Diubah !",
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Success"
+                });
         }
         else
         {
             pembayaranGrid.CancelEditRow(item);
             NotificationService.Notify(new NotificationMessage
-            {
-                Detail = "Pembayaran Gagal Diubah !",
-                Duration = 3000,
-                Severity = NotificationSeverity.Error,
-                Summary = "Error"
-            });
+                {
+                    Detail = "Pembayaran Gagal Diubah !",
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error"
+                });
         }
     }
 

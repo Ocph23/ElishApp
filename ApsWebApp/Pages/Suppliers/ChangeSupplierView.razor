@@ -1,10 +1,13 @@
 ﻿@page "/supplier/change/{id?}"
 
-@inject NavigationManager nav;
-@inject ISupplierService supplierService;
+@attribute [Authorize]
 @using Microsoft.AspNetCore.Authorization
 
-@attribute [Authorize]
+@inject NavigationManager nav;
+@inject ISupplierService supplierService;
+@inject NotificationService NotificationService;
+
+
 
 <h3>@title</h3>
 
@@ -45,9 +48,12 @@
                 <label for="inputAddress2">Telepon</label>
                 <input type="text" class="form-control" @bind="model.Telepon" id="inputAddress2" placeholder="Telepon">
             </div>
+            <div class="form-row col-md-6 d-flex justify-content-end gap-2">
+                <Radzen.Blazor.RadzenButton Icon="undo" Text="Kembali" ButtonType="ButtonType.Button" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" />
+                <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Submit"
+                                            ButtonStyle="ButtonStyle.Warning" />
+            </div>
         </div>
-        <button type="button" @onclick="GoBack" class="btn btn-primary">Back</button>
-        <button type="submit" class="btn btn-primary">Save</button>
     </EditForm>
 </RadzenFieldset>
 
@@ -106,9 +112,16 @@
 
 
         }
-        catch
+        catch(Exception ex)
         {
-            //ex.Message;
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Detail = ex.Message,
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error"
+
+                });
         }
 
 

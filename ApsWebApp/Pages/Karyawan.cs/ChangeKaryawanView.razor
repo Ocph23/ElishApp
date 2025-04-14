@@ -16,89 +16,90 @@
                             <Radzen.Blazor.RadzenFieldset Text="Data Karyawan/Sales">
                                 <div class="form-row">
                                     <div class="col-md-6">
-                                        <div class="row" style="margin-top:10px">
+                                        <div class="row my-1" >
                                             <div class="col-md-4 align-items-center d-flex">
                                                 <RadzenLabel Text="Nama Karyawan/Sales" />
                                             </div>
                                             <div class="col-md-8">
-                                                <RadzenTextBox @bind-Value="model.Name" Name="Name" />
+                                                <RadzenTextBox class="w-100" @bind-Value="model.Name" Name="Name" />
                                                 <RadzenRequiredValidator Component="Name" Text="Name is required" Popup=true Style="position: absolute" />
                                             </div>
                                         </div>
 
-                                        <div class="row" style="margin-top:10px">
+                                        <div class="row my-1" >
                                             <div class="col-md-4 align-items-center d-flex">
                                                 <RadzenLabel Text="Email" />
                                             </div>
                                             <div class="col-md-8">
-                                                <RadzenTextBox @bind-Value="model.Email" />
+                                                <RadzenTextBox class="w-100" @bind-Value="model.Email" />
                                                 <RadzenRequiredValidator Component="Email" Text="Email Name is required" Popup=true Style="position: absolute" />
                                             </div>
                                         </div>
 
-                                        <div class="row" style="margin-top:10px">
+                                        <div class="row my-1" >
                                             <div class="col-md-4 align-items-center d-flex">
                                                 <RadzenLabel Text="Telepon" />
                                             </div>
                                             <div class="col-md-8">
-                                                <RadzenTextBox @bind-Value="model.Telepon" Name="Telepon" />
+                                                <RadzenTextBox class="w-100" @bind-Value="model.Telepon" Name="Telepon" />
                                                 <RadzenRequiredValidator Component="Telepon" Text="Telepon is required" Popup=true Style="position: absolute" />
                                             </div>
                                         </div>
 
-                                        <div class="row" style="margin-top:10px">
+                                        <div class="row my-1" >
                                             <div class="col-md-4 align-items-center d-flex">
                                                 <RadzenLabel Text="Alamat" />
                                             </div>
-                                            <div  class="col-md-8">
-                                                <RadzenTextArea @bind-Value="model.Address" Name="Address" />
+                                            <div class="col-md-8">
+                                                <RadzenTextArea class="w-100" @bind-Value="model.Address" Name="Address" />
                                                 <RadzenRequiredValidator Component="Address" Text="Address is required" Popup=true Style="position: absolute" />
                                             </div>
                                         </div>
+                                        <hr />
 
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <Radzen.Blazor.RadzenButton Icon="undo" Text="Kembali" ButtonType="ButtonType.Button"
+                                                                        Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" />
+                                            <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Button"
+                                                                        Click="@(()=>Save(null))"
+                                                                        ButtonStyle="ButtonStyle.Warning" />
+                                        </div>
                                     </div>
                                 </div>
 
-                                <hr />
-                                <div class="row text-center" style="margin:10px;display:flex">
-                                    <Radzen.Blazor.RadzenButton  Icon="undo" ButtonType="ButtonType.Button" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" 
-                                        Style="margin:5px; width:50px" />
-                                    <Radzen.Blazor.RadzenButton Icon="save" ButtonType="ButtonType.Button" Click="@(()=>Save(null))" ButtonStyle="ButtonStyle.Warning" 
-                                        Style="margin:5px; width:50px"  />
-                                </div>
 
                             </Radzen.Blazor.RadzenFieldset>
                         </RadzenTemplateForm>
                     </RadzenTabsItem>
                     <RadzenTabsItem Text="User Akses">
-                        <RadzenButton Click=@AddRole Icon="add" ButtonStyle="ButtonStyle.Success"  />
-                        <RadzenGrid @ref="grid" Data="model.User.Roles">
+                        <RadzenButton Click=@AddRole Icon="add" ButtonStyle="ButtonStyle.Success" />
+                        <RadzenDataGrid @ref="grid" Data="model.User.Roles">
                             <Columns>
-                                <RadzenGridColumn TItem="UserRole" Title="Role" Property="Role.Name" />
-                                <RadzenGridColumn TItem="UserRole" Context="item" Width="100px">
+                                <RadzenDataGridColumn TItem="UserRole" Title="Role" Property="Role.Name" />
+                                <RadzenDataGridColumn TItem="UserRole" Context="item" Width="100px">
                                     <Template>
                                         <RadzenButton Icon="delete" ButtonStyle="ButtonStyle.Danger" Click="@(async()=> await DeleteRole(item))"></RadzenButton>
                                     </Template>
-                                </RadzenGridColumn>
+                                </RadzenDataGridColumn>
                             </Columns>
-                        </RadzenGrid>
+                        </RadzenDataGrid>
                     </RadzenTabsItem>
 
                     @if (customers != null && customers.Count() > 0)
                     {
                         <RadzenTabsItem Text="Data Customer">
-                            <RadzenGrid Data="customers" AllowFiltering="true" AllowPaging="false" AllowSorting="true">
+                            <RadzenDataGrid Data="customers" AllowFiltering="true" AllowPaging="false" AllowSorting="true">
                                 <Columns>
-                                    <RadzenGridColumn TItem="Customer" Title="Name" Property="Name" />
-                                    <RadzenGridColumn TItem="Customer" Title="Contact Person" Property="ContactName" Width="250px" />
-                                    <RadzenGridColumn TItem="Customer" Title="Telepon" Property="Telepon" Width="250px" />
-                                    <RadzenGridColumn TItem="Customer" Context="item" Width="65px">
+                                    <RadzenDataGridColumn TItem="Customer" Title="Name" Property="Name" />
+                                    <RadzenDataGridColumn TItem="Customer" Title="Contact Person" Property="ContactName" Width="250px" />
+                                    <RadzenDataGridColumn TItem="Customer" Title="Telepon" Property="Telepon" Width="250px" />
+                                    <RadzenDataGridColumn TItem="Customer" Context="item" Width="65px">
                                         <Template>
                                             <RadzenButton Icon="info" ButtonStyle="ButtonStyle.Warning" Click="@(()=> nav.NavigateTo($"/customer/change/{item.Id}"))"></RadzenButton>
                                         </Template>
-                                    </RadzenGridColumn>
+                                    </RadzenDataGridColumn>
                                 </Columns>
-                            </RadzenGrid>
+                            </RadzenDataGrid>
                         </RadzenTabsItem>
                     }
                 </Tabs>
@@ -116,15 +117,13 @@
     public Karyawan model { get; set; } = new Karyawan();
     IEnumerable<Customer> customers;
 
-    RadzenGrid<UserRole> grid;
+    RadzenDataGrid<UserRole> grid;
 
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-
-
             if (string.IsNullOrEmpty(id))
             {
                 model = new Karyawan();
@@ -145,7 +144,7 @@
 
     public async Task AddRole()
     {
-        var args =await dialogService.OpenAsync<AddUserAccessView>($"Add Role Access",
+        var args = await dialogService.OpenAsync<AddUserAccessView>($"Add Role Access",
                                         new Dictionary<string, object>() { { "model", model.User }, },
                                         new DialogOptions());
 
@@ -167,7 +166,7 @@
             if (deleted)
                 model.User.Roles.Remove(role);
         }
-       await grid.Reload();
+        await grid.Reload();
     }
 
 
@@ -193,7 +192,12 @@
                 }
             }
 
-           await grid.Reload();
+
+            if (grid != null)
+            {
+                await grid.Reload();
+            }
+
         }
         catch
         {

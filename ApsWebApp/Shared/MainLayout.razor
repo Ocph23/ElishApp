@@ -1,38 +1,47 @@
 ﻿@inherits LayoutComponentBase
+@inject CookieThemeService CookieThemeService
 <RadzenNotification />
 <RadzenDialog />
 
-    <div class="page noprint">
-        <div class="@sidebar">
-            <NavMenu @ref="nav" OnChange="OnChangeEvent" />
+
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+            <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)" />
+            <RadzenLabel Text="Header" />
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar Responsive="false" Style="width: max-content">
+        <NavMenu @ref="nav" OnChange="OnChangeEvent" />
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-4">
+            @Body
         </div>
-
-        <div class="main">
-            <div class="top-row noprint">
-                <a class="noprint" href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-            </div>
-
-            <div class="content px-4">
-                @Body
-            </div>
-        </div>
-    </div>
+    </RadzenBody>
+    <RadzenFooter>
+        Footer
+    </RadzenFooter>
+</RadzenLayout>
 
 
-@code{
+
+
+@code {
 
     NavMenu nav;
-    string sidebar => GetSidebarClass();
-    private string GetSidebarClass()
-    {
+    bool sidebarExpanded = true;
+    // string sidebar => GetSidebarClass();
+    // private string GetSidebarClass()
+    // {
 
-        if (nav != null && !nav.isWidth)
-            return "sidebar-half";
+    //     if (nav != null && !nav.isWidth)
+    //         return "sidebar-half";
 
-        return "sidebar";
+    //     return "sidebar";
 
 
-    }
+    // }
 
     public void OnChangeEvent(int data)
     {

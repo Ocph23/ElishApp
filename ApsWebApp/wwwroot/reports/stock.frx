@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="02/11/2021 19:42:00" ReportInfo.Modified="06/08/2021 01:24:54" ReportInfo.CreatorVersion="2021.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/11/2021 19:42:00" ReportInfo.Modified="04/14/2025 22:56:48" ReportInfo.CreatorVersion="2025.2.0.0">
   <Styles Name="Standard">
     <Style Name="Title" Font="Arial, 12pt, style=Bold"/>
     <Style Name="Header" Font="Arial, 10pt, style=Bold"/>
@@ -9,7 +9,7 @@
     <Style Name="EvenRows" Fill.Color="WhiteSmoke" Font="Arial, 10pt"/>
   </Styles>
   <Dictionary>
-    <XmlDataConnection Name="Stock" ConnectionString="rijcmlqgsY9uIG8zf4cJoD1cREbfNXIEarcjozDYkL5qYtp/PnXfKKK92D98+yZ/8EinX0a7INKgOYSoRHruk/wDDMoMu+xSqxAESEY8zk6gODMoQFH17b+RzQXO8uxeV2LAD6uhNZqp/rJJLR6zSHFfviF3dCjkj8a8HaXMg80veKycFNEvsrjAIDwTx4gbLbRVwWrhUkr0qO1qPrmHS869TIJeQ==">
+    <XmlDataConnection Name="Stock" ConnectionString="rijcmlqgsY9uIG8zf4cJoD1cREbfNXIEarcjozDYkL5qYtp/PnXfKKK92D98+yZ/8EinX0a7INKgOYSoRHruk/wDDMoMu+xSqxAESEY8zk6gODMoQFH17b+RzQXO8uxeV2LAD6uhNZqp/rJJLR6zSHFfviF3dCjkj8a8HaXMg80veKycFNEvsrjAIDwTx4gbLbRVwWrrqnMce/nLTF9spPtpCXBtg==">
       <TableDataSource Name="Table1" DataType="System.Int32" Enabled="true" TableName="Table1">
         <Column Name="No" DataType="System.Int32"/>
         <Column Name="CodeArticle" DataType="System.String"/>
@@ -22,74 +22,58 @@
         <Column Name="Size" DataType="System.String"/>
       </TableDataSource>
     </XmlDataConnection>
-    <Parameter Name="Gudang" DataType="System.String"/>
-    <Parameter Name="Merk" DataType="System.String"/>
+    <Parameter Name="Gudang" DataType="System.String" AsString=""/>
+    <Parameter Name="Merk" DataType="System.String" AsString=""/>
     <Total Name="GrandTotal" Expression="[Table1.Total]" Evaluator="Data1" PrintOn="ReportSummary1"/>
   </Dictionary>
-  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" LeftMargin="20" TopMargin="20" RightMargin="20" BottomMargin="20" Watermark.Font="Arial, 60pt">
-    <PageHeaderBand Name="PageHeader1" Width="664.9" Height="113.45">
-      <TextObject Name="Text21" Top="48" Width="67.2" Height="19.2" Text="Gudang" Font="Arial, 9pt"/>
-      <TextObject Name="Text23" Left="67.2" Top="48" Width="297.6" Height="19.2" Text=": [Gudang]" Font="Arial, 9pt"/>
-      <TextObject Name="Text20" Top="28.8" Width="67.2" Height="19.2" Text="Periode" Font="Arial, 9pt"/>
-      <TextObject Name="Text22" Left="67.2" Top="28.8" Width="297.6" Height="19.2" Text=": [Date]" Font="Arial, 9pt"/>
-      <TextObject Name="Text19" Top="0.15" Width="663.75" Height="19.2" Text="LAPORAN STOK" HorzAlign="Center" Font="Arial, 12pt, style=Bold, Underline"/>
-      <TextObject Name="Text25" Top="66.15" Width="67.2" Height="19.2" Text="Merk" Font="Arial, 9pt"/>
-      <TextObject Name="Text26" Left="67.2" Top="66.15" Width="297.6" Height="19.2" Text=": [Merk]" Font="Arial, 9pt"/>
-      <TableObject Name="Table5" Top="89.5" Width="662.99" Height="23.9">
-        <TableColumn Name="Column23" Width="38.16"/>
-        <TableColumn Name="Column24" Width="115.6"/>
-        <TableColumn Name="Column25" Width="230.75"/>
-        <TableColumn Name="Column26" Width="85.78"/>
-        <TableColumn Name="Column27" Width="74.46"/>
-        <TableColumn Name="Column28" Width="118.24"/>
-        <TableRow Name="Row4" Height="23.9">
-          <TableCell Name="Cell23" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="No" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell24" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Kode Produk" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell25" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Nama produk" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell26" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Jumlah" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell27" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Satuan" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell28" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Total" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
+  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Top="20" Width="718.2" Height="103.95">
+      <TextObject Name="Text27" Left="9.45" Top="57.3" Width="67.2" Height="19.2" Text="Gudang" Font="Arial, 9pt"/>
+      <TextObject Name="Text28" Left="76.65" Top="57.3" Width="297.6" Height="19.2" Text=": [Gudang]" Font="Arial, 9pt"/>
+      <TextObject Name="Text29" Left="9.45" Top="38.1" Width="67.2" Height="19.2" Text="Periode" Font="Arial, 9pt"/>
+      <TextObject Name="Text30" Left="76.65" Top="38.1" Width="297.6" Height="19.2" Text=": [Date]" Font="Arial, 9pt"/>
+      <TextObject Name="Text31" Left="252.9" Top="9.45" Width="229.05" Height="19.2" Text="LAPORAN STOK" HorzAlign="Center" Font="Arial, 12pt, style=Bold, Underline"/>
+      <TextObject Name="Text32" Left="9.45" Top="75.45" Width="67.2" Height="19.2" Text="Merk" Font="Arial, 9pt"/>
+      <TextObject Name="Text33" Left="76.65" Top="75.45" Width="297.6" Height="19.2" Text=": [Merk]" Font="Arial, 9pt"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader2" Top="143.95" Width="718.2" Height="33.35">
+      <TableObject Name="Table8" Left="9.45" Top="9.45" Width="701.21" Height="23.9">
+        <TableColumn Name="Column41" Width="50.8"/>
+        <TableColumn Name="Column42" Width="128.31"/>
+        <TableColumn Name="Column43" Width="205.5"/>
+        <TableColumn Name="Column44" Width="98.47"/>
+        <TableColumn Name="Column45" Width="87.17"/>
+        <TableColumn Name="Column46" Width="130.96"/>
+        <TableRow Name="Row7" Height="23.9">
+          <TableCell Name="Cell41" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="No" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell42" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Kode Produk" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell43" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Nama produk" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell44" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Jumlah" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell45" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Satuan" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell46" Border.Lines="Top, Bottom" Border.Style="Dot" Border.Width="0.25" Text="Total" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
     </PageHeaderBand>
-    <DataBand Name="Data1" Top="115.45" Width="664.9" Height="21.9" DataSource="Table1">
-      <TableObject Name="Table2" Left="-0.45" Width="662.99" Height="21.9">
-        <TableColumn Name="Column1" Width="38.16"/>
-        <TableColumn Name="Column3" Width="115.6"/>
-        <TableColumn Name="Column4" Width="230.75"/>
-        <TableColumn Name="Column5" Width="85.78"/>
-        <TableColumn Name="Column6" Width="74.46"/>
-        <TableColumn Name="Column7" Width="118.24"/>
-        <TableRow Name="Row1" Height="21.9">
-          <TableCell Name="Cell1" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.No]" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell3" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.CodeProduct]" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell4" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.ProductName]" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell5" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.Amount]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell6" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.Unit]" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell7" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.Total]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
+    <DataBand Name="Data2" Top="197.3" Width="718.2" Height="21.9" DataSource="Table1">
+      <TableObject Name="Table7" Left="9.45" Width="701.25" Height="21.9">
+        <TableColumn Name="Column35" Width="50.81"/>
+        <TableColumn Name="Column36" Width="128.32"/>
+        <TableColumn Name="Column37" Width="205.5"/>
+        <TableColumn Name="Column38" Width="98.48"/>
+        <TableColumn Name="Column39" Width="87.18"/>
+        <TableColumn Name="Column40" Width="130.96"/>
+        <TableRow Name="Row6" Height="21.9">
+          <TableCell Name="Cell35" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.No]" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell36" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.CodeProduct]" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell37" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.ProductName]" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell38" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.Amount]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell39" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.Unit]" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt"/>
+          <TableCell Name="Cell40" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="[Table1.Total]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 9pt"/>
         </TableRow>
       </TableObject>
     </DataBand>
-    <ReportSummaryBand Name="ReportSummary1" Top="139.35" Width="664.9" Height="21.4">
-      <TableObject Name="Table6" Width="662.99" Height="18.9">
-        <TableColumn Name="Column29" Width="38.16"/>
-        <TableColumn Name="Column30" Width="115.6"/>
-        <TableColumn Name="Column31" Width="230.75"/>
-        <TableColumn Name="Column32" Width="85.78"/>
-        <TableColumn Name="Column33" Width="74.46"/>
-        <TableColumn Name="Column34" Width="118.24"/>
-        <TableRow Name="Row5">
-          <TableCell Name="Cell29" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell30" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell31" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell32" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell33" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="Total" HorzAlign="Center" VertAlign="Center" Font="Arial, 8pt"/>
-          <TableCell Name="Cell34" Border.Lines="Bottom" Border.Style="Dot" Border.Width="0.25" Text="Total" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 8pt"/>
-        </TableRow>
-      </TableObject>
-    </ReportSummaryBand>
-    <PageFooterBand Name="PageFooter1" Top="162.75" Width="664.9" Height="17.2">
-      <TextObject Name="Text24" Left="546.25" Width="114.9" Height="13.2" Text="[PageN]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Arial, 8pt"/>
+    <PageFooterBand Name="PageFooter2" Top="239.2" Width="718.2" Height="37.8">
+      <TextObject Name="Text34" Left="529.2" Width="178.05" Height="13.2" Text="[PageN]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" Font="Arial, 9pt"/>
     </PageFooterBand>
   </ReportPage>
 </Report>

@@ -1,4 +1,6 @@
 ﻿using ApsWebApp.Data;
+using ApsWebApp.Validations;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ShareModels;
 using System;
@@ -14,11 +16,13 @@ namespace ApsWebApp.Services
 
         private readonly ApplicationDbContext dbContext;
         private readonly IUserService userService;
+        private readonly IValidator<Karyawan> karyawanValidator;
 
-        public KaryawanService(ApplicationDbContext db, IUserService _userService)
+        public KaryawanService(ApplicationDbContext db, IUserService _userService, IValidator<Karyawan> _karyawanValidator)
         {
             dbContext = db;
             userService = _userService;
+            karyawanValidator = _karyawanValidator;
         }
         public Task<bool> Delete(int id)
         {
@@ -63,6 +67,9 @@ namespace ApsWebApp.Services
 
             try
             {
+                var validateResult = karyawanValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 Karyawan result = await userService.RegisterKaryawan(value);
                 if (result == null)
                     throw new SystemException("Data Not Saved !");
@@ -98,6 +105,9 @@ namespace ApsWebApp.Services
         {
             try
             {
+                var validateResult = karyawanValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 var existsModel = dbContext.Karyawan.Where(x => x.Id == id).FirstOrDefault();
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");

@@ -1,6 +1,6 @@
 ﻿@inject IUserStateService userServiceState
 
-<div class="top-row pl-4 navbar navbar-dark">
+<div class="top-row pl-4 px-2 navbar navbar-dark">
     <a class="navbar-brand" href="">@title</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -28,7 +28,7 @@
                         @foreach (var menu1 in menu.Children)
                         {
 
-                            <RadzenPanelMenuItem Style="margin-left:15px" Text="@(!isWidth?"":menu1.Text)" Icon="@menu1.Icon" Path="@menu1.Path"></RadzenPanelMenuItem>
+                            <RadzenPanelMenuItem Style="margin-left:0px" Text="@(!isWidth?"":menu1.Text)" Icon="@menu1.Icon" Path="@menu1.Path"></RadzenPanelMenuItem>
                         }
                     }
                 </RadzenPanelMenuItem>
@@ -72,8 +72,8 @@
         new MenuItem(){ Icon="home", Path="/", Text="Master" , Children =
                 new List<MenuItem>{
                     new MenuItem(){ Icon="category", Path="category", Text="Kategori" },
-                    new MenuItem(){ Icon="category", Path="merk", Text="Merek" },
-                    new MenuItem(){ Icon="category", Path="gudang", Text="Gudang" },
+                    new MenuItem(){ Icon="collections_bookmark", Path="merk", Text="Merek" },
+                    new MenuItem(){ Icon="home_work", Path="gudang", Text="Gudang" },
                     new MenuItem(){ Icon="supervised_user_circle", Path="supplier", Text="Suplier" },
                     new MenuItem(){ Icon="group", Path="karyawan", Text="Karyawan" },
                 }
@@ -89,28 +89,28 @@
         new MenuItem(){ Icon="inventory", Text="Data Barang" , Path="product" },
         new MenuItem(){ Icon="shopping_cart", Text="Pembelian" , Children =
                 new List<MenuItem>{
-                    new MenuItem(){ Icon="shopping_cart", Path="pembelian/order", Text="Order" },
-                    new MenuItem(){ Icon="shopping_cart", Path="pembelian/realisasi", Text="Reaslisasi" },
-                    new MenuItem(){ Icon="storefront", Path="pembelian/return", Text="Return" },
+                    new MenuItem(){ Icon="draft_orders", Path="pembelian/order", Text="Order" },
+                    new MenuItem(){ Icon="order_approve", Path="pembelian/realisasi", Text="Reaslisasi" },
+                    new MenuItem(){ Icon="assignment_return", Path="pembelian/return", Text="Return" },
                 }
         },
         new MenuItem(){ Icon="storefront", Text="Penjualan" , Children =
                 new List<MenuItem>{
-                    new MenuItem(){ Icon="storefront", Path="penjualan/order", Text="Order" },
-                    new MenuItem(){ Icon="storefront", Path="penjualan/realisasi", Text="Reaslisasi" },
-                    new MenuItem(){ Icon="storefront", Path="penjualan/pengembalian", Text="Return" },
+                    new MenuItem(){ Icon="draft_orders", Path="penjualan/order", Text="Order" },
+                    new MenuItem(){ Icon="order_approve", Path="penjualan/realisasi", Text="Reaslisasi" },
+                    new MenuItem(){ Icon="assignment_return", Path="penjualan/pengembalian", Text="Return" },
                 }
         },
 
-         new MenuItem(){ Icon="storefront", Text="Pemindahan", Path="pemindahan" },
+         new MenuItem(){ Icon="trolley", Text="Pemindahan", Path="pemindahan" },
         new MenuItem(){ Icon="save", Text="Laporan" , Children =
                 new List<MenuItem>{
-                    new MenuItem(){ Icon="receipt_log", Path="data/stock", Text="Stock" },
-                    new MenuItem(){ Icon="receipt_log", Path="data/penjualan", Text="Penjualan" },
-                    new MenuItem(){ Icon="receipt_log", Path="data/piutang", Text="Piutang" },
-                    new MenuItem(){ Icon="receipt_log", Path="data/utang", Text="Utang" },
-                    new MenuItem(){ Icon="receipt_log", Path="data/feesalesman", Text="Fee Salesman" },
-                    new MenuItem(){ Icon="receipt_log", Path="data/summary", Text="Sumarry" },
+                    new MenuItem(){ Icon="inventory_2", Path="data/stock", Text="Stock" },
+                    new MenuItem(){ Icon="shopping_cart", Path="data/penjualan", Text="Penjualan" },
+                    new MenuItem(){ Icon="payments", Path="data/piutang", Text="Piutang" },
+                    new MenuItem(){ Icon="request_quote", Path="data/utang", Text="Utang" },
+                    new MenuItem(){ Icon="deployed_code_account", Path="data/feesalesman", Text="Fee Salesman" },
+                    new MenuItem(){ Icon="summarize", Path="data/summary", Text="Sumarry" },
                 }
             },
        // new MenuItem(){ Icon="receipt_log", Text="Incomming Check" , Path="incomming" },

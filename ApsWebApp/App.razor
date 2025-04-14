@@ -1,23 +1,52 @@
-﻿
-
-@using ApsWebApp.Services
+﻿@using ApsWebApp.Services
 
 @inject NavigationManager NavigationManager
 @inject IUserStateService userService
- 
-    <Router AppAssembly="@typeof(Program).Assembly">
-        <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
-                <NotAuthorized>
-                        <ApsWebApp.Pages.Login></ApsWebApp.Pages.Login>
-                </NotAuthorized>
-            </AuthorizeRouteView>
-        </Found>
-        <NotFound>
-            <CascadingAuthenticationState>
-                <LayoutView Layout="@typeof(MainLayout)">
-                    <p>Sorry, there's nothing at this address.</p>
-                </LayoutView>
-            </CascadingAuthenticationState>
-        </NotFound>
-    </Router>
+<head>
+    <RadzenTheme Theme="dark" />
+
+</head>
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <NotAuthorized>
+                <ApsWebApp.Pages.Login></ApsWebApp.Pages.Login>
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <CascadingAuthenticationState>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </CascadingAuthenticationState>
+    </NotFound>
+</Router>
+
+
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; }
+
+    [Inject]
+    private ThemeService ThemeService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        if (HttpContext != null)
+        {
+            var theme = HttpContext.Request.Cookies["MyApplicationTheme"];
+
+            if (!string.IsNullOrEmpty(theme))
+            {
+                ThemeService.SetTheme(theme, false);
+            }
+        }
+    }
+}
+
+
+<script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>

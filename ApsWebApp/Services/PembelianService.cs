@@ -16,18 +16,19 @@ namespace ApsWebApp.Services
     public class PembelianService : IPembelianService
     {
         private readonly ApplicationDbContext dbContext;
-        //    private readonly IHttpContextAccessor auth;
+        private readonly IStockService stockService;
+
         private readonly ILogger _logger;
 
-        public PembelianService(ILogger<PembelianService> logger, ApplicationDbContext db)
+        public PembelianService(ILogger<PembelianService> logger, ApplicationDbContext db, IStockService _stockService)
         {
             dbContext = db;
-            //     auth = httpContextAccessor;
+            stockService = _stockService;
             _logger = logger;
         }
 
         #region Pembelian
-        public Task<Pembelian> CreatePembelian(int orderid, int gudangid)
+        public async Task<Pembelian> CreatePembelian(int orderid, int gudangid)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
@@ -47,13 +48,13 @@ namespace ApsWebApp.Services
                     throw new SystemException("Order Tidak Ditemukan !");
 
 
-                dbContext.Set<Pembelian>().AsNoTracking();
+                //dbContext.Set<Pembelian>().AsNoTracking();
                 var pembelian = new Pembelian
                 {
                     Gudang = gudang,
                     OrderPembelianId = orderid,
                     OrderPembelian = lastOrder,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToUniversalTime(),
                     Items = new List<PembelianItem>()
                 };
 
@@ -73,8 +74,24 @@ namespace ApsWebApp.Services
                 dbContext.Pembelian.Add(pembelian);
                 lastOrder.Status = OrderStatus.Diproses;
                 dbContext.SaveChanges();
+
+                await Task.Delay(500);
+
+                foreach (var item in pembelian.Items)
+                {
+                    //add Stock
+                    double newStock = item.Amount * item.Unit.Quantity;
+                    var saved = await stockService.AddMovementStock(item.Product.Id, pembelian.Gudang.Id, StockMovementType.IN,
+                         ReferenceType.Purchase, item.Id, newStock);
+
+                    if (!saved)
+                        throw new SystemException("Gagal Menyimpan Stok !");
+
+                }
+
+                dbContext.SaveChanges();
                 trans.Commit();
-                return Task.FromResult(pembelian);
+                return await Task.FromResult(pembelian);
             }
             catch (Exception ex)
             {
@@ -170,7 +187,7 @@ namespace ApsWebApp.Services
             try
             {
                 var pembelians = dbContext.Pembelian
-                    .Include(x=>x.Gudang)
+                    .Include(x => x.Gudang)
                                    .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units)
                                    .Include(x => x.OrderPembelian).ThenInclude(x => x.Supplier).ToList();
 
@@ -254,6 +271,7 @@ namespace ApsWebApp.Services
                     dbContext.Entry(item.Product).State = EntityState.Unchanged;
                     dbContext.Entry(item.Unit).State = EntityState.Unchanged;
                 }
+                order.OrderDate = order.OrderDate.ToUniversalTime();
                 dbContext.OrderPembelian.Add(order);
                 dbContext.SaveChanges();
                 return Task.FromResult(order);
@@ -390,7 +408,7 @@ namespace ApsWebApp.Services
                 totalBayar = pembelian.PembayaranPembelian.Sum(x => x.PayValue);
                 var sisa = totalInvoice - totalBayar - pembayaran.PayValue;
 
-                if (sisa < 0 )
+                if (sisa < 0)
                     throw new SystemException("Pembayaran Anda Melebihi Tagihan Invoice !");
 
                 var status = sisa > 0 ? PaymentStatus.Panjar : PaymentStatus.Lunas;

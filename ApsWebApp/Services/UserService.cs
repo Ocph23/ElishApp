@@ -139,7 +139,7 @@ namespace ApsWebApp.Services
             }
             catch (Exception ex)
             {
-                throw new MySqlServiceException(ex);
+                throw new NpgsqlServiceException(ex);
             }
         }
 
@@ -157,19 +157,19 @@ namespace ApsWebApp.Services
 
                 User user = new User { Email = model.Email, UserName = model.Email, PasswordHash = GeneratePasswordHash(model.Email), Activated = true };
                 _context.User.Add(user);
-                await _context.SaveChangesAsync();
-                var role = _context.Role.Where(x => x.Name == "customer").FirstOrDefault();
+                 _context.SaveChanges();
+                var role = _context.Role.Where(x => x.Name == "Customer").FirstOrDefault();
                 _context.Userrole.Add(new UserRole { Role = role, User = user });
                 model.User = user;
                 _context.Customer.Add(model);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 trans.Commit();
                 return model;
             }
             catch (Exception ex)
             {
                 trans.Rollback();
-                throw new MySqlServiceException(ex);
+                throw new NpgsqlServiceException(ex);
             }
         }
 
@@ -203,7 +203,7 @@ namespace ApsWebApp.Services
             catch (Exception ex)
             {
                 trans.Rollback();
-                throw new MySqlServiceException(ex);
+                throw new NpgsqlServiceException(ex);
             }
         }
 

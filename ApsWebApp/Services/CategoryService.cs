@@ -1,18 +1,24 @@
 ﻿using ApsWebApp.Data;
+using ApsWebApp.Validations;
+using FluentValidation;
 using ShareModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ApsWebApp.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly ApplicationDbContext dbContext;
-        public CategoryService(ApplicationDbContext db)
+        private readonly IValidator<Category> categoriValidator;
+
+        public CategoryService(ApplicationDbContext db, IValidator<Category> _categoriValidator)
         {
             dbContext = db;
+            categoriValidator = _categoriValidator;
         }
         public  Task<bool> Delete(int id)
         {
@@ -49,6 +55,9 @@ namespace ApsWebApp.Services
         {
             try
             {
+                var validateResult = categoriValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 dbContext.Category.Add(value);
                 dbContext.SaveChanges();
                 return Task.FromResult(value);
@@ -63,6 +72,9 @@ namespace ApsWebApp.Services
         {
             try
             {
+                var validateResult = categoriValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 var existsModel = dbContext.Category.Where(x => x.Id == id).FirstOrDefault();
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");

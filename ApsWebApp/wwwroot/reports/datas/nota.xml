@@ -2,29 +2,29 @@
 <Nota>
   <Table1>
     <No>1</No>
-    <CodeProduct>SUNEVOLVE 10,5 - 11,5</CodeProduct>
-    <ProductName>Sun Swallow  Evolve 10,5 - 11,5</ProductName>
-    <Unit>psg</Unit>
+    <CodeProduct>SSWL06L.10.5</CodeProduct>
+    <ProductName>Sun Swallow 06 Ladies - 10.5 10.5</ProductName>
+    <Unit>Pcs</Unit>
     <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>27000</Price>
-    <Total>162000</Total>
+    <Price>18100</Price>
+    <Total>108600</Total>
   </Table1>
   <Table1>
     <No>2</No>
-    <CodeProduct>SSWL06D.10.5</CodeProduct>
-    <ProductName>Sun Swallow 06D 10.5</ProductName>
-    <Unit>Psg</Unit>
+    <CodeProduct>SSWL938L.10</CodeProduct>
+    <ProductName>Sun Swallow 938 Ladies -10 10</ProductName>
+    <Unit>Pcs</Unit>
     <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>19000</Price>
-    <Total>114000</Total>
+    <Price>23000</Price>
+    <Total>138000</Total>
   </Table1>
   <Table1>
     <No>3</No>
-    <CodeProduct>SSWL938L-10</CodeProduct>
-    <ProductName>Sun Swallow 938 Ladies 10</ProductName>
-    <Unit>psg</Unit>
+    <CodeProduct>SSWL938L.10.5</CodeProduct>
+    <ProductName>Sun Swallow 938 Ladies -10.5 10.5</ProductName>
+    <Unit>Pcs</Unit>
     <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
     <Price>23000</Price>
@@ -32,140 +32,119 @@
   </Table1>
   <Table1>
     <No>4</No>
-    <CodeProduct>SSWL938L-10.5</CodeProduct>
-    <ProductName>Sun Swallow 938 Ladies 10.5</ProductName>
-    <Unit>psg</Unit>
-    <Amount>6</Amount>
+    <CodeProduct>SSWLELGNT.11</CodeProduct>
+    <ProductName>Sun Swallow Man Elegant - 11 11</ProductName>
+    <Unit>Pcs</Unit>
+    <Amount>12</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>23000</Price>
-    <Total>138000</Total>
+    <Price>23700</Price>
+    <Total>284400</Total>
   </Table1>
   <Table1>
     <No>5</No>
-    <CodeProduct>SSWLHTMEXC-11</CodeProduct>
-    <ProductName>Sun Swallow Htm Exclusive 11</ProductName>
-    <Unit>psg</Unit>
+    <CodeProduct>SSWLELGNT.11.5</CodeProduct>
+    <ProductName>Sun Swallow Man Elegant - 11.5 11.5</ProductName>
+    <Unit>Pcs</Unit>
     <Amount>12</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>22600</Price>
-    <Total>271200</Total>
+    <Price>23700</Price>
+    <Total>284400</Total>
   </Table1>
   <Table1>
     <No>6</No>
-    <CodeProduct>SSWLHTMEXC-11.5</CodeProduct>
-    <ProductName>Sun Swallow Htm Exclusive 11.5</ProductName>
-    <Unit>psg</Unit>
-    <Amount>12</Amount>
+    <CodeProduct>SSWLPARIS.10.5</CodeProduct>
+    <ProductName>Sun Swallow Paris - 10.5 10.5</ProductName>
+    <Unit>Pcs</Unit>
+    <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>22600</Price>
-    <Total>271200</Total>
+    <Price>22500</Price>
+    <Total>135000</Total>
   </Table1>
   <Table1>
     <No>7</No>
-    <CodeProduct>SSWLLDSBTY-10</CodeProduct>
-    <ProductName>Sun Swallow Ladies Beauty 10</ProductName>
-    <Unit>psg</Unit>
+    <CodeProduct>SSWLPARIS.10</CodeProduct>
+    <ProductName>Sun Swallow Paris- 10 10</ProductName>
+    <Unit>Pcs</Unit>
     <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>23000</Price>
-    <Total>138000</Total>
+    <Price>22500</Price>
+    <Total>135000</Total>
   </Table1>
   <Table1>
     <No>8</No>
-    <CodeProduct>SSWLLDSBTY-10.5</CodeProduct>
-    <ProductName>Sun Swallow Ladies Beauty 10.5</ProductName>
-    <Unit>psg</Unit>
+    <CodeProduct>SSWLRUNNER.10.5</CodeProduct>
+    <ProductName>Sun Swallow Runner - 10.5 10.5</ProductName>
+    <Unit>Pcs</Unit>
     <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>23000</Price>
-    <Total>138000</Total>
+    <Price>19500</Price>
+    <Total>117000</Total>
   </Table1>
   <Table1>
     <No>9</No>
-    <CodeArticle xml:space="preserve"> </CodeArticle>
-    <CodeProduct>SSWLTRAVEL10</CodeProduct>
-    <ProductName>Sun Swallow Travel 10 10</ProductName>
-    <Unit>Psg</Unit>
-    <Amount>12</Amount>
+    <CodeProduct>SSWLRUNNER.11</CodeProduct>
+    <ProductName>Sun Swallow Runner - 11 11</ProductName>
+    <Unit>Pcs</Unit>
+    <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>27500</Price>
-    <Total>330000</Total>
+    <Price>19500</Price>
+    <Total>117000</Total>
   </Table1>
   <Table1>
     <No>10</No>
-    <CodeProduct>SSWLTREK -10</CodeProduct>
-    <ProductName>Sun Swallow Trek 10</ProductName>
-    <Unit>psg</Unit>
+    <CodeProduct>SSWLRUNNER.11.5</CodeProduct>
+    <ProductName>Sun Swallow Runner - 11.5 11.5</ProductName>
+    <Unit>Pcs</Unit>
     <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>22700</Price>
-    <Total>136200</Total>
+    <Price>19500</Price>
+    <Total>117000</Total>
   </Table1>
   <Table1>
     <No>11</No>
-    <CodeProduct>SSWLTREK -10,5</CodeProduct>
-    <ProductName>Sun Swallow Trek 10,5</ProductName>
-    <Unit>psg</Unit>
-    <Amount>6</Amount>
+    <CodeProduct>SSWLTREK.10.5</CodeProduct>
+    <ProductName>Sun Swallow Trek - 10.5 10.5</ProductName>
+    <Unit>Pcs</Unit>
+    <Amount>12</Amount>
     <DiscountValue>0</DiscountValue>
     <Price>22700</Price>
-    <Total>136200</Total>
+    <Total>272400</Total>
   </Table1>
   <Table1>
     <No>12</No>
-    <CodeProduct>SSWLTREK -11</CodeProduct>
-    <ProductName>Sun Swallow Trek 11</ProductName>
-    <Unit>psg</Unit>
-    <Amount>6</Amount>
+    <CodeProduct>SSWLTREK.11</CodeProduct>
+    <ProductName>Sun Swallow Trek - 11 11</ProductName>
+    <Unit>Pcs</Unit>
+    <Amount>12</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>23000</Price>
-    <Total>138000</Total>
+    <Price>23200</Price>
+    <Total>278400</Total>
   </Table1>
   <Table1>
     <No>13</No>
-    <CodeProduct>SSWLTREK -11,5</CodeProduct>
-    <ProductName>Sun Swallow Trek 11,5</ProductName>
-    <Unit>psg</Unit>
-    <Amount>6</Amount>
+    <CodeProduct>SSWLTREK.11.5</CodeProduct>
+    <ProductName>Sun Swallow Trek - 11.5 11.5</ProductName>
+    <Unit>Pcs</Unit>
+    <Amount>12</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>23000</Price>
-    <Total>138000</Total>
+    <Price>23200</Price>
+    <Total>278400</Total>
   </Table1>
   <Table1>
     <No>14</No>
-    <CodeProduct>SUNURBAN 10 - 11</CodeProduct>
-    <ProductName>Sun Swallow Urban 10 - 11</ProductName>
-    <Unit>psg</Unit>
-    <Amount>12</Amount>
+    <CodeProduct>SSWLWAVE.10.5</CodeProduct>
+    <ProductName>Sun Swallow Wave- 10.5 10.5</ProductName>
+    <Unit>Pcs</Unit>
+    <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
-    <Price>28200</Price>
-    <Total>338400</Total>
+    <Price>21900</Price>
+    <Total>131400</Total>
   </Table1>
   <Table1>
     <No>15</No>
-    <CodeProduct>SSWLWAVE.10.5</CodeProduct>
-    <ProductName>Sun Swallow Wave 10.5</ProductName>
-    <Unit>psg</Unit>
-    <Amount>6</Amount>
-    <DiscountValue>0</DiscountValue>
-    <Price>21900</Price>
-    <Total>131400</Total>
-  </Table1>
-  <Table1>
-    <No>16</No>
     <CodeProduct>SSWLWAVE.11</CodeProduct>
-    <ProductName>Sun Swallow Wave 11</ProductName>
-    <Unit>psg</Unit>
-    <Amount>6</Amount>
-    <DiscountValue>0</DiscountValue>
-    <Price>21900</Price>
-    <Total>131400</Total>
-  </Table1>
-  <Table1>
-    <No>17</No>
-    <CodeProduct>SSWLWAVE.11.5</CodeProduct>
-    <ProductName>Sun Swallow Wave 11.5</ProductName>
-    <Unit>psg</Unit>
+    <ProductName>Sun Swallow Wave- 11 11</ProductName>
+    <Unit>Pcs</Unit>
     <Amount>6</Amount>
     <DiscountValue>0</DiscountValue>
     <Price>21900</Price>

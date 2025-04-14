@@ -11,9 +11,12 @@ namespace ApsWebApp.Services
     public class PengembalianPenjualanService : IPengembalianPenjualanService
     {
         private readonly ApplicationDbContext dbContext;
-        public PengembalianPenjualanService(ApplicationDbContext db)
+        private readonly IStockService stockService;
+
+        public PengembalianPenjualanService(ApplicationDbContext db, IStockService _stockService)
         {
             dbContext = db;
+            stockService = _stockService;
         }
 
         public Task<IEnumerable<Penjualanitem>> GetPenjualanByCustomerId(int customerId)
@@ -27,12 +30,12 @@ namespace ApsWebApp.Services
             return Task.FromResult(result.OrderByDescending(x=>x.Id) as IEnumerable<Penjualanitem>);
         }
 
-        public Task<PengembalianPenjualan> Post(PengembalianPenjualan model)
+        public async Task<PengembalianPenjualan> Post(PengembalianPenjualan model)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
             {
-
+                model.Created = model.Created.ToUniversalTime();
                 dbContext.PengembalianPenjualan.Add(model);
                 dbContext.Entry(model.Customer).State = EntityState.Unchanged;
                 dbContext.Entry(model.Gudang).State = EntityState.Unchanged;
@@ -43,8 +46,20 @@ namespace ApsWebApp.Services
                     dbContext.Entry(item.Unit).State = EntityState.Unchanged;
                 }
                 dbContext.SaveChanges();
+
+                foreach (var item in model.Items)
+                {
+                    double newStock = item.Quantity * item.Unit.Quantity;
+                    var saved = await stockService.AddMovementStock(item.Product.Id, model.Gudang.Id, StockMovementType.IN,
+                         ReferenceType.ReturnSale, item.Id, newStock);
+
+                    if (!saved)
+                        throw new SystemException("Gagal Menyimpan Stok !");
+                }
+
+                dbContext.SaveChanges();
                 trans.Commit();
-                return Task.FromResult(model);
+                return await Task.FromResult(model);
             }
             catch (Exception ex)
             {

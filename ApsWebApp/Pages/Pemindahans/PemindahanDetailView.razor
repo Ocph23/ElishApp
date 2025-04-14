@@ -1,4 +1,4 @@
-@page "/pemindahan/detail";
+﻿@page "/pemindahan/detail";
 @page "/pemindahan/detail/{id}";
 
 @using ShareModels
@@ -11,13 +11,13 @@
 @inject NotificationService notificationService;
 @inject NavigationManager nav;
 @inject IProductService productService
-
+@inject IStockService stockService;
 
 <RadzenTabs>
     <Tabs>
         <RadzenTabsItem Text="@("Gudang")">
             <RadzenFieldset Text="Data Supplier">
-                <div class="col-md-12  align-items-center d-flex">
+                <div class="col-md-12 align-items-center d-flex">
                     <div class="col-md-6">
 
                         <div class="row" style="margin-top:5px">
@@ -81,26 +81,26 @@
                     </div>
                 </div>
 
-                <RadzenGrid @ref="pemindahanGrid" Data="@(model.Items)" AllowFiltering="true"
+                <RadzenDataGrid @ref="pemindahanGrid" Data="@(model.Items)" AllowFiltering="true"
                             AllowSorting="true" TItem="PemindahanItem">
                     <Columns>
-                        <RadzenGridColumn Width="180px" TItem="PemindahanItem" Property="Product.CodeName" Title="Code" />
-                        <RadzenGridColumn TItem="PemindahanItem" Property="Product.Name" Title="Product" />
-                        <RadzenGridColumn Width="100px" TItem="PemindahanItem" TextAlign="TextAlign.Right" Context="data" Property="Quntity" Title="Quntity">
+                        <RadzenDataGridColumn Width="180px" TItem="PemindahanItem" Property="Product.CodeName" Title="Code" />
+                        <RadzenDataGridColumn TItem="PemindahanItem" Property="Product.Name" Title="Product" />
+                        <RadzenDataGridColumn Width="100px" TItem="PemindahanItem" TextAlign="TextAlign.Right" Context="data" Property="Quntity" Title="Quntity">
                             <Template Context="item">
                                 <RadzenNumeric TValue="double" @bind-Value="item.Quantity" Step="1" Change=@(args => OnChangeOrderItem(args, item)) />
                             </Template>
-                        </RadzenGridColumn>
-                        <RadzenGridColumn Width="130px" TItem="PemindahanItem" Property="Unit.Name" Title="Unit">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Width="130px" TItem="PemindahanItem" Property="Unit.Name" Title="Unit">
                             <EditTemplate Context="item">
                                 <RadzenDropDown @bind-Value="item.Unit" Data="@item.Product.Units"
                                                 Change=@(args => OnChangeOrderItem(args, item))
                                                 TextProperty="Name" Style="width:100%" />
                             </EditTemplate>
-                        </RadzenGridColumn>
+                        </RadzenDataGridColumn>
 
-                        <RadzenGridColumn TItem="PemindahanItem" Context="sampleBlazorModelsSampleOrder"
-                                          Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                        <RadzenDataGridColumn TItem="PemindahanItem" Context="sampleBlazorModelsSampleOrder"
+                                            Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                             <HeaderTemplate>
                                 <RadzenCheckBox TValue="bool" ValueChanged="@((x)=>OnCheckChange(x))" />
                             </HeaderTemplate>
@@ -120,9 +120,9 @@
                                 <RadzenButton Click=@(args => nav.NavigateTo("/pembelian")) Icon="cancel" ButtonStyle="ButtonStyle.Warning" />
                                 <RadzenButton Click=@(args => Save(model)) Icon="save" ButtonStyle="ButtonStyle.Success" />
                             </FooterTemplate>
-                        </RadzenGridColumn>
+                        </RadzenDataGridColumn>
                     </Columns>
-                </RadzenGrid>
+                </RadzenDataGrid>
             </RadzenFieldset>
         </RadzenTabsItem>
 
@@ -162,7 +162,7 @@
 
     Pemindahan model = new Pemindahan() { Created = DateTime.Now, WaktuPemindahan = DateTime.Now, Items = new List<PemindahanItem>() };
 
-    private RadzenGrid<PemindahanItem> pemindahanGrid;
+    private RadzenDataGrid<PemindahanItem> pemindahanGrid;
 
 
 
@@ -248,7 +248,7 @@
     {
         asal = data as Gudang;
         if(asal!=null)
-            products = await productService.GetProductStockByGudangId(merkId, asal.Id, true);
+            products = await stockService.GetProductStocks(asal.Id);
     }
 
 
@@ -258,7 +258,8 @@
         if (merk != null)
         {
             merkId = merk.Id;
-            products = await productService.GetProductStockByGudangId(merkId, asal.Id, true);
+            var xproducts = await stockService.GetProductStocks(asal.Id);
+            products = xproducts.Where(x => x.Merk.Id == merkId);
         }
     }
 

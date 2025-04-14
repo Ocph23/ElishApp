@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using FluentValidation.Results;
 using ShareModels;
 using System;
 using System.Collections.Generic;
@@ -233,6 +234,11 @@ namespace ApsWebApp
             workbook.SaveAs(stream);
             var content = stream.ToArray();
             return content;
+        }
+
+        internal static string? GetErrorString(List<ValidationFailure> errors)
+        {
+            return string.Join(";\r\n", errors.Select(x => x.ErrorMessage));
         }
     }
 }

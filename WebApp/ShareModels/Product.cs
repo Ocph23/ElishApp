@@ -1,12 +1,13 @@
-using System; 
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
- namespace ShareModels 
+
+namespace ShareModels
 {
-    public class Product  :BaseNotify,IEntity
+    public class Product : BaseNotify, IEntity
     {
 
         public int Id { get; set; }
@@ -14,7 +15,8 @@ using System.Threading.Tasks;
         public string CodeName { get; set; }
 
         private string _codeArticle;
-        public string CodeArticle {
+        public string CodeArticle
+        {
             get => _codeArticle;
             set => SetProperty(ref _codeArticle, value);
         }
@@ -33,8 +35,23 @@ using System.Threading.Tasks;
         //public ICollection<PembelianItem> PembelianItem { get; set; }
         //public ICollection<Penjualanitem> PenjualanItem { get; set; }
         public ICollection<ProductImage> ProductImage { get; set; }
-        public Unit UnitSelected => Units!=null&& Units.Count>0?Units.FirstOrDefault():new Unit();
-        
+
+
+        private Unit unitSelected;
+
+        [NotMapped]
+        public virtual Unit UnitSelected
+        {
+            get
+            {
+                if (unitSelected == null)
+                    return Units != null && Units.Count > 0 ? Units.FirstOrDefault() : new Unit(); ;
+                return unitSelected;
+            }
+            set { unitSelected = value; }
+        }
+
+
     }
 }
 

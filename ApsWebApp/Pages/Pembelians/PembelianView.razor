@@ -15,45 +15,45 @@
 <RadzenTabs>
     <Tabs>
         <RadzenTabsItem Text="Data Realisasi Pembelian">
-            <RadzenGrid Data="@pembelians"
+            <RadzenDataGrid Data="@pembelians"
                         AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" TItem="Pembelian" @ref="grid" LoadData="@LoadData" Count="@count" PageSize="10">
                 <Columns>
-                    <Radzen.Blazor.RadzenGridColumn Width="100px" TItem="Pembelian" Title="Created" Property="CreatedDate">
+                    <Radzen.Blazor.RadzenDataGridColumn Width="100px" TItem="Pembelian" Title="Created" Property="CreatedDate">
                         <Template Context="item">
                             @(item.CreatedDate.ToString("dd/MM/yyyy"))
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn Width="190px" TItem="Pembelian" Title="INV" Property="Nomor" />
-                    <Radzen.Blazor.RadzenGridColumn TItem="Pembelian" Title="Supplier" Property="Supplier.Nama">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn Width="190px" TItem="Pembelian" Title="INV" Property="Nomor" />
+                    <Radzen.Blazor.RadzenDataGridColumn TItem="Pembelian" Title="Supplier" Property="Supplier.Nama">
                         <Template Context="item">
                             @(item.OrderPembelian.Supplier.Nama)
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="Pembelian" Title="Invoice" Property="InvoiceNumber" />
-                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="Pembelian" Title="Total" TextAlign="TextAlign.Right">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn Width="150px" TItem="Pembelian" Title="Invoice" Property="InvoiceNumber" />
+                    <Radzen.Blazor.RadzenDataGridColumn Width="150px" TItem="Pembelian" Title="Total" TextAlign="TextAlign.Right">
                         <Template Context="item">
                             @(item.Total.ToString("N"))
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn Width="100px" TItem="Pembelian" Title="DeadLine" Property="PayDeadLine">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn Width="100px" TItem="Pembelian" Title="DeadLine" Property="PayDeadLine">
                         <Template Context="item">
                             @(item.PayDeadLine.ToString("dd/MM/yyyy"))
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn Width="110px" TItem="Pembelian" Title="Paid" Property="Status">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn Width="110px" TItem="Pembelian" Title="Paid" Property="Status">
                         <FilterTemplate>
                             <RadzenDropDown @bind-Value="@currentPeyment" TextProperty="Text"
                                             ValueProperty="Value" Style="width:100%"
                                             Data="@(Enum.GetValues(typeof(PaymentStatus)).Cast<PaymentStatus>().Select(t => new { Text = $"{t}", Value = t }))" Change="@(()=>grid.Reload())" />
                         </FilterTemplate>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn TItem="Pembelian" Width="65px">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn TItem="Pembelian" Width="65px">
                         <Template Context="item">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list" Click=@(args => Nav.NavigateTo($"pembelian/realisasi/detail/{item.Id}")) />
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
+                    </Radzen.Blazor.RadzenDataGridColumn>
                 </Columns>
-            </RadzenGrid>
+            </RadzenDataGrid>
         </RadzenTabsItem>
     </Tabs>
 </RadzenTabs>
@@ -64,7 +64,7 @@
 
     private IEnumerable<Pembelian> pembelians;
     PaymentStatus currentPeyment;
-    RadzenGrid<Pembelian> grid;
+    RadzenDataGrid<Pembelian> grid;
     int count;
 
     private async Task CreatePembayaran(int idpembelian)

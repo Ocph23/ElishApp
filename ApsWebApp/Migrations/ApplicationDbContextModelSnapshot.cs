@@ -4,6 +4,7 @@ using ApsWebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,22 +17,24 @@ namespace ApsWebApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("ShareModels.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -42,41 +45,36 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("ContactName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("KaryawanId")
-                        .HasColumnType("int");
+                    b.Property<int?>("KaryawanId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("NPWP")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Telepon")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -91,15 +89,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -110,26 +108,27 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<double>("ActualValue")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("Amount")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("PembelianId")
-                        .HasColumnType("int");
+                    b.Property<int?>("PembelianId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -146,26 +145,24 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Telepon")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -178,15 +175,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -197,20 +194,21 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Discription")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<int>("SupplierId")
-                        .HasColumnType("int");
+                    b.Property<int?>("SupplierId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -223,28 +221,30 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<double>("Discount")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Keterangan")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("OrderPembelianId")
-                        .HasColumnType("int");
+                    b.Property<int?>("OrderPembelianId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("Price")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("Quntity")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -261,29 +261,30 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("DeadLine")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Discription")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("GudangId")
-                        .HasColumnType("int");
+                    b.Property<int?>("GudangId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("SalesId")
-                        .HasColumnType("int");
+                    b.Property<int?>("SalesId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -300,25 +301,27 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<double>("Discount")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("OrderPenjualanId")
-                        .HasColumnType("int");
+                    b.Property<int?>("OrderPenjualanId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("Price")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("Quantity")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -335,38 +338,36 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BankName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("PayDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PayTo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("PayType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<double>("PayValue")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("PembelianId")
-                        .HasColumnType("int");
+                    b.Property<int?>("PembelianId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("RekNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -379,38 +380,36 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BankName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("PayDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PayTo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("PayType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<double>("PayValue")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("PenjualanId")
-                        .HasColumnType("int");
+                    b.Property<int?>("PenjualanId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("RekNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -423,26 +422,27 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("DeadLine")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<int>("GudangId")
-                        .HasColumnType("int");
+                    b.Property<int?>("GudangId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("InvoiceNumber")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("OrderPembelianId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -458,28 +458,27 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<double>("Amount")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("Discount")
-                        .HasColumnType("double");
-
-                    b.Property<string>("Keterangan")
-                        .HasColumnType("longtext");
+                        .HasColumnType("double precision");
 
                     b.Property<int?>("PembelianId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<double>("Price")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -496,23 +495,24 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DariId")
-                        .HasColumnType("int");
+                    b.Property<int?>("DariId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("TujuanId")
-                        .HasColumnType("int");
+                    b.Property<int?>("TujuanId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("WaktuPemindahan")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -527,19 +527,21 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<int>("PemindahanId")
-                        .HasColumnType("int");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<int?>("PemindahanId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("Quantity")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -556,20 +558,21 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("GudangId")
-                        .HasColumnType("int");
+                    b.Property<int?>("GudangId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -584,28 +587,30 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<double>("Discount")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<int?>("PengembalianPenjualanId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<int>("PenjualanId")
-                        .HasColumnType("int");
+                    b.Property<int?>("PenjualanId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("Price")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("Quantity")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -624,41 +629,42 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Activity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("DeadLine")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<double>("Expedisi")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("FeeSalesman")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("GudangId")
-                        .HasColumnType("int");
+                    b.Property<int?>("GudangId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("OrderPenjualanId")
-                        .HasColumnType("int");
+                    b.Property<int?>("OrderPenjualanId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("SalesmanId")
-                        .HasColumnType("int");
+                    b.Property<int?>("SalesmanId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -677,25 +683,27 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<double>("Discount")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("PenjualanId")
-                        .HasColumnType("int");
+                    b.Property<int?>("PenjualanId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("Price")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
 
                     b.Property<double>("Quantity")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -712,43 +720,39 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("CodeArticle")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("CodeName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<double>("Discount")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("MerkId")
-                        .HasColumnType("int");
+                    b.Property<int?>("MerkId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("SupplierId")
-                        .HasColumnType("int");
+                    b.Property<int?>("SupplierId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -765,21 +769,21 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("FileType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Thumb")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -792,50 +796,110 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("Role");
                 });
 
+            modelBuilder.Entity("ShareModels.Stock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("GudangId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Quntity")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GudangId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Stocks");
+                });
+
+            modelBuilder.Entity("ShareModels.StockMovement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("GudangId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("MovementDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("Quntity")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("ReferenceId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ReferenceType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StockMovementType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GudangId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("StockMovements");
+                });
+
             modelBuilder.Entity("ShareModels.Supplier", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("ContactPerson")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("ContactPersonName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("NPWP")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nama")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Telepon")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -846,26 +910,27 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<double>("Buy")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<int>("Level")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int?>("ProductId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<double>("Quantity")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("Sell")
-                        .HasColumnType("double");
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -878,22 +943,21 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Activated")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -904,13 +968,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -925,15 +991,11 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Karyawan", "Karyawan")
                         .WithMany()
-                        .HasForeignKey("KaryawanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("KaryawanId");
 
                     b.HasOne("ShareModels.User", "User")
                         .WithMany("Customers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Karyawan");
 
@@ -944,21 +1006,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Pembelian", "Pembelian")
                         .WithMany("Incomingitem")
-                        .HasForeignKey("PembelianId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PembelianId");
 
                     b.HasOne("ShareModels.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("ShareModels.Unit", "Unit")
                         .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UnitId");
 
                     b.Navigation("Pembelian");
 
@@ -971,9 +1027,7 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.User", "User")
                         .WithMany("Sales")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -982,9 +1036,7 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Supplier", "Supplier")
                         .WithMany("Orderpembelian")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SupplierId");
 
                     b.Navigation("Supplier");
                 });
@@ -993,21 +1045,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.OrderPembelian", "OrderPembelian")
                         .WithMany("Items")
-                        .HasForeignKey("OrderPembelianId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderPembelianId");
 
                     b.HasOne("ShareModels.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("ShareModels.Unit", "Unit")
                         .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UnitId");
 
                     b.Navigation("OrderPembelian");
 
@@ -1020,21 +1066,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("ShareModels.Gudang", "Gudang")
                         .WithMany()
-                        .HasForeignKey("GudangId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GudangId");
 
                     b.HasOne("ShareModels.Karyawan", "Sales")
                         .WithMany()
-                        .HasForeignKey("SalesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalesId");
 
                     b.Navigation("Customer");
 
@@ -1047,21 +1087,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.OrderPenjualan", "OrderPenjualan")
                         .WithMany("Items")
-                        .HasForeignKey("OrderPenjualanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderPenjualanId");
 
                     b.HasOne("ShareModels.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("ShareModels.Unit", "Unit")
                         .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UnitId");
 
                     b.Navigation("OrderPenjualan");
 
@@ -1074,9 +1108,7 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Pembelian", "Pembelian")
                         .WithMany("PembayaranPembelian")
-                        .HasForeignKey("PembelianId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PembelianId");
 
                     b.Navigation("Pembelian");
                 });
@@ -1085,9 +1117,7 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Penjualan", "Penjualan")
                         .WithMany("PembayaranPenjualan")
-                        .HasForeignKey("PenjualanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PenjualanId");
 
                     b.Navigation("Penjualan");
                 });
@@ -1096,9 +1126,7 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Gudang", "Gudang")
                         .WithMany()
-                        .HasForeignKey("GudangId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GudangId");
 
                     b.HasOne("ShareModels.OrderPembelian", "OrderPembelian")
                         .WithOne("Pembelian")
@@ -1119,15 +1147,11 @@ namespace ApsWebApp.Migrations
 
                     b.HasOne("ShareModels.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("ShareModels.Unit", "Unit")
                         .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UnitId");
 
                     b.Navigation("Product");
 
@@ -1138,15 +1162,11 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Gudang", "Dari")
                         .WithMany()
-                        .HasForeignKey("DariId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DariId");
 
                     b.HasOne("ShareModels.Gudang", "Tujuan")
                         .WithMany()
-                        .HasForeignKey("TujuanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TujuanId");
 
                     b.Navigation("Dari");
 
@@ -1157,21 +1177,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Pemindahan", "Pemindahan")
                         .WithMany("Items")
-                        .HasForeignKey("PemindahanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PemindahanId");
 
                     b.HasOne("ShareModels.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("ShareModels.Unit", "Unit")
                         .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UnitId");
 
                     b.Navigation("Pemindahan");
 
@@ -1184,15 +1198,11 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("ShareModels.Gudang", "Gudang")
                         .WithMany()
-                        .HasForeignKey("GudangId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GudangId");
 
                     b.Navigation("Customer");
 
@@ -1207,21 +1217,15 @@ namespace ApsWebApp.Migrations
 
                     b.HasOne("ShareModels.Penjualan", "Penjualan")
                         .WithMany()
-                        .HasForeignKey("PenjualanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PenjualanId");
 
                     b.HasOne("ShareModels.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("ShareModels.Unit", "Unit")
                         .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UnitId");
 
                     b.Navigation("Penjualan");
 
@@ -1234,27 +1238,19 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("ShareModels.Gudang", "Gudang")
                         .WithMany()
-                        .HasForeignKey("GudangId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GudangId");
 
                     b.HasOne("ShareModels.OrderPenjualan", "OrderPenjualan")
                         .WithMany()
-                        .HasForeignKey("OrderPenjualanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderPenjualanId");
 
                     b.HasOne("ShareModels.Karyawan", "Salesman")
                         .WithMany()
-                        .HasForeignKey("SalesmanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalesmanId");
 
                     b.Navigation("Customer");
 
@@ -1269,21 +1265,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Penjualan", "Penjualan")
                         .WithMany("Items")
-                        .HasForeignKey("PenjualanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PenjualanId");
 
                     b.HasOne("ShareModels.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("ShareModels.Unit", "Unit")
                         .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UnitId");
 
                     b.Navigation("Penjualan");
 
@@ -1296,21 +1286,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("ShareModels.Merk", "Merk")
                         .WithMany()
-                        .HasForeignKey("MerkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MerkId");
 
                     b.HasOne("ShareModels.Supplier", "Supplier")
                         .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SupplierId");
 
                     b.Navigation("Category");
 
@@ -1328,6 +1312,36 @@ namespace ApsWebApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ShareModels.Stock", b =>
+                {
+                    b.HasOne("ShareModels.Gudang", "Gudang")
+                        .WithMany()
+                        .HasForeignKey("GudangId");
+
+                    b.HasOne("ShareModels.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Gudang");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ShareModels.StockMovement", b =>
+                {
+                    b.HasOne("ShareModels.Gudang", "Gudang")
+                        .WithMany()
+                        .HasForeignKey("GudangId");
+
+                    b.HasOne("ShareModels.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Gudang");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ShareModels.Unit", b =>
                 {
                     b.HasOne("ShareModels.Product", null)
@@ -1339,15 +1353,11 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.HasOne("ShareModels.User", "User")
                         .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Role");
 
@@ -1358,8 +1368,7 @@ namespace ApsWebApp.Migrations
                 {
                     b.Navigation("Items");
 
-                    b.Navigation("Pembelian")
-                        .IsRequired();
+                    b.Navigation("Pembelian");
                 });
 
             modelBuilder.Entity("ShareModels.OrderPenjualan", b =>

@@ -45,14 +45,16 @@ namespace ApsWebApp.Data
         public virtual DbSet<Unit> Unit { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserRole> Userrole { get; set; }
+        public virtual DbSet<Stock> Stocks{ get; set; }
+        public virtual DbSet<StockMovement> StockMovements { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                var constring = "server=151.106.112.219;port=3306;database=ApsDb;user=ocph23;password=Alpharian@77";
-                optionsBuilder.UseMySql(constring, ServerVersion.AutoDetect(constring));
-            }
+            //if (!optionsBuilder.IsConfigured)
+            //{
+            //    var constring = "server=151.106.112.219;port=3306;database=ApsDb;user=ocph23;password=Alpharian@77";
+            //    optionsBuilder.UseMySql(constring, ServerVersion.AutoDetect(constring));
+            //}
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

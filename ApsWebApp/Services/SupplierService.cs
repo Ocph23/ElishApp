@@ -1,4 +1,6 @@
 ﻿using ApsWebApp.Data;
+using ApsWebApp.Validations;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ShareModels;
 using System;
@@ -11,10 +13,12 @@ namespace ApsWebApp.Services
     public class SupplierService : ISupplierService
     {
         private readonly ApplicationDbContext dbContext;
+        private readonly IValidator<Supplier> supplierValidator;
 
-        public SupplierService(ApplicationDbContext db)
+        public SupplierService(ApplicationDbContext db, IValidator<Supplier> _supplierValidator)
         {
             dbContext = db;
+            supplierValidator = _supplierValidator;
         }
 
         public  Task<bool> Delete(int id)
@@ -57,6 +61,9 @@ namespace ApsWebApp.Services
         {
             try
             {
+                var validateResult = supplierValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 dbContext.Supplier.Add(value);
                 dbContext.SaveChanges();
                 return Task.FromResult(value);
@@ -71,6 +78,9 @@ namespace ApsWebApp.Services
         {
             try
             {
+                var validateResult = supplierValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 var existsModel = dbContext.Supplier.SingleOrDefault(x => x.Id == id);
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");

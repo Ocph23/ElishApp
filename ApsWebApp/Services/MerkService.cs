@@ -1,4 +1,6 @@
 ﻿using ApsWebApp.Data;
+using ApsWebApp.Validations;
+using FluentValidation;
 using ShareModels;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,14 @@ namespace ApsWebApp.Services
     public class MerkService : IMerkService
     {
         private readonly ApplicationDbContext dbContext;
-        public MerkService(ApplicationDbContext db)
+        private readonly IValidator<Merk> merkValidator;
+
+        public MerkService(ApplicationDbContext db, IValidator<Merk> _merkValidator)
         {
             dbContext = db;
+            merkValidator = _merkValidator;
         }
-        public  Task<bool> Delete(int id)
+        public Task<bool> Delete(int id)
         {
             try
             {
@@ -39,7 +44,7 @@ namespace ApsWebApp.Services
             return Task.FromResult(result);
         }
 
-        public Task<Merk> GetBySupplier(int  supplerId)
+        public Task<Merk> GetBySupplier(int supplerId)
         {
             var result = dbContext.Merk.Where(x => x.Id == supplerId).FirstOrDefault();
             return Task.FromResult(result);
@@ -51,12 +56,15 @@ namespace ApsWebApp.Services
             return Task.FromResult(results.AsEnumerable());
         }
 
-        public  Task<Merk> Post(Merk value)
+        public Task<Merk> Post(Merk value)
         {
             try
             {
+                var validateResult = merkValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 dbContext.Merk.Add(value);
-                 dbContext.SaveChanges();
+                dbContext.SaveChanges();
                 return Task.FromResult(value);
             }
             catch (Exception ex)
@@ -65,17 +73,20 @@ namespace ApsWebApp.Services
             }
         }
 
-        public  Task<bool> Update(int id, Merk value)
+        public Task<bool> Update(int id, Merk value)
         {
             try
             {
+                var validateResult = merkValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
                 var existsModel = dbContext.Merk.Where(x => x.Id == id).FirstOrDefault();
                 if (existsModel == null)
                     throw new SystemException("Data Not Found !");
 
                 dbContext.Entry(existsModel).CurrentValues.SetValues(value);
 
-                var updated =  dbContext.SaveChanges();
+                var updated = dbContext.SaveChanges();
                 if (updated <= 0)
                     throw new SystemException("Data Not Saved !");
                 return Task.FromResult(true);

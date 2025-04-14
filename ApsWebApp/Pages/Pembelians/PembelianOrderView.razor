@@ -18,31 +18,31 @@
         <RadzenTabsItem Text="Data Order Pembelian">
             <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => Nav.NavigateTo("/pembelian/order/detail")) Style="margin-bottom:10px" />
 
-            <RadzenGrid Data="@orders"
+            <RadzenDataGrid Data="@orders"
                         @ref="grid" LoadData="@LoadData" Count="@count" PageSize="20" FilterMode="FilterMode.Advanced"
                         AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPembelian">
                 <Columns>
-                    <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="OrderPembelian" Title="Order Date" Property="OrderDate" />
-                    <Radzen.Blazor.RadzenGridColumn Width="200px" TItem="OrderPembelian" Title="PO Number" Property="Nomor" />
-                    <Radzen.Blazor.RadzenGridColumn TItem="OrderPembelian" Title="Supplier" Property="Supplier.Nama" />
-                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Disc">
+                    <Radzen.Blazor.RadzenDataGridColumn Width="200px" TItem="OrderPembelian" Title="Order Date" Property="OrderDate" />
+                    <Radzen.Blazor.RadzenDataGridColumn Width="200px" TItem="OrderPembelian" Title="PO Number" Property="Nomor" />
+                    <Radzen.Blazor.RadzenDataGridColumn TItem="OrderPembelian" Title="Supplier" Property="Supplier.Nama" />
+                    <Radzen.Blazor.RadzenDataGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Disc">
                         <Template Context="item">
                             @(item.Discount.ToString("N2"))
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Total">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn Width="150px" TItem="OrderPembelian" TextAlign="TextAlign.Center" Title="Total">
                         <Template Context="item">
                             @((item.Total - item.Discount).ToString("N2"))
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn Width="120px" TItem="OrderPembelian" Title="Status" Property="Status">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn Width="120px" TItem="OrderPembelian" Title="Status" Property="Status">
                         <FilterTemplate>
                             <RadzenDropDown @bind-Value="@currentTOC" TextProperty="Text"
                                             ValueProperty="Value" Style="width:100%" Change="@(()=>grid.Reload())"
                                             Data="@(Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().Select(t => new { Text = $"{t}", Value = t }))" />
                         </FilterTemplate>
-                    </Radzen.Blazor.RadzenGridColumn>
-                    <Radzen.Blazor.RadzenGridColumn TItem="OrderPembelian" Width="110px">
+                    </Radzen.Blazor.RadzenDataGridColumn>
+                    <Radzen.Blazor.RadzenDataGridColumn TItem="OrderPembelian" Width="110px">
                         <Template Context="item">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list" Click=@(args => Nav.NavigateTo($"pembelian/order/detail/{item.Id}")) />
                             @if (item.Status == OrderStatus.Baru)
@@ -56,9 +56,9 @@
 
                             }
                         </Template>
-                    </Radzen.Blazor.RadzenGridColumn>
+                    </Radzen.Blazor.RadzenDataGridColumn>
                 </Columns>
-            </RadzenGrid>
+            </RadzenDataGrid>
 
         </RadzenTabsItem>
     </Tabs>
@@ -67,8 +67,8 @@
 @code {
 
 
-    OrderStatus currentTOC;
-    RadzenGrid<OrderPembelian> grid;
+    OrderStatus currentTOC = OrderStatus.Baru;
+    RadzenDataGrid<OrderPembelian> grid;
     int count;
 
 
@@ -80,13 +80,13 @@
 
 
 
-    public void OnCloseDialog(dynamic data)
+    public async void OnCloseDialog(dynamic data)
     {
         if (data.GetType() != typeof(bool))
         {
             try
             {
-                var result = pembelianService.CreatePembelian((Int32)data.OrderId, (Int32)data.Gudang.Id).Result;
+                var result = await pembelianService.CreatePembelian((Int32)data.OrderId, (Int32)data.Gudang.Id);
                 if (result != null)
                 {
                     Nav.NavigateTo($"/pembelian/realisasi/detail/{result.Id}", true);

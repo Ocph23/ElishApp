@@ -16,7 +16,7 @@
                     <RadzenDatePicker Change="@(()=>GetData(true))" @bind-Value="start" Style="width:200px" />
                 </div>
             </div>
-            <div class="form-group row">
+            <div class="form-group row my-2">
                 <label class="col-sm-2 col-form-label">Sampi</label>
                 <div class="col-sm-10">
                     <RadzenDatePicker Change="@(()=>GetData(true))" @bind-Value="endDate" Style="width:200px" />
@@ -33,11 +33,11 @@
                 </RadzenRadioButtonList>
             </div>
         </div>
-        <div class="col-md-12">
-            <RadzenGrid @ref="grid" Data="datas" AllowSorting="true" ColumnWidth="200px">
+        <div class="col-md-12 mt-2">
+            <RadzenDataGrid @ref="grid" Data="datas" AllowSorting="true" ColumnWidth="200px">
                 <Columns>
                 </Columns>
-            </RadzenGrid>
+            </RadzenDataGrid>
         </div>
     </div>
 </RadzenFieldset>
@@ -49,7 +49,7 @@
     private DateTime? endDate;
     private List<PenjualanViewModel> datas = new List<PenjualanViewModel>();
     private IEnumerable<Penjualan> source = new List<Penjualan>();
-    RadzenGrid<PenjualanViewModel> grid;
+    RadzenDataGrid<PenjualanViewModel> grid;
 
     public async Task GetData(bool forced)
     {
@@ -62,10 +62,11 @@
         {
             if (source.Count() <= 0 || forced)
             {
-                source = dbContext.Penjualan.Where(x => x.CreateDate >= start.Value && x.CreateDate <= endDate.Value)
+                source = dbContext.Penjualan.Where(x => x.CreateDate >= start.Value.ToUniversalTime() && x.CreateDate <= endDate.Value.ToUniversalTime())
                     .Include(x => x.Salesman)
                     .Include(x => x.Customer)
                     .Include(x => x.Items).ThenInclude(x => x.Unit)
+                    .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Merk)
                     .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Supplier)
                     .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Units);
             }
@@ -111,11 +112,11 @@
                         datas.Add(item);
                     }
 
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "Name", Title = "Name" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CodeName", Title = "Code Name" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CodeName", Title = "Article" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "SupplierName", Title = "Supplier" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "AmountView", Title = "Amount" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "Name", Title = "Name" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "CodeName", Title = "Code Name" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "CodeName", Title = "Article" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "SupplierName", Title = "Supplier" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "AmountView", Title = "Amount" });
                     break;
 
                 case 2:
@@ -139,12 +140,12 @@
                         datas.Add(item);
                     }
 
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CreateDate", Title = "Crate" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "Nomor", Title = "Nomor" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CustomerName", Title = "Customer" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "Payment", Title = "Payment Type" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "Status", Title = "Paid" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "SalesName", Title = "Sales" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "CreateDate", Title = "Crate" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "Nomor", Title = "Nomor" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "CustomerName", Title = "Customer" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "Payment", Title = "Payment Type" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "Status", Title = "Paid" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "SalesName", Title = "Sales" });
                     break;
 
 
@@ -162,7 +163,7 @@
                         datas.Add(item);
                     }
 
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "CustomerName", Title = "Customer" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "CustomerName", Title = "Customer" });
                     break;
 
 
@@ -181,8 +182,8 @@
                         datas.Add(item);
                     }
 
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "SalesName", Title = "Sales" });
-                    grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>()
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "SalesName", Title = "Sales" });
+                    grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>()
                     {
                         Property = "TotalFeeSalesman",
                         Title = "Fee Sales",
@@ -191,8 +192,8 @@
                     break;
             }
 
-            grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "TotalDiscountView", Title = "Discount", TextAlign = TextAlign.Right });
-            grid.ColumnsCollection.Add(new RadzenGridColumn<PenjualanViewModel>() { Property = "GrandTotal", Title = "Total", TextAlign = TextAlign.Right });
+            grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "TotalDiscountView", Title = "Discount", TextAlign = TextAlign.Right });
+            grid.ColumnsCollection.Add(new RadzenDataGridColumn<PenjualanViewModel>() { Property = "GrandTotal", Title = "Total", TextAlign = TextAlign.Right });
             await grid.Reload();
         }
     }

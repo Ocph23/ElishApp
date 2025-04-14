@@ -1,13 +1,13 @@
-using System; 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
- namespace ShareModels 
-{ 
-     public class Karyawan  
-   {
+
+namespace ShareModels
+{
+    public class Karyawan
+    {
         public Karyawan()
         {
         }
@@ -19,7 +19,7 @@ using System.Threading.Tasks;
         public string Email { get; set; }
         public virtual User User { get; set; }
 
-       public bool IsSales => User != null && User.Roles.Where(x=>x.Role.Name=="Sales").Count()>0 ?true:false;
+        public bool IsSales => User != null && User.Roles.Where(x => x.Role.Name == "Sales").Count() > 0 ? true : false;
 
     }
 

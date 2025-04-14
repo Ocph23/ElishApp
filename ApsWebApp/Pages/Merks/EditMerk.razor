@@ -16,7 +16,7 @@
                     <RadzenTextBox @bind-Value="model.Name" style="width: 100%;" Name="CardNr" />
                 </div>
             </div>
-            <div class="row">
+            <div class="row my-2">
                 <div class="col-md-4 align-items-center d-flex">
                     <RadzenLabel Text="Description" />
                 </div>
@@ -30,9 +30,11 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12 text-right" style="margin-top:20px">
-        <RadzenButton Click="@(()=>Close())" ButtonStyle="ButtonStyle.Secondary" Text="Cancel" Style="margin-bottom: 10px; width: 150px" />
-        <RadzenButton Click="@(async (args) => await SaveAction())" Text="OK" Style="margin-bottom: 10px; width: 150px" />
+    <div class="col-md-12 d-flex justify-content-end gap-2 mt-2" >
+
+        <Radzen.Blazor.RadzenButton Icon="undo" Text="Batal" ButtonType="ButtonType.Button" Click="@(()=>Close())" ButtonStyle="ButtonStyle.Info" />
+        <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Button"
+                                    Click="@(async (args) => await SaveAction())" ButtonStyle="ButtonStyle.Warning" />
     </div>
 </div>
 

@@ -4,19 +4,17 @@ using ApsWebApp.Data;
 using ApsWebApp.Models;
 using ApsWebApp.Services;
 using Blazored.LocalStorage;
-using ClosedXML.Graphics;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using Radzen;
 using ShareModels;
-using System.Reflection;
-using System.Text.Json;
+using System.Security.Authentication;
 using System.Text.Json.Serialization;
+using ApsWebApp.Validations;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 if (builder.Environment.IsProduction())
 {
@@ -24,18 +22,31 @@ if (builder.Environment.IsProduction())
     {
         serverOptions.ListenLocalhost(5000);
     });
+
+
+    builder.WebHost.UseIISIntegration().UseKestrel(kestrelOptions =>
+    {
+        kestrelOptions.ConfigureHttpsDefaults(httpsOptions =>
+        {
+            httpsOptions.SslProtocols = SslProtocols.Tls12;
+        });
+    }).UseIIS();
 }
 
 
 // Add services to the container.
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
@@ -51,13 +62,23 @@ builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMyServices();
+builder.Services.AddValidatorServices();
+builder.Services.AddFastReport();
+
 
 builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions
-                .ReferenceHandler = ReferenceHandler.Preserve); 
+                .ReferenceHandler = ReferenceHandler.Preserve);
 //.AddNewtonsoftJson(options =>
 // options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 // );
 
+builder.Services.AddRadzenComponents();
+
+builder.Services.AddRadzenCookieThemeService(options =>
+{
+    options.Name = "MyApplicationTheme"; // The name of the cookie
+    options.Duration = TimeSpan.FromDays(365); // The duration of the cookie
+});
 
 
 var app = builder.Build();
