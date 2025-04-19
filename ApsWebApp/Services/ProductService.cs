@@ -59,10 +59,18 @@ namespace ApsWebApp.Services
                 var validateResult = await unitValidator.ValidateAsync(unit);
                 if (!validateResult.IsValid)
                     throw new SystemException(Helper.GetErrorString(validateResult.Errors));
-                var product = dbContext.Product.Where(x => x.Id == productId).Include(x => x.Units).Include(x => x.Merk)
+
+                if (!dbContext.Product.Any() && unit.Level > 0)
+                {
+                    throw new SystemException("Minimal level adalah 0");
+                }
+
+                var product = dbContext.Product.Where(x => x.Id == productId)
+                    .Include(x => x.Units).Include(x => x.Merk)
                     .Include(x => x.Category).FirstOrDefault();
+
                 var lastUnit = product.Units.OrderBy(x => x.Level).LastOrDefault();
-                unit.Level = lastUnit == null ? 0 : lastUnit.Level + 1;
+                unit.Level = lastUnit == null ? 0 : lastUnit.Id>0?lastUnit.Level + 1:0;
                 product.Units.Add(unit);
                 dbContext.SaveChanges();
                 if (unit.Id <= 0)

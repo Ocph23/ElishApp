@@ -141,4 +141,7 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller}/{action}/{id}");
 });
+
+
+
 app.Run();
