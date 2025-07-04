@@ -30,13 +30,13 @@ namespace ApsWebApp.Services
             return Task.FromResult(result.OrderByDescending(x=>x.Id) as IEnumerable<Penjualanitem>);
         }
 
-        public async Task<PengembalianPenjualan> Post(PengembalianPenjualan model)
+        public async Task<PengembalianPenjualan> Post(PengembalianPenjualan model)  
         {
+            dbContext.ChangeTracker.Clear();
             var trans = dbContext.Database.BeginTransaction();
             try
             {
                 model.Created = model.Created.ToUniversalTime();
-                dbContext.PengembalianPenjualan.Add(model);
                 dbContext.Entry(model.Customer).State = EntityState.Unchanged;
                 dbContext.Entry(model.Gudang).State = EntityState.Unchanged;
                 foreach (var item in model.Items)
@@ -45,6 +45,7 @@ namespace ApsWebApp.Services
                     dbContext.Entry(item.Product).State = EntityState.Unchanged;
                     dbContext.Entry(item.Unit).State = EntityState.Unchanged;
                 }
+                dbContext.PengembalianPenjualan.Add(model);
                 dbContext.SaveChanges();
 
                 foreach (var item in model.Items)
@@ -69,7 +70,7 @@ namespace ApsWebApp.Services
             }
         }
 
-        public Task<PengembalianPenjualan> Put(int id, PengembalianPenjualan model)
+        public async Task<PengembalianPenjualan> Put(int id, PengembalianPenjualan model)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
@@ -102,6 +103,21 @@ namespace ApsWebApp.Services
                             dbContext.Entry(item.Unit).State = EntityState.Unchanged;
                         }
                         dbContext.Entry(oldItem).CurrentValues.SetValues(item);
+
+                        var stockMovement = await stockService.GetMovementStock(StockMovementType.IN, ReferenceType.ReturnSale, item.Id);
+                        //oldItem.Quantity = item.Quantity;
+                        //oldItem.Price = item.Price;
+                        //oldItem.Discount = item.Discount;
+                        //oldItem.Unit = item.Unit;
+                        if (stockMovement.Quantity != (oldItem.Quantity * oldItem.Unit.Quantity))
+                        {
+                            await stockService.UpdateStockMovement(stockMovement, item.Quantity * item.Unit.Quantity);
+                        }
+
+
+
+
+
                     }
                 }
 
@@ -119,7 +135,7 @@ namespace ApsWebApp.Services
 
                 dbContext.SaveChanges();
                 trans.Commit();
-                return Task.FromResult(model);
+                return model;
             }
             catch (Exception ex)
             {

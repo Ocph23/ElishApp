@@ -8,8 +8,6 @@
 @inject DialogService DialogService;
 @attribute [Authorize]
 
-
-
 <RadzenFieldset>
 
     <HeaderTemplate>Data Kategori</HeaderTemplate>
@@ -25,7 +23,7 @@
         <Columns>
             <RadzenDataGridColumn Width="300" Property="Name" Title="Nama" TItem="Category" />
             <RadzenDataGridColumn Property="Description" Title="Keterangan" TItem="Category" />
-            <RadzenDataGridColumn Width="60px" TItem="Category">
+            <RadzenDataGridColumn  Width="60px" TItem="Category">
                 <Template Context="item">
                     <RadzenButton Click=@(args => DialogService.OpenAsync<EditCategory>($"Edit Category",
                         new Dictionary<string, object>() { { "model", item}, },
@@ -34,7 +32,7 @@
             </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
-   
+
     </ChildContent>
 
 </RadzenFieldset>
@@ -44,12 +42,14 @@
     private ICollection<Category> categories;
     RadzenDataGrid<Category> grid;
 
-  //  RenderFragment fragment;
+    //  RenderFragment fragment;
 
     protected override async Task OnInitializedAsync()
     {
         DialogService.OnClose += OnCloseDialog;
         categories = (await categoryService.Get()).ToList();
+        Console.WriteLine($"current  render mode : {RendererInfo.IsInteractive}");
+
     }
 
     public void OnCloseDialog(dynamic result)

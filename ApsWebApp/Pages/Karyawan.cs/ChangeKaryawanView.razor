@@ -1,6 +1,7 @@
 ﻿@page "/karyawan/change/{id?}"
 
 @inject NavigationManager nav;
+@inject NotificationService NotificationService;
 @inject IKaryawanService karyawanService;
 @inject ICustomerService customerService;
 @inject DialogService dialogService
@@ -9,59 +10,37 @@
 <Radzen.Blazor.RadzenFieldset Text="@title">
     <div class="row">
         <div class="col-xl-12">
-            <RadzenTabs style="height: 750px">
+            <RadzenTabs>
                 <Tabs>
                     <RadzenTabsItem Text="Data Karaywan">
-                        <RadzenTemplateForm Data="model" Submit="@(async(Karyawan arg)=>await Save(arg))">
+                        <RadzenTemplateForm Data="model" TItem="Karyawan" Submit="Save">
                             <Radzen.Blazor.RadzenFieldset Text="Data Karyawan/Sales">
                                 <div class="form-row">
                                     <div class="col-md-6">
-                                        <div class="row my-1" >
-                                            <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Nama Karyawan/Sales" />
-                                            </div>
-                                            <div class="col-md-8">
-                                                <RadzenTextBox class="w-100" @bind-Value="model.Name" Name="Name" />
-                                                <RadzenRequiredValidator Component="Name" Text="Name is required" Popup=true Style="position: absolute" />
-                                            </div>
-                                        </div>
+                                        <RadzenFormField Text="Nama Karyawan/Sales" Component="Name" class="rz-my-1 rz-w-100">
+                                            <RadzenTextBox @bind-Value="@model.Name" Name="Name"  />
+                                            <RadzenRequiredValidator Component="Name" Text="Name is required" Popup="true" Style="position: absolute" />
+                                        </RadzenFormField>
 
-                                        <div class="row my-1" >
-                                            <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Email" />
-                                            </div>
-                                            <div class="col-md-8">
-                                                <RadzenTextBox class="w-100" @bind-Value="model.Email" />
-                                                <RadzenRequiredValidator Component="Email" Text="Email Name is required" Popup=true Style="position: absolute" />
-                                            </div>
-                                        </div>
+                                        <RadzenFormField Text="Email" class="rz-my-1 rz-w-100">
+                                            <RadzenTextBox @bind-Value="@model.Email" />
+                                        </RadzenFormField>
 
-                                        <div class="row my-1" >
-                                            <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Telepon" />
-                                            </div>
-                                            <div class="col-md-8">
-                                                <RadzenTextBox class="w-100" @bind-Value="model.Telepon" Name="Telepon" />
-                                                <RadzenRequiredValidator Component="Telepon" Text="Telepon is required" Popup=true Style="position: absolute" />
-                                            </div>
-                                        </div>
+                                        <RadzenFormField Text="Telepon" class="rz-my-1 rz-w-100">
+                                            <RadzenTextBox @bind-Value="@model.Telepon" />
+                                        </RadzenFormField>
 
-                                        <div class="row my-1" >
-                                            <div class="col-md-4 align-items-center d-flex">
-                                                <RadzenLabel Text="Alamat" />
-                                            </div>
-                                            <div class="col-md-8">
-                                                <RadzenTextArea class="w-100" @bind-Value="model.Address" Name="Address" />
-                                                <RadzenRequiredValidator Component="Address" Text="Address is required" Popup=true Style="position: absolute" />
-                                            </div>
-                                        </div>
+                                        <RadzenFormField Text="Alamat" class="rz-my-1 rz-w-100">
+                                            <RadzenTextBox @bind-Value="@model.Address" />
+                                        </RadzenFormField>
+
+
                                         <hr />
 
                                         <div class="d-flex justify-content-end gap-2">
                                             <Radzen.Blazor.RadzenButton Icon="undo" Text="Kembali" ButtonType="ButtonType.Button"
                                                                         Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" />
-                                            <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Button"
-                                                                        Click="@(()=>Save(null))"
+                                            <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Submit"
                                                                         ButtonStyle="ButtonStyle.Warning" />
                                         </div>
                                     </div>
@@ -180,6 +159,14 @@
                 var data = await karyawanService.Post(model);
                 if (data != null)
                 {
+                    NotificationService.Notify(new NotificationMessage
+                        {
+                            Detail = "Data Saved !",
+                            Duration = 3000,
+                            Severity = NotificationSeverity.Success,
+                            Summary = "Success"
+
+                        });
                     nav.NavigateTo("/karyawan");
                 }
             }
@@ -199,9 +186,15 @@
             }
 
         }
-        catch
+        catch (Exception ex)
         {
-            //ex.Message;
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Detail = ex.Message,
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error"
+                });
         }
 
 

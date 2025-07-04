@@ -24,8 +24,8 @@
         <RadzenTabsItem Text="Data Produk">
             <RadzenTemplateForm Data="model" Submit="@(async (Product prod)=> { await SaveProduct(model); })">
                 <Radzen.Blazor.RadzenFieldset>
-                    <div class="row">
-                        <div class="col-md-6">
+                    <RadzenRow>
+                        <RadzenColumn Size="6">
                             <div class="row" style="margin-top:10px">
                                 <div class="col-md-4 align-items-center d-flex">
                                     <RadzenLabel Text="Merk" />
@@ -77,9 +77,9 @@
                             </div>
 
 
-                        </div>
+                        </RadzenColumn>
 
-                        <div class="col-md-6">
+                        <RadzenColumn Size="6">
 
                             <div class="row" style="margin-top:10px">
                                 <div class="col-md-4 align-items-center d-flex">
@@ -125,8 +125,8 @@
                                     <RadzenTextArea @bind-Value="model.Description" style="width: 95%;" />
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </RadzenColumn>
+                    </RadzenRow>
                     <hr />
                     <div style="margin:10px; display:flex; justify-content:end">
                         <Radzen.Blazor.RadzenButton Visible="!IsNew" Icon="undo" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" Style="margin:5px" />
@@ -135,7 +135,6 @@
                     </div>
 
                 </Radzen.Blazor.RadzenFieldset>
-                <hr />
             </RadzenTemplateForm>
         </RadzenTabsItem>
         <RadzenTabsItem Visible="model.Id > 0" Text="Harga Satuan">
@@ -284,6 +283,7 @@
             }
 
             if (saved)
+            {
                 NotificationService.Notify(new NotificationMessage
                     {
                         Severity = NotificationSeverity.Success,
@@ -291,6 +291,9 @@
                         Detail = "Data Berhasil Disimpan !",
                         Duration = 3000
                     });
+
+                nav.NavigateTo($"/product/detail/{model.Id}");
+            }
 
             else
                 throw new SystemException("Data Not Saved !");

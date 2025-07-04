@@ -52,66 +52,6 @@ namespace ApsWebApp.Services
 
             return Task.FromResult(result.AsEnumerable());
         }
-        public async Task<bool> AddMovementStock(int productId, int gudangId,
-            StockMovementType stockMovementType, ReferenceType referenceType, int referenceId, double quantity)
-        {
-            try
-            {
-                dbContext.StockMovements.Add(new StockMovement()
-                {
-                    GudangId = gudangId,
-                    ProductId = productId,
-                    StockMovementType = stockMovementType,
-                    ReferenceType = referenceType,
-                    ReferenceId = referenceId,
-                    Quantity = quantity,
-                    MovementDate = DateTime.Now.ToUniversalTime()
-                });
-                var stock = dbContext.Stocks.Where(x => x.ProductId == productId && x.GudangId == gudangId)
-                   .FirstOrDefault();
-                if (stock == null)
-                {
-                    dbContext.Stocks.Add(new Stock()
-                    {
-                        GudangId = gudangId,
-                        ProductId = productId,
-                        Quantity = quantity
-                    });
-                }
-                else
-                {
-                    if (stockMovementType == StockMovementType.OUT)
-                    {
-                        if (stock.Quantity < quantity)
-                        {
-                            throw new SystemException("Stock tidak cukup");
-                        }
-                        stock.Quantity -= quantity;
-                    }
-                    else
-                    {
-                        stock.Quantity += quantity;
-                    }
-                }
-                dbContext.SaveChanges();
-                return await Task.FromResult(true);
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                _logger.LogError(ex, "Error updating stock");
-                throw new SystemException("Error updating stock");
-            }
-            catch (DbUpdateException ex)
-            {
-                _logger.LogError(ex, "Error updating stock");
-                throw new SystemException("Error updating stock");
-            }
-            catch (Exception ex)
-            {
-                throw new SystemException(ex.Message);
-            }
-        }
-
 
         /// <summary>
         /// Ambil Stock Semua Produk berdasarkan Gudang
@@ -200,7 +140,7 @@ namespace ApsWebApp.Services
                {
                    ProductId = g.Key.ProductId,
                    GudangId = g.Key.GudangId,
-                   Total = g.Where(x=>x.StockMovementType== StockMovementType.IN).Sum(m => m.Quantity)- g.Where(x=>x.StockMovementType== StockMovementType.OUT).Sum(m => m.Quantity)
+                   Total = g.Where(x => x.StockMovementType == StockMovementType.IN).Sum(m => m.Quantity) - g.Where(x => x.StockMovementType == StockMovementType.OUT).Sum(m => m.Quantity)
                })
                .ToList();
 
@@ -236,7 +176,159 @@ namespace ApsWebApp.Services
             }
         }
 
+        #region Stockmovement
+        public async Task<bool> AddMovementStock(int productId, int gudangId,
+          StockMovementType stockMovementType, ReferenceType referenceType, int referenceId, double quantity)
+        {
+            try
+            {
+                dbContext.StockMovements.Add(new StockMovement()
+                {
+                    GudangId = gudangId,
+                    ProductId = productId,
+                    StockMovementType = stockMovementType,
+                    ReferenceType = referenceType,
+                    ReferenceId = referenceId,
+                    Quantity = quantity,
+                    MovementDate = DateTime.Now.ToUniversalTime()
+                });
+                var stock = dbContext.Stocks.Where(x => x.ProductId == productId && x.GudangId == gudangId)
+                   .FirstOrDefault();
+                if (stock == null)
+                {
+                    dbContext.Stocks.Add(new Stock()
+                    {
+                        GudangId = gudangId,
+                        ProductId = productId,
+                        Quantity = quantity
+                    });
+                }
+                else
+                {
+                    if (stockMovementType == StockMovementType.OUT)
+                    {
+                        if (stock.Quantity < quantity)
+                        {
+                            throw new SystemException($"Stock tidak cukup, {stock.Product.Name} sisa {stock.Quantity} {stock.Product.UnitSelected.Name} ");
+                        }
+                        stock.Quantity -= quantity;
+                    }
+                    else
+                    {
+                        stock.Quantity += quantity;
+                    }
+                }
+                //dbContext.SaveChanges();
+                return await Task.FromResult(true);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                _logger.LogError(ex, "Error updating stock");
+                throw new SystemException("Error updating stock");
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Error updating stock");
+                throw new SystemException("Error updating stock");
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
+
+
+        public async Task<StockMovement> GetMovementStock(StockMovementType type, ReferenceType refType, int referenceId)
+        {
+            try
+            {
+                var result = await dbContext.StockMovements.FirstOrDefaultAsync(x => x.StockMovementType == type
+                && x.ReferenceType == refType
+                && x.ReferenceId == referenceId);
+                return result!;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public Task<bool> UpdateStockMovement(StockMovement stockMovemnet, double newStock)
+        {
+            try
+            {
+                var stock = dbContext.Stocks.FirstOrDefault(x => x.ProductId == stockMovemnet.ProductId && x.GudangId == stockMovemnet.GudangId);
+                stock.Quantity += newStock - stockMovemnet.Quantity;
+                stockMovemnet.Quantity = newStock;
+                return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
+        public Task<Stock> GetStockByProductIdAndGudangIdIncludeOrder(int productId, int gudangId)
+        {
+            try
+            {
+                var stocks = from s in dbContext.Stocks
+                             where s.ProductId == productId && s.GudangId == gudangId
+                             select s;
+
+                if (stocks.Any())
+                {
+                    var stock = stocks.FirstOrDefault();
+                    stock.Quantity = stocks.Sum(x => x.Quantity);
+
+
+                    var orderPenjualan = dbContext.OrderPenjualan
+                        .Include(x => x.Items)
+                        .Include(x => x.Gudang)
+                        .Where(x => x.Status == OrderStatus.Baru && x.Gudang.Id == gudangId)
+                        .SelectMany(x => x.Items.Where(x => x.Product.Id == productId));
+
+
+                    if (orderPenjualan.Count() > 0)
+                    {
+                        stock.Quantity -= orderPenjualan.Sum(x => x.Quantity);
+                    }
+
+                    return Task.FromResult(stock);
+                }
+                else
+                {
+                    return Task.FromResult(new Stock()
+                    {
+                        ProductId = productId,
+                        Quantity = 0
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
+
+        public async Task<bool> RemoveStockMovement(StockMovement stockMovement, double newStock)
+        {
+            try
+            {
+                dbContext.StockMovements.Remove(stockMovement);
+                await UpdateStockMovement(stockMovement, newStock);
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw new SystemException(ex.Message);
+            }
+        }
+
+        #endregion
     }
 
-  
+
 }

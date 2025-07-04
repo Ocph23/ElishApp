@@ -1,5 +1,6 @@
 ﻿using ApsWebApp.Data;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Radzen;
 using ShareModels;
 
@@ -7,11 +8,17 @@ namespace ApsWebApp.Services
 {
     public static class AppServiceCollection
     {
-        public  static IServiceCollection AddMyServices(this IServiceCollection services)
+        public static IServiceCollection AddMyServices(this IServiceCollection services)
         {
-          
+
             services.AddScoped<HttpClient>();
             services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            })
+    .AddIdentityCookies();
             //services.AddScoped<ApplicationDbContext>();
             services.AddSingleton<IIncommingService, IncommingService>();
             services.AddScoped<IUserStateService, UserStateService>();

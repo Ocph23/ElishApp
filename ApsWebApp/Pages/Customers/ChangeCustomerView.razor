@@ -8,97 +8,66 @@
 
 <Radzen.Blazor.RadzenFieldset>
 
-    <FieldSetHeader Title="@title" />
     <div class="row">
         <div class="col-xl-12">
             <RadzenTabs style="height: 750px">
                 <Tabs>
                     <RadzenTabsItem Text="Data">
-                        <RadzenTemplateForm Data="model" Submit="@(async(Customer arg)=>await Save(arg))">
+                        <RadzenTemplateForm Data="model" TItem="Customer" Submit="@Save">
                             <Radzen.Blazor.RadzenFieldset Text="Customer">
-                                <div class="form-row">
-                                    <div class="col-md-6">
-                                        <div class="row mb-2">
-                                            <div class="col-md-3 align-items-center d-flex">
-                                                <RadzenLabel Text="Nama" />
-                                            </div>
-                                            <div class="col-md-9">
-                                                <RadzenTextBox @bind-Value="model.Name" Name="Name" class="w-100" />
-                                                <RadzenRequiredValidator Component="Name" Text="Customer Name is required" Popup=true  />
-                                            </div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-md-3 align-items-center d-flex">
-                                                <RadzenLabel Text="Email" />
-                                            </div>
-                                            <div class="col-md-9">
-                                                <RadzenTextBox @bind-Value="model.Email" Name="Email" class="w-100" />
-                                                <RadzenRequiredValidator Component="Email" Text="Email is required" Popup=true  />
-                                            </div>
-                                        </div>
-                                        <div class="row" style="margin-top:10px">
-                                            <div class="col-md-3 align-items-center d-flex">
-                                                <RadzenLabel Text="Nama Kontak" />
-                                            </div>
-                                            <div class="col-md-9">
-                                                <RadzenTextBox @bind-Value="model.ContactName" Name="ContactName" class="w-100" />
-                                                <RadzenRequiredValidator Component="ContactName" Text="Contact Name is required" Popup=true  />
+                                <RadzenRow>
+                                    <RadzenColumn Size="6">
+                                        <RadzenFormField Text="Nama" class="rz-my-1 rz-w-100">
+                                            <RadzenTextBox @bind-Value="@model.Name" Name="Name" />
+                                            <RadzenRequiredValidator Component="Name" Text="Customer Name is required" Popup=true />
+                                        </RadzenFormField>
 
-                                            </div>
-                                        </div>
-                                        <div class="row" style="margin-top:10px">
-                                            <div class="col-md-3 align-items-center d-flex">
-                                                <RadzenLabel Text="Telepon" />
-                                            </div>
-                                            <div class="col-md-9">
-                                                <RadzenTextBox @bind-Value="model.Telepon" Name="Telepon" class="w-100" />
-                                                <RadzenRequiredValidator Component="Telepon" Text="Telepon is required" Popup=true  />
-                                            </div>
-                                        </div>
+                                        <RadzenFormField Text="Email" class="rz-my-1 rz-w-100">
+                                            <RadzenTextBox @bind-Value="@model.Email" Name="Email" />
+                                            <RadzenRequiredValidator Component="Email" Text="Email Name is required" Popup=true />
+                                        </RadzenFormField>
 
-                                    </div>
-                                    <div class="col-md-6">
+                                        <RadzenFormField Text="Nama Kontak" class="rz-my-1 rz-w-100">
+                                            <RadzenTextBox @bind-Value="@model.ContactName" Name="ContacName" />
+                                            <RadzenRequiredValidator Component="ContacName" Text="Contact Name is required" Popup=true />
+                                        </RadzenFormField>
 
-                                        <div class="row" style="margin-top:10px">
-                                            <div class="col-md-3 align-items-center d-flex">
-                                                <RadzenLabel Text="NPWP" />
-                                            </div>
-                                            <div class="col-md-9">
-                                                <RadzenTextBox @bind-Value="model.NPWP" class="w-100" />
-                                            </div>
-                                        </div>
+                                        <RadzenFormField Text="Telepon" class="rz-my-1 rz-w-100">
+                                            <RadzenTextBox @bind-Value="@model.Telepon" Name="Telepon" />
+                                            <RadzenRequiredValidator Component="Telepon" Text="Telepon is required" Popup=true />
+                                        </RadzenFormField>
 
-                                        <div class="row" style="margin-top:10px">
-                                            <div class="col-md-3 align-items-center d-flex">
-                                                <RadzenLabel Text="Alamat" />
-                                            </div>
-                                            <div class="col-md-9">
-                                                <RadzenTextArea @bind-Value="model.Address" Name="Address" class="w-100" />
+                                    </RadzenColumn>
+                                    <RadzenColumn Size="6">
+                                        <div class="col-md-6">
+                                            <RadzenFormField Text="NPWP" class="rz-my-1 rz-w-100">
+                                                <RadzenTextBox @bind-Value="@model.NPWP" Name="NPWP" />
+                                                <RadzenRequiredValidator Component="NPWP" Text="NPWP is required" Popup=true />
+                                            </RadzenFormField>
+                                            <RadzenFormField Text="Alamat" class="rz-my-1 rz-w-100">
+                                                <RadzenTextArea Rows="4" @bind-Value="@model.Address" Name="Address" />
                                                 <RadzenRequiredValidator Component="Address" Text="Address is required" Popup=true />
-                                            </div>
-                                        </div>
+                                            </RadzenFormField>
+                                            <RadzenFormField Text="Sales" class="rz-my-1 rz-w-100">
+                                                <RadzenDropDown Name="Sales" AllowClear="true" AllowFiltering="true"
 
-                                        <div class="row" style="margin-top:10px">
-                                            <div class="col-md-3 align-items-center d-flex">
-                                                <RadzenLabel Text="Seles" />
-                                            </div>
-                                            <div class="col-md-9">
-                                                <RadzenDropDown AllowClear="true" AllowFiltering="true"
                                                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                                                 Data=@salesmans @bind-Value=@model.Karyawan SelectedItemChanged="@((arg)=> SelectSalesman(arg))"
                                                                 TextProperty="Name" class="w-100" />
-                                            </div>
+                                                <RadzenRequiredValidator Component="Sales" Text="Sales is required" Popup=true />
+                                            </RadzenFormField>
+
+                                           
                                         </div>
 
-                                        <hr />
-                                        <div class="d-flex justify-content-end gap-2 mt-2" style="margin:10px">
-                                            <Radzen.Blazor.RadzenButton Icon="undo" Text="Batal" ButtonType="ButtonType.Button" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" />
-                                            <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Submit"
-                                                                        ButtonStyle="ButtonStyle.Warning" />
-                                        </div>
-                                    </div>
-                                </div>
-
+                                    </RadzenColumn>
+                                </RadzenRow>
+                                    <hr />
+                                <RadzenRow class="rz-w-100 rz-display-flex rz-justify-content-end rz-mt-2" style="margin:10px">
+                                        <Radzen.Blazor.RadzenButton Icon="undo" Text="Batal" ButtonType="ButtonType.Button" Click="@(()=>GoBack())" ButtonStyle="ButtonStyle.Info" />
+                                        <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Submit"
+                                                                    ButtonStyle="ButtonStyle.Warning" />
+                                </RadzenRow>
                             </Radzen.Blazor.RadzenFieldset>
                         </RadzenTemplateForm>
                     </RadzenTabsItem>

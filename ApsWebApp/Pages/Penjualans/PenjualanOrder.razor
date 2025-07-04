@@ -12,6 +12,7 @@
 @inject ICustomerService customerService;
 @inject IProductService productService;
 @inject DialogService dialog;
+@inject NotificationService NotificationService;
 
 @inject NavigationManager nav;
 
@@ -21,10 +22,10 @@
             <RadzenButton Icon="add" Style="margin-bottom:10px" ButtonStyle="ButtonStyle.Success"
                           Click="@(()=> nav.NavigateTo($"/penjualan/orderdetail"))" />
             <RadzenDataGrid Data="@orders"
-                        @ref="grid" LoadData="@LoadData" Count="@count" PageSize="12" FilterMode="FilterMode.Advanced"
-                        AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPenjualan">
+                            @ref="grid" LoadData="@LoadData" Count="@count" PageSize="12" FilterMode="FilterMode.Advanced"
+                            AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPenjualan">
                 <Columns>
-                    <RadzenDataGridColumn Width="120px" TItem="OrderPenjualan" Property="OrderDate" Title="Order" />
+                    <RadzenDataGridColumn Width="180px" TItem="OrderPenjualan" Property="OrderDate" Title="Order" />
                     <RadzenDataGridColumn Width="180px" TItem="OrderPenjualan" Property="Nomor" Title="Nomor" />
                     <RadzenDataGridColumn Width="280px" TItem="OrderPenjualan" Property="Customer.Name" Title="Customer" />
                     <RadzenDataGridColumn TItem="OrderPenjualan" Property="Sales.Name" Title="Sales" />
@@ -41,8 +42,8 @@
                                             Data="@(Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>().Select(t => new { Text = $"{t}", Value = t }))" />
                         </FilterTemplate>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="OrderPenjualan" Context="item"   
-                                      Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                    <RadzenDataGridColumn TItem="OrderPenjualan" Context="item"
+                                          Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="200px">
                         <Template Context="item">
                             <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="edit"
                                           Size="ButtonSize.Medium"
@@ -50,6 +51,9 @@
 
                             <RadzenButton Visible=@(item.Status==OrderStatus.Baru?true:false) ButtonStyle="ButtonStyle.Warning" Icon="add"
                                           Size="ButtonSize.Medium" Click="@(()=> CreatePenjualan(item))" />
+
+                            <RadzenButton Visible=@(item.Status==OrderStatus.Baru?true:false) ButtonStyle="ButtonStyle.Danger" Icon="cancel"
+                                          Size="ButtonSize.Medium" Click="@(()=> CancelOrder(item))" />
                         </Template>
                     </RadzenDataGridColumn>
                 </Columns>
@@ -62,9 +66,9 @@
 @code {
 
 
-    IEnumerable<OrderPenjualan> orders;
+    ICollection<OrderPenjualan> orders;
 
-    OrderStatus currentTOC;
+    OrderStatus currentTOC = OrderStatus.Semua;
     RadzenDataGrid<OrderPenjualan> grid;
     int count;
 
@@ -109,7 +113,7 @@
     {
         var datas = await task;
         orders = datas.OrderByDescending(x => x.OrderDate).ToList();
-       await InvokeAsync(() => StateHasChanged());
+        await InvokeAsync(() => StateHasChanged());
     }
 
 
@@ -120,7 +124,44 @@
         var resultDialog = await dialog.Confirm("Yakin Buat Penjualan ? ", "Buat Penjualan", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
         if (resultDialog != null && resultDialog == true)
         {
-                nav.NavigateTo($"/penjualan/realisasiorder/{item.Id}", true);
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Success",
+                    Detail = "Penjualan Berhasil Dibuat !",
+                    Duration = 3000
+                });
+            nav.NavigateTo($"/penjualan/realisasiorder/{item.Id}", true);
+        }
+    }
+
+    async Task CancelOrder(OrderPenjualan item)
+    {
+        var resultDialog = await dialog.Confirm("Yakin Batalkan Order? ", "Cancel Order", new ConfirmOptions { OkButtonText = "Ya", CancelButtonText = "Tidak" });
+        if (resultDialog != null && resultDialog == true)
+        {
+            var deleted = await penjualanService.DeleteOrder(item.Id);
+            if (deleted)
+            {
+                orders.Remove(item);
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Success",
+                        Detail = "Order Berhasil Dibatalkan/Hapus !",
+                        Duration = 3000
+                    });
+            }
+            else
+            {
+                NotificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "Error",
+                        Detail = "Order gagal Dibatalkan/Hapus !",
+                        Duration = 3000
+                    });
+            }
         }
     }
 }

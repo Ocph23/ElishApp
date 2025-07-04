@@ -18,76 +18,57 @@
     <Tabs>
         <RadzenTabsItem Text="@(@title +" Order Pembelian")">
             <RadzenFieldset Text="Data Supplier">
-                <div class="col-md-12 align-items-center d-flex">
-                    <div class="col-md-6">
+                <RadzenRow>
+                    <RadzenColumn Size="6">
+                        <RadzenFormField Text="Supplier" class="rz-my-1 rz-w-100">
+                            <RadzenDropDown AllowClear="true" AllowFiltering="true" Style="width:90%"
+                                            FilterCaseSensitivity="FilterCaseSensitivity.Default" Data=@suppliers @bind-Value=@model.Supplier
+                                            TextProperty="Nama"
+                                            Change=@(args => SelectSupplier(args, "Supplier")) />
+                        </RadzenFormField>
 
-                        <div class="row" style="margin-top:5px">
-                            <div class="col-md-4 align-items-center d-flex">
-                                <RadzenLabel Text="Suplier" />
-                            </div>
-                            <div class="col-md-8">
-                                <RadzenDropDown AllowClear="true" AllowFiltering="true" Style="width:90%"
-                                                FilterCaseSensitivity="FilterCaseSensitivity.Default" Data=@suppliers @bind-Value=@model.Supplier
-                                                TextProperty="Nama"
-                                                Change=@(args => SelectSupplier(args, "Supplier")) />
-                            </div>
-                        </div>
-                        <div class="row nt-2" >
-                            <div class="col-md-4 align-items-center d-flex">
-                                <RadzenLabel Text="Status" Style="margin-top:5px" />
-                            </div>
-                            <div class="col-md-8">
-                                <RadzenTextBox Disabled=true Value="@model.Status.ToString()" Style="margin-top:5px" />
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top:5px">
-                            <div class="col-md-4 align-items-center d-flex">
-                                <RadzenLabel Text="Keterangan" Style="margin-top:5px" />
-                            </div>
-                            <div class="col-md-8">
-                                <RadzenTextArea @bind-Value="@model.Discription" Style="width:90%" />
-                            </div>
-                        </div>
+                        <RadzenFormField Text="Status" class="rz-my-1 rz-w-100">
+                            <RadzenTextBox Disabled=true Value="@model.Status.ToString()" Style="margin-top:5px" />
 
-
-
-                    </div>
-                    <div class="col-md-6" style="text-align:right">
+                        </RadzenFormField>
+                        <RadzenFormField Text="Keterangan" class="rz-my-1 rz-w-100">
+                            <RadzenTextArea Value="@model.Discription" Style="margin-top:5px" />
+                        </RadzenFormField>
+                    </RadzenColumn>
+                    <RadzenColumn Size="6" class="col-md-6" style="text-align:right">
                         <RadzenButton Icon="download" Click="@(()=> nav.NavigateTo($"/report/OrderPembelianExcel/{model.Id}",true))"></RadzenButton>
                         <RadzenButton Icon="send" Click="@(async()=> await SendToSupplier(model.Id))"></RadzenButton>
-                    </div>
-                </div>
+                    </RadzenColumn>
+                </RadzenRow>
             </RadzenFieldset>
 
             <RadzenFieldset Text="Data Orders">
-                <div class="row col-md-6">
-                    <div class="col-md-4 align-items-center d-flex">
-                        <RadzenLabel Text="Merek" />
-                    </div>
-                    <div class="col-md-6">
-                        <RadzenDropDown AllowClear="true" AllowFiltering="true"
-                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                        Data=@merks
-                                        @bind-Value=@merkId
-                                        TextProperty="Name" ValueProperty="Id" Style="width:400px" />
-                    </div>
-                </div>
-                <div class="row col-md-6">
-                    <div class="col-md-4 align-items-center d-flex">
-                        <RadzenLabel Text="Product" />
-                    </div>
-                    <div class="col-md-8 mt-1">
-                        <RadzenDropDown AllowClear="true" AllowFiltering="true"
-                                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                        Data=@products.Where( item=> merkId<=0?true: item.Merk.Id==merkId && !model.Items.Any(data=> data.Product.Id.Equals(item.Id)))
-                                        @bind-Value=@product
-                                        TextProperty="CodeName"
-                                        Change=@(args => SelectProduct(args, "Supplier")) Style="width:400px" />
-                    </div>
-                </div>
+                <RadzenRow>
+                    <RadzenColumn Size="6">
+                        <RadzenFormField Text="Merek" class="rz-my-1 rz-w-100">
+                            <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            Data=@merks
+                                            @bind-Value=@merkId
+                                            TextProperty="Name" ValueProperty="Id" Style="width:400px" />
 
-                <RadzenDataGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" class="my-2"
-                            AllowSorting="true" TItem="OrderPembelianItem">
+                        </RadzenFormField>
+                        <RadzenFormField Text="Product" class="rz-my-1 rz-w-100">
+                            <RadzenDropDown AllowClear="true" AllowFiltering="true"
+                                            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            Data=@products.Where( item=> merkId<=0?true: item.Merk.Id==merkId && !model.Items.Any(data=> data.Product.Id.Equals(item.Id)))
+                                            @bind-Value=@product
+                                            TextProperty="CodeName"
+                                            Change=@(args => SelectProduct(args, "Supplier")) Style="width:400px" />
+                        </RadzenFormField>
+
+
+                    </RadzenColumn>
+                </RadzenRow>
+
+
+                <RadzenDataGrid @ref="ordersGrid" Data="@(model.Items)" AllowFiltering="true" class="rz-my-2"
+                                AllowSorting="true" TItem="OrderPembelianItem">
                     <Columns>
                         <RadzenDataGridColumn Width="180px" TItem="OrderPembelianItem" Property="Product.CodeName" Title="Code" />
                         <RadzenDataGridColumn TItem="OrderPembelianItem" Property="Product.Name" Title="Product" />
@@ -145,7 +126,7 @@
 
 
                         <RadzenDataGridColumn TItem="OrderPembelianItem" Context="sampleBlazorModelsSampleOrder" Visible="@(model.Items.Count>0  && ((Int32)model.Status < 1))"
-                                           Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                                              Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
                             <HeaderTemplate>
                                 <RadzenCheckBox TValue="bool" ValueChanged="@((x)=>OnCheckChange(x))" />
                             </HeaderTemplate>

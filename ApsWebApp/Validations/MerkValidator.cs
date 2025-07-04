@@ -13,7 +13,7 @@ namespace ApsWebApp.Validations
 
             RuleFor(x => x.Description)
                 .NotEmpty()
-                .WithMessage("Deskripsikan kategori.");
+                .WithMessage("Deskripsikan Merek.");
         }
     }
   

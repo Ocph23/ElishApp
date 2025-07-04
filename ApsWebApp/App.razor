@@ -4,7 +4,7 @@
 @inject IUserStateService userService
 <head>
     <RadzenTheme Theme="dark" />
-
+    <RadzenTheme Theme="material" @rendermode="InteractiveServer" />
 </head>
 <Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
@@ -47,6 +47,3 @@
         }
     }
 }
-
-
-<script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>

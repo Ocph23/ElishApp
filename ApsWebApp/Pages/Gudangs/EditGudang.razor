@@ -8,36 +8,21 @@
 <div class="row">
     <div class="col-md-12">
         <RadzenFieldset Text="Gudang">
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Name" />
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextBox @bind-Value="model.Name" style="width: 100%;" Name="CardNr" />
-                </div>
-            </div>
-            <div class="row my-2">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Description" />
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextArea style="width: 100%;" @bind-Value="model.Description" />
-                </div>
-            </div>
 
-
+            <RadzenFormField Text="Nama" class="rz-my-1 rz-w-100">
+                <RadzenTextBox @bind-Value="@model.Name" />
+            </RadzenFormField>
+            <RadzenFormField Text="Keterangan" class="rz-my-1 rz-w-100">
+                <RadzenTextBox @bind-Value="@model.Description" />
+            </RadzenFormField>
         </RadzenFieldset>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12 d-flex justify-content-end gap-2 mt-2" >
-
-
-
+    <div class="col-md-12 d-flex justify-content-end mt-2 gap-2" >
         <Radzen.Blazor.RadzenButton Icon="undo" Text="Batal" ButtonType="ButtonType.Button" Click="@(()=>Close())" ButtonStyle="ButtonStyle.Info" />
         <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Button"
                                     Click="@(async (args) => await SaveAction())" ButtonStyle="ButtonStyle.Warning" />
-
     </div>
 </div>
 

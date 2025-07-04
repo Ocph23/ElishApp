@@ -15,6 +15,7 @@ namespace ApsWebApp.Validations
             services.AddScoped<IValidator<Karyawan>, KaryawanValidator>();
             services.AddScoped<IValidator<Product>, ProductValidator>();
             services.AddScoped<IValidator<Unit>, UnitValidator>();
+            services.AddScoped<IValidator<Customer>, CustomerValidator>();
 
             return services;
         }

@@ -17,7 +17,7 @@ namespace ApsWebApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -816,13 +816,13 @@ namespace ApsWebApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("GudangId")
+                    b.Property<int>("GudangId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
-                    b.Property<double>("Quntity")
+                    b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
@@ -842,16 +842,16 @@ namespace ApsWebApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("GudangId")
+                    b.Property<int>("GudangId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("MovementDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
-                    b.Property<double>("Quntity")
+                    b.Property<double>("Quantity")
                         .HasColumnType("double precision");
 
                     b.Property<int>("ReferenceId")
@@ -868,6 +868,8 @@ namespace ApsWebApp.Migrations
                     b.HasIndex("GudangId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("StockMovementType", "ReferenceType", "ReferenceId");
 
                     b.ToTable("StockMovements");
                 });
@@ -1316,11 +1318,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Gudang", "Gudang")
                         .WithMany()
-                        .HasForeignKey("GudangId");
+                        .HasForeignKey("GudangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ShareModels.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Gudang");
 
@@ -1331,11 +1337,15 @@ namespace ApsWebApp.Migrations
                 {
                     b.HasOne("ShareModels.Gudang", "Gudang")
                         .WithMany()
-                        .HasForeignKey("GudangId");
+                        .HasForeignKey("GudangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ShareModels.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Gudang");
 

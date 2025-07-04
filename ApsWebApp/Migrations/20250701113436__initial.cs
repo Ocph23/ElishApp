@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ApsWebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class _Initial : Migration
+    public partial class _initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -290,13 +290,13 @@ namespace ApsWebApp.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    GudangId = table.Column<int>(type: "integer", nullable: true),
-                    ProductId = table.Column<int>(type: "integer", nullable: true),
-                    Quntity = table.Column<double>(type: "double precision", nullable: false),
+                    Quantity = table.Column<double>(type: "double precision", nullable: false),
                     StockMovementType = table.Column<int>(type: "integer", nullable: false),
                     ReferenceId = table.Column<int>(type: "integer", nullable: false),
                     ReferenceType = table.Column<int>(type: "integer", nullable: false),
-                    MovementDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    MovementDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    GudangId = table.Column<int>(type: "integer", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -305,12 +305,14 @@ namespace ApsWebApp.Migrations
                         name: "FK_StockMovements_Gudang_GudangId",
                         column: x => x.GudangId,
                         principalTable: "Gudang",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_StockMovements_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -319,9 +321,9 @@ namespace ApsWebApp.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    GudangId = table.Column<int>(type: "integer", nullable: true),
-                    ProductId = table.Column<int>(type: "integer", nullable: true),
-                    Quntity = table.Column<double>(type: "double precision", nullable: false)
+                    Quantity = table.Column<double>(type: "double precision", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    GudangId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -330,12 +332,14 @@ namespace ApsWebApp.Migrations
                         name: "FK_Stocks_Gudang_GudangId",
                         column: x => x.GudangId,
                         principalTable: "Gudang",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Stocks_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -1018,6 +1022,11 @@ namespace ApsWebApp.Migrations
                 name: "IX_StockMovements_ProductId",
                 table: "StockMovements",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StockMovements_StockMovementType_ReferenceType_ReferenceId",
+                table: "StockMovements",
+                columns: new[] { "StockMovementType", "ReferenceType", "ReferenceId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Stocks_GudangId",

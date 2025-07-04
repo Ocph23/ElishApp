@@ -1,15 +1,5 @@
 ﻿@inject IUserStateService userServiceState
 
-<div class="top-row pl-4 px-2 navbar navbar-dark">
-    <a class="navbar-brand" href="">@title</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <button class="sidetoggle" @onclick="ToggleWidth">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
-
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
 
     <RadzenPanelMenu>
@@ -22,13 +12,13 @@
             }
             else
             {
-                <RadzenPanelMenuItem Text="@(!isWidth?"":menu.Text)" Icon="@menu.Icon" Path="@menu.Path">
+                <RadzenPanelMenuItem Text="@(!IsWidth?"":menu.Text)" Icon="@menu.Icon" Path="@menu.Path">
                     @if (menu.Children != null)
                     {
                         @foreach (var menu1 in menu.Children)
                         {
 
-                            <RadzenPanelMenuItem Style="margin-left:0px" Text="@(!isWidth?"":menu1.Text)" Icon="@menu1.Icon" Path="@menu1.Path"></RadzenPanelMenuItem>
+                            <RadzenPanelMenuItem Style="margin-left:0px" Text="@(!IsWidth?"":menu1.Text)" Icon="@menu1.Icon" Path="@menu1.Path"></RadzenPanelMenuItem>
                         }
                     }
                 </RadzenPanelMenuItem>
@@ -50,11 +40,15 @@
 
     [ParameterAttribute]
     public EventCallback<int> OnChange { get; set; }
+
+
+    [ParameterAttribute]
+    public bool IsWidth { get; set; } = true;
+
     private bool collapseNavMenu = true;
 
-    public bool isWidth = true;
 
-    string title => collapseNavMenu && !isWidth ? "" : "APS";
+    string title => collapseNavMenu && !IsWidth ? "" : "APS";
 
     private string NavMenuCssClass => GetMenuClass();
 
@@ -126,17 +120,18 @@
 
     private void ToggleWidth()
     {
-        isWidth = !isWidth;
+        collapseNavMenu = !collapseNavMenu;
+        IsWidth = !IsWidth;
         OnChange.InvokeAsync(1);
     }
 
 
     private string GetMenuClass()
     {
-        if (collapseNavMenu && isWidth)
+        if (collapseNavMenu && IsWidth)
             return "collapse";
 
-        if (collapseNavMenu && !isWidth)
+        if (collapseNavMenu && !IsWidth)
             return "collapse-half";
 
         return null;

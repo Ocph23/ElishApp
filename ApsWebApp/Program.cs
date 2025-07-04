@@ -42,6 +42,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
+    options.EnableSensitiveDataLogging();
 });
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -73,14 +74,14 @@ builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions
 // );
 
 builder.Services.AddRadzenComponents();
-
 builder.Services.AddRadzenCookieThemeService(options =>
 {
     options.Name = "MyApplicationTheme"; // The name of the cookie
     options.Duration = TimeSpan.FromDays(365); // The duration of the cookie
 });
 
-
+builder.Services.AddRazorComponents()
+.AddInteractiveServerComponents();
 var app = builder.Build();
 
 
@@ -129,6 +130,7 @@ app.UseMiddleware<JwtMiddleware>();
 app.UseFastReport();
 app.UseDefaultFiles();
 
+app.UseAntiforgery();
 //app.MapControllers();
 //app.MapBlazorHub();
 //app.MapFallbackToPage("/_Host");
@@ -141,7 +143,5 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller}/{action}/{id}");
 });
-
-
 
 app.Run();

@@ -27,7 +27,7 @@ namespace ShareModels
         }
 
 
-        public virtual Unit Unit { get; set; }
+        public Unit Unit { get; set; }
 
         public virtual Product Product { get; set; }
         public double Discount { get; set; }

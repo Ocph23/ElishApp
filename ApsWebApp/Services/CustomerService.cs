@@ -1,4 +1,5 @@
 ﻿using ApsWebApp.Data;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ShareModels;
 using System;
@@ -14,13 +15,16 @@ namespace ApsWebApp.Services
     {
         private readonly ApplicationDbContext dbContext;
         private readonly IUserService userService;
+        private readonly IValidator<Customer> customerValidator;
+
         //public ObservableCollection<Customer> CustomerCollection { get; set; }
 
-        public CustomerService(ApplicationDbContext db, IUserService _userService)
+        public CustomerService(ApplicationDbContext db, IUserService _userService, IValidator<Customer> _customerValidator)
         {
             dbContext = db;
             userService = _userService;
-           // CustomerCollection = new ObservableCollection<Customer>();
+            customerValidator = _customerValidator;
+            // CustomerCollection = new ObservableCollection<Customer>();
         }
 
         public  Task<bool> Delete(int id)
@@ -59,7 +63,7 @@ namespace ApsWebApp.Services
 
         public Task<IEnumerable<Customer>> Get()
         {
-            var customer = dbContext.Customer.Include(x => x.Karyawan); 
+            var customer = dbContext.Customer.Include(x => x.Karyawan).AsNoTracking(); 
             return Task.FromResult(customer.AsEnumerable());
         }
 
@@ -68,6 +72,10 @@ namespace ApsWebApp.Services
         {
             try
             {
+                var validateResult = customerValidator.Validate(value);
+                if (!validateResult.IsValid)
+                    throw new SystemException(Helper.GetErrorString(validateResult.Errors));
+
                 Customer result = await userService.RegisterCustomer(value);
                 if (result == null)
                     throw new SystemException("Data Not Saved !");

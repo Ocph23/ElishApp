@@ -109,13 +109,14 @@ namespace ApsWebApp.Services
         }
 
 
-        public Task<Pembelian> UpdatePembelian(int pembelianId, Pembelian order)
+        public async Task<Pembelian> UpdatePembelian(int pembelianId, Pembelian order)
         {
             var trans = dbContext.Database.BeginTransaction();
             try
             {
 
-                var lastOrder = dbContext.Pembelian.Where(x => x.Id == pembelianId).Include(x => x.OrderPembelian).FirstOrDefault();
+                var lastOrder = dbContext.Pembelian.Where(x => x.Id == pembelianId)
+                    .Include(x => x.OrderPembelian).FirstOrDefault();
 
                 if (lastOrder == null)
                     throw new SystemException("Pembelian Not Found  !");
@@ -131,13 +132,22 @@ namespace ApsWebApp.Services
                     }
                     else
                     {
-                        var oldItem = dbContext.PembelianItem.SingleOrDefault(x => x.Id == item.Id);
+                        var oldItem = dbContext.PembelianItem.Include(x=>x.Unit).SingleOrDefault(x => x.Id == item.Id);
                         if (oldItem == null)
                             throw new SystemException("Item Pembelian Tidak Ditemukan !");
-                        dbContext.Entry(oldItem).CurrentValues.SetValues(item);
+
+
+                        var stockMovement = await stockService.GetMovementStock(StockMovementType.IN, ReferenceType.Purchase, item.Id);
+                        oldItem.Amount = item.Amount;
+                        oldItem.Price = item.Price;
+                        oldItem.Discount = item.Discount;
+                        oldItem.Unit = item.Unit;
+                        if (stockMovement.Quantity!=(oldItem.Amount*oldItem.Unit.Quantity))
+                        {
+                           await stockService.UpdateStockMovement(stockMovement, item.Amount * item.Unit.Quantity);
+                        }
                     }
                 }
-
 
                 //remove
 
@@ -153,7 +163,7 @@ namespace ApsWebApp.Services
 
                 dbContext.SaveChanges();
                 trans.Commit();
-                return Task.FromResult(order);
+                return order;
             }
             catch (Exception ex)
             {
@@ -170,9 +180,12 @@ namespace ApsWebApp.Services
                 var pembelians = dbContext.Pembelian.Where(x => x.Id == id)
                                    .Include(x => x.Gudang)
                                    .Include(x => x.Items)
-                                   .ThenInclude(x => x.Product)
-                                   .ThenInclude(x => x.Units)
-                                   .Include(x => x.OrderPembelian).ThenInclude(x => x.Supplier);
+                                        .ThenInclude(x=>x.Unit)
+                                   .Include(x => x.Items)
+                                        .ThenInclude(x => x.Product)
+                                            .ThenInclude(x => x.Units)
+                                   .Include(x => x.OrderPembelian)
+                                   .ThenInclude(x => x.Supplier);
                 return Task.FromResult(pembelians.FirstOrDefault());
             }
             catch (System.Exception ex)

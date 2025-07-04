@@ -1,51 +1,63 @@
 <?xml version="1.0" standalone="yes"?>
 <Piutang>
   <Table1>
-    <Nomor>1/INV-APS/4/2025</Nomor>
-    <Customer>Hj. Jabal</Customer>
-    <JatuhTempo>2025-04-23T12:34:50.813019+09:00</JatuhTempo>
-    <Tagihan>3563400</Tagihan>
+    <Nomor>7/INV-APS/7/2025</Nomor>
+    <Customer>Rudi</Customer>
+    <JatuhTempo>2025-07-14T08:40:47.206248+09:00</JatuhTempo>
+    <Tagihan>150000</Tagihan>
     <Panjar>0</Panjar>
     <Sales>Rian</Sales>
-    <PenjualanId>1</PenjualanId>
+    <PenjualanId>7</PenjualanId>
     <Discount>0</Discount>
-    <TagihanAfterDiscount>3563400</TagihanAfterDiscount>
-    <Sisa>3563400</Sisa>
+    <TagihanAfterDiscount>150000</TagihanAfterDiscount>
+    <Sisa>150000</Sisa>
   </Table1>
   <Table1>
-    <Nomor>2/INV-APS/4/2025</Nomor>
-    <Customer>Tk. Hoki</Customer>
-    <JatuhTempo>2025-04-23T12:51:28.331927+09:00</JatuhTempo>
-    <Tagihan>2588400</Tagihan>
+    <Nomor>8/INV-APS/7/2025</Nomor>
+    <Customer>Rudi</Customer>
+    <JatuhTempo>2025-07-14T08:43:35.607758+09:00</JatuhTempo>
+    <Tagihan>181500</Tagihan>
     <Panjar>0</Panjar>
     <Sales>Rian</Sales>
-    <PenjualanId>2</PenjualanId>
+    <PenjualanId>8</PenjualanId>
     <Discount>0</Discount>
-    <TagihanAfterDiscount>2588400</TagihanAfterDiscount>
-    <Sisa>2588400</Sisa>
+    <TagihanAfterDiscount>181500</TagihanAfterDiscount>
+    <Sisa>181500</Sisa>
   </Table1>
   <Table1>
-    <Nomor>3/INV-APS/4/2025</Nomor>
-    <Customer>Tk . Aul</Customer>
-    <JatuhTempo>2025-04-23T12:59:38.264521+09:00</JatuhTempo>
-    <Tagihan>3027000</Tagihan>
+    <Nomor>9/INV-APS/7/2025</Nomor>
+    <Customer>Rudi</Customer>
+    <JatuhTempo>2025-07-14T08:49:08.078655+09:00</JatuhTempo>
+    <Tagihan>180000</Tagihan>
     <Panjar>0</Panjar>
     <Sales>Rian</Sales>
-    <PenjualanId>3</PenjualanId>
+    <PenjualanId>9</PenjualanId>
     <Discount>0</Discount>
-    <TagihanAfterDiscount>3027000</TagihanAfterDiscount>
-    <Sisa>3027000</Sisa>
+    <TagihanAfterDiscount>180000</TagihanAfterDiscount>
+    <Sisa>180000</Sisa>
   </Table1>
   <Table1>
-    <Nomor>4/INV-APS/4/2025</Nomor>
-    <Customer>Mama Lea</Customer>
-    <JatuhTempo>2025-04-23T14:21:22.167306+09:00</JatuhTempo>
-    <Tagihan>262500</Tagihan>
+    <Nomor>10/INV-APS/7/2025</Nomor>
+    <Customer>Rudi</Customer>
+    <JatuhTempo>2025-07-15T09:48:42.958892+09:00</JatuhTempo>
+    <Tagihan>240000</Tagihan>
     <Panjar>0</Panjar>
     <Sales>Rian</Sales>
-    <PenjualanId>4</PenjualanId>
+    <PenjualanId>10</PenjualanId>
     <Discount>0</Discount>
-    <TagihanAfterDiscount>262500</TagihanAfterDiscount>
-    <Sisa>262500</Sisa>
+    <TagihanAfterDiscount>240000</TagihanAfterDiscount>
+    <Sisa>240000</Sisa>
+  </Table1>
+  <Table1>
+    <Nomor>11/INV-APS/7/2025</Nomor>
+    <Customer>Rudi</Customer>
+    <JatuhTempo>2025-07-15T11:11:34.993865+09:00</JatuhTempo>
+    <Tagihan>700000</Tagihan>
+    <Panjar>0</Panjar>
+    <Sales>Rian</Sales>
+    <PenjualanId>11</PenjualanId>
+    <Discount>0</Discount>
+    <TagihanAfterDiscount>700000</TagihanAfterDiscount>
+    <Sisa>700000</Sisa>
   </Table1>
 </Piutang>

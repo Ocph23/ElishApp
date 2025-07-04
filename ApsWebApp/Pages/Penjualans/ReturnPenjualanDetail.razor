@@ -235,7 +235,7 @@
         {
 
 
-            if (model.Id <= 0)
+            if (model.Id <= 0 && Validate(model))
             {
                 PengembalianPenjualan result = await returnSerivce.Post(model);
                 notificationService.Notify(new NotificationMessage
@@ -245,20 +245,19 @@
                         Detail = "Data pengembalian berhasil dibuat",
                         Duration = 3000
                     });
+
+                nav.NavigateTo("/pengembalian");
             }
-            else
+            else if (Validate(model))
             {
-                if (Validate(model))
-                {
-                    var saved = await returnSerivce.Put(model.Id, model);
-                    notificationService.Notify(new NotificationMessage
-                        {
-                            Severity = NotificationSeverity.Success,
-                            Summary = "Success",
-                            Detail = "Data pengembalian berhasil diubah",
-                            Duration = 3000
-                        });
-                }
+                var saved = await returnSerivce.Put(model.Id, model);
+                notificationService.Notify(new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Success,
+                        Summary = "Success",
+                        Detail = "Data pengembalian berhasil diubah",
+                        Duration = 3000
+                    });
             }
         }
         catch (System.Exception ex)
@@ -371,7 +370,8 @@
             {
                 var first = item.FirstOrDefault();
                 first.Quantity = item.Sum(x => x.Quantity * x.Unit.Quantity);
-                first.Unit = item.Where(x => x.Unit.Level == 0).FirstOrDefault()!.Unit;
+                var product = await productService.Get(first.Product.Id);
+                first.Unit = product.Units.Where(x => x.Level == 0).FirstOrDefault();
                 penjualanTemp.Add(first);
             }
 

@@ -29,10 +29,10 @@
                     <RadzenDataGridColumn Width="160px" TItem="Penjualan" Property="Nomor" Title="Sale Number" />
                     <RadzenDataGridColumn CssClass="" TItem="Penjualan" Property="Customer.Name" Title="Customer" />
                     <RadzenDataGridColumn TItem="Penjualan" Property="Salesman.Name" Title="Sales" />
-                    <RadzenDataGridColumn TItem="Penjualan" Property="Payment" Width="100px" Title="Payment" />
+                    <RadzenDataGridColumn TItem="Penjualan" Property="Payment" Width="150px" Title="Jenis Pembayaran" />
                     <RadzenDataGridColumn Width="150px" TItem="Penjualan" TextAlign="TextAlign.Right" Property="Total" Title="Total">
                         <Template Context="item">
-                            @item.Total.ToString("N")
+                            @((item.Total + item.Expedisi).ToString("N"))
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn Width="100px" TItem="Penjualan" Property="Status" Title="Status">
@@ -62,7 +62,7 @@
 
     IEnumerable<Penjualan> penjualans;
 
-    PaymentStatus currentPeyment;
+    PaymentStatus currentPeyment= PaymentStatus.All;
 
     RadzenDataGrid<Penjualan> grid;
     int count;

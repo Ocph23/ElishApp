@@ -6,40 +6,26 @@
 @inject NotificationService NotificationService;
 @inject Radzen.DialogService dialogService;
 
-
-<div class="row">
-    <div class="col-md-12">
-        <RadzenFieldset Text="Kategori">
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Nama" />
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextBox @bind-Value="model.Name" style="width: 100%;" Name="CardNr" />
-                </div>
+<RadzenFieldset Text="Kategori">
+    <RadzenTemplateForm Data="model" TItem="Category" Submit="SaveAction">
+        <RadzenFormField Text="Nama" class="rz-my-1 rz-w-100">
+            <RadzenTextBox @bind-Value="@model.Name" Name="Name" />
+            <RadzenRequiredValidator Component="Name" Text="Name is required" Popup=true />
+        </RadzenFormField>
+        <RadzenFormField Text="Keterangan " class="rz-my-1 rz-w-100">
+            <RadzenTextBox @bind-Value="@model.Description" Name="Description" />
+            <RadzenRequiredValidator Component="Description" Text="Description is required" Popup=true />
+        </RadzenFormField>
+        <div class="row">
+            <div class="col-md-12 justify-content-end gap-2" style="width:100%; margin-top:20px; display:flex; gap:2px">
+                <Radzen.Blazor.RadzenButton Icon="undo" Text="Batal" ButtonType="ButtonType.Button" Click="@(()=>Close())" ButtonStyle="ButtonStyle.Info" />
+                <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Submit"
+                                            ButtonStyle="ButtonStyle.Warning" />
             </div>
-            <div class="row my-2">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Keterangan" />
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextArea style="width: 100%;" @bind-Value="model.Description" />
-                </div>
-            </div>
+        </div>
+    </RadzenTemplateForm>
 
-
-        </RadzenFieldset>
-    </div>
-</div>
-<div class="row">
-   
-    <div class="col-md-12 d-flex justify-content-end gap-2" style="margin-top:20px">
-
-        <Radzen.Blazor.RadzenButton Icon="undo" Text="Batal" ButtonType="ButtonType.Button" Click="@(()=>Close())" ButtonStyle="ButtonStyle.Info" />
-        <Radzen.Blazor.RadzenButton Icon="save" Text="Simpan" ButtonType="ButtonType.Button"
-                                    Click="@(async (args) => await SaveAction())" ButtonStyle="ButtonStyle.Warning" />
-    </div>
-</div>
+</RadzenFieldset>
 
 
 
@@ -67,27 +53,23 @@
 
 
 
-    public async Task SaveAction()
+    public async Task SaveAction(Category data)
     {
         try
         {
-                
-
-
-
             var saved = false;
-            if (model.Id > 0)
+            if (data.Id > 0)
             {
-                saved = await categoryService.Update(model.Id, model);
+                saved = await categoryService.Update(data.Id, data);
                 dialogService.Close();
             }
             else
             {
-                var result = await categoryService.Post(model);
+                var result = await categoryService.Post(data);
                 if (result != null)
                 {
                     saved = true;
-                    dialogService.Close(model);
+                    dialogService.Close(data);
                 }
             }
 
@@ -95,23 +77,27 @@
                 throw new SystemException("Data Not Saved");
 
             NotificationService.Notify(new NotificationMessage
-            {
-                Detail = "Data Saved !",
-                Duration = 3000,
-                Severity = NotificationSeverity.Success,
-                Summary = "Success"
+                {
+                    Detail = "Data Saved !",
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Success,
+                    Summary = "Success"
 
-            });
+                });
 
 
         }
         catch (Exception ex)
         {
 
-            NotificationService.Notify(new NotificationMessage {
-                Detail=ex.Message, Duration=3000, Severity= NotificationSeverity.Error,  Summary="Error"
+            NotificationService.Notify(new NotificationMessage
+                {
+                    Detail = ex.Message,
+                    Duration = 3000,
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error"
 
-            });
+                });
         }
     }
 }

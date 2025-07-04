@@ -19,8 +19,8 @@
             <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add" Click=@(args => Nav.NavigateTo("/pembelian/order/detail")) Style="margin-bottom:10px" />
 
             <RadzenDataGrid Data="@orders"
-                        @ref="grid" LoadData="@LoadData" Count="@count" PageSize="20" FilterMode="FilterMode.Advanced"
-                        AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPembelian">
+                            @ref="grid" LoadData="@LoadData" Count="@count" PageSize="20" FilterMode="FilterMode.Advanced"
+                            AllowFiltering="true" AllowPaging="true" AllowSorting="true" TItem="OrderPembelian">
                 <Columns>
                     <Radzen.Blazor.RadzenDataGridColumn Width="200px" TItem="OrderPembelian" Title="Order Date" Property="OrderDate" />
                     <Radzen.Blazor.RadzenDataGridColumn Width="200px" TItem="OrderPembelian" Title="PO Number" Property="Nomor" />
@@ -67,7 +67,7 @@
 @code {
 
 
-    OrderStatus currentTOC = OrderStatus.Baru;
+    OrderStatus currentTOC = OrderStatus.Semua;
     RadzenDataGrid<OrderPembelian> grid;
     int count;
 
@@ -82,6 +82,8 @@
 
     public async void OnCloseDialog(dynamic data)
     {
+       
+
         if (data.GetType() != typeof(bool))
         {
             try
